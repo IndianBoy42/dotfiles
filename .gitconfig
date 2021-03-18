@@ -28,15 +28,23 @@
 	lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
 	lg = !"git lg1"
 	s = status
-	switch = checkout
+	#switch = checkout
+	sw = switch
+	addi = add --interactive
 	new-branch = checkout -b
-	done = !git push -u origin HEAD
 	save = commit -a
 	save-all = !git add -A && git commit
 	wip = commit -am "WIP"
 	undo = reset HEAD~1 --mixed
 	amend = commit -a --amend
 	sync = !git fetch && git pull --ff-only && git push -u origin HEAD
-	up = !git pull --rebase --prune $@ && git submodule update --init --recursive
+	down = !git pull --rebase --prune $@ && git submodule update --init --recursive
+	up = !git push -u origin HEAD
 	ec = config --global -e
 	unstage = restore . --staged
+	branches = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
+	la = "!git config -l | grep alias | cut -c 7-"
+	rao = remote add origin
+	clean-merged = !git branch --merged | grep -v \"\\*\" | xargs -n 1 git branch -d
+
+

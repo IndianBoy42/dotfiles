@@ -53,6 +53,7 @@ abbr sudo!! 'eval sudo $history[1]'
 # yadm helper abbreviations
 abbr yad yadm
 abbr yadd 'yadm add'
+abbr yaddi 'yadm addi'
 abbr yads 'yadm status'
 
 # cat(bat) or ls(lsd) all-in-one

@@ -16,13 +16,16 @@ abbr rgl 'rg -C0'
 status is-interactive && eval /home/amedhi/anaconda3/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
 
+
 abbr reload_profile 'source ~/.config/fish/config.fish'
 function codeprofile
 	code -w ~/.config/fish/config.fish
+	yadm add ~/.config/fish/config.fish
 	source ~/.config/fish/config.fish
 end
 function profile
 	nvim ~/.config/fish/config.fish
+	yadm add ~/.config/fish/config.fish
 	source ~/.config/fish/config.fish
 end
 function silent
@@ -37,11 +40,11 @@ abbr yadsave 'yadm commit'
 abbr yads 'yadm status'
 abbr yadsync 'yadm fetch && yadm pull && yadm push'
 
-function vw
+function v
 	if test -f $argv
-		cat $argv
+		bat $argv
 	else
-		ls $argv
+		lsd -A $argv
 	end
 end
 

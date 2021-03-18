@@ -51,10 +51,9 @@ abbr justdoit "sudo !!"
 abbr sudo!! 'eval sudo $history[1]'
 
 # yadm helper abbreviations
+abbr yad yadm
 abbr yadd 'yadm add'
-abbr yadsave 'yadm commit'
 abbr yads 'yadm status'
-abbr yadsync 'yadm fetch && yadm pull && yadm push'
 
 # cat(bat) or ls(lsd) all-in-one
 function v
@@ -186,6 +185,7 @@ end
 
 # I guess ill use nvim inside the terminal
 set -gx EDITOR nvim
+abbr vim nvim
 
 # so many spotify-tui abbreviations
 set -gx SPT_FORMAT '%f %s %p : %t - %a (%b) - %v% - playing on %d'

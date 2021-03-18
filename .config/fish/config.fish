@@ -7,6 +7,10 @@ zoxide init fish | source
 # set -gx PATH "$HOME/anaconda3/bin" $PATH  # commented out by conda initialize;
 thefuck --alias | source
 
+set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/config
+alias rgrep 'rg --no-config'
+abbr rgl 'rg -C0'
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 status is-interactive && eval /home/amedhi/anaconda3/bin/conda "shell.fish" "hook" $argv | source

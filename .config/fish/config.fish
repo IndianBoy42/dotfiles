@@ -32,6 +32,19 @@ abbr k 'eval $history[1]'
 abbr kk 'eval $history[2]'
 abbr sudo!! 'eval sudo $history[1]'
 
+abbr yadd 'yadm add'
+abbr yadsave 'yadm commit'
+abbr yads 'yadm status'
+abbr yadsync 'yadm fetch && yadm pull && yadm push'
+
+function vw
+	if test -f $argv
+		cat $argv
+	else
+		ls $argv
+	end
+end
+
 # ghcup-env
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME
 test -f /home/amedhi/.ghcup/env ; and set -gx PATH $HOME/.cabal/bin /home/amedhi/.ghcup/bin $PATH

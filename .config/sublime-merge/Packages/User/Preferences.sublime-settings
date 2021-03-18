@@ -1,0 +1,6 @@
+{
+	"editor_path": "code",
+	"hide_menu": true,
+	"side_bar_layout": "commit_graph_as_column",
+	"expand_merge_commits_by_default": true,
+}

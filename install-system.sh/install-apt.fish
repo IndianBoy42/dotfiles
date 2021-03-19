@@ -29,7 +29,6 @@ sudo apt-get install -y \
     anydesk \
     neovim \
     x11-xserver-utils \
-    thefuck \
     libudev-dev \
     libusb-dev \
     libcairo2-dev \

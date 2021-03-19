@@ -9,8 +9,6 @@ sudo apt-get install -y apt-transport-http\
     gnupg2 \
     lsb-release
 
-curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
-
 xmodmap ~/.xmodmap-capslockmod
 
 fish ~/.cargo/install-apt.fish

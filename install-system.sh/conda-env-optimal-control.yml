@@ -1,0 +1,15 @@
+name: optimal-control
+channels: 
+        - conda-forge
+dependencies:
+        - python
+        - numpy
+        - scipy
+        - cvxpy
+        - matplotlib
+        - ipykernel
+        - pip
+        - opencv
+        - pip:
+                - casadi
+                - gradient-free-optimizers 

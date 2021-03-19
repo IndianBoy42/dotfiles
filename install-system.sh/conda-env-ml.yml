@@ -1,0 +1,14 @@
+name: machine-learning
+channels: 
+        - conda-forge
+        - pytorch
+dependencies:
+        - python
+        - numpy
+        - scipy
+        - matplotlib
+        - ipykernel
+        - seaborn
+        - pytorch
+        - torchvision
+        - tqdm

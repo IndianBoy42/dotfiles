@@ -4,6 +4,9 @@ set -gx PATH "$HOME/.cargo/bin" $PATH;
 set -gx PATH "$HOME/.local/bin" $PATH;
 set -gx PATH "$HOME/anaconda3/bin" $PATH;
 
+# linuxbrew add to env
+eval (~/../linuxbrew/.linuxbrew/bin/brew shellenv)
+
 # Initialize zoxide (terminal cd jumper)
 zoxide init fish | source
 

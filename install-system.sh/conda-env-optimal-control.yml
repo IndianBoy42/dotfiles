@@ -10,6 +10,7 @@ dependencies:
         - ipykernel
         - pip
         - opencv
+        - numba
         - pip:
                 - casadi
                 - gradient-free-optimizers 

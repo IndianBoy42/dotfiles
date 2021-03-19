@@ -18,6 +18,10 @@ end
 sudo apt update
 
 sudo apt-get install -y \
+    libopenblas-dev \
+    liblapack-dev \
+    libomp-dev \
+    libeigen3-dev \
     cmake \
     ninja-build \
     openocd\

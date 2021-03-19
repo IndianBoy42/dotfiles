@@ -17,3 +17,4 @@ fish ~/.cargo/install-apt.fish
 fish ~/.cargo/install-cargo.fish
 fish ~/.cargo/install-py.fish
 fish ~/.cargo/install-jl.fish
+fish ~/.cargo/install-brew.fish

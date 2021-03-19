@@ -59,6 +59,7 @@ abbr yad yadm
 abbr yadd 'yadm add'
 abbr yaddi 'yadm addi'
 abbr yads 'yadm status'
+abbr yadi yadm enter verco
 
 # cat(bat) or ls(lsd) all-in-one
 function v

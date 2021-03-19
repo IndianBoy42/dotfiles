@@ -9,7 +9,11 @@ if not type -q conda
     conda config --set channel_priority strict
 end
 
+conda activate base
 pip3 install outrun xxh-xxh click argcomplete
 pip3 install --user qmk
 
-conda env create -f conda-env-*.yml
+for f in conda-env-*.yml
+	echo $f
+	conda env create -f $f || conda env update --prune -n (cat conda-env-comp-vision.yml | rg 'name: ([\S]+)' -C0 -r '$1')
+end

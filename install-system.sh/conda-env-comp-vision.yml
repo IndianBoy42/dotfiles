@@ -1,0 +1,12 @@
+name: comp-vision
+channels: 
+        - conda-forge
+dependencies:
+        - python
+        - numpy
+        - scipy
+        - matplotlib
+        - ipykernel
+        - pip
+        - opencv
+        - numba

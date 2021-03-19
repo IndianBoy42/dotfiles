@@ -194,23 +194,23 @@ abbr vim nvim
 
 # so many spotify-tui abbreviations
 set -gx SPT_FORMAT '%f %s %p : %t - %a (%b) - %v% - playing on %d'
-abbr sptnext "spt playback --next -f '$SPT_FORMAT'"
-abbr sptn sptnext
-abbr sptprev "spt playback --previous -f '$SPT_FORMAT'"
-abbr sptpb "spt playback -f '$SPT_FORMAT'"
-abbr sptplay "spt playback --toggle -f '$SPT_FORMAT'"
-abbr sptp sptplay
-abbr sptvol "spt playback -f '$SPT_FORMAT' --volume"
-abbr sptlike "spt playback --like -f '$SPT_FORMAT'"
-abbr sptf "spt search"
-abbr sptfl "spt search --playlists"
-abbr sptfa "spt search --artists"
-abbr sptfal "spt search --albums"
-abbr sptft "spt search --tracks"
-abbr sptpl "spt play -f '$SPT_FORMAT' --playlist --name"
-abbr sptpa "spt play -f '$SPT_FORMAT' --artist --name"
-abbr sptpal "spt play -f '$SPT_FORMAT' --album --name"
-abbr sptpt "spt play -f '$SPT_FORMAT' --track --name"
+abbr sptnext " spt playback --next -f '$SPT_FORMAT'"
+abbr sptn  " spt playback --next -f '$SPT_FORMAT'"
+abbr sptprev " spt playback --previous -f '$SPT_FORMAT'"
+abbr sptpb " spt playback -f '$SPT_FORMAT'"
+abbr sptplay " spt playback --toggle -f '$SPT_FORMAT'"
+abbr sptp  " spt playback --toggle -f '$SPT_FORMAT'"
+abbr sptvol " spt playback -f '$SPT_FORMAT' --volume"
+abbr sptlike " spt playback --like -f '$SPT_FORMAT'"
+abbr sptf " spt search"
+abbr sptfl " spt search --playlists"
+abbr sptfa " spt search --artists"
+abbr sptfal " spt search --albums"
+abbr sptft " spt search --tracks"
+abbr sptpl " spt play -f '$SPT_FORMAT' --playlist --name"
+abbr sptpa " spt play -f '$SPT_FORMAT' --artist --name"
+abbr sptpal " spt play -f '$SPT_FORMAT' --album --name"
+abbr sptpt " spt play -f '$SPT_FORMAT' --track --name"
 
 # gvm is weird and broken in fish lol
 function gvm

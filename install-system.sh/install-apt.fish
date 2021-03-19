@@ -36,4 +36,5 @@ sudo apt-get install -y \
     clang \
     libclang-dev \
     meson \
+    sshpass \
     ffmpeg

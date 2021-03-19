@@ -21,6 +21,7 @@ fish ~/.cargo/install-apt.sh
 fish ~/.cargo/install-cargo.sh
 
 pip3 install outrun
+pip3 install xxh-xxh
 
 xmodmap ~/.xmodmap-capslockmod
 

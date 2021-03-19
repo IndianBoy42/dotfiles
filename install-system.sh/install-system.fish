@@ -1,3 +1,4 @@
+#!/usr/bin/env fish
 mkdir -p ~/bin
 
 # just upgrade everything once

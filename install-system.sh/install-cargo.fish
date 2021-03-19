@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env fish
 if not type -q rustup
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 end

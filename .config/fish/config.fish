@@ -133,13 +133,17 @@ function rga-fzf-broken
 end
 
 # define some variables for CMAKE
-set -gx CMAKE_CLANG "MAKE_C_COMPILER=clang CMAKE_CXX_COMPILER=clang++"
+set -gx CMAKE_CLANG "CMAKE_C_COMPILER=clang CMAKE_CXX_COMPILER=clang++"
 set -gx CMAKE_GCC "CMAKE_C_COMPILER=gcc CMAKE_CXX_COMPILER=g++"
 set -gx CMAKE_ARM "CMAKE_C_COMPILER=arm-none-eabi-gcc CMAKE_CXX_COMPILER=arm-none-eabi-g++"
 set -gx CMAKE_ZIG "CMAKE_C_COMPILER=zig\ cc CMAKE_CXX_COMPILER=zig\ c++"
 set -gx CMAKE_GENERATOR "Ninja"
 set -gx CMAKE_BUILD_TYPE "Release"
 set -gx MAKEFLAGS "-j 18"
+set -gx CFLAGS "-O3 -march=native -mtune=native"
+set -gx CXXFLAGS "-O3 -march=native -mtune=native"
+set -gx FFLAGS "-O3 -march=native -mtune=native"
+set -gx FCFLAGS "-O3 -march=native -mtune=native"
 
 # edit and then run
 function vim_n_source

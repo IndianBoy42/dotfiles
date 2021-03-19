@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../install-system.sh"
+		},
+		{
+			"path": "../../.cargo"
+		}
+	],
+	"settings": {}
+}

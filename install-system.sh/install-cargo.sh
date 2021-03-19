@@ -1,3 +1,9 @@
+#!/usr/bin/env sh
+if not type -q rustup
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+end
+
+cargo install duma
 cargo install bandwhich
 cargo install bat
 cargo install bottom

@@ -97,6 +97,18 @@ abbr l "lsd -A"
 abbr lr "lsd -AR --depth 2"
 abbr ll "lsd -alh"
 abbr lt "lsd --tree -A"
+# zoxide fzf stuff?
+alias zf=__fzf_search_current_dir
+bind \cz 'zi'
+abbr z- 'z -'
+function zl
+	z $argv
+	lsd -A
+end
+function zil
+	zi
+	lsd -A
+end
 
 # apt abbreviations
 abbr apti "sudo apt install -y"
@@ -204,11 +216,6 @@ end
 
 # what even is xdg
 abbr open xdg-open
-
-# zoxide fzf stuff?
-alias zf=__fzf_search_current_dir
-bind \cz 'zi'
-abbr z- 'z -'
 
 # Reindex (indexa) if is-interactive
 if test -x ix

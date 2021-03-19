@@ -1,3 +1,4 @@
+sudo apt-get dist-upgrade
 sudo apt-get install -y yadm
 yadm clone https://github.com/IndianBoy42/dotfiles.git
 

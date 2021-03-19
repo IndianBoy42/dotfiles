@@ -1,12 +1,19 @@
+# Add stuff to path
 set -gx PATH "$HOME/bin" $PATH;
 set -gx PATH "$HOME/.cargo/bin" $PATH;
 set -gx PATH "$HOME/.local/bin" $PATH;
 set -gx PATH "$HOME/anaconda3/bin" $PATH;
+
+# Initialize zoxide (terminal cd jumper)
 zoxide init fish | source
+
+# Use starship (I prefer fish tide for now)
 # starship init fish | source
-# set -gx PATH "$HOME/anaconda3/bin" $PATH  # commented out by conda initialize;
+
+# alias thefuck for quick correct in the shell
 thefuck --alias | source
 
+# ripgrep stuff, config and aliases
 set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/config
 alias rgrep 'rg --no-config'
 abbr rgl 'rg -C0'
@@ -16,7 +23,7 @@ abbr rgl 'rg -C0'
 status is-interactive && eval /home/amedhi/anaconda3/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
 
-
+# profile editing helper functions
 abbr reload_profile 'source ~/.config/fish/config.fish'
 function codeprofile
 	code -w ~/.config/fish/config.fish
@@ -28,18 +35,25 @@ function profile
 	yadm add ~/.config/fish/config.fish
 	source ~/.config/fish/config.fish
 end
+
+# run the command silently (should use pueue for this tbh)
 function silent
 	$argv &> /dev/null &
 end
+
+# repeat the previous command, the problem is you cant do this twice
 abbr k 'eval $history[1]'
 abbr kk 'eval $history[2]'
+abbr justdoit "sudo !!"
 abbr sudo!! 'eval sudo $history[1]'
 
+# yadm helper abbreviations
 abbr yadd 'yadm add'
 abbr yadsave 'yadm commit'
 abbr yads 'yadm status'
 abbr yadsync 'yadm fetch && yadm pull && yadm push'
 
+# cat(bat) or ls(lsd) all-in-one
 function v
 	if test -f $argv
 		bat $argv
@@ -52,6 +66,7 @@ end
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME
 test -f /home/amedhi/.ghcup/env ; and set -gx PATH $HOME/.cabal/bin /home/amedhi/.ghcup/bin $PATH
 
+# super short cargo abbreviations
 abbr cg "cargo"
 abbr cgcl "cargo clean"
 abbr cgr "cargo r"
@@ -63,6 +78,7 @@ abbr cgbr "cargo build --release"
 abbr cgbe "cargo bench"
 abbr cgwc "cargo watch -x check --clear"
 
+# super short zig abbreviations
 abbr zib "zig build"
 abbr zir "zig run"
 abbr zit "zig test"
@@ -72,23 +88,36 @@ abbr zcc "zig cc"
 abbr zc++ "zig c++"
 abbr ziinit "zig init-exe"
 
+# TODO: cmake super short abbr
+
 abbr py "python"
+
+# lsd abbreviations
 abbr l "lsd -A"
 abbr lr "lsd -AR --depth 2"
 abbr ll "lsd -alh"
 abbr lt "lsd --tree -A"
+
+# apt abbreviations
 abbr apti "sudo apt install -y"
 abbr apts "apt search"
+
+# mkdir helpers
 abbr mkdp "mkdir -p"
 function mkcd 
 	mkdir -p $argv;
 	cd $argv;
 end
-abbr justdoit "sudo !!"
+# make all directories and create the file
+function touchp
+	mkdir -p (dirname $argv)
+	touch $argv
+end
 
+# ranger and then cd, dont think this works
 abbr rcd 'ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
 
-
+# broken something about rg and fzf
 function rga-fzf-broken
 	set RG_PREFIX "rga --files-with-matches"
 	local file
@@ -103,6 +132,7 @@ function rga-fzf-broken
 	xdg-open "$file"
 end
 
+# define some variables for CMAKE
 set -gx CMAKE_CLANG "MAKE_C_COMPILER=clang CMAKE_CXX_COMPILER=clang++"
 set -gx CMAKE_GCC "CMAKE_C_COMPILER=gcc CMAKE_CXX_COMPILER=g++"
 set -gx CMAKE_ARM "CMAKE_C_COMPILER=arm-none-eabi-gcc CMAKE_CXX_COMPILER=arm-none-eabi-g++"
@@ -110,6 +140,8 @@ set -gx CMAKE_ZIG "CMAKE_C_COMPILER=zig\ cc CMAKE_CXX_COMPILER=zig\ c++"
 set -gx CMAKE_GENERATOR "Ninja"
 set -gx CMAKE_BUILD_TYPE "Release"
 set -gx MAKEFLAGS "-j 18"
+
+# edit and then run
 function vim_n_source
 	nvim $argv
 	source $argv
@@ -121,6 +153,7 @@ end
 abbr edex vim_n_source
 abbr cedex code_n_source
 
+# for copying across long trees, you can mark a place to copy to (and then copy/go to it)
 function cpmark
 	set -gx CP_TO (pwd)
 	echo $CP_TO
@@ -132,11 +165,10 @@ function cpto
 	cp $argv $CP_TO
 end
 
-set -gx CMAKE_BUILD_TYPE Release
-set -gx CMAKE_GENERATOR Ninja
-
+# I guess ill use nvim inside the terminal
 set -gx EDITOR nvim
 
+# so many spotify-tui abbreviations
 set -gx SPT_FORMAT '%f %s %p : %t - %a (%b) - %v% - playing on %d'
 abbr sptnext "spt playback --next -f '$SPT_FORMAT'"
 abbr sptn sptnext
@@ -156,26 +188,29 @@ abbr sptpa "spt play -f '$SPT_FORMAT' --artist --name"
 abbr sptpal "spt play -f '$SPT_FORMAT' --album --name"
 abbr sptpt "spt play -f '$SPT_FORMAT' --track --name"
 
+# gvm is weird and broken in fish lol
 function gvm
   bass source ~/.gvm/scripts/gvm ';' gvm $argv
 end
 
+# echo the PATH and make each entry in a different line
 function echopath
 	echo $PATH | sed 's/ /\n/g'
 end
 
+# what even is xdg
 abbr open xdg-open
 
+# zoxide fzf stuff?
 alias zf=__fzf_search_current_dir
 bind \cz 'zi'
 abbr z- 'z -'
 
-status --is-interactive; and ix -u &> /dev/null &
+# Reindex (indexa) if is-interactive
+if test -x ix
+	status --is-interactive; and ix -u &> /dev/null &
+end
 
+# pueue is really cool
 abbr pu pueue
 abbr pusts pueue status
-
-function touchp
-	mkdir -p (dirname $argv)
-	touch $argv
-end

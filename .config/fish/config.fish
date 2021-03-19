@@ -176,6 +176,7 @@ function code_n_source
 end
 abbr edex vim_n_source
 abbr cedex code_n_source
+abbr coda code -a
 
 # for copying across long trees, you can mark a place to copy to (and then copy/go to it)
 function cpmark
@@ -237,3 +238,17 @@ for al in (git config -l | grep '^alias\.' | cut -d'=' -f1 | cut -d'.' -f2)
     abbr g$al "git $al"
 end
 abbr gdiff git diff
+
+abbr scr scriptisto
+abbr scrt scriptisto template
+abbr scrts scriptisto template ls
+# abbr scrnew scriptisto new
+function scrnew
+	scriptisto new $argv[1] > $argv[2]
+	chmod +x $argv[2]
+	lsd -Al $argv[2]
+end
+function watch-script
+	watchexec -c -w $argv[1] "$argv[1]"
+end
+

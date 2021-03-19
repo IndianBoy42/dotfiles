@@ -14,7 +14,8 @@ zoxide init fish | source
 # starship init fish | source
 
 # alias thefuck for quick correct in the shell
-thefuck --alias | source
+#thefuck --alias | source
+thefuck --alias fk | source
 
 # ripgrep stuff, config and aliases
 set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/config
@@ -230,8 +231,8 @@ if test -x ix
 end
 
 abbr g git
-
 # Alias all git aliases
 for al in (git config -l | grep '^alias\.' | cut -d'=' -f1 | cut -d'.' -f2)
     abbr g$al "git $al"
 end
+abbr gdiff git diff

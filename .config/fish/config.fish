@@ -43,6 +43,9 @@ end
 function silent
 	$argv &> /dev/null &
 end
+# pueue is really cool
+abbr pu pueue
+abbr pusts pueue status
 
 # repeat the previous command, the problem is you cant do this twice
 abbr k 'eval $history[1]'
@@ -226,6 +229,9 @@ if test -x ix
 	status --is-interactive; and ix -u &> /dev/null &
 end
 
-# pueue is really cool
-abbr pu pueue
-abbr pusts pueue status
+abbr g git
+
+# Alias all git aliases
+for al in (git config -l | grep '^alias\.' | cut -d'=' -f1 | cut -d'.' -f2)
+    abbr g$al "git $al"
+end

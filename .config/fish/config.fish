@@ -51,6 +51,7 @@ abbr justdoit "sudo !!"
 abbr sudo!! 'eval sudo $history[1]'
 
 # yadm helper abbreviations
+abbr yad 'yadm'
 abbr yadd 'yadm add'
 abbr yadsave 'yadm commit'
 abbr yads 'yadm status'
@@ -228,3 +229,6 @@ end
 # pueue is really cool
 abbr pu pueue
 abbr pusts pueue status
+
+abbr ros2-foxy bass source /opt/ros/foxy/setup.bash
+abbr ros-noetic bass source /opt/ros/noetic/setup.bash

@@ -121,6 +121,10 @@ end
 # apt abbreviations
 abbr apti "sudo apt install -y"
 abbr apts "apt search"
+abbr aptr "sudo apt remove"
+abbr aptu "sudo apt update && sudo apt upgrade"
+abbr aptar "sudo apt autoremove"
+abbr aptsi "apt list --installed | fzf"
 
 # mkdir helpers
 abbr mkdp "mkdir -p"
@@ -159,7 +163,7 @@ set -gx CMAKE_ARM "CMAKE_C_COMPILER=arm-none-eabi-gcc CMAKE_CXX_COMPILER=arm-non
 set -gx CMAKE_ZIG "CMAKE_C_COMPILER=zig\ cc CMAKE_CXX_COMPILER=zig\ c++"
 set -gx CMAKE_GENERATOR "Ninja"
 set -gx CMAKE_BUILD_TYPE "Release"
-set -gx MAKEFLAGS "-j 18"
+set -gx MAKEFLAGS -j (nproc)
 set -gx CFLAGS "-O3 -march=native -mtune=native"
 set -gx CXXFLAGS "-O3 -march=native -mtune=native"
 set -gx FFLAGS "-O3 -march=native -mtune=native"

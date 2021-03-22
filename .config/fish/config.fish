@@ -14,7 +14,8 @@ zoxide init fish | source
 # starship init fish | source
 
 # alias thefuck for quick correct in the shell
-thefuck --alias | source
+#thefuck --alias | source
+thefuck --alias fk | source
 
 # ripgrep stuff, config and aliases
 set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/config
@@ -43,6 +44,9 @@ end
 function silent
 	$argv &> /dev/null &
 end
+# pueue is really cool
+abbr pu pueue
+abbr pusts pueue status
 
 # repeat the previous command, the problem is you cant do this twice
 abbr k 'eval $history[1]'
@@ -51,11 +55,11 @@ abbr justdoit "sudo !!"
 abbr sudo!! 'eval sudo $history[1]'
 
 # yadm helper abbreviations
-abbr yad 'yadm'
+abbr yad yadm
 abbr yadd 'yadm add'
-abbr yadsave 'yadm commit'
+abbr yaddi 'yadm addi'
 abbr yads 'yadm status'
-abbr yadsync 'yadm fetch && yadm pull && yadm push'
+abbr yadi yadm enter verco
 
 # cat(bat) or ls(lsd) all-in-one
 function v
@@ -172,6 +176,7 @@ function code_n_source
 end
 abbr edex vim_n_source
 abbr cedex code_n_source
+abbr coda code -a
 
 # for copying across long trees, you can mark a place to copy to (and then copy/go to it)
 function cpmark
@@ -187,26 +192,27 @@ end
 
 # I guess ill use nvim inside the terminal
 set -gx EDITOR nvim
+abbr vim nvim
 
 # so many spotify-tui abbreviations
 set -gx SPT_FORMAT '%f %s %p : %t - %a (%b) - %v% - playing on %d'
-abbr sptnext "spt playback --next -f '$SPT_FORMAT'"
-abbr sptn sptnext
-abbr sptprev "spt playback --previous -f '$SPT_FORMAT'"
-abbr sptpb "spt playback -f '$SPT_FORMAT'"
-abbr sptplay "spt playback --toggle -f '$SPT_FORMAT'"
-abbr sptp sptplay
-abbr sptvol "spt playback -f '$SPT_FORMAT' --volume"
-abbr sptlike "spt playback --like -f '$SPT_FORMAT'"
-abbr sptf "spt search"
-abbr sptfl "spt search --playlists"
-abbr sptfa "spt search --artists"
-abbr sptfal "spt search --albums"
-abbr sptft "spt search --tracks"
-abbr sptpl "spt play -f '$SPT_FORMAT' --playlist --name"
-abbr sptpa "spt play -f '$SPT_FORMAT' --artist --name"
-abbr sptpal "spt play -f '$SPT_FORMAT' --album --name"
-abbr sptpt "spt play -f '$SPT_FORMAT' --track --name"
+abbr sptnext " spt playback --next -f '$SPT_FORMAT'"
+abbr sptn  " spt playback --next -f '$SPT_FORMAT'"
+abbr sptprev " spt playback --previous -f '$SPT_FORMAT'"
+abbr sptpb " spt playback -f '$SPT_FORMAT'"
+abbr sptplay " spt playback --toggle -f '$SPT_FORMAT'"
+abbr sptp  " spt playback --toggle -f '$SPT_FORMAT'"
+abbr sptvol " spt playback -f '$SPT_FORMAT' --volume"
+abbr sptlike " spt playback --like -f '$SPT_FORMAT'"
+abbr sptf " spt search"
+abbr sptfl " spt search --playlists"
+abbr sptfa " spt search --artists"
+abbr sptfal " spt search --albums"
+abbr sptft " spt search --tracks"
+abbr sptpl " spt play -f '$SPT_FORMAT' --playlist --name"
+abbr sptpa " spt play -f '$SPT_FORMAT' --artist --name"
+abbr sptpal " spt play -f '$SPT_FORMAT' --album --name"
+abbr sptpt " spt play -f '$SPT_FORMAT' --track --name"
 
 # gvm is weird and broken in fish lol
 function gvm
@@ -232,3 +238,24 @@ abbr pusts pueue status
 
 abbr ros2-foxy bass source /opt/ros/foxy/setup.bash
 abbr ros-noetic bass source /opt/ros/noetic/setup.bash
+
+abbr g git
+# Alias all git aliases
+for al in (git config -l | grep '^alias\.' | cut -d'=' -f1 | cut -d'.' -f2)
+    abbr g$al "git $al"
+end
+abbr gdiff git diff
+
+abbr scr scriptisto
+abbr scrt scriptisto template
+abbr scrts scriptisto template ls
+# abbr scrnew scriptisto new
+function scrnew
+	scriptisto new $argv[1] > $argv[2]
+	chmod +x $argv[2]
+	lsd -Al $argv[2]
+end
+function watch-script
+	watchexec -c -w $argv[1] "$argv[1]"
+end
+

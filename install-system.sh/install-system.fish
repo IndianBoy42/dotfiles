@@ -1,7 +1,10 @@
+#!/usr/bin/env fish
 mkdir -p ~/bin
 
+# just upgrade everything once
 sudo apt-get dist-upgrade
 
+# Essential
 sudo apt-get install -y apt-transport-http\
     curl \
     wget \
@@ -9,10 +12,9 @@ sudo apt-get install -y apt-transport-http\
     gnupg2 \
     lsb-release
 
-curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
-
 xmodmap ~/.xmodmap-capslockmod
 
+# install from all the "package managers"
 fish ~/.cargo/install-apt.fish
 fish ~/.cargo/install-cargo.fish
 fish ~/.cargo/install-py.fish

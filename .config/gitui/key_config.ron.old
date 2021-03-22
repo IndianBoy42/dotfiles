@@ -35,6 +35,18 @@
             bits: 1,
         ),
     ),
+    focus_workdir: (
+        code: Char('w'),
+        modifiers: (
+            bits: 0,
+        ),
+    ),
+    focus_stage: (
+        code: Char('s'),
+        modifiers: (
+            bits: 0,
+        ),
+    ),
     focus_right: (
         code: Right,
         modifiers: (
@@ -179,18 +191,6 @@
             bits: 0,
         ),
     ),
-    diff_stage_lines: (
-        code: Char('s'),
-        modifiers: (
-            bits: 0,
-        ),
-    ),
-    diff_reset_lines: (
-        code: Char('d'),
-        modifiers: (
-            bits: 0,
-        ),
-    ),
     stashing_save: (
         code: Char('s'),
         modifiers: (
@@ -275,13 +275,7 @@
             bits: 0,
         ),
     ),
-    force_push: (
-        code: Char('P'),
-        modifiers: (
-            bits: 1,
-        ),
-    ),
-    pull: (
+    fetch: (
         code: Char('f'),
         modifiers: (
             bits: 0,

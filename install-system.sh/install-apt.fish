@@ -24,7 +24,8 @@ sudo apt-get install -y \
     libeigen3-dev \
     cmake \
     ninja-build \
-    openocd\
+    openocd \
+    zathura \
     sublime-merge \
     anydesk \
     neovim \

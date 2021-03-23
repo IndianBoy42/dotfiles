@@ -1,4 +1,3 @@
-alias whch='type -a'
 # Add stuff to path
 set -gx PATH "$HOME/bin" $PATH;
 set -gx PATH "$HOME/.cargo/bin" $PATH;
@@ -6,17 +5,25 @@ set -gx PATH "$HOME/.local/bin" $PATH;
 set -gx PATH "$HOME/anaconda3/bin" $PATH;
 
 # linuxbrew add to env
-eval (~/../linuxbrew/.linuxbrew/bin/brew shellenv)
+if type -q ~/../linuxbrew/.linux/bin/brew
+	eval (~/../linuxbrew/.linuxbrew/bin/brew shellenv)
+end
 
 # Initialize zoxide (terminal cd jumper)
-zoxide init fish | source
+if type -q zoxide
+	zoxide init fish | source
+end
 
 # Use starship (I prefer fish tide for now)
 # starship init fish | source
 
 # alias thefuck for quick correct in the shell
 #thefuck --alias | source
-thefuck --alias fk | source
+if type -q thefuck
+	thefuck --alias fk | source
+endif
+
+alias whch='type -a'
 
 # ripgrep stuff, config and aliases
 set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/config

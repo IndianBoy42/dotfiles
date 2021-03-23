@@ -23,6 +23,13 @@ if type -q thefuck
 	thefuck --alias fk | source
 end
 
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+status is-interactive && eval /home/amedhi/anaconda3/bin/conda "shell.fish" "hook" $argv | source
+# <<< conda initialize <<<
+
+# functions / abbrs
+
 alias whch='type -a'
 
 # ripgrep stuff, config and aliases
@@ -30,11 +37,6 @@ set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/config
 alias rgrep 'rg --no-config'
 abbr rgl 'rg -C0'
 abbr fda 'fd -HI'
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-status is-interactive && eval /home/amedhi/anaconda3/bin/conda "shell.fish" "hook" $argv | source
-# <<< conda initialize <<<
 
 # profile editing helper functions
 abbr reload_profile 'source ~/.config/fish/config.fish'

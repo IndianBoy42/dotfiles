@@ -21,7 +21,7 @@ end
 #thefuck --alias | source
 if type -q thefuck
 	thefuck --alias fk | source
-endif
+end
 
 alias whch='type -a'
 

@@ -109,6 +109,9 @@ abbr lt "lsd --tree -A"
 alias zf=__fzf_search_current_dir
 bind \cz 'zi'
 abbr z- 'z -'
+function zh
+	cd (dirh | fzf --tac | sd '\s*[0-9]+\)\s*(.*)' '$1')
+end
 function zl
 	z $argv
 	lsd -A

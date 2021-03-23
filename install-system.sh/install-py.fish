@@ -2,7 +2,7 @@
 if not type -q conda
     wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh -O /tmp/anaconda.sh
     sh /tmp/anaconda.sh
-    source ~/.bashrc
+    bass source ~/.bashrc
     conda update conda # in case this link is outdated
     conda update anaconda
     conda config --add channels conda-forge

@@ -168,6 +168,7 @@ function rga-fzf-broken
 				--phony -q "$1" \
 				--bind "change:reload:$RG_PREFIX {q}" \
 				--preview-window="70%:wrap"
+
 	)" &&
 	echo "opening $file" &&
 	xdg-open "$file"
@@ -255,6 +256,8 @@ abbr open xdg-open
 if test -x ix
 	status --is-interactive; and ix -u &> /dev/null &
 end
+status --is-interactive; and fish_vi_key_bindings
+
 
 # pueue is really cool
 abbr pu pueue

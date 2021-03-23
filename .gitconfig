@@ -1,5 +1,8 @@
 [credential]
-	helper = store
+	helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
+	helper = 
+	helper = /usr/bin/git-credential-manager-core
+	credentialStore = secretservice
 [user]
 	name = Anshuman
 	email = amedhi@connect.ust.hk
@@ -48,3 +51,5 @@
 	clean-merged = !git branch --merged | grep -v \"\\*\" | xargs -n 1 git branch -d
 
 
+[credential "https://dev.azure.com"]
+	useHttpPath = true

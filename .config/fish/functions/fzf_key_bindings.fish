@@ -1,1 +1,0 @@
-/home/amedhi/dev/fzf/shell/key-bindings.fish

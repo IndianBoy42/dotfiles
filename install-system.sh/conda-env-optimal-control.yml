@@ -11,6 +11,7 @@ dependencies:
         - pip
         - opencv
         - numba
+        - black
         - pip:
                 - casadi
                 - gradient-free-optimizers 

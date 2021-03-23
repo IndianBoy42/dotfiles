@@ -22,6 +22,7 @@ thefuck --alias fk | source
 set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/config
 alias rgrep 'rg --no-config'
 abbr rgl 'rg -C0'
+abbr fda 'fd -HI'
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

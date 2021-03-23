@@ -15,12 +15,13 @@ sudo apt-get install -y apt-transport-http\
 xmodmap ~/.xmodmap-capslockmod
 
 # install from all the "package managers"
-fish ~/.install-system/install-nvim.fish
-fish ~/.install-system/install-nf.fish
-fish ~/.install-system/install-apt.fish
-fish ~/.install-system/install-py.fish
-fish ~/.install-system/install-jl.fish
-fish ~/.install-system/install-brew.fish
-fish ~/.install-system/install-node.fish
-fish ~/.install-system/install-go.fish
-fish ~/.install-system/install-flatpak.fish
+fish ~/install-system.sh/install-nvim.fish
+fish ~/install-system.sh/install-code.fish
+fish ~/install-system.sh/install-apt.fish
+fish ~/install-system.sh/install-py.fish
+fish ~/install-system.sh/install-jl.fish
+fish ~/install-system.sh/install-brew.fish
+fish ~/install-system.sh/install-node.fish
+fish ~/install-system.sh/install-go.fish
+fish ~/install-system.sh/install-flatpak.fish
+fish ~/install-system.sh/install-nf.fish

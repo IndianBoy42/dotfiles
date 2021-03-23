@@ -1,3 +1,3 @@
 #!/usr/bin/env fish
 
-flatpak install -y com.spotify.Client
+flatpak install -y com.spotify.Client com.anydesk.Anydesk

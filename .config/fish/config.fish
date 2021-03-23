@@ -105,6 +105,7 @@ abbr l "lsd -A"
 abbr lr "lsd -AR --depth 2"
 abbr ll "lsd -alh"
 abbr lt "lsd --tree -A"
+abbr ltd "lsd --tree -A --depth"
 # zoxide fzf stuff?
 alias zf=__fzf_search_current_dir
 bind \cz 'zi'
@@ -195,6 +196,9 @@ function gomark
 end
 function cpto 
 	cp $argv $CP_TO
+end
+function mvto
+	mv $argv $CP_TO
 end
 
 # I guess ill use nvim inside the terminal

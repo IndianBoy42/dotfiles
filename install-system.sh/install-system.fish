@@ -2,6 +2,7 @@
 mkdir -p ~/bin
 
 # just upgrade everything once
+sudo apt-get update
 sudo apt-get dist-upgrade
 
 # Essential

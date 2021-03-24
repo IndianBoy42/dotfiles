@@ -1,12 +1,10 @@
 #!/usr/bin/env fish
 if not type -q conda
     wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh -O /tmp/anaconda.sh
-    sh /tmp/anaconda.sh
+    sh /tmp/anaconda.sh -b -u
     bass source ~/.bashrc
-    conda update conda # in case this link is outdated
-    conda update anaconda
-    conda config --add channels conda-forge
-    conda config --set channel_priority strict
+	conda remove anaconda --force
+	conda update --all
 end
 
 conda activate base

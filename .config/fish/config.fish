@@ -2,10 +2,10 @@
 set -gx PATH "$HOME/bin" $PATH;
 set -gx PATH "$HOME/.cargo/bin" $PATH;
 set -gx PATH "$HOME/.local/bin" $PATH;
-set -gx PATH "$HOME/anaconda3/bin" $PATH;
+# set -gx PATH "$HOME/anaconda3/bin" $PATH;
 
 # linuxbrew add to env
-if type -q ~/../linuxbrew/.linux/bin/brew
+if type -q ~/../linuxbrew/.linuxbrew/bin/brew
 	eval (~/../linuxbrew/.linuxbrew/bin/brew shellenv)
 end
 
@@ -14,13 +14,15 @@ if type -q zoxide
 	zoxide init fish | source
 end
 
+set -gx CUDACXX /usr/lib/cuda/bin/nvcc
+
 # Use starship (I prefer fish tide for now)
 # starship init fish | source
 
 # alias thefuck for quick correct in the shell
 #thefuck --alias | source
 if type -q thefuck
-	thefuck --alias fk | source
+	status is-interactive; and thefuck --alias fk | source
 end
 
 if type -q conda

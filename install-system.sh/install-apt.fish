@@ -15,6 +15,7 @@ sudo apt-get install -y \
     libeigen3-dev \
 	qemu-system-arm \
 	qemu-system-aarch64 \
+	meson \
 	bison \
 	binutils \
 	lld \

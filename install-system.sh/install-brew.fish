@@ -6,5 +6,6 @@ if not type -q brew
 	bash $tmpfile
 	eval (~/../linuxbrew/.linuxbrew/bin/brew shellenv)
 end
-brew install zig
+brew install cmake gcc ninja
+brew install zig --HEAD
 brew install fzf

@@ -220,6 +220,7 @@ end
 # I guess ill use nvim inside the terminal
 set -gx EDITOR nvim
 abbr vim nvim
+abbr vi nvim
 
 # so many spotify-tui abbreviations
 set -gx SPT_FORMAT '%f %s %p : %t - %a (%b) - %v% - playing on %d'

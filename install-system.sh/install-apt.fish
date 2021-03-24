@@ -56,4 +56,6 @@ sudo apt-get install -y \
     sshpass \
     google-chrome-stable \
     kicad \
-    ffmpeg
+    ffmpeg \
+	fancontrol lm-sensors psensor sensors-applet
+

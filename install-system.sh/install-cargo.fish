@@ -5,6 +5,7 @@ end
 
 cargo install  \
     duma  \
+	alacritty \
     bandwhich  \
     bat  \
     bottom  \
@@ -54,3 +55,5 @@ cargo install  \
     zoxide 
 
 cargo install-update --all
+
+

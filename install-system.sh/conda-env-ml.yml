@@ -10,6 +10,7 @@ dependencies:
         - ipykernel
         - seaborn
         - pytorch
+        - tensorflow-gpu
         - torchvision
         - tqdm
         - black

@@ -16,9 +16,14 @@ sudo apt-get install -y \
 	qemu-system-arm \
 	qemu-system-aarch64 \
 	meson \
+	gcc-arm-none-eabi \
+	libglibmm-2.4-dev \
+	libglib2.0-dev \
+	python \
 	bison \
 	binutils \
 	lld \
+	googletest \
     cmake \
     ninja-build \
     openocd \

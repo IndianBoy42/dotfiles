@@ -1,3 +1,5 @@
+set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig/
+set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/local/lib/pkgconfig/
 # Add stuff to path
 set -gx PATH "$HOME/bin" $PATH;
 set -gx PATH "$HOME/.cargo/bin" $PATH;
@@ -53,6 +55,14 @@ function profile
 	nvim ~/.config/fish/config.fish
 	yadm add ~/.config/fish/config.fish
 	source ~/.config/fish/config.fish
+end
+function install-script
+	set file ~/install-system.sh/install-$argv.fish
+	set tmpfile /(mktemp)
+	cp $file $tmpfile
+	nvim $file
+	yadm add $file
+	delta $tmpfile $file
 end
 
 # run the command silently (should use pueue for this tbh)
@@ -112,6 +122,7 @@ abbr zc++ "zig c++"
 abbr ziinit "zig init-exe"
 
 # TODO: cmake super short abbr
+abbr ninja-targets "ninja -t targets"
 
 abbr py "python"
 
@@ -183,6 +194,7 @@ set -gx CMAKE_ARM "CMAKE_C_COMPILER=arm-none-eabi-gcc CMAKE_CXX_COMPILER=arm-non
 set -gx CMAKE_ZIG "CMAKE_C_COMPILER=zig\ cc CMAKE_CXX_COMPILER=zig\ c++"
 set -gx CMAKE_GENERATOR "Ninja"
 set -gx CMAKE_BUILD_TYPE "Release"
+set -gx CMAKE_EXE_LINKER_FLAGS "-fuse-ld=gold"
 set -gx MAKEFLAGS -j (nproc)
 set -gx CFLAGS "-O3 -march=native -mtune=native"
 set -gx CXXFLAGS "-O3 -march=native -mtune=native"

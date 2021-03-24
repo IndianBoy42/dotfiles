@@ -25,7 +25,7 @@ if type -q thefuck
 	status is-interactive; and thefuck --alias fk | source
 end
 
-if type -q conda
+if type -q ~/anaconda3/bin/conda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 status is-interactive && eval /home/amedhi/anaconda3/bin/conda "shell.fish" "hook" $argv | source

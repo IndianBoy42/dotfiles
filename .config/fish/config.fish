@@ -188,10 +188,10 @@ function rga-fzf-broken
 end
 
 # define some variables for CMAKE
-set -gx CMAKE_CLANG "CMAKE_C_COMPILER=clang CMAKE_CXX_COMPILER=clang++"
-set -gx CMAKE_GCC "CMAKE_C_COMPILER=gcc CMAKE_CXX_COMPILER=g++"
-set -gx CMAKE_ARM "CMAKE_C_COMPILER=arm-none-eabi-gcc CMAKE_CXX_COMPILER=arm-none-eabi-g++"
-set -gx CMAKE_ZIG "CMAKE_C_COMPILER=zig\ cc CMAKE_CXX_COMPILER=zig\ c++"
+abbr cmake-clang "cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
+abbr cmake-gcc "cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++"
+abbr cmake-zig "cmake -DCMAKE_C_COMPILER=zig\ cc -DCMAKE_CXX_COMPILER=zig\ c++"
+abbr cmake-zap "cmake -DCMAKE_C_COMPILER=zapcc -DCMAKE_CXX_COMPILER=zapcc"
 set -gx CMAKE_GENERATOR "Ninja"
 set -gx CMAKE_BUILD_TYPE "Release"
 set -gx CMAKE_EXE_LINKER_FLAGS "-fuse-ld=gold"

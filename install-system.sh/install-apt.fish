@@ -12,6 +12,7 @@ sudo apt-get install -y \
     libopenblas-dev \
     liblapack-dev \
     libomp-dev \
+    libpomp-dev \
     libeigen3-dev \
 	qemu-system-arm \
 	qemu-system-aarch64 \

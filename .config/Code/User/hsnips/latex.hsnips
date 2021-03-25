@@ -1,0 +1,74 @@
+snippet beg "begin{} / end{}" bA
+\begin{$1}
+	$2
+\end{$1}
+endsnippet
+
+snippet \( "inline math" A
+\( $1 \)
+endsnippet
+snippet $ "short inline math" A
+$$1$
+endsnippet
+
+snippet () "parens" A
+\left( $1 \right)
+endsnippet
+snippet [] "sq brackets" A
+\left[ $1 \right]
+endsnippet
+snippet {} "curly brackets" A
+\left\{ $1 \right\}
+endsnippet
+snippet \| "norm" A
+\left\| $1 \right\|
+endsnippet
+
+snippet mbb "" A
+\mathbb{$1}
+endsnippet
+snippet mbf "" A
+\mathbf{$1}
+endsnippet
+
+snippet \eq "display math" bA
+\begin{equation}
+    $1
+\end{equation}
+endsnippet
+
+snippet \alig "aligned math" bA
+\begin{align}
+    $1
+\end{align}
+endsnippet
+snippet &= "align equals" A
+&= $1 \\\\
+endsnippet
+
+snippet \algo "algorithm" bA
+\begin{algorithm} \DontPrintSemicolon \SetAlgoLined
+    \KwIn{ $1 }
+    \KwResult{ $2 }
+    \caption{ $3 }
+
+    \tcc{ Algorithm Here }
+    $0 \;
+
+    \KwRet{ $5 }
+\end{algorithm}
+endsnippet
+
+snippet \psec "section" bA
+\clearpage\section{$1}
+endsnippet
+snippet \sec "section" bA
+\section{$1}
+endsnippet
+
+snippet \psubsec "subsection" bA
+\clearpage\subsection{$1}
+endsnippet
+snippet \subsec "subsection" bA
+\subsection{$1}
+endsnippet

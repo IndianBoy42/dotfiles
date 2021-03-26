@@ -1,6 +1,12 @@
 #!/usr/bin/env fish
 if not type -q rustup
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --profile default
+    rustup target add x86_64-unknown-linux-musl      
+    rustup target add thumbv7m-none-eabi
+    rustup target add thumbv7em-none-eabi
+    rustup target add thumbv7em-none-eabihf
+    rustup target add aarch64-unknown-linux-musl
+    rustup toolchain install stable
 end
 
 cargo install  \

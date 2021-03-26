@@ -65,5 +65,6 @@ sudo apt-get install -y \
     google-chrome-stable \
     kicad \
     ffmpeg \
-	fancontrol lm-sensors psensor sensors-applet
+	fancontrol lm-sensors psensor sensors-applet \
+    linux-tools-common linux-tools-generic linux-tools-(uname -r)
 

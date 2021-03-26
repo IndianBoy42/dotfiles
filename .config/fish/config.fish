@@ -110,6 +110,9 @@ abbr cgb "cargo build"
 abbr cgbr "cargo build --release"
 abbr cgbe "cargo bench"
 abbr cgwc "cargo watch -x check --clear"
+set -gx CARGO_BUILD_TARGET x86_64-unknown-linux-musl
+
+abbr watchbuild "watchexec -cw . -i build --"
 
 # super short zig abbreviations
 abbr zib "zig build"
@@ -136,6 +139,7 @@ abbr ltd "lsd --tree -A --depth"
 alias zf=__fzf_search_current_dir
 bind \cz 'zi'
 abbr z- 'z -'
+abbr cd z
 function zh
 	cd (dirh | fzf --tac | sd '\s*[0-9]+\)\s*(.*)' '$1')
 end

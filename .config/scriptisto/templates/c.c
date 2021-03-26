@@ -5,7 +5,7 @@
 
 // scriptisto-begin
 // script_src: main.c
-// build_cmd: clang -O2 --std=gnu2x -Wall -Wextra -Wpedantic main.c `pkg-config --libs --cflags glib-2.0` -o ./script -fsanitize=address -g
+// build_cmd: clang -O2 -fuse-ld=lld --std=gnu2x -Wall -Wextra -Wpedantic main.c `pkg-config --libs --cflags glib-2.0` -o ./script -g
 // scriptisto-end
 
 int main(int argc, char* argv[]) {

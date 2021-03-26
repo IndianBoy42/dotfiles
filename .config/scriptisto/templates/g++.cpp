@@ -6,7 +6,7 @@
 
 // scriptisto-begin
 // script_src: main.cpp
-// build_cmd: g++ -O2 main.cc --std=gnu++20 -Wall -Wextra -Wpedantic `pkg-config --libs --cflags glibmm-2.4` -o ./script -fsanitize=address
+// build_cmd: g++ -O2 -fuse-ld=lld main.cpp --std=gnu++20 -Wall -Wextra -Wpedantic `pkg-config --libs --cflags glibmm-2.4` -o ./script
 // scriptisto-end
 
 int main(int argc, char *argv[]) {

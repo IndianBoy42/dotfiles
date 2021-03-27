@@ -1,6 +1,8 @@
 #!/usr/bin/env fish
 mkdir -p ~/bin
 
+sudo usermod -aG docker $USER
+
 # just upgrade everything once
 sudo apt-get update
 sudo apt-get dist-upgrade

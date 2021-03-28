@@ -1,10 +1,59 @@
 source "%val{config}/surround.kak"
 source "%val{config}/auto-pairs.kak"
+source "%val{config}/vertical-selection.kak"
+source "%val{config}/text-objects.kak"
+source "%val{config}/move-line.kak"
 require-module auto-pairs
+require-module move-line
+
+add-highlighter global/number-lines number-lines -relative -hlcursor
+add-highlighter global/show-matching show-matching
+# add-highlighter global/show-whitespaces show-whitespaces
+
+set-option global scrolloff 5,1
+
+# Live reload
+set-option global autoreload yes
+# Fix LiveReload
+set-option global writemethod replace
+
+set-option global grepcmd 'rgrep --column'
+
+set-option -add global matching_pairs ‹ › « » “ ” ‘ ’
+
+#set-option global modelinefmt '{yellow}%opt{out_of_view_status_line}{default} {{mode_info}} {magenta}%val{client}{default} at {yellow}%val{session}{default} on {green}%val{bufname}{default} {{context_info}} {cyan}U+%sh{printf ''%04x'' "$kak_cursor_char_value"}{default} {cyan}%val{cursor_line}{default}:{cyan}%val{cursor_char_column}{default}'
 
 declare-user-mode surround
 map global surround s ':surround<ret>' -docstring 'surround'
 map global surround c ':change-surround<ret>' -docstring 'change'
 map global surround d ':delete-surround<ret>' -docstring 'delete'
-map global normal 's' ':enter-user-mode surround<ret>'
+map global normal s ':enter-user-mode surround<ret>' -docstring 'surround'
 
+map global normal <space> , -docstring 'leader'
+map global normal <esc> <space> -docstring 'remove all sels except main'
+map global normal <a-esc> <a-space> -docstring 'remove main sel'
+map global normal <backspace> ';' -docstring 'reduce sels to cursor'
+map global normal <tab> '<a-;>' -docstring 'swap cursor and anchor'
+map global user <tab> '<a-:>'
+
+map global normal 0 '<a-h>hl' -docstring 'Go to beginning of line'
+
+# clipboard interaction
+map global user p -docstring 'paste from clipboard' '!xsel -bo<ret>uU'
+map global user y -docstring 'copy to clipboard' '<a-|>xsel -bi<ret>'
+map global user d -docstring 'cut to clipboard' '|xsel -bi<ret>'
+
+# vim old habits
+map global normal D '<a-l>d' -docstring 'delete to end of line'
+map global normal Y '<a-l>y' -docstring 'yank to end of line'
+map global normal <a-h> Gi
+
+source "%val{config}/user-mode.kak"
+
+map global normal <a-down> ': move-line-below<ret>'
+map global normal <a-up> ': move-line-above<ret>'
+
+define-command -docstring 'Open kakrc' edit-kakoune 'edit ~/.config/kak/kakrc'
+
+hook global InsertCompletionShow .* %{ map window insert <tab> <c-n>; map window insert <s-tab> <c-p> }
+hook global InsertCompletionHide .* %{ unmap window insert <tab> <c-n>; unmap window insert <s-tab> <c-p> }

@@ -48,6 +48,10 @@ sudo apt-get install -y \
     libcairo2-dev \
     libjpeg-dev \
     libgif-dev \
+    libtiff-dev \
+	libx11-dev \
+	libxpm-dev \
+	libgtk2.0-dev \
     texlive-full \
     python3-pip \
     sublime-merge \
@@ -77,4 +81,5 @@ sudo apt-get install -y \
     ffmpeg \
 	fancontrol lm-sensors psensor sensors-applet \
     linux-tools-common linux-tools-generic linux-tools-(uname -r) \
-	docker-ce docker-ce-cli containerd.io
+	docker-ce docker-ce-cli containerd.io \
+	musl musl-dev musl-tools

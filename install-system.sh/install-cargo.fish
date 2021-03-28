@@ -7,9 +7,11 @@ if not type -q rustup
     rustup target add thumbv7em-none-eabihf
     rustup target add aarch64-unknown-linux-musl
     rustup toolchain install stable
+else
+	rustup update
 end
 
-cargo install  \
+CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
     duma  \
 	alacritty \
     bandwhich  \

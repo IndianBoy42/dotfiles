@@ -19,6 +19,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
+Plug 'liuchengxu/vim-which-key'
 
 " Initialize plugin system
 call plug#end()
@@ -43,4 +44,8 @@ inoremap { {}<Left>
 inoremap {<CR> {<CR>}<Esc>O
 inoremap {{ {
 inoremap {} {}
+
+" let mapleader = " "
+" nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+set timeoutlen=100
 

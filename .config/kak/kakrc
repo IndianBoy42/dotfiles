@@ -1,0 +1,10 @@
+source "%val{config}/surround.kak"
+source "%val{config}/auto-pairs.kak"
+require-module auto-pairs
+
+declare-user-mode surround
+map global surround s ':surround<ret>' -docstring 'surround'
+map global surround c ':change-surround<ret>' -docstring 'change'
+map global surround d ':delete-surround<ret>' -docstring 'delete'
+map global normal 's' ':enter-user-mode surround<ret>'
+

@@ -6,6 +6,8 @@ if not test -f /etc/apt/sources.list.d/sublime-text.list
     echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
 end
 
+sudo add-apt-repository ppa:git-core/ppa
+
 sudo apt update
 
 sudo apt-get install -y \

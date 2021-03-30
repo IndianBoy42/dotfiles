@@ -3,20 +3,24 @@ declare-user-mode select-words
 declare-user-mode select-lines
 declare-user-mode matching
 
+
 map global view i <esc><a-i> -docstring "Select Inside"
 map global view a <esc><a-a> -docstring "Select Around"
 
 map global user i <a-i> -docstring 'Select Inside'
 map global user a <a-a> -docstring 'Select Around'
 
+map global user q ': q' -docstring 'Quit'
+
 map global user b ': enter-user-mode<space>user-buffer<ret>' -docstring '+Buffer'
 map global user-buffer b ': buffer ' -docstring 'Switch Buffer'
+map global user-buffer d ': delete-buffer<ret>' -docstring 'Delete Buffer'
 map global user-buffer n ': buffer-next<ret>' -docstring 'Next Buffer'
 map global user-buffer p ': buffer-previous<ret>' -docstring 'Previous Buffer'
 map global user-buffer w ': write<ret>' -docstring 'Write Buffer'
-map global user-buffer W ': write ' -docstring 'Write Buffer'
+map global user-buffer W ': write ' -docstring 'Write Buffer to {file}'
 map global user-buffer o ': edit ' -docstring 'Open File'
-map global user-buffer d ': buffer *debug*<ret>' -docstring 'Debug Buffer'
+map global user-buffer D ': buffer *debug*<ret>' -docstring 'Debug Buffer'
 
 map global user s '*N: enter-user-mode -lock matching<ret>' -docstring '+Matches'
 map global matching s N -docstring 'Add next match'

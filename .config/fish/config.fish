@@ -52,7 +52,7 @@ function codeprofile
 	source ~/.config/fish/config.fish
 end
 function profile
-	nvim ~/.config/fish/config.fish
+	$EDITOR ~/.config/fish/config.fish
 	yadm add ~/.config/fish/config.fish
 	source ~/.config/fish/config.fish
 end
@@ -60,7 +60,7 @@ function install-script
 	set file ~/install-system.sh/install-$argv.fish
 	set tmpfile /(mktemp)
 	cp $file $tmpfile
-	nvim $file
+	$EDITOR $file
 	yadm add $file
 	delta $tmpfile $file
 end
@@ -206,8 +206,8 @@ set -gx FFLAGS "-O3 -march=native -mtune=native"
 set -gx FCFLAGS "-O3 -march=native -mtune=native"
 
 # edit and then run
-function vim_n_source
-	nvim $argv
+function ed_n_source
+	$EDITOR $argv
 	source $argv
 end
 function code_n_source
@@ -235,7 +235,8 @@ end
 
 # I guess ill use nvim inside the terminal
 set -gx EDITOR kak #nvim
-set -gx PAGER $EDITOR
+set -gx VISUAL $EDITOR
+# set -gx PAGER $EDITOR
 abbr vim nvim
 abbr vi nvim
 

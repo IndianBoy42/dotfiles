@@ -5,7 +5,7 @@ if not test -f /etc/apt/sources.list.d/sublime-text.list
     echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
 end
 
-sudo add-apt-repository ppa:git-core/ppa
+sudo add-apt-repository -y ppa:git-core/ppa
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
@@ -18,7 +18,6 @@ sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/u
 sudo apt update
 
 sudo apt-get install -y \
-	bazel \
     libopenblas-dev \
     liblapack-dev \
     libomp-dev \

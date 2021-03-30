@@ -8,7 +8,7 @@ if not type -q rustup
     rustup target add aarch64-unknown-linux-musl
     rustup toolchain install stable
 else
-	rustup update
+    rustup update
 end
 
 CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
@@ -62,6 +62,6 @@ CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
     xsv  \
     zoxide 
 
-cargo install-update --all
+CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install-update --all
 
 

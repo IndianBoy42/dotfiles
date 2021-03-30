@@ -234,7 +234,8 @@ function mvto
 end
 
 # I guess ill use nvim inside the terminal
-set -gx EDITOR nvim
+set -gx EDITOR kak #nvim
+set -gx PAGER $EDITOR
 abbr vim nvim
 abbr vi nvim
 

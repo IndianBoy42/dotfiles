@@ -95,7 +95,7 @@ abbr yaddi 'yadm addi'
 abbr yads 'yadm status'
 abbr yadi yadm enter verco
 abbr yaddconfigs yadm add --update ~/.config/
-abbr yaddinstall yadm add --update ~/install-system.sh/
+abbr yaddinstall yadm add ~/install-system.sh/
 abbr yaddupdate yadm add --update ~
 
 # cat(bat) or ls(lsd) all-in-one

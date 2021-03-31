@@ -81,4 +81,5 @@ sudo apt-get install -y \
 	fancontrol lm-sensors psensor sensors-applet \
     linux-tools-common linux-tools-generic linux-tools-(uname -r) \
 	docker-ce docker-ce-cli containerd.io \
-	musl musl-dev musl-tools
+	musl musl-dev musl-tools \
+	direnv

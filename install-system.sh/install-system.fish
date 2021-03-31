@@ -15,8 +15,6 @@ sudo apt-get install -y apt-transport-http\
     gnupg2 \
     lsb-release
 
-xmodmap ~/.xmodmap-capslockmod
-
 # install from all the "package managers"
 fish ~/install-system.sh/install-nvim.fish
 fish ~/install-system.sh/install-code.fish

@@ -49,7 +49,7 @@
 	la = "!git config -l | grep alias | cut -c 7-"
 	rao = remote add origin
 	clean-merged = !git branch --merged | grep -v \"\\*\" | xargs -n 1 git branch -d
-
-
+	f = fetch --all
+	
 [credential "https://dev.azure.com"]
 	useHttpPath = true

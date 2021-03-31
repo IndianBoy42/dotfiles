@@ -213,10 +213,15 @@ set -gx CMAKE_GENERATOR "Ninja"
 set -gx CMAKE_BUILD_TYPE "Release"
 set -gx CMAKE_EXE_LINKER_FLAGS "-fuse-ld=gold"
 set -gx MAKEFLAGS -j (nproc)
-set -gx CFLAGS "-O3 -march=native -mtune=native"
-set -gx CXXFLAGS "-O3 -march=native -mtune=native"
-set -gx FFLAGS "-O3 -march=native -mtune=native"
-set -gx FCFLAGS "-O3 -march=native -mtune=native"
+function FASTFLAGS
+    set -gx CFLAGS "-O3 -march=native -mtune=native"
+    set -gx CXXFLAGS "-O3 -march=native -mtune=native"
+    set -gx CPPFLAGS $CXXFLAGS
+    set -gx FFLAGS "-O3 -march=native -mtune=native"
+    set -gx FCFLAGS "-O3 -march=native -mtune=native"
+    set -gx CMAKE_C_FLAGS_RELEASE $CFLAGS
+    set -gx CMAKE_CXX_FLAGS_RELEASE $CPPFLAGS
+end
 
 # edit and then run
 function ed_n_source

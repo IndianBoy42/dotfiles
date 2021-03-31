@@ -36,6 +36,12 @@ end
 
 # functions / abbrs
 
+function fish_user_key_bindings
+	bind \cg expand_glob
+	bind \cz 'zi'
+	echo "user_keys"
+end
+
 alias whch='type -a'
 
 # ripgrep stuff, config and aliases
@@ -150,7 +156,6 @@ abbr ltd "lsd --tree -A --depth"
 abbr la "lsd -alh"
 # zoxide fzf stuff?
 alias zf=__fzf_search_current_dir
-bind \cz 'zi'
 abbr z- 'z -'
 abbr cd z
 function zh
@@ -295,7 +300,7 @@ abbr open xdg-open
 if test -x ix
 	status --is-interactive; and ix -u &> /dev/null &
 end
-status --is-interactive; and fish_vi_key_bindings
+set -g fish_key_bindings fish_vi_key_bindings
 
 
 # pueue is really cool
@@ -325,3 +330,4 @@ function watch-script
 	watchexec -c -w $argv[1] "$argv[1]"
 end
 
+direnv hook fish | source

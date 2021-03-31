@@ -147,6 +147,7 @@ abbr lr "lsd -AR --depth 2"
 abbr ll "lsd -alh"
 abbr lt "lsd --tree -A"
 abbr ltd "lsd --tree -A --depth"
+abbr la "lsd -alh"
 # zoxide fzf stuff?
 alias zf=__fzf_search_current_dir
 bind \cz 'zi'

@@ -9,7 +9,6 @@ end
 
 conda activate base
 pip3 install outrun xxh-xxh click argcomplete thefuck
-pip3 install --user qmk
 
 for f in conda-env-*.yml
 	echo $f

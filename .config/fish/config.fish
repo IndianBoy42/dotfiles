@@ -64,6 +64,15 @@ function install-script
 	yadm add $file
 	delta $tmpfile $file
 end
+function fdinstall
+   fd -IH --type f '.' ~/install-system.sh/ | fzf 
+end
+function fdconfig
+   fd -IH --type f '.' ~/.config/ | fzf 
+end
+function edconfig
+   $EDITOR (   fd -IH --type f '.' ~/.config/ | fzf )
+end
 
 # run the command silently (should use pueue for this tbh)
 function silent

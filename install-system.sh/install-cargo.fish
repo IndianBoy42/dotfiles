@@ -53,6 +53,7 @@ CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
     sd  \
     serial-monitor \
     shy  \
+    skim \
     so  \
     spotify-tui \
     starship  \

@@ -127,6 +127,5 @@ return {
     keys = keybindings,
     unix_domains = {{
         name = "main",
-        connect_automatically = true
     }}
 }

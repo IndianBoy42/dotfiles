@@ -34,7 +34,11 @@ status is-interactive && eval /home/amedhi/anaconda3/bin/conda "shell.fish" "hoo
 # <<< conda initialize <<<
 end
 
+##################################
 # functions / abbrs
+##################################
+
+abbr del rm -vi
 
 function fish_user_key_bindings
 	bind \cg expand_glob
@@ -54,12 +58,10 @@ abbr fda 'fd -HI'
 abbr reload_profile 'source ~/.config/fish/config.fish'
 function codeprofile
 	code -w ~/.config/fish/config.fish
-	yadm add ~/.config/fish/config.fish
 	source ~/.config/fish/config.fish
 end
 function profile
 	$EDITOR ~/.config/fish/config.fish
-	yadm add ~/.config/fish/config.fish
 	source ~/.config/fish/config.fish
 end
 function install-script
@@ -67,7 +69,6 @@ function install-script
 	set tmpfile /(mktemp)
 	cp $file $tmpfile
 	$EDITOR $file
-	yadm add $file
 	delta $tmpfile $file
 end
 function fdinstall

@@ -39,3 +39,12 @@ bazel build
 # cd tools/install/dockerhub/focal
 # wget https://drake-packages.csail.mit.edu/drake/nightly/drake-latest-focal.tar.gz
 # docker build -t robotlocomation/drake:focal
+
+# fzf
+cd ~/git-builds/
+git clone https://github.com/junegunn/fzf.git
+cd fzf
+gvm use 16
+make
+make install
+sudo ln -s $PWD/bin/fzf ~/bin/fzf

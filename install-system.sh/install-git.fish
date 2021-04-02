@@ -48,3 +48,8 @@ gvm use 16
 make
 make install
 sudo ln -s $PWD/bin/fzf ~/bin/fzf
+
+cd ~/git-builds/
+git clone https://github.com/sachaos/todoist.git
+cd todoist
+make install

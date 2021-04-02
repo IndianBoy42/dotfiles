@@ -157,6 +157,7 @@ abbr ltd "lsd --tree -A --depth"
 abbr la "lsd -alh"
 # zoxide fzf stuff?
 alias zf=__fzf_search_current_dir
+abbr zh 'z ~ && z (__fzf_search_current_dir)'
 abbr z- 'z -'
 abbr cd z
 function zh
@@ -332,3 +333,4 @@ function watch-script
 end
 
 direnv hook fish | source
+

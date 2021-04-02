@@ -1,6 +1,10 @@
 local wezterm = require 'wezterm';
 
-font = "FiraCode Nerd Font Mono"
+font = {
+    "FiraCode Nerd Font Mono",
+    "JetBains Mono",
+    "Source Code Pro"
+}
 
 keybindings = {{
     key = "h",
@@ -113,7 +117,7 @@ keybindings = {{
 }}
 
 return {
-    font = wezterm.font_with_fallback({font, "JetBains Mono"}),
+    font = wezterm.font_with_fallback(font),
     -- font_rules = {
     --	{intensity="Bold", font = wezterm.font_with_fallback({font..", Bold", font})},
     --	{intensity="Half", font = wezterm.font_with_fallback({font..", Light", font})}

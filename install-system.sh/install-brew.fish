@@ -9,4 +9,3 @@ end
 brew install cmake gcc ninja
 brew install --cask gcc-arm-embedded
 brew install zig --HEAD
-brew install fzf

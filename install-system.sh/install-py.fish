@@ -8,7 +8,20 @@ if not type -q conda
 end
 
 conda activate base
-pip3 install --user outrun xxh-xxh click argcomplete thefuck mps-youtube youtube-dl
+pip3 install --user pipx
+pipx ensurepath
+
+pipx install git+https://github.com/mps-youtube/mps-youtube.git
+pipx inject mps-youtube youtube-dl 
+pipx inject mps-youtube pyperclip
+sudo add-apt-repository -y ppa:mc3man/mpv-tests
+sudo apt-get update
+sudo apt install -y mpv
+
+pipx install outrun
+pipx install xxh-xxh
+pipx install thefuck
+pip3 install --user click argcomplete 
 
 for f in conda-env-*.yml
 	echo $f

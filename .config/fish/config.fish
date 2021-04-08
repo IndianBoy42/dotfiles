@@ -97,7 +97,7 @@ abbr sudo!! 'eval sudo $history[1]'
 
 # yadm helper abbreviations
 abbr yad yadm
-abbr yadd 'yadm adds'
+abbr yadd 'yadm add'
 abbr yaddi 'yadm addi'
 abbr yads 'yadm status'
 abbr yadi yadm enter verco

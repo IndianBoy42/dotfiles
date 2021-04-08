@@ -219,6 +219,7 @@ abbr cmake-zap "cmake -DCMAKE_C_COMPILER=zapcc -DCMAKE_CXX_COMPILER=zapcc"
 set -gx CMAKE_GENERATOR "Ninja"
 set -gx CMAKE_BUILD_TYPE "Release"
 set -gx CMAKE_EXE_LINKER_FLAGS "-fuse-ld=gold"
+set -gx CMAKE_EXPORT_COMPILE_COMMANDS "ON"
 set -gx MAKEFLAGS -j (nproc)
 function FASTFLAGS
     set -gx CFLAGS "-O3 -march=native -mtune=native"
@@ -333,4 +334,3 @@ function watch-script
 end
 
 direnv hook fish | source
-

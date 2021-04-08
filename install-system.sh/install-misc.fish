@@ -18,8 +18,7 @@ sudo touch /etc/udev/rules.d/uinput.rules
 echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"   (base)
   ' | sudo tee /etc/udev/rules.d/uinput.rules
   
-wget https://github.com/david-janssen/kmonad/raw/master/startup/kmonad.service -O /tmp/kmonad.service
-sudo cp /tmp/kmonad.service /etc/systemd/system/kmonad.service
+sudo cp ./kmonad.service /etc/systemd/system/kmonad.service
 sudo systemctl enable kmonad.service
 
 # Wezterm -- cool terminal?

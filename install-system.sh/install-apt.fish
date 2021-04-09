@@ -18,6 +18,7 @@ sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/u
 sudo apt update
 
 sudo apt-get install -y \
+    openssh-server \
     libopenblas-dev \
     liblapack-dev \
     libomp-dev \

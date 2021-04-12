@@ -16,6 +16,9 @@ if type -q zoxide
 	zoxide init fish | source
 end
 
+# git-subrepo
+source ~/git-builds/git-subrepo/.fish.rc
+
 set -gx CUDACXX /usr/lib/cuda/bin/nvcc
 
 # Use starship (I prefer fish tide for now)

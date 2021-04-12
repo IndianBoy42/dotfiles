@@ -2,6 +2,10 @@
 
 mkdir -p ~/git-builds
 
+# git-subrepo
+cd ~/git-builds
+git clone https://github.com/ingydotnet/git-subrepo
+
 # indexa
 cd ~/git-builds
 git clone https://github.com/mosmeh/indexa.git --depth 1

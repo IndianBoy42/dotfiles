@@ -22,6 +22,10 @@ end
 # git-subrepo
 source ~/git-builds/git-subrepo/.fish.rc
 
+if type -q _kn
+	_kn init fish | source
+end
+
 set -gx CUDACXX /usr/lib/cuda/bin/nvcc
 
 # Use starship (I prefer fish tide for now)

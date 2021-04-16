@@ -57,3 +57,11 @@ cd ~/git-builds/
 git clone https://github.com/sachaos/todoist.git
 cd todoist
 make install
+
+# tikzit
+cd ~/git-builds/
+git clone https://github.com/tikzit/tikzit.git
+sudo apt -y install flex bison qt5-default libpoppler-dev libpoppler-qt5-dev
+cd tikzit
+qmake -r
+make

@@ -96,8 +96,8 @@ abbr pu pueue
 abbr pusts pueue status
 
 # repeat the previous command, the problem is you cant do this twice
-abbr k 'eval $history[1]'
-abbr kk 'eval $history[2]'
+abbr k ' eval $history[1]'
+abbr kk ' eval $history[2]'
 abbr justdoit "sudo !!"
 abbr sudo!! 'eval sudo $history[1]'
 

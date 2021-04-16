@@ -15,6 +15,9 @@ end
 if type -q zoxide
 	zoxide init fish | source
 end
+if type -q _kn
+	_kn init fish | source
+end
 
 # git-subrepo
 source ~/git-builds/git-subrepo/.fish.rc

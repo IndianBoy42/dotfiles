@@ -1,0 +1,3 @@
+snippet templ "template" A
+template<typename $0>
+endsnippet

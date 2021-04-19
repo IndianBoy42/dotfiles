@@ -1,6 +1,12 @@
 snippet \bf "bold face" a
 \textbf{$0}
 endsnippet
+snippet phi "phi" A
+\phi
+endsnippet
+snippet omega "omega" A
+\omega
+endsnippet
 snippet delta "delta" A
 \delta
 endsnippet

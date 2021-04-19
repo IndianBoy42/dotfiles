@@ -100,8 +100,11 @@ abbr pu pueue
 abbr pusts pueue status
 
 # repeat the previous command, the problem is you cant do this twice
-abbr k ' eval $history[1]'
-abbr kk ' eval $history[2]'
+function run_previous_command
+	echo $history[1]
+	eval $history[1]
+end
+abbr k ' run_previous_command'
 abbr justdoit "sudo !!"
 abbr sudo!! 'eval sudo $history[1]'
 
@@ -169,7 +172,7 @@ abbr la "lsd -alh"
 alias zf=__fzf_search_current_dir
 abbr zh 'z ~ && z (__fzf_search_current_dir)'
 abbr z- 'z -'
-abbr cd z
+abbr cd kn
 function zh
 	cd (dirh | fzf --tac | sd '\s*[0-9]+\)\s*(.*)' '$1')
 end

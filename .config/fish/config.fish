@@ -100,13 +100,21 @@ abbr pu pueue
 abbr pusts pueue status
 
 # repeat the previous command, the problem is you cant do this twice
+function run_history_command
+	echo $history[$argv[1]]
+	eval $history[$argv[1]]
+end
 function run_previous_command
-	echo $history[1]
-	eval $history[1]
+	run_history_command 1
+end
+function run_prev2_command
+	run_history_command 2
 end
 abbr k ' run_previous_command'
-abbr justdoit "sudo !!"
-abbr sudo!! 'eval sudo $history[1]'
+abbr kk ' run_prev2_command'
+abbr K ' run_history_command' 
+abbr suk ' sudo run_previous_command'
+abbr sukk ' sudo run_prev2_command'
 
 # yadm helper abbreviations
 abbr yad yadm

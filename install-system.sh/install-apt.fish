@@ -30,6 +30,7 @@ sudo apt-get install -y \
     libpomp-dev \
     libeigen3-dev \
 	libgtk-3-dev \
+	libasound2-dev \
 	qemu-system-arm \
 	qemu-system-aarch64 \
 	meson \

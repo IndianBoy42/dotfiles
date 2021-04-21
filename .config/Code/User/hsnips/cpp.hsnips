@@ -1,3 +1,10 @@
 snippet templ "template" A
 template<typename $0>
 endsnippet
+
+snippet cref "const ref" A
+const $1&
+endsnippet
+snippet const& "const ref" A
+const $1&
+endsnippet

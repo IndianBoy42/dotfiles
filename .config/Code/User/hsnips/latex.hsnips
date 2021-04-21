@@ -16,6 +16,12 @@ endsnippet
 snippet alpha "alpha" A
 \alpha
 endsnippet
+snippet psi "psi" A
+\psi
+endsnippet
+snippet phi "phi" A
+\phi
+endsnippet
 snippet theta "theta" A
 \theta
 endsnippet

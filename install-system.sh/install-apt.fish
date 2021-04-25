@@ -81,6 +81,7 @@ sudo apt-get install -y \
     libxtst6 \
     clang \
     libclang-dev \
+    freeglut3-dev \
     meson \
     sshpass \
     google-chrome-stable \

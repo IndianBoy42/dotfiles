@@ -8,3 +8,19 @@ endsnippet
 snippet const& "const ref" A
 const $1&
 endsnippet
+
+snippet constant "static constexpr" bA
+static constexpr $1 = $0;
+endsnippet
+
+snippet foreach "for auto&&" bA
+for (auto&& $1 : $2) {
+    $0
+}
+endsnippet
+
+snippet =iife " = ([&]{})()" A
+= ([&]{
+    $0
+})();
+endsnippet

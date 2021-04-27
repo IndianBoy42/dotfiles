@@ -19,9 +19,14 @@ sudo rm /usr/share/keyrings/docker-archive-keyring.gpg
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu groovy stable"
 
+sudo cp deb-experimental.list /etc/apt/sources.list.d
+sudo apt-key adv --keyserver   keyserver.ubuntu.com --recv-keys 7638D0442B90D010
+sudo apt-key adv --keyserver   keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
+
 sudo apt update
 
 sudo apt-get install -y \
+	checkinstall \
     openssh-server \
     signal-desktop \
 	libusb-1.0-0-dev \

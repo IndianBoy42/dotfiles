@@ -29,7 +29,7 @@ git clone https://github.com/google/benchmark.git --depth 1
 cd benchmark
 mkdir -p build && cd
 cmake .. -DBENCHMARK_DOWNLOAD_DEPENDENCIES=ON -DBENCHMARK_ENABLE_GTEST_TESTS=OFF
-ninja && sudo ninja install
+ninja && sudo checkinstall ninja install
 
 # drake
 cd ~/git-builds
@@ -49,14 +49,13 @@ cd ~/git-builds/
 git clone https://github.com/junegunn/fzf.git
 cd fzf
 gvm use 16
-make
-make install
+make && checkinstall
 sudo ln -s $PWD/bin/fzf ~/bin/fzf
 
 cd ~/git-builds/
 git clone https://github.com/sachaos/todoist.git
 cd todoist
-make install
+make && checkinstall
 
 # tikzit
 cd ~/git-builds/

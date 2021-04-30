@@ -1,8 +1,19 @@
-snippet \bf "bold face" a
+snippet (\w)+..e "environment" A
+\begin{$1}
+    $0
+\end{$1}
+endsnippet
+snippet \bf "bold face" A
 \textbf{$0}
+endsnippet
+snippet sigma "sigma" A
+\sigma
 endsnippet
 snippet phi "phi" A
 \phi
+endsnippet
+snippet lambda "lambda" A
+\lambda
 endsnippet
 snippet omega "omega" A
 \omega
@@ -49,7 +60,7 @@ snippet [] "sq brackets" A
 \left[ $0 \right]
 endsnippet
 snippet {} "curly brackets" A
-\left\{ $0 \right\}
+\left\{ $0 \right\\}
 endsnippet
 snippet \| "norm" A
 \left\| $0 \right\|

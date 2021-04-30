@@ -1,0 +1,1404 @@
+{
+    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, UseTab: Always, IndentWidth: 4, TabWidth: 4, ColumnLimit: 80}",
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "C_Cpp.updateChannel": "Insiders",
+    "[cpp]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[ispc]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+    },
+    "[rust]": {
+        "editor.defaultFormatter": "statiolake.vscode-rustfmt"
+    },
+    "cmake.configureOnOpen": false,
+    "codespaces.accountProvider": "GitHub",
+    "diffEditor.renderSideBySide": true,
+    "editor.accessibilitySupport": "off",
+    "editor.cursorSurroundingLines": 5,
+    "editor.folding": true,
+    // "editor.fontFamily": "'Caskaydia Cove','",
+    "editor.fontFamily": "FiraCode NF, FiraCode Nerd Font",
+    "editor.fontLigatures": true,
+    "editor.fontSize": 12,
+    "editor.formatOnSaveMode": "modifications",
+    "editor.glyphMargin": false,
+    "editor.lineNumbers": "relative",
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.quickSuggestions": true,
+    "editor.smoothScrolling": true,
+    "editor.suggestSelection": "first",
+    "editor.wordWrap": "on",
+    "files.associations": {
+        "*.cu": "cpp",
+        "*.h": "c"
+    },
+    "files.autoSave": "afterDelay",
+    "files.exclude": {
+        "data/ccpd_lpr_**/**": true
+    },
+    "files.watcherExclude": {
+        "data/ccpd_lpr_**/**": true
+    },
+    "git.autofetch": true,
+    "grammarly.userWords": ["eatigo"],
+    "ispc.compilerPath": "~/bin/ispc.exe",
+    "ispc.compilerTarget": "avx2",
+    "ispc.compilerTargetOS": "linux",
+    "julia.enableTelemetry": true,
+    "jupyter.askForKernelRestart": false,
+    "jupyter.sendSelectionToInteractiveWindow": true,
+    "latex-utilities.liveReformat.enabled": true,
+    "latex-workshop.chktex.run": "onType",
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "latexmk 🔃",
+            "tools": ["latexmk"]
+        },
+        {
+            "name": "latexmk (lualatex)",
+            "tools": ["lualatexmk"]
+        },
+        {
+            "name": "latexmk (latexmkrc)",
+            "tools": ["latexmk_rconly"]
+        },
+        {
+            "name": "pdflatex ➞ bibtex ➞ pdflatex × 2",
+            "tools": ["pdflatex", "bibtex", "pdflatex", "pdflatex"]
+        },
+        {
+            "name": "Compile Rnw files",
+            "tools": ["rnw2tex", "latexmk"]
+        },
+        {
+            "name": "Compile Jnw files",
+            "tools": ["jnw2tex", "latexmk"]
+        }
+    ],
+    "latex-workshop.view.pdf.external.synctex.command": "zathura",
+    "latex-workshop.view.pdf.external.viewer.command": "zathura",
+    "latex-workshop.view.pdf.viewer": "tab",
+    "liveServer.settings.donotShowInfoMsg": true,
+    "macros": {
+        "saveAndExitVimInsertMode": [
+            "workbench.action.files.save",
+            "extension.vim_escape"
+        ]
+    },
+    "markdown.preview.fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif",
+    "markdown.preview.fontSize": 18,
+    "matlab-formatter.separateBlocks": false,
+    "mesonbuild.configureOnOpen": false,
+    "prettier.arrowParens": "avoid",
+    "prettier.tabWidth": 4,
+    "python.insidersChannel": "off",
+    "python.jediEnabled": false,
+    "python.languageServer": "Pylance",
+    "python.pythonPath": "C:\\Users\\amedhi\\Anaconda3\\python.exe",
+    "remote.SSH.remotePlatform": {
+        "10.89.120.244": "linux",
+        "10.89.126.64": "linux",
+        "10.89.176.158": "linux",
+        "10.89.243.217": "linux",
+        "10.89.87.208": "linux",
+        "143.89.130.147": "linux",
+        "143.89.130.61": "linux",
+        "143.89.244.182": "linux",
+        "192.168.1.117": "linux",
+        "192.168.116.129": "linux",
+        "192.168.137.123": "linux",
+        "192.168.137.58": "linux",
+        "192.168.31.209": "linux",
+        "192.168.39.129": "linux",
+        "192.168.39.130": "linux",
+        "192.168.45.111": "linux",
+        "35.241.86.83": "linux",
+        "csl2wk20.cse.ust.hk": "linux",
+        "csl2wk30.cse.ust.hk": "linux",
+        "localhost": "linux"
+    },
+    "remote.SSH.useLocalServer": false,
+    "rust-analyzer.assist.importMergeBehaviour": "last",
+    "rust-analyzer.updates.askBeforeDownload": false,
+    "search.showLineNumbers": true,
+    "settingsSync.ignoredSettings": ["files.autoSaveDelay", "files.autoSave"],
+    "settingsSync.keybindingsPerPlatform": false,
+    "tabnine.experimentalAutoImports": true,
+    "terminal.integrated.commandsToSkipShell": ["language-julia.interrupt"],
+    "terminal.integrated.cursorBlinking": true,
+    "terminal.integrated.cursorStyle": "line",
+    // "terminal.integrated.fontFamily": "'Cascadia Code PL'",
+    // "terminal.integrated.fontFamily": "'CaskaydiaCove Nerd Font'",
+    // "terminal.integrated.fontSize": 14,
+    "terminal.integrated.fontFamily": "FiraMono NF, FiraCode Nerd Font Mono",
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.shell.linux": "/usr/bin/fish",
+    "terminal.integrated.shell.windows": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+    "todo-tree.general.tags": [
+        "BUG",
+        "HACK",
+        "FIXME",
+        "TODO",
+        "XXX",
+        "[ ]",
+        "[x]",
+        "unimplemented!",
+        "todo!"
+    ],
+    "todo-tree.highlights.enabled": true,
+    "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
+    "todo-tree.tree.showScanModeButton": false,
+    "vim.camelCaseMotion.enable": true,
+    "vim.easymotion": true,
+    "vim.handleKeys": {
+        "<C-c>": false,
+        "<C-f>": false,
+        "<C-g>": false,
+        "<C-r>": false
+    },
+    "vim.highlightedyank.duration": 1000,
+    "vim.highlightedyank.enable": true,
+    "vim.hlsearch": true,
+    "vim.incsearch": true,
+    "vim.insertModeKeyBindingsNonRecursive": [
+        // {
+        //     "before": ["<Esc>"],
+        //     "commands": ["workbench.action.files.save", "extension.vim_escape"]
+        // }
+    ],
+    "vim.leader": "\\",
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "after": [],
+            "before": ["."]
+        },
+        {
+            "after": ["^"],
+            "before": ["H"]
+        },
+        {
+            "after": ["g", "_"],
+            "before": ["L"]
+        },
+        {
+            "after": ["^"],
+            "before": ["0"]
+        },
+        {
+            "after": ["g", "_"],
+            "before": ["9"]
+        },
+        {
+            "after": ["leader", "leader", "leader", "b", "d", "w"],
+            "before": ["q"]
+        },
+        {
+            "after": ["leader", "leader", "leader", "b", "d", "j", "k"],
+            "before": ["Q"]
+        },
+        {
+            "after": ["leader", "leader", "leader", "j"],
+            "before": ["S"]
+        },
+        {
+            "after": ["leader", "leader", "/"],
+            "before": ["s"]
+        },
+        {
+            "after": ["b", "i"],
+            "before": ["z", "i"]
+        },
+        {
+            "after": ["e", "a"],
+            "before": ["z", "a"]
+        },
+        // {
+        //     "before": ["g", "Y"],
+        //     "commands": ["intelli-refactor.refactor"]
+        // },
+        // {
+        //     "before": ["g", "y"],
+        //     "commands": ["intelli-refactor.quickFix"]
+        // },
+        // {
+        //     "before": ["g", "u"],
+        //     "commands": ["editor.action.marker.next"]
+        // },
+        // {
+        //     "before": ["g", "U"],
+        //     "commands": ["editor.action.marker.prev"]
+        // },
+        // {
+        //     "before": ["g", "i"],
+        //     "commands": ["editor.action.goToReferences"]
+        // },
+        {
+            "before": ["g", "p", "d"],
+            "commands": ["editor.action.peekDefinition"]
+        },
+        // {
+        //     "before": ["g", "p", "D"],
+        //     "commands": ["editor.action.peekDeclaration"]
+        // },
+        // {
+        //     "before": ["g", "P", "D"],
+        //     "commands": ["editor.action.openDeclarationToTheSide"]
+        // },
+        // {
+        //     "before": ["g", "P", "d"],
+        //     "commands": ["editor.action.revealDefinitionAside"]
+        // },
+        // {
+        //     "before": ["g", "D"],
+        //     "commands": ["editor.action.revealDeclaration"]
+        // },
+        // {
+        //     "before": ["g", "s", "b"],
+        //     "commands": ["bracket-jumper.ascendLeft"]
+        // },
+        // {
+        //     "before": ["z", "s", "b"],
+        //     "commands": ["bracket-jumper.ascendRight"]
+        // },
+        {
+            "after": ["<C-o>"],
+            "before": ["g", "b"]
+        },
+        // {
+        //     "before": ["g", "r"],
+        //     "commands": ["workbench.action.tasks.build"]
+        // },
+        // {
+        //     "before": ["g", "E"],
+        //     "commands": ["workbench.action.tasks.reRunTask"]
+        // },
+        // {
+        //     "before": ["g", "e"],
+        //     "commands": ["workbench.action.tasks.runTask"]
+        // },
+        // {
+        //     "before": ["g", " "],
+        //     "commands": ["workbench.action.showCommands"]
+        // },
+        {
+            "before": ["g", "o"],
+            "commands": ["workbench.action.quickOpen"]
+        },
+        // {
+        //     "before": ["g", "O"],
+        //     "commands": ["workbench.action.focusNextGroup"]
+        // },
+        // {
+        //     "before": ["g", ":"],
+        //     "commands": ["workbench.action.gotoLine"]
+        // },
+        // {
+        //     "before": ["g", ";"],
+        //     "commands": ["workbench.action.gotoSymbol"]
+        // },
+        {
+            "before": ["g", "f"],
+            "commands": [
+                "editor.action.formatDocument",
+                "workbench.action.files.save"
+            ]
+        },
+        // {
+        //     "before": ["g", "n"],
+        //     "commands": ["workbench.action.files.newUntitledFile"]
+        // },
+        // {
+        //     "before": ["g", "w"],
+        //     "commands": ["workbench.action.closeActiveEditor"]
+        // },
+        {
+            "before": ["Z", "Z"],
+            "commands": ["workbench.action.files.save"]
+        },
+        {
+            "after": ["o", "<Esc>"],
+            "before": ["z", "o"]
+        },
+        {
+            "after": ["O", "<Esc>"],
+            "before": ["z", "O"]
+        },
+        {
+            "after": ["*"],
+            "before": ["z", "n"]
+        },
+        {
+            "after": ["y", "$"],
+            "before": ["Y"]
+        },
+        {
+            "before": ["z", "f"],
+            "commands": ["vim-search-and-replace.start"]
+        },
+        {
+            "after": ["\"", "_", "c"],
+            "before": ["z", "c"]
+        },
+        {
+            "after": ["\"", "_", "C"],
+            "before": ["z", "C"]
+        },
+        {
+            "after": ["\"", "_", "d"],
+            "before": ["z", "d"]
+        },
+        {
+            "after": ["\"", "_", "D"],
+            "before": ["z", "D"]
+        },
+        {
+            "after": ["\"", "_", "X"],
+            "before": ["X"]
+        },
+        {
+            "after": ["\"", "_", "x"],
+            "before": ["x"]
+        },
+        {
+            "after": ["X"],
+            "before": ["z", "X"]
+        },
+        {
+            "after": ["x"],
+            "before": ["z", "x"]
+        },
+        {
+            "before": ["<C-J>"],
+            "commands": ["editor.action.insertCursorBelow"]
+        },
+        {
+            "before": ["<C-K>"],
+            "commands": ["editor.action.insertCursorAbove"]
+        },
+        {
+            "before": ["<space>"],
+            "commands": ["vspacecode.space"]
+        },
+        {
+            "before": [","],
+            "commands": [
+                "vspacecode.space",
+                {
+                    "args": "m",
+                    "command": "whichkey.triggerKey"
+                }
+            ]
+        }
+    ],
+    "vim.sneak": true,
+    "vim.surround": true,
+    "vim.useSystemClipboard": true,
+    // "vim.leader": " ",
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": ["i", "z", "w"],
+            "commands": ["extension.subword-select"]
+        },
+        {
+            "before": ["r"],
+            "after": ["\"", "_", "c"]
+        },
+        {
+            "after": ["\"", "_", "c"],
+            "before": ["z", "c"]
+        },
+        {
+            "after": ["\"", "_", "C"],
+            "before": ["z", "C"]
+        },
+        {
+            "after": ["\"", "_", "d"],
+            "before": ["z", "d"]
+        },
+        {
+            "after": ["\"", "_", "D"],
+            "before": ["z", "D"]
+        },
+        {
+            "after": ["\"", "_", "X"],
+            "before": ["X"]
+        },
+        {
+            "after": ["\"", "_", "x"],
+            "before": ["x"]
+        },
+        {
+            "after": ["X"],
+            "before": ["z", "X"]
+        },
+        {
+            "after": ["x"],
+            "before": ["z", "x"]
+        },
+        {
+            "after": ["^"],
+            "before": ["H"]
+        },
+        {
+            "after": ["g", "_"],
+            "before": ["L"]
+        },
+        {
+            "after": ["^"],
+            "before": ["0"]
+        },
+        {
+            "after": ["g", "_"],
+            "before": ["9"]
+        },
+        {
+            "before": ["g", "s", "b"],
+            "commands": ["bracket-jumper.ascendLeft"]
+        },
+        {
+            "before": ["z", "s", "b"],
+            "commands": ["bracket-jumper.ascendRight"]
+        },
+        {
+            "after": ["g", "b"],
+            "before": ["s"]
+        },
+        {
+            "after": [],
+            "before": ["."]
+        },
+        {
+            "before": ["<space>"],
+            "commands": ["vspacecode.space"]
+        },
+        {
+            "before": [","],
+            "commands": [
+                "vspacecode.space",
+                {
+                    "args": "m",
+                    "command": "whichkey.triggerKey"
+                }
+            ]
+        }
+    ],
+    "vim.visualstar": true,
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "vspacecode.bindingOverrides": [
+        {
+            "command": "git-graph.view",
+            "keys": "g.l",
+            "name": "View Git Graph",
+            "type": "command"
+        },
+        // TODO: Need a lot more git commands if I wanna use it, but do I wanna use it?
+        {
+            "command": "workbench.action.editor.previousChange",
+            "keys": "e.C",
+            "name": "Jump to previous change",
+            "type": "command"
+        },
+        {
+            "command": "workbench.action.editor.nextChange",
+            "keys": "e.c",
+            "name": "Jump to next change",
+            "type": "command"
+        },
+        {
+            "command": "merge-conflict.next",
+            "keys": "e.M",
+            "name": "Jump to previous conflict",
+            "type": "command"
+        },
+        {
+            "command": "merge-conflict.previous",
+            "keys": "e.m",
+            "name": "Jump to next conflict",
+            "type": "command"
+        },
+        {
+            "command": "editor.action.toggleWordWrap",
+            "keys": "l.w",
+            "name": "Toggle Word Wrap",
+            "type": "command"
+        },
+        {
+            "keys": "w.t",
+            "name": "Toggle terminal window",
+            "type": "conditional",
+            "bindings": [
+                {
+                    "command": "terminal.focus",
+                    "name": "Focus terminal",
+                    "type": "command",
+                    "key": "when:!terminalFocus"
+                },
+                {
+                    "command": "workbench.action.focusActiveEditorGroup",
+                    "name": "Focus Editor",
+                    "type": "command",
+                    "key": "when:!editorFocus"
+                }
+            ]
+        },
+        {
+            "keys": "N",
+            "name": "+New/Nav",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "command": "explorer.newFolder",
+                    "key": "D",
+                    "name": "New folder",
+                    "type": "command"
+                },
+                {
+                    "command": "workbench.action.terminal.new",
+                    "key": "t",
+                    "name": "New terminal",
+                    "type": "command"
+                },
+                {
+                    "command": "opensshremotesexplorer.emptyWindowInNewWindow",
+                    "key": "s",
+                    "name": "New window (SSH)",
+                    "type": "command"
+                },
+                {
+                    "command": "workbench.action.newWindow",
+                    "key": "w",
+                    "name": "New window",
+                    "type": "command"
+                },
+                {
+                    "command": "workbench.action.files.showOpenedFileInNewWindow",
+                    "key": "o",
+                    "name": "Open file in new window",
+                    "type": "command"
+                },
+                {
+                    "command": "workbench.action.files.newUntitledFile",
+                    "key": "f",
+                    "name": "New untitled file",
+                    "type": "command"
+                },
+                {
+                    "command": "explorer.newFile",
+                    "key": "F",
+                    "name": "New file",
+                    "type": "command"
+                }
+            ]
+        },
+        {
+            "keys": "u",
+            "name": "+Undo",
+            "type": "transient",
+            "bindings": [
+                {
+                    "command": "undo",
+                    "key": "u",
+                    "name": "Undo",
+                    "type": "command"
+                },
+                {
+                    "command": "redo",
+                    "key": "r",
+                    "name": "Redo",
+                    "type": "command"
+                }
+            ]
+        },
+        {
+            "keys": "n",
+            "name": "+Navigate",
+            "type": "transient",
+            "bindings": [
+                {
+                    "command": "cursorPageDown",
+                    "key": "d",
+                    "name": "Page Down",
+                    "type": "command"
+                },
+                {
+                    "command": "cursorPageUp",
+                    "key": "u",
+                    "name": "Page Up",
+                    "type": "command"
+                },
+                {
+                    "key": "j",
+                    "name": "Half Page Down",
+                    "type": "command",
+                    "command": "vim.remap",
+                    "args": {
+                        "after": ["<C-d>"]
+                    }
+                },
+                {
+                    "key": "k",
+                    "name": "Half Page Up",
+                    "type": "command",
+                    "command": "vim.remap",
+                    "args": {
+                        "after": ["<C-u>"]
+                    }
+                }
+            ]
+        },
+        { "keys": "x", "name": "+Text", "position": -1 },
+        {
+            "keys": "r",
+            "name": "+Text/Refactor",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "command": "yo1dog.cursor-align.alignCursors",
+                    "key": "n",
+                    "name": "Align Cursor/Selections",
+                    "type": "command"
+                },
+                {
+                    "key": "q",
+                    "name": "Quick fix",
+                    "type": "command",
+                    "command": "editor.action.quickFix"
+                },
+                {
+                    "key": "a",
+                    "name": "Find all references",
+                    "type": "command",
+                    "command": "editor.action.referenceSearch.trigger"
+                },
+                {
+                    "key": "i",
+                    "name": "Organize Imports",
+                    "type": "command",
+                    "command": "editor.action.organizeImports"
+                },
+                {
+                    "key": "r",
+                    "name": "Rename symbol",
+                    "type": "command",
+                    "command": "editor.action.rename"
+                },
+                {
+                    "key": "u",
+                    "name": "To lower case",
+                    "type": "command",
+                    "command": "editor.action.transformToLowercase"
+                },
+                {
+                    "key": "J",
+                    "name": "Move lines down",
+                    "type": "transient",
+                    "command": "editor.action.moveLinesDownAction",
+                    "bindings": [
+                        {
+                            "key": "J",
+                            "name": "Move lines down",
+                            "type": "command",
+                            "command": "editor.action.moveLinesDownAction"
+                        },
+                        {
+                            "key": "K",
+                            "name": "Move lines up",
+                            "type": "command",
+                            "command": "editor.action.moveLinesUpAction"
+                        }
+                    ]
+                },
+                {
+                    "key": "K",
+                    "name": "Move lines up",
+                    "type": "transient",
+                    "command": "editor.action.moveLinesUpAction",
+                    "bindings": [
+                        {
+                            "key": "J",
+                            "name": "Move lines down",
+                            "type": "command",
+                            "command": "editor.action.moveLinesDownAction"
+                        },
+                        {
+                            "key": "K",
+                            "name": "Move lines up",
+                            "type": "command",
+                            "command": "editor.action.moveLinesUpAction"
+                        }
+                    ]
+                },
+                {
+                    "key": "R",
+                    "name": "Refactor",
+                    "type": "command",
+                    "command": "editor.action.refactor"
+                },
+                {
+                    "key": "U",
+                    "name": "To upper case",
+                    "type": "command",
+                    "command": "editor.action.transformToUppercase"
+                },
+                {
+                    "key": "d",
+                    "name": "+Delete",
+                    "type": "bindings",
+                    "bindings": [
+                        {
+                            "key": "w",
+                            "name": "Delete trailing whitespace",
+                            "type": "command",
+                            "command": "editor.action.trimTrailingWhitespace"
+                        }
+                    ]
+                },
+                {
+                    "key": "l",
+                    "name": "+Lines",
+                    "type": "bindings",
+                    "bindings": [
+                        {
+                            "key": "d",
+                            "name": "Duplicate lines down",
+                            "type": "command",
+                            "command": "editor.action.copyLinesDownAction"
+                        },
+                        {
+                            "key": "s",
+                            "name": "Sort lines in ascending order",
+                            "type": "command",
+                            "command": "editor.action.sortLinesAscending"
+                        },
+                        {
+                            "key": "D",
+                            "name": "Duplicate lines up",
+                            "type": "command",
+                            "command": "editor.action.copyLinesUpAction"
+                        },
+                        {
+                            "key": "S",
+                            "name": "Sort lines in descending order",
+                            "type": "command",
+                            "command": "editor.action.sortLinesDescending"
+                        }
+                    ]
+                },
+                {
+                    "key": "m",
+                    "name": "+Merge conflict",
+                    "type": "bindings",
+                    "bindings": [
+                        {
+                            "key": "b",
+                            "name": "Accept both",
+                            "type": "command",
+                            "command": "merge-conflict.accept.both"
+                        },
+                        {
+                            "key": "c",
+                            "name": "Accept current",
+                            "type": "command",
+                            "command": "merge-conflict.accept.current"
+                        },
+                        {
+                            "key": "i",
+                            "name": "Accept incoming",
+                            "type": "command",
+                            "command": "merge-conflict.accept.incoming"
+                        },
+                        {
+                            "key": "k",
+                            "name": "Compare current conflict",
+                            "type": "command",
+                            "command": "merge-conflict.compare"
+                        },
+                        {
+                            "key": "n",
+                            "name": "Next Conflict",
+                            "type": "command",
+                            "command": "merge-conflict.next"
+                        },
+                        {
+                            "key": "s",
+                            "name": "Accept selection",
+                            "type": "command",
+                            "command": "merge-conflict.accept.selection"
+                        },
+                        {
+                            "key": "B",
+                            "name": "Accept all both",
+                            "type": "command",
+                            "command": "merge-conflict.accept.all-both"
+                        },
+                        {
+                            "key": "C",
+                            "name": "Accept all current",
+                            "type": "command",
+                            "command": "merge-conflict.accept.all-current"
+                        },
+                        {
+                            "key": "I",
+                            "name": "Accept all incoming",
+                            "type": "command",
+                            "command": "merge-conflict.accept.all-incoming"
+                        },
+                        {
+                            "key": "N",
+                            "name": "Previous Conflict",
+                            "type": "command",
+                            "command": "merge-conflict.previous"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "command": "workbench.action.positionPanelDown",
+            "keys": "l.j",
+            "name": "Move Panel Down",
+            "type": "command"
+        },
+        {
+            "command": "workbench.action.positionPanelRight",
+            "keys": "l.l",
+            "name": "Move Panel Right",
+            "type": "command"
+        },
+        {
+            "command": "cmake.build",
+            "keys": "c.m",
+            "name": "CMake Build",
+            "type": "command"
+        },
+        {
+            "command": "workbench.action.tasks.build",
+            "keys": "c.b",
+            "name": "Build Task",
+            "type": "command"
+        },
+
+        {
+            "command": "cmake.buildWithTarget",
+            "keys": "c.t",
+            "name": "CMake",
+            "type": "command"
+        },
+        {
+            "command": "workbench.action.tasks.runTask",
+            "keys": "c.r",
+            "name": "Run Task",
+            "type": "command"
+        },
+        {
+            "command": "workbench.action.tasks.reRunTask",
+            "keys": "c.R",
+            "name": "Rerun Task",
+            "type": "command"
+        },
+        {
+            "commands": [
+                "editor.action.formatDocument",
+                "workbench.action.files.save"
+            ],
+            "keys": "b.F",
+            "name": "Format and save buffer",
+            "type": "commands"
+        },
+        {
+            "commands": [
+                "editor.action.formatDocument",
+                "workbench.action.files.save"
+            ],
+            "keys": "c.F",
+            "name": "Format and save buffer",
+            "type": "commands"
+        },
+        {
+            "command": "editor.action.formatDocument",
+            "keys": "b.f",
+            "name": "Format buffer",
+            "type": "command"
+        },
+        {
+            "command": "editor.action.formatDocument",
+            "keys": "c.f",
+            "name": "Format buffer",
+            "type": "command"
+        },
+        {
+            "command": "jupyter.runcurrentcelladvance",
+            "keys": "c.a",
+            "name": "Run Cell and Advance",
+            "type": "command"
+        },
+        {
+            "command": "jupyter.runallcells",
+            "keys": "c.J",
+            "name": "Run All Cell",
+            "type": "command"
+        },
+        {
+            "command": "jupyter.runcurrentcellandallbelow.palette",
+            "keys": "c.j",
+            "name": "Run Cell and Below",
+            "type": "command"
+        },
+        {
+            "args": {
+                "after": ["leader", "leader", "/"]
+            },
+            "command": "vim.remap",
+            "keys": "j./",
+            "name": "Jump to search",
+            "type": "command"
+        },
+        {
+            "command": "workbench.action.quickOpen",
+            "keys": "f.o",
+            "name": "+Find file in project",
+            "type": "command"
+        },
+        {
+            "command": "workbench.action.findInFiles",
+            "keys": "p.s",
+            "name": "Search in Project",
+            "type": "command"
+        },
+        {
+            "command": "workbench.action.openRecent",
+            "keys": "p.o",
+            "name": "+Switch project",
+            "type": "command"
+        },
+        {
+            "keys": "p.p",
+            "name": "+Switch project",
+            "position": -1
+        },
+        {
+            "keys": "p.l",
+            "name": "+Switch project",
+            "position": -1
+        },
+        {
+            "command": "workbench.action.files.openFolder",
+            "keys": "p.n",
+            "name": "+Open new project",
+            "type": "command"
+        },
+        {
+            "command": "explorer.newFile",
+            "keys": "f.N",
+            "name": "New file",
+            "type": "command"
+        },
+        {
+            "command": "workbench.action.files.newUntitledFile",
+            "keys": "f.n",
+            "name": "New untitled file",
+            "type": "command"
+        },
+        {
+            "command": "vim-search-and-replace.start",
+            "keys": "s.a",
+            "name": "Search and Replace",
+            "type": "command"
+        },
+        {
+            "command": "workbench.action.terminal.focus",
+            "keys": "S.t",
+            "name": "Show terminal",
+            "type": "command"
+        },
+        {
+            "command": "workbench.action.maximizeEditor",
+            "keys": "S.M",
+            "name": "Maximise editor and hide sidebar",
+            "type": "command"
+        },
+        {
+            "bindings": [
+                {
+                    "args": {
+                        "after": ["v", "a", "'"]
+                    },
+                    "command": "vim.remap",
+                    "key": "q",
+                    "name": "String '",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "a", "\""]
+                    },
+                    "command": "vim.remap",
+                    "key": "Q",
+                    "name": "String \"",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "a", "'"]
+                    },
+                    "command": "vim.remap",
+                    "key": "'",
+                    "name": "String '",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "a", "\""]
+                    },
+                    "command": "vim.remap",
+                    "key": "\"",
+                    "name": "String \"",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "a", "W"]
+                    },
+                    "command": "vim.remap",
+                    "key": "<a-w>",
+                    "name": "WORD",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "a", "<"]
+                    },
+                    "command": "vim.remap",
+                    "key": "a",
+                    "name": "Angle Brackets <>",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "a", "["]
+                    },
+                    "command": "vim.remap",
+                    "key": "r",
+                    "name": "Square Brackets []",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "a", "B"]
+                    },
+                    "command": "vim.remap",
+                    "key": "B",
+                    "name": "Curly Braces",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "a", "b"]
+                    },
+                    "command": "vim.remap",
+                    "key": "b",
+                    "name": "Parentheses",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "a", "w"]
+                    },
+                    "command": "vim.remap",
+                    "key": "w",
+                    "name": "Word",
+                    "type": "command"
+                }
+            ],
+            "keys": "a",
+            "name": "+Select Around",
+            "type": "bindings"
+        },
+        {
+            "bindings": [
+                {
+                    "args": {
+                        "after": ["v", "i", "'"]
+                    },
+                    "command": "vim.remap",
+                    "key": "q",
+                    "name": "String '",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "i", "\""]
+                    },
+                    "command": "vim.remap",
+                    "key": "Q",
+                    "name": "String \"",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "i", "'"]
+                    },
+                    "command": "vim.remap",
+                    "key": "'",
+                    "name": "String '",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "i", "\""]
+                    },
+                    "command": "vim.remap",
+                    "key": "\"",
+                    "name": "String \"",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "i", "W"]
+                    },
+                    "command": "vim.remap",
+                    "key": "<a-w>",
+                    "name": "WORD",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "i", "<"]
+                    },
+                    "command": "vim.remap",
+                    "key": "a",
+                    "name": "Angle Brackets <>",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "i", "["]
+                    },
+                    "command": "vim.remap",
+                    "key": "r",
+                    "name": "Square Brackets []",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "i", "B"]
+                    },
+                    "command": "vim.remap",
+                    "key": "B",
+                    "name": "Curly Braces",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "i", "b"]
+                    },
+                    "command": "vim.remap",
+                    "key": "b",
+                    "name": "Parentheses",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["v", "i", "w"]
+                    },
+                    "command": "vim.remap",
+                    "key": "w",
+                    "name": "Word",
+                    "type": "command"
+                }
+            ],
+            "keys": "i",
+            "name": "+Select Inside",
+            "type": "bindings"
+        },
+        {
+            "bindings": [
+                {
+                    "command": "workbench.action.gotoLine",
+                    "key": "g",
+                    "name": "Go to line",
+                    "type": "command"
+                },
+                {
+                    "command": "workbench.action.gotoSymbol",
+                    "key": "s",
+                    "name": "Go to Symbol",
+                    "type": "command"
+                },
+                {
+                    "command": "editor.action.revealDefinition",
+                    "key": "d",
+                    "name": "Go to Definition",
+                    "type": "command"
+                },
+                {
+                    "command": "editor.action.revealDeclaration",
+                    "key": "D",
+                    "name": "Go to Declaration",
+                    "type": "command"
+                },
+                {
+                    "command": "editor.action.goToTypeDefinition",
+                    "key": "t",
+                    "name": "Go to Type Definition",
+                    "type": "command"
+                },
+                {
+                    "command": "editor.action.goToImplementation",
+                    "key": "i",
+                    "name": "Go to Implementations",
+                    "type": "command"
+                },
+                {
+                    "command": "editor.action.goToReferences",
+                    "key": "r",
+                    "name": "Go to References",
+                    "type": "command"
+                },
+                {
+                    "command": "C_Cpp.SwitchHeaderSource",
+                    "key": "H",
+                    "name": "Switch Header/Source",
+                    "type": "command"
+                },
+                {
+                    "command": "editor.action.showHover",
+                    "key": "h",
+                    "name": "Show Hover",
+                    "type": "command"
+                },
+                {
+                    "bindings": [
+                        {
+                            "command": "editor.action.revealDefinitionAside",
+                            "key": "d",
+                            "name": "Go to Definition",
+                            "type": "command"
+                        },
+                        {
+                            "command": "editor.action.openDeclarationToTheSide",
+                            "key": "D",
+                            "name": "Go to Declaration",
+                            "type": "command"
+                        }
+                    ],
+                    "key": "P",
+                    "name": "+Aside",
+                    "type": "bindings"
+                },
+                {
+                    "bindings": [
+                        {
+                            "command": "editor.action.peekDefinition",
+                            "key": "d",
+                            "name": "Go to Definition",
+                            "type": "command"
+                        },
+                        {
+                            "command": "editor.action.peekDeclaration",
+                            "key": "D",
+                            "name": "Go to Declaration",
+                            "type": "command"
+                        }
+                    ],
+                    "key": "p",
+                    "name": "+Peek",
+                    "type": "bindings"
+                },
+                {
+                    "args": {
+                        "after": ["leader", "leader", "s"]
+                    },
+                    "command": "vim.remap",
+                    "key": "j",
+                    "name": "Jump to character",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": [
+                            "leader",
+                            "leader",
+                            "leader",
+                            "b",
+                            "d",
+                            "j",
+                            "k"
+                        ]
+                    },
+                    "command": "vim.remap",
+                    "key": "l",
+                    "name": "Jump to line",
+                    "type": "command"
+                },
+                {
+                    "command": "workbench.action.navigateBack",
+                    "key": "f",
+                    "name": "Jump forward",
+                    "type": "command"
+                },
+                {
+                    "command": "workbench.action.navigateBack",
+                    "key": "b",
+                    "name": "Jump back",
+                    "type": "command"
+                },
+                {
+                    "args": {
+                        "after": ["leader", "leader", "leader", "b", "d", "w"]
+                    },
+                    "command": "vim.remap",
+                    "key": "w",
+                    "name": "Jump to word",
+                    "type": "command"
+                },
+                {
+                    "command": "breadcrumbs.focusAndSelect",
+                    "key": "v",
+                    "name": "Jump to outline/variables",
+                    "type": "command"
+                }
+            ],
+            "keys": "j",
+            "name": "+Jump/Goto...",
+            "type": "bindings"
+        }
+    ],
+    "whichkey.sortOrder": "nonNumberFirst",
+    "window.menuBarVisibility": "toggle",
+    "window.smoothScrollingWorkaround": false,
+    "window.titleBarStyle": "custom",
+    "workbench.colorCustomizations": {
+        // "editor.selectionBackground": "#ffffff70",
+        "editor.foreground": "#c7c7c7"
+        // "editor.selectionHighlightBackground": "#ffffff60"
+        // "editor.selectionBackground": "#ff000050"
+    },
+    "workbench.colorTheme": "Dark+ Material",
+    "workbench.editorAssociations": [
+        {
+            "filenamePattern": "*.ipynb",
+            "viewType": "jupyter.notebook.ipynb"
+        }
+    ],
+    "workbench.panel.defaultLocation": "right",
+    "zenMode.fullScreen": false,
+    "zenMode.restore": true
+}

@@ -3,7 +3,8 @@
 ;; TODO: can kmonad take arguments to specify the device?
 (defcfg
   ;; For Linux
-  input  (device-file "/dev/input/event3")
+  input  (device-file "/dev/input/event3") # TODO: use by-id?
+;;  input  (device-file "/dev/input/by-id/usb-MythosMann_TG4x-event-kbd")
   output (uinput-sink "My KMonad output"
     ;; To understand the importance of the following line, see the section on
     ;; Compose-key sequences at the near-bottom of this file.
@@ -43,22 +44,56 @@
 ;;   _    _    _              _              _    _    _    _
 ;; )
 
-(defalias nav (layer-toggle capslockmods))
+(defalias 
+	nav (layer-toggle capslockmods)
+	syms (tap-hold-next-release 500 spc (layer-toggle symlayer))
+	ma (tap-hold-next-release 500 a lmet)
+	as (tap-hold-next-release 500 s lalt)
+	cd (tap-hold-next-release 500 d lctl)
+	sf (tap-hold-next-release 500 f lsft)
+	ml (tap-hold-next-release 500 l lmet)
+	ak (tap-hold-next-release 500 k lalt)
+	cj (tap-hold-next-release 500 j lctl)
+	sh (tap-hold-next-release 500 h lsft)
+	m2 (tap-hold-next-release 500 2 lmet)
+	a3 (tap-hold-next-release 500 3 lalt)
+	c4 (tap-hold-next-release 500 4 lctl)
+	s5 (tap-hold-next-release 500 5 lsft)
+	m0 (tap-hold-next-release 500 0 lmet)
+	a9 (tap-hold-next-release 500 9 lalt)
+	c8 (tap-hold-next-release 500 8 lctl)
+	s7 (tap-hold-next-release 500 7 lsft)
+)
 
 ;; Default qwerty layer
+(deflayer base-homerow
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  @nav @ma  @as  @cd  @sf  g    @sh  @cj  @ak  @ml   ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           @syms          ralt rmet cmp  rctl
+)
 (deflayer qwerty
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
   @nav a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           spc            ralt rmet cmp  rctl
+  lctl lmet lalt           @syms          ralt rmet cmp  rctl
 )
 
 (defalias csp C-S-p)
 (deflayer capslockmods
   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    f13  f14  f15  f16  _    _    _    _    _    _    _    _    _
-  _    f17  f18  f19  f20  _    left down up   rght _    _    @csp
+  _    f17  f18  f19  f20  _    f13  f14  f15  f16  _    _    _    _
+  _    lmet lalt lctl lsft _    left down up   rght _    _    @csp
   _    f21  f22  f23  f24  _    home pgdn pgup end  _    _
   _    _    _              lctl           _    _    _    _
+)
+
+(deflayer symlayer
+   _    _    _    _    _    _    _    _    _    _    _    _    _    _
+   _    _    _    _    _    _    _    _    _    _    _    _    _    _
+   0    1    2    3    4    5    6    7    8    9    -    =    _
+   _    _    _    _    _    '    /    [    ]    \    _    _
+   _    _    _              _              _    _    _    _
 )

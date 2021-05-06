@@ -3,7 +3,7 @@
 ;; TODO: can kmonad take arguments to specify the device?
 (defcfg
   ;; For Linux
-  input  (device-file "/dev/input/event3") # TODO: use by-id?
+  input  (device-file "/dev/input/event3") ;; TODO: use by-id?
 ;;  input  (device-file "/dev/input/by-id/usb-MythosMann_TG4x-event-kbd")
   output (uinput-sink "My KMonad output"
     ;; To understand the importance of the following line, see the section on

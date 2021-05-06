@@ -15,8 +15,7 @@ sudo usermod -aG uinput $USER
 sudo usermod -aG input $USER
 sudo modprobe uinput
 sudo touch /etc/udev/rules.d/uinput.rules
-echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"   (base)
-  ' | sudo tee /etc/udev/rules.d/uinput.rules
+echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/uinput.rules
   
 sudo cp ./kmonad.service /etc/systemd/system/kmonad.service
 sudo systemctl enable kmonad.service

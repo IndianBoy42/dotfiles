@@ -16,6 +16,7 @@ sudo apt-get install -y apt-transport-http\
     lsb-release
 
 # install from all the "package managers"
+sudo bash -c "$(curl -fsSL https://git.io/JfHDM)" # pacstall
 fish ~/install-system.sh/install-nvim.fish
 fish ~/install-system.sh/install-code.fish
 fish ~/install-system.sh/install-apt.fish

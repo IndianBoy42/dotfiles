@@ -51,8 +51,10 @@ end
 abbr del rm -vi
 
 function fish_user_key_bindings
-	bind \cg expand_glob
-	bind \cz 'zi'
+	bind -M insert \cg expand_glob
+	bind -M insert \cz 'kn'
+	bind -M insert \ez 'zi'
+	bind -M default cd kn
 	echo "user_keys"
 end
 

@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/eendroroy/alacritty-theme.git
+	branch = master
+	commit = 189e06119c0ab84bc9c76113cf014d1dd3b11ddd
+	parent = 54aba7da1ec47f7aa82922248f9993187237c219
+	method = merge
+	cmdver = 0.4.3

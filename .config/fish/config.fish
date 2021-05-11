@@ -103,14 +103,14 @@ abbr pusts pueue status
 
 # repeat the previous command, the problem is you cant do this twice
 function run_history_command
-	echo $history[$argv[1]]
-	eval $history[$argv[1]]
+	echo $history[$argv[1]] $argv[2..-1]
+	eval $history[$argv[1]] $argv[2..-1]
 end
 function run_previous_command
-	run_history_command 1
+	run_history_command 1 $argv
 end
 function run_prev2_command
-	run_history_command 2
+	run_history_command 2 $argv
 end
 abbr k ' run_previous_command'
 abbr kk ' run_prev2_command'

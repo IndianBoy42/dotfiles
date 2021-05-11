@@ -60,7 +60,7 @@ CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
     starship  \
     tealdeer  \
     verco  \
-    watchexec  \
+    watchexec-cli  \
     xsv  \
     zoxide 
 

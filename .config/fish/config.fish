@@ -55,7 +55,6 @@ function fish_user_key_bindings
 	bind -M insert \cz 'kn'
 	bind -M insert \ez 'zi'
 	bind -M default cd kn
-	echo "user_keys"
 end
 
 alias whch='type -a'
@@ -197,7 +196,7 @@ function zil
 end
 
 # apt abbreviations
-abbr apti "sudo apt install -y"
+abbr apti "sudo apt install"
 abbr apts "apt search"
 abbr aptr "sudo apt remove"
 abbr aptu "sudo apt update && sudo apt upgrade"

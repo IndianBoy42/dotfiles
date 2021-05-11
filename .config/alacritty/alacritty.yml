@@ -11,33 +11,31 @@ window:
     y: 3
 
 colors:
-  # COLORSCHEME: campbell.yaml
+  # COLORSCHEME: hyper.yaml
   # Default colors
   primary:
-    background: '0x0c0c0c'
-    foreground: '0xcccccc'
-
-  # Normal colors
+    background: '0x000000'
+    foreground: '0xffffff'
   normal:
-    black: '0x0c0c0c'
-    red: '0xc50f1f'
-    green: '0x13a10e'
-    yellow: '0xc19c00'
-    blue: '0x0037da'
-    magenta: '0x881798'
-    cyan: '0x3a96dd'
-    white: '0xcccccc'
+    black: '0x000000'
+    red: '0xfe0100'
+    green: '0x33ff00'
+    yellow: '0xfeff00'
+    blue: '0x0066ff'
+    magenta: '0xcc00ff'
+    cyan: '0x00ffff'
+    white: '0xd0d0d0'
 
   # Bright colors
   bright:
-    black: '0x767676'
-    red: '0xe74856'
-    green: '0x16c60c'
-    yellow: '0xf9f1a5'
-    blue: '0x3b78ff'
-    magenta: '0xb4009e'
-    cyan: '0x61d6d6'
-    white: '0xf2f2f2'
+    black: '0x808080'
+    red: '0xfe0100'
+    green: '0x33ff00'
+    yellow: '0xfeff00'
+    blue: '0x0066ff'
+    magenta: '0xcc00ff'
+    cyan: '0x00ffff'
+    white: '0xFFFFFF'
   dim:
     black: '0x31363b'
     red: '0x783228'
@@ -48,7 +46,7 @@ colors:
     cyan: '0x186c60'
     white: '0x63686d'
   cursor:
-    text: '0x000b1e'
-    cursor: '0x0abdc6'
+    text: '0xF81CE5'
+    cursor: '0xffffff'
 
   # Normal colors

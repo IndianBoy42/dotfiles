@@ -4,6 +4,12 @@ font:
     style: Regular
 
   size: 11
+window:
+    decorations: "none"
+    padding:
+        x: 3
+        y: 3
+
 colors:
   # COLORSCHEME: ayu_dark.yaml
   primary:

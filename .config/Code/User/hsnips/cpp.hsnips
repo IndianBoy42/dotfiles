@@ -1,5 +1,28 @@
-snippet templ "template" A
-template<typename $0>
+snippet linc "include local header" A
+``rv = "#include \"" + path.replace(/^.*[\\\/\:]/, '').replace(/\..*/, '') + ".hpp\""``
+endsnippet
+snippet clhead "class header template" 
+#pragma once
+
+class ${1:class}
+{
+public:
+    ${1:class}();
+    ~${1:class}();
+
+private:
+    $0
+};
+endsnippet
+
+snippet tp "template" A
+template<typename ${0:T}>
+endsnippet
+
+snippet nrvo "named return value" A
+${2:auto} ${1:res};
+$
+return $1;
 endsnippet
 
 snippet cref "const ref" A
@@ -8,19 +31,177 @@ endsnippet
 snippet const& "const ref" A
 const $1&
 endsnippet
-
-snippet constant "static constexpr" bA
-static constexpr $1 = $0;
+snippet compt "static constexpr" bA
+static constexpr ${2:auto} $1 = $0;
 endsnippet
-
-snippet foreach "for auto&&" bA
-for (auto&& $1 : $2) {
+snippet rauto "const auto" bA
+auto&& $1 = $0;
+endsnippet
+snippet auto "auto var" bA
+auto $1 = $0;
+endsnippet
+snippet cauto "const auto" bA
+const auto $1 = $0;
+endsnippet
+snippet cfn "auto function()" bA
+/**
+ * @brief a new const member function
+ */
+auto $1() const {
+    $0
+}
+endsnippet
+snippet fn "auto function()" bA
+/**
+ * @brief a new function
+ */
+auto $1() {
     $0
 }
 endsnippet
 
-snippet =iife " = ([&]{})()" A
-= ([&]{
+snippet forr "for auto&&" bA
+for (auto&& ${1:e} : $2) {
     $0
+}
+endsnippet
+
+snippet iife " = ([&]{})()" A
+([&]{
+    $0
+})()
+endsnippet
+snippet iifc " = ([&]{})()" A
+([&]{
+    ${2:auto} $1;
+    $0;
+    return $1;
+})()
+endsnippet
+
+snippet clet "const auto v = ([&]{})()" bA
+const auto $1 = ([&]{
+    ${2:auto} $1;
+    $0;
+    return $1;
 })();
+endsnippet
+
+snippet cstr "const char*" A
+const char*
+endsnippet
+snippet str "std::string"
+std::string ${1:var};
+endsnippet
+snippet sstr "std::string" A
+std::string
+endsnippet
+snippet smap "std::map" A
+std::map<${1:K}, ${2:V}>
+endsnippet
+snippet hashmap "std::unordered_map" A
+std::unordered_map<${1:K}, ${2:V}>
+endsnippet
+snippet svec "std::vector" A
+std::vector<${1:T}>
+endsnippet
+snippet vec "std::vector"
+std::vector<${1:T}> ${0:v};
+endsnippet
+snippet sbox "std::unique_ptr" A
+std::unique_ptr<${1:T}>
+endsnippet
+snippet make_box "std::unique_ptr" A
+std::unique_ptr<${1:T}> $0 = make_unique<$1>();
+endsnippet
+snippet cout "std::cout" A
+std::cout << $0;
+endsnippet
+
+snippet tnull "std::nullptr_t" A
+std::nullptr_t
+endsnippet
+snippet null "nullptr" A
+nullptr
+endsnippet
+
+snippet `(\w+)\[\]` "vector of T" A
+std::vector<``rv=m[1]``>
+endsnippet
+
+snippet `(\w+)\.\.i` "iterator-pair" A
+``rv=m[1]``.begin(), ``rv=m[1]``.end()
+endsnippet
+
+snippet `(\w+)\.\.erase` "erase-remove" A
+``rv=m[1]``.erase(std::remove(``rv=m[1]``.begin(), ``rv=m[1]``.end(), ${0:erase}));
+endsnippet
+snippet `(\w+)\.\.erasif` "erase-removeif" A
+``rv=m[1]``.erase(std::remove_if(``rv=m[1]``.begin(), ``rv=m[1]``.end(), [&](const auto& e){
+    return ${0:false};
+}));
+endsnippet
+snippet `(\w+)\.\.fill` "std::fill(range)" A
+std::fill(``rv=m[1]``.begin(), ``rv=m[1]``.end(), $1);
+endsnippet
+snippet `(\w+)\.\.gen` "std::fill(range)" A
+std::generate(``rv=m[1]``.begin(), ``rv=m[1]``.end(), [&]{
+    return ${0:{}};
+});
+endsnippet
+snippet `(\w+)\.\.sort` "std::sort(range)" A
+std::sort(``rv=m[1]``.begin(), ``rv=m[1]``.end())
+endsnippet
+snippet `(\w+)\.\.map` "std::transform(range)" A
+std::transform(``rv=m[1]``.begin(), ``rv=m[1]``.end(), $1.begin(), [&](const auto& e){
+    return ${0:e};
+})
+endsnippet
+snippet `(\w+)\.\.sum` "std::accumulate(range)" A
+std::transform(``rv=m[1]``.begin(), ``rv=m[1]``.end(), ${1:{}})
+endsnippet
+snippet `(\w+)\.\.fold` "std::accumulate(range)" A
+std::transform(``rv=m[1]``.begin(), ``rv=m[1]``.end(), ${1:{}}, [&](const auto& acc, const auto& e){
+    return ${0:acc};
+})
+endsnippet
+snippet `(\w+)\.\.filter` "std::copy_if(range)" A
+std::copy_if(``rv=m[1]``.begin(), ``rv=m[1]``.end(), $1.begin(), [&](const auto& e){
+    return ${0:true};
+})
+endsnippet
+
+snippet stdsort "std::sort" A
+std::sort($1.begin(), $1.end());
+endsnippet
+snippet stdfill "std::fill" A
+std::fill($1.begin(), $1.end(), $2);
+endsnippet
+snippet stdgen "std::gen" A
+std::gen($1.begin(), $1.end(), [&]{
+    return ${0:{}};
+});
+endsnippet
+snippet stdtran "std::transform" A
+std::transform($1.begin(), $1.end(), $2.begin(), [&](const auto& e){
+    return ${0:e};
+});
+endsnippet
+snippet stdfilt "std::copy_if" A
+std::copy_if($1.begin(), $1.end(), $2.begin(), [&](const auto& e){
+    return ${0:true};
+});
+endsnippet
+snippet `alg::(\w+)\s` "std::algorithm" A
+std::``rv=m[1]``($1.begin(), $1.end());
+endsnippet
+
+snippet readfile "read file (readF)"
+std::vector<char> v;
+if (FILE *fp = fopen(${1:filename}, ``rv='"r"'``)) {
+	char buf[1024];
+	while(size_t len = fread(buf, 1, sizeof(buf), fp))
+		v.insert(v.end(), buf, buf + len);
+	fclose(fp);
+}
 endsnippet

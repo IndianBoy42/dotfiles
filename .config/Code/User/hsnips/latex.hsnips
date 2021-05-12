@@ -1,39 +1,39 @@
-snippet (\w)+..e "environment" A
-\begin{$1}
+snippet `(\w+)\.\.e` "environment" A
+\begin{``rv=m[1]``}
     $0
-\end{$1}
+\end{``rv=m[1]``}
 endsnippet
 snippet \bf "bold face" A
 \textbf{$0}
 endsnippet
-snippet sigma "sigma" A
+snippet sigma "sigma" Aw
 \sigma
 endsnippet
-snippet phi "phi" A
+snippet phi "phi" Aw
 \phi
 endsnippet
-snippet lambda "lambda" A
+snippet lambda "lambda" Aw
 \lambda
 endsnippet
-snippet omega "omega" A
+snippet omega "omega" Aw
 \omega
 endsnippet
-snippet delta "delta" A
+snippet delta "delta" Aw
 \delta
 endsnippet
-snippet beta "beta" A
+snippet beta "beta" Aw
 \beta
 endsnippet
-snippet alpha "alpha" A
+snippet alpha "alpha" Aw
 \alpha
 endsnippet
-snippet psi "psi" A
+snippet psi "psi" Aw
 \psi
 endsnippet
-snippet phi "phi" A
+snippet phi "phi" Aw
 \phi
 endsnippet
-snippet theta "theta" A
+snippet theta "theta" Aw
 \theta
 endsnippet
 snippet beg "begin{} / end{}" bA

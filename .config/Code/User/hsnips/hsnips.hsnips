@@ -1,0 +1,23 @@
+snippet bsnip "snippet-begin" bA
+snippet $1 bA
+$0
+``
+rv = "endsnippet"
+``
+endsnippet
+
+snippet snip "snippet-auto" bA
+snippet $1 A
+$0
+``
+rv = "endsnippet"
+``
+endsnippet
+
+snippet wsnip "snippet-auto" bA
+snippet $1 Aw
+$0
+``
+rv = "endsnippet"
+``
+endsnippet

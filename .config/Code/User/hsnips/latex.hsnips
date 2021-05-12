@@ -92,19 +92,6 @@ snippet \\ "newline" A
 
 endsnippet
 
-snippet \algo "algorithm" bA
-\begin{algorithm} \DontPrintSemicolon \SetAlgoLined
-    \KwIn{ $1 }
-    \KwResult{ $2 }
-    \caption{ $3 }
-
-    \tcc{ Algorithm Here }
-    $0 \;
-
-    \KwRet{ $5 }
-\end{algorithm}
-endsnippet
-
 snippet \psec "section" bA
 \clearpage\section{$0}
 endsnippet
@@ -147,5 +134,103 @@ snippet insfig "insert a figure" bA
     \caption{$2}
     \label{$3}
 \end{figure}
+
+endsnippet
+
+snippet \algo Ab
+\begin{algorithm} \DontPrintSemicolon \SetAlgoLined
+    \caption{$${1:Function} \implies$}
+    \KwResult{$${2:Result} \implies$}
+    \KwIn{$${3:Input \implies}$}
+    
+    $0
+\end{algorithm}
+endsnippet
+snippet `while;` Ab
+\While{\$$1\$}{
+    $0
+}
+endsnippet
+snippet `while\s+(.+);` Ab
+\While{\$``rv=m[1]``\$}{
+    $0
+}
+endsnippet
+snippet `for;` Ab
+\For{$1}{
+    $0
+}
+endsnippet
+snippet `for\s+\((.+)\);` Ab
+\For{$``rv=m[1]``$}{
+    $0
+}
+endsnippet
+snippet `for\s+(.+)\s+in\s+(.+);` Ab
+\For{\$``rv=m[1]`` \gets ``rv=m[2]``\$}{
+    $0
+}
+endsnippet
+snippet `for\s+(.+)\s+from\s+(.+)\s+to\s+(.+);` Ab
+\For{\$``rv=m[1]`` \gets ``rv=m[2]``\$ \KwTo \$``rv=m[3]``\$}{
+    $0
+}
+endsnippet
+snippet `for\s+(.+)\s+from\s+(.+)\s+til\s+(.+)\s+by\s+(.+);` Ab
+\For{\$``rv=m[1]`` \gets ``rv=m[2]``\$ \KwTo \$``rv=m[3]``\$ \KwBy \$``rv=m[4]``\$}{
+    $0
+}
+endsnippet
+endsnippet
+snippet `forto;` Ab
+\For{\$i \gets $1$ \KwTo $$2$}{
+    $0
+}
+endsnippet
+snippet `if\s+(.+);` bA
+\If{\$``rv=m[1]``\$}{
+    $0
+}
+endsnippet
+snippet `ifel\s+\((.+)\);` bA
+\uIf{\$``rv=m[1]``\$}{
+    $0
+} \Else {
+}
+endsnippet
+snippet `elif\s+\((.+)\);` bA
+\ElseIf{\$``rv=m[1]``\$}{
+    $0
+}
+endsnippet
+snippet `elfife\s+\((.+)\);` bA
+\uElseIf{\$``rv=m[1]``\$}{
+    $0
+} \Else {
+}
+endsnippet
+snippet `return\s+(\w+);` Ab
+\KwRet{\$``rv=m[1]``\$}\;
+endsnippet
+snippet `/\*` A
+\tcc{$0}
+endsnippet
+snippet `//` A
+\tcp{$0}
+endsnippet
+snippet `let\s+(.+)\s*=\s*(.+);` Ab
+\textbf{let} \$``rv=m[1]`` \gets ``rv=m[2]``\$ \;
+endsnippet
+snippet `(\w+.*)\s+(.)=\s*(.+);` Ab
+\$``rv=m[1]`` \gets ``rv=m[1]`` ``rv=m[2]`` ``rv=m[3]``\$ \;
+endsnippet
+snippet `(\w+.*)\+\+;` Ab
+\$``rv=m[1]`` \gets ``rv=m[1]`` + 1\$ \;
+endsnippet
+snippet `(\w+.*)\s+=\s+(.+);` Ab
+\$``rv=m[1]`` \gets ``rv=m[2]``\$ \;
+endsnippet
+snippet `;;` A
+\;
 
 endsnippet

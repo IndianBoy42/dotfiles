@@ -3,6 +3,9 @@ snippet `(\w+)\.\.e` "environment" A
     $0
 \end{``rv=m[1]``}
 endsnippet
+snippet $ A
+\( $0 \)
+endsnippet
 snippet \bf "bold face" A
 \textbf{$0}
 endsnippet

@@ -1,6 +1,11 @@
 snippet linc "include local header" A
 ``rv = "#include \"" + path.replace(/^.*[\\\/\:]/, '').replace(/\..*/, '') + ".hpp\""``
 endsnippet
+snippet ifguard "header guard" A
+#ifndef ``rv=path.replace(/^.*[\\\/\:]/, '').replace(/\..*/, '')``
+#define ``rv=path.replace(/^.*[\\\/\:]/, '').replace(/\..*/, '')``
+#endif //``rv=path.replace(/^.*[\\\/\:]/, '').replace(/\..*/, '')``
+endsnippet
 snippet clhead "class header template" 
 #pragma once
 

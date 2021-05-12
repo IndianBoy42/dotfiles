@@ -8,8 +8,8 @@ sudo apt install ros-noetic-desktop-full
 
 source /opt/ros/noetic/setup.bash
 
-sudo apt install -y python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential
-sudo apt install -y ros-noetic-catkin ros-noetic-roscpp ros-noetic-rospy
+sudo apt install python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential
+sudo apt install ros-noetic-catkin ros-noetic-roscpp ros-noetic-rospy
 
 conda create -n ros python
 

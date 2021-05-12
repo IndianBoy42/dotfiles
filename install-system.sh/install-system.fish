@@ -8,7 +8,7 @@ sudo apt-get update
 sudo apt-get dist-upgrade
 
 # Essential
-sudo apt-get install -y apt-transport-http\
+sudo apt-get install apt-transport-http\
     curl \
     wget \
     build-essential \

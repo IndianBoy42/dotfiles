@@ -25,7 +25,7 @@ sudo apt-key adv --keyserver   keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
 
 sudo apt update
 
-sudo apt-get install -y \
+sudo apt-get install \
 	checkinstall \
     openssh-server \
     signal-desktop \

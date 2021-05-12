@@ -16,7 +16,7 @@ pipx inject mps-youtube youtube-dl
 pipx inject mps-youtube pyperclip
 sudo add-apt-repository -y ppa:mc3man/mpv-tests
 sudo apt-get update
-sudo apt install -y mpv
+sudo apt install mpv
 
 pipx install outrun
 pipx install xxh-xxh

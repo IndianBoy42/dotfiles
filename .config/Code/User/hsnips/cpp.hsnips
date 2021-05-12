@@ -1,19 +1,27 @@
 snippet linc "include local header" A
 ``rv = "#include \"" + path.replace(/^.*[\\\/\:]/, '').replace(/\..*/, '') + ".hpp\""``
 endsnippet
-snippet ifguard "header guard" A
-#ifndef ``rv=path.replace(/^.*[\\\/\:]/, '').replace(/\..*/, '')``
-#define ``rv=path.replace(/^.*[\\\/\:]/, '').replace(/\..*/, '')``
-#endif //``rv=path.replace(/^.*[\\\/\:]/, '').replace(/\..*/, '')``
+snippet #inc A
+#include $0
 endsnippet
-snippet clhead "class header template" 
+snippet headguard "header guard" b
+#ifndef ``rv=path.replace(/^.*[\\\/\:]/, '').replace(/[\.-]/, '_').toUpperCase()``
+#define ``rv=path.replace(/^.*[\\\/\:]/, '').replace(/[\.-]/, '_').toUpperCase()``
+
+$0
+
+#endif //``rv=path.replace(/^.*[\\\/\:]/, '').replace(/[\.-]/, '_').toUpperCase()``
+endsnippet
+snippet headclass "class header template" 
 #pragma once
 
-class ${1:class}
+class ${1:``
+  rv = path.replace(/^.*[\\\/\:]/, '').replace(/\..*/, '').replace(/[-_]/, '').replace(/(?:^\w|[A-Z]|\b\w)/g, word => word.toUpperCase()).replace(/\s+/g, '')
+``}
 {
 public:
-    ${1:class}();
-    ~${1:class}();
+    $1();
+    ~$1();
 
 private:
     $0
@@ -30,11 +38,11 @@ $
 return $1;
 endsnippet
 
-snippet cref "const ref" A
-const $1&
+snippet cref "const ref" Aw
+const $0&
 endsnippet
 snippet const& "const ref" A
-const $1&
+const $0&
 endsnippet
 snippet compt "static constexpr" bA
 static constexpr ${2:auto} $1 = $0;
@@ -65,6 +73,16 @@ auto $1() {
 }
 endsnippet
 
+snippet forin "for auto : " bA
+for (auto ${1:e} : $2) {
+    $0
+}
+endsnippet
+snippet forc "for const auto&" bA
+for (const auto& ${1:e} : $2) {
+    $0
+}
+endsnippet
 snippet forr "for auto&&" bA
 for (auto&& ${1:e} : $2) {
     $0
@@ -130,7 +148,7 @@ snippet null "nullptr" A
 nullptr
 endsnippet
 
-snippet `(\w+)\[\]` "vector of T" A
+snippet `vec(\w+)\[\]` "vector of T" A
 std::vector<``rv=m[1]``>
 endsnippet
 
@@ -214,4 +232,87 @@ endsnippet
 snippet `cin-(\w+);` "variables from stdin" bA
 $0 ``rv=m[1]``;
 cin >> ``rv=m[1]``;
+endsnippet
+
+snippet cudaKernel bA
+template<typename T>
+__global__ void ${1:kernel}(${2:T* buf}) {
+    const size_t gidx = blockIdx.x * blockDim.x + threadIdx.x;
+    const size_t gidy = blockIdx.y * blockDim.y + threadIdx.y;
+    const size_t gidz = blockIdx.z * blockDim.z + threadIdx.z;
+
+    $0
+}
+endsnippet
+snippet cudaNew Ab
+${1:T}* ${2:ptr};
+cudaMallocManaged(&$2, sizeof($1) * ${3:1});
+$0
+cudaFree($2);
+endsnippet
+snippet __shared__ Ab
+__shared__ ${1:T} $2[];
+endsnippet
+snippet cudtp Ab
+template<typename T, size_t blockDimX, size_t blockDimY, size_t blockDimZ>
+__global__ void ${1:cuda}(${2:T* buf}) {
+    const size_t ${1:gidx} = blockIdx.x * blockDimX + threadIdx.x;
+    const size_t ${1:gidy} = blockIdx.y * blockDimY + threadIdx.y;
+    const size_t ${1:gidz} = blockIdx.z * blockDimZ + threadIdx.z;
+
+    $0
+}
+endsnippet
+snippet `const tgidx` Ab
+const size_t gidx = blockIdx.x * blockDimX + threadIdx.x;
+
+endsnippet
+snippet `const tgidy` Ab
+const size_t gidy = blockIdx.y * blockDimY + threadIdx.y;
+
+endsnippet
+snippet `const tgidz` Ab
+const size_t gidz = blockIdx.z * blockDimZ + threadIdx.z;
+
+endsnippet
+snippet `const gidx` Ab
+const size_t gidx = blockIdx.x * blockDim.x + threadIdx.x;
+
+endsnippet
+snippet `const gidy` Ab
+const size_t gidy = blockIdx.y * blockDim.y + threadIdx.y;
+
+endsnippet
+snippet `const gidz` Ab
+const size_t gidz = blockIdx.z * blockDim.z + threadIdx.z;
+
+endsnippet
+snippet bidx A
+(blockIdx.x)
+endsnippet
+snippet bidy A
+(blockIdx.y)
+endsnippet
+snippet bidz A
+(blockIdx.z)
+endsnippet
+snippet tidx A
+(threadIdx.x)
+endsnippet
+snippet tidy A
+(threadIdx.y)
+endsnippet
+snippet tidz A
+(threadIdx.z)
+endsnippet
+snippet dim3 A
+dim3 gridSize($1);
+dim3 blockSize($2);
+endsnippet
+snippet `(\w.*)<<<` Ab
+{
+    dim3 gridSize($1);
+    dim3 blockSize($2);
+    ``rv=m[1]``<<<gridSize, blockSize>>>($0);
+}
 endsnippet

@@ -7,6 +7,15 @@ snippet #! "shebang" Ab
 
 endsnippet
 
+snippet def Ab
+def $1():
+	${0:pass}
+endsnippet
+snippet with A
+with ${1:open()} as $2:
+	${0:pass}
+endsnippet
+
 snippet cell "# %%" Ab
 
 # %%

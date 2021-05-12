@@ -209,14 +209,14 @@ snippet `elfife\s+\((.+)\);` bA
 } \Else {
 }
 endsnippet
-snippet `return\s+(\w+);` Ab
+snippet `return\s*(\w*);` Ab
 \KwRet{\$``rv=m[1]``\$}\;
 endsnippet
 snippet `/\*` A
 \tcc{$0}
 endsnippet
 snippet `//` A
-\tcp{$0}
+\tcp*{$0}
 endsnippet
 snippet `let\s+(.+)\s*=\s*(.+);` Ab
 \textbf{let} \$``rv=m[1]`` \gets ``rv=m[2]``\$ \;

@@ -1,0 +1,12 @@
+snippet key "string entry" Ab
+${1:key} : $0,
+endsnippet
+#snippet str "string entry" Ab
+#${1:key} : "$0",
+#endsnippet
+snippet obj "obj entry" Ab
+${1:key} : { $0 },
+endsnippet
+snippet arr "array entry" Ab
+${1:key} : [ $0 ],
+endsnippet

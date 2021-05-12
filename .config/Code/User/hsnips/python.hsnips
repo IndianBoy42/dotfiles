@@ -1,3 +1,7 @@
+snippet shbang "shebang" Ab
+#!/usr/bin/env python
+
+endsnippet
 snippet #! "shebang" Ab
 #!/usr/bin/env python
 

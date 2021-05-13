@@ -52,6 +52,7 @@
 	f = fetch --all
 	adds = "!f() { git diff $1; git add $1; }; f"
 	untracked = ls-files . --exclude-standard --others
+	sm = submodule
 	
 [credential "https://dev.azure.com"]
 	useHttpPath = true

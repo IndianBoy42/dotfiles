@@ -1,12 +1,12 @@
 ---
 client:
   read_local_logs: true
-  show_confirmation_questions: false
-  show_expanded_aliases: false
+  show_confirmation_questions: true
+  show_expanded_aliases: true
   dark_mode: false
   max_status_lines: ~
 daemon:
-  default_parallel_tasks: 1
+  default_parallel_tasks: 8
   pause_group_on_failure: false
   pause_all_on_failure: false
   callback: ~

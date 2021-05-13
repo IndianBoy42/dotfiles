@@ -247,6 +247,11 @@ $0 ``rv=m[1]``;
 cin >> ``rv=m[1]``;
 endsnippet
 
+
+#########################################################
+# CUDA C++ Snippets
+#########################################################
+
 snippet cudaKernel bA
 template<typename T>
 __global__ void ${1:kernel}(${2:T* buf}) {

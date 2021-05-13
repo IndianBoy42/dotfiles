@@ -1,3 +1,8 @@
+snippet beg "begin{} / end{}" bA
+\begin{$1}
+	$0
+\end{$1}
+endsnippet
 snippet `(\w+)\.\.e` "environment" A
 \begin{``rv=m[1]``}
     $0
@@ -6,55 +11,17 @@ endsnippet
 snippet $ A
 \( $0 \)
 endsnippet
-snippet \bf "bold face" A
-\textbf{$0}
-endsnippet
-snippet sigma "sigma" Aw
-\sigma
-endsnippet
-snippet phi "phi" Aw
-\phi
-endsnippet
-snippet lambda "lambda" Aw
-\lambda
-endsnippet
-snippet omega "omega" Aw
-\omega
-endsnippet
-snippet delta "delta" Aw
-\delta
-endsnippet
-snippet beta "beta" Aw
-\beta
-endsnippet
-snippet alpha "alpha" Aw
-\alpha
-endsnippet
-snippet psi "psi" Aw
-\psi
-endsnippet
-snippet phi "phi" Aw
-\phi
-endsnippet
-snippet theta "theta" Aw
-\theta
-endsnippet
-snippet beg "begin{} / end{}" bA
-\begin{$1}
-	$0
-\end{$1}
-endsnippet
-
-snippet \verb "verbatim" A
-\verb!$0!
-endsnippet
-
 snippet \( "inline math" A
 \( $0 \)
 endsnippet
-snippet $ "short inline math" A
-$$0$
+snippet \bf "bold face" A
+\textbf{$0}
 endsnippet
+
+snippet \ver "verbatim" A
+\verb!$0!
+endsnippet
+
 
 snippet () "parens" A
 \left( $0 \right)
@@ -236,4 +203,115 @@ endsnippet
 snippet `;;` A
 \;
 
+endsnippet
+
+snippet template b
+\documentclass[a4paper, 11pt]{article}
+
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+% \usepackage{fontspec}
+% \setmainfont[
+% BoldFont=calibrib.ttf,
+% ItalicFont=calibrii.ttf,
+% ]{Calibri.ttf}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage[table]{xcolor}
+\usepackage{hhline}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{listings}
+\usepackage{pdfpages}
+\usepackage{cancel}
+\usepackage{afterpage}
+\usepackage{xcolor}
+\usepackage{tikz}
+% \usepackage{tikzit}
+% \input{tikzitstyles.tikzstyles} 
+\usepackage{fancyhdr}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{setspace}
+
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{claim}{Claim}
+
+\newcommand{\R}{\mathbb{R}}
+\providecommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Op}{\mathcal{O}}
+\providecommand{\C}{\mathbb{C}}
+\newcommand{\iprod}[2]{\left\langle {#1},{#2} \right\rangle}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+\newcommand{\sspan}{\operatorname{span}}
+
+\renewcommand{\thesection}{\arabic{section}.}
+% \renewcommand{\thesubsection}{\quad\alph{subsection}.}
+\renewcommand{\thesubsection}{\thesection\alph{subsection})}
+
+\usepackage{parskip}
+% \setlength{\parskip}{\baselineskip}%
+% \setlength{\parindent}{0pt}%
+
+\newcommand\setrow[1]{\gdef\rowmac{#1}#1\ignorespaces}
+\newcommand\clearrow{\global\let\rowmac\relax}
+
+\newcommand\Ccancel[2][black]{
+    \let\OldcancelColor\CancelColor
+    \renewcommand\CancelColor{\color{#1}}
+    \cancel{#2}
+    \renewcommand\CancelColor{\OldcancelColor}
+}
+\newcommand{\rcancel}[1]{ \Ccancel[red]{#1} }
+\newcommand{\cleft}[2][.]{%
+  \begingroup\colorlet{savedleftcolor}{.}%
+  \color{#1}\left#2\color{savedleftcolor}%
+}
+\newcommand{\cright}[2][.]{% \color{#1}\right#2\endgroup }
+\newcommand{\rleft}[1]{ \cleft[red]{#1} }
+\newcommand{\rright}[1]{ \cright[red]{#1} }
+
+% 
+% 
+% Document formatting ends here
+% 
+% 
+% Document Info starts here
+% 
+% 
+
+\title{${1:``rv = path.replace(/^.*[\\\/\:]/, '').replace(/\..*/, '')``}}
+\author{Anshuman Medhi}
+
+\pagestyle{fancy}
+\fancyhf{}
+\makeatletter
+\let\headerauthor\@author
+\let\headertitle\@title
+\makeatother
+\lhead{\headertitle}
+\lfoot{\nouppercase\leftmark}
+\rfoot{Page \thepage}
+
+% \onehalfspacing
+\doublespacing
+\begin{document}
+
+\maketitle
+
+\section{$0}
+
+\end{document}
 endsnippet

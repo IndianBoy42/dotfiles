@@ -1,0 +1,40 @@
+snippet `mov self fn` Ab
+fn ${1:name}(self) -> _ {
+    $0
+}
+endsnippet
+snippet `&self fn` Ab
+fn ${1:name}(&self) -> _ {
+    $0
+}
+endsnippet
+snippet `mut self fn` Ab
+fn ${1:name}(&mut self) -> _ {
+    $0
+}
+endsnippet
+snippet method Ab
+fn ${1:name}(${2:&} self) -> _ {
+    $0
+}
+endsnippet
+snippet `pub fn` Ab
+fn ${1:name}(${2:&} self) -> _ {
+    $0
+}
+endsnippet
+snippet fn Ab
+fn ${1:name}() -> _ {
+    $0
+}
+endsnippet
+
+snippet `mod tests` Ab
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test() {
+        $0
+    }
+}
+endsnippet

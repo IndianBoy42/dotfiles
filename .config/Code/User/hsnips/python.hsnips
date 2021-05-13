@@ -8,7 +8,7 @@ snippet #! "shebang" Ab
 endsnippet
 
 snippet def Ab
-def $1():
+def ${1:function}():
 	${0:pass}
 endsnippet
 snippet with A
@@ -24,20 +24,20 @@ $0
 
 endsnippet
 
-snippet printf "print(f'')" A
+snippet prif "print(f'')" A
 print(f'$0')
 endsnippet
 
 snippet ifor "for loop" Ab
-for ${2:i} in range($1):
+for ${1:i} in range($2):
     ${0:pass}
 endsnippet
 snippet for "for loop" Ab
-for ${2:e} in $1:
+for ${1:e} in $2:
     ${0:pass}
 endsnippet
 
-snippet ifmain "if name==main:" Ab
+snippet main: "if name==main:" Ab
 if __name__==``rv='"__main__"'``:
     pass
 endsnippet

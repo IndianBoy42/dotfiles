@@ -89,12 +89,20 @@ for (auto&& ${1:e} : $2) {
 }
 endsnippet
 
-snippet iife " = ([&]{})()" A
+snippet lambda A
+[&]($1){
+    $0
+}
+endsnippet
+snippet `(\w.*)\s+=>` A
+[&] (const auto& ``rv=m[1]``) { return $0; }
+endsnippet
+snippet iiff " = ([&]{})()" A
 ([&]{
     $0
 })()
 endsnippet
-snippet iifc " = ([&]{})()" A
+snippet iife = ([&]{})()" A
 ([&]{
     ${2:auto} $1;
     $0;

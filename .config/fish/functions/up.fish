@@ -1,4 +1,5 @@
 function up
+# https://gist.github.com/zlksnk/81a4993be410586c038f8b3fc140b1c7
   set -l dir_to_be_child $argv[1]
 
   if [ "$dir_to_be_child" = "" ]

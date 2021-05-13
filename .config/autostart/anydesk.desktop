@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+GenericName=Remote Desktop
+Name=AnyDesk
+Comment=Remote Desktop
+TryExec=anydesk
+Exec=anydesk
+Icon=anydesk
+Terminal=false
+StartupNotify=false
+X-GNOME-Autostart-Delay=60
+

@@ -291,6 +291,7 @@ else:
 	${6:pass}
 finally:
 	${7:pass}
+endsnippet
 
 snippet true "true" A
 True
@@ -327,5 +328,4 @@ import scipy as sp
 from scipy import optimize sopt
 from scipy import integrate sint
 from numba import jit
->>>>>>> 525e579 (some python snippets)
 endsnippet

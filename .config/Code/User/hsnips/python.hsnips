@@ -311,6 +311,7 @@ endsnippet
 snippet importcs "import casadi" bA
 import casadi as cs
 from casadi import SX, MX, Opti
+opti = cs.Opti()
 endsnippet
 snippet importsp "import scipy" bA
 import scipy as sp

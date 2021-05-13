@@ -51,6 +51,7 @@
 	clean-merged = !git branch --merged | grep -v \"\\*\" | xargs -n 1 git branch -d
 	f = fetch --all
 	adds = "!f() { git diff $1; git add $1; }; f"
+	untracked = ls-files . --exclude-standard --others
 	
 [credential "https://dev.azure.com"]
 	useHttpPath = true

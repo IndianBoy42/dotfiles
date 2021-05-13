@@ -21,6 +21,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'liuchengxu/vim-which-key'
 
+set clipboard=unnamedplus
+
 " Initialize plugin system
 call plug#end()
 
@@ -49,3 +51,7 @@ inoremap {} {}
 " nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 set timeoutlen=100
 
+augroup highlight_yank
+    autocmd!
+    autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 1000)
+augroup END

@@ -291,4 +291,41 @@ else:
 	${6:pass}
 finally:
 	${7:pass}
+
+snippet true "true" A
+True
+endsnippet
+snippet false "false" A
+False
+endsnippet
+
+snippet importnp "import numpy" bA
+import numpy as np
+from numpy import linalg as la
+endsnippet
+snippet importplt "import matplotlib" bA
+import matplotlib as mpl
+from matplotlib import pyplot as plt
+endsnippet
+snippet importcs "import casadi" bA
+import casadi as cs
+from casadi import SX, MX, Opti
+endsnippet
+snippet importsp "import scipy" bA
+import scipy as sp
+from scipy import optimize sopt
+from scipy import integrate sint
+endsnippet
+snippet importall "import all math" bA
+import numpy as np
+from numpy import linalg as la
+import matplotlib as mpl
+from matplotlib import pyplot as plt
+import casadi as cs
+from casadi import SX, MX, Opti
+import scipy as sp
+from scipy import optimize sopt
+from scipy import integrate sint
+from numba import jit
+>>>>>>> 525e579 (some python snippets)
 endsnippet

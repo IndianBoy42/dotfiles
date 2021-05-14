@@ -236,12 +236,10 @@ snippet template b
 % \usepackage{tikzit}
 % \input{tikzitstyles.tikzstyles} 
 \usepackage{fancyhdr}
-\usepackage[colorinlistoftodos]{todonotes}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage{setspace}
 
 \usepackage{amsthm}
-\newtheorem{theorem}{Theorem}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
 \newtheorem{claim}{Claim}
@@ -279,7 +277,7 @@ snippet template b
   \begingroup\colorlet{savedleftcolor}{.}%
   \color{#1}\left#2\color{savedleftcolor}%
 }
-\newcommand{\cright}[2][.]{% \color{#1}\right#2\endgroup }
+\newcommand{\cright}[2][.]{ \color{#1}\right#2\endgroup }
 \newcommand{\rleft}[1]{ \cleft[red]{#1} }
 \newcommand{\rright}[1]{ \cright[red]{#1} }
 

@@ -8,8 +8,8 @@ snippet `(\w+)\.\.e` "environment" A
     $0
 \end{``rv=m[1]``}
 endsnippet
-snippet $ A
-\( $0 \)
+snippet $ "inline math" A
+\($0\)
 endsnippet
 snippet \( "inline math" A
 \( $0 \)
@@ -72,7 +72,7 @@ endsnippet
 snippet \psub "subsection" bA
 \clearpage\subsection{$0}
 endsnippet
-snippet \sub "subsection" bA
+snippet \subs "subsection" bA
 \subsection{$0}
 endsnippet
 snippet \pssub "subsubsection" bA
@@ -94,6 +94,10 @@ snippet \enum "enumerate" bA
 endsnippet
 snippet -- "item" bA
 \item 
+endsnippet
+
+snippet `([a-zA-Z0-9])\$` A
+\(``rv=m[1]``\)
 endsnippet
 
 snippet insfig "insert a figure" bA
@@ -218,7 +222,7 @@ snippet template b
 % ]{Calibri.ttf}
 
 %% Sets page size and margins
-\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
 
 %% Useful packages
 \usepackage{amsmath,amssymb,amsfonts}
@@ -307,7 +311,17 @@ snippet template b
 \doublespacing
 \begin{document}
 
+%\thispagestyle{empty}
 \maketitle
+
+%\newpage
+%\begin{abstract}
+%  \input{abstract}
+%\end{abstract}
+
+%\newpage
+%\tableofcontents
+%\listoffigures
 
 \section{$0}
 

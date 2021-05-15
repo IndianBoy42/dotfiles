@@ -14,6 +14,9 @@ endsnippet
 snippet \( "inline math" A
 \( $0 \)
 endsnippet
+snippet \it "italic text" A
+\textit{$0}
+endsnippet
 snippet \bf "bold face" A
 \textbf{$0}
 endsnippet
@@ -21,7 +24,30 @@ endsnippet
 snippet \ver "verbatim" A
 \verb!$0!
 endsnippet
-
+snippet theorem b
+\begin{theorem}
+    $0
+\end{theorem}
+\begin{proof}
+    
+\end{proof}
+endsnippet
+snippet lemma b
+\begin{lemma}
+    $0
+\end{lemma}
+\begin{proof}
+    
+\end{proof}
+endsnippet
+snippet claim b
+\begin{claim}
+    $0
+\end{claim}
+\begin{proof}
+    
+\end{proof}
+endsnippet
 
 snippet () "parens" A
 \left( $0 \right)
@@ -50,9 +76,9 @@ snippet \eq "display math" bA
 endsnippet
 
 snippet \align "aligned math" bA
-\begin{align}
+\begin{align*}
     $0
-\end{align}
+\end{align*}
 endsnippet
 snippet xyz&= "align equals" A
 &= $0 \\\\
@@ -100,6 +126,30 @@ snippet `([a-zA-Z0-9])\$` A
 \(``rv=m[1]``\)
 endsnippet
 
+snippet `(\w+)\.\.t` A
+\text{``rv=m[1]``}
+endsnippet
+snippet `(\w+)\.\.i` A
+\textit{``rv=m[1]``}
+endsnippet
+snippet `(\w+)\.\.b` A
+\textbf{``rv=m[1]``}
+endsnippet
+snippet `(\w+)\.\.c` A
+\textcolor{``rv=m[1]``}{$0}
+endsnippet
+
+# experimental
+snippet `\b(.*):c:(.*)\s+` A
+\textcolor{``rv=m[1]``}{``rv=m[2]``}
+endsnippet
+snippet `\b(.*)::(.*)\s+` A
+\``rv=m[1]``{``rv=m[2]``}
+endsnippet
+snippet `(\w+)ct;` A
+\textcolor{``rv=m[1]``}{$0}
+endsnippet
+
 snippet insfig "insert a figure" bA
 
 \begin{figure}[htb]
@@ -113,20 +163,20 @@ endsnippet
 
 snippet \algo Ab
 \begin{algorithm} \DontPrintSemicolon \SetAlgoLined
-    \caption{$${1:Function} \implies$}
-    \KwResult{$${2:Result} \implies$}
-    \KwIn{$${3:Input \implies}$}
+    \caption{\(${1:Function} \implies\)}
+    \KwResult{\(${2:Result} \implies\)}
+    \KwIn{\(${3:Input} \implies\)}
     
     $0
 \end{algorithm}
 endsnippet
 snippet `while;` Ab
-\While{\$$1\$}{
+\While{\($1\)}{
     $0
 }
 endsnippet
 snippet `while\s+(.+);` Ab
-\While{\$``rv=m[1]``\$}{
+\While{\(``rv=m[1]``\)}{
     $0
 }
 endsnippet
@@ -141,50 +191,50 @@ snippet `for\s+\((.+)\);` Ab
 }
 endsnippet
 snippet `for\s+(.+)\s+in\s+(.+);` Ab
-\For{\$``rv=m[1]`` \gets ``rv=m[2]``\$}{
+\For{\(``rv=m[1]`` \gets ``rv=m[2]``\)}{
     $0
 }
 endsnippet
 snippet `for\s+(.+)\s+from\s+(.+)\s+to\s+(.+);` Ab
-\For{\$``rv=m[1]`` \gets ``rv=m[2]``\$ \KwTo \$``rv=m[3]``\$}{
+\For{\(``rv=m[1]`` \gets ``rv=m[2]``\$ \KwTo \$``rv=m[3]``\)}{
     $0
 }
 endsnippet
 snippet `for\s+(.+)\s+from\s+(.+)\s+til\s+(.+)\s+by\s+(.+);` Ab
-\For{\$``rv=m[1]`` \gets ``rv=m[2]``\$ \KwTo \$``rv=m[3]``\$ \KwBy \$``rv=m[4]``\$}{
+\For{\(``rv=m[1]`` \gets ``rv=m[2]``\$ \KwTo \$``rv=m[3]``\$ \KwBy \$``rv=m[4]``\)}{
     $0
 }
 endsnippet
 endsnippet
 snippet `forto;` Ab
-\For{\$i \gets $1$ \KwTo $$2$}{
+\For{\(i \gets $1$ \KwTo $$2$}{
     $0
 }
 endsnippet
 snippet `if\s+(.+);` bA
-\If{\$``rv=m[1]``\$}{
+\If{\(``rv=m[1]``\)}{
     $0
 }
 endsnippet
 snippet `ifel\s+\((.+)\);` bA
-\uIf{\$``rv=m[1]``\$}{
+\uIf{\(``rv=m[1]``\)}{
     $0
 } \Else {
 }
 endsnippet
 snippet `elif\s+\((.+)\);` bA
-\ElseIf{\$``rv=m[1]``\$}{
+\ElseIf{\(``rv=m[1]``\)}{
     $0
 }
 endsnippet
 snippet `elfife\s+\((.+)\);` bA
-\uElseIf{\$``rv=m[1]``\$}{
+\uElseIf{\(``rv=m[1]``\)}{
     $0
 } \Else {
 }
 endsnippet
 snippet `return\s*(\w*);` Ab
-\KwRet{\$``rv=m[1]``\$}\;
+\KwRet{\(``rv=m[1]``\)}\;
 endsnippet
 snippet `/\*` A
 \tcc{$0}
@@ -209,7 +259,7 @@ snippet `;;` A
 
 endsnippet
 
-snippet template b
+snippet maintemplate b
 \documentclass[a4paper, 11pt]{article}
 
 %% Language and font encodings
@@ -326,4 +376,15 @@ snippet template b
 \section{$0}
 
 \end{document}
+endsnippet
+
+snippet subnotestemplate A
+\documentclass[../main/main.tex]{subfiles}
+\begin{document}
+
+\section{``rv = new Date().toDateString()``}
+\subsection{${1:Topic}}
+$0
+
+\end{document} 
 endsnippet

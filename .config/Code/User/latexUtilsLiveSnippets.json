@@ -324,7 +324,7 @@
     },
     {
         "prefix": "\\bbmat$",
-        "body": "\\begin{bmatrix} $$1 \\end{bmatrix} ",
+        "body": "\\begin{bmatrix} $$0 \\end{bmatrix} ",
         "mode": "maths",
         "description": "bmatrix",
         "triggerWhenComplete": true
@@ -398,48 +398,42 @@
         "body": "$1\\, ",
         "mode": "maths",
         "description": "add maths whitespace \\,",
-        "priority": -1,
-        "triggerWhenComplete": true
+        "priority": -1
     },
     {
         "prefix": "([^ \\\\])\\\\, {2,4}$",
         "body": "$1\\: ",
         "mode": "maths",
         "description": "add maths whitespace \\:",
-        "priority": 0.1,
-        "triggerWhenComplete": true
+        "priority": 0.1
     },
     {
         "prefix": "([^ \\\\])\\\\: {2,4}$",
         "body": "$1\\; ",
         "mode": "maths",
         "description": "add maths whitespace \\;",
-        "priority": 0.2,
-        "triggerWhenComplete": true
+        "priority": 0.2
     },
     {
         "prefix": "([^ \\\\])\\\\; {2,4}$",
         "body": "$1\\ ",
         "mode": "maths",
         "description": "add maths whitespace \\ ",
-        "priority": 0.3,
-        "triggerWhenComplete": true
+        "priority": 0.3
     },
     {
         "prefix": "([^ \\\\])\\\\ {2,4}$",
         "body": "$1\\quad ",
         "mode": "maths",
         "description": "add maths whitespace quad",
-        "priority": 0.4,
-        "triggerWhenComplete": true
+        "priority": 0.4
     },
     {
         "prefix": "([^ \\\\])\\\\quad {2,4}$",
         "body": "$1\\qquad ",
         "mode": "maths",
         "description": "add maths whitespace qquad",
-        "priority": 0.5,
-        "triggerWhenComplete": true
+        "priority": 0.5
     },
     {
         "prefix": "\\bset$",

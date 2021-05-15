@@ -16,6 +16,8 @@ sudo usermod -aG input $USER
 sudo modprobe uinput
 sudo touch /etc/udev/rules.d/uinput.rules
 echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/uinput.rules
+echo "the next output will help you find the device that your keyboard corresponds to"
+cat /proc/bus/input/devices | rg -C5 keyboard
   
 sudo cp ./kmonad.service /etc/systemd/system/kmonad.service
 sudo systemctl enable kmonad.service

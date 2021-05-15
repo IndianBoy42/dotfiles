@@ -323,6 +323,13 @@
         "triggerWhenComplete": true
     },
     {
+        "prefix": "[[]]$",
+        "body": "\\begin{bmatrix} $$0 \\end{bmatrix} ",
+        "mode": "maths",
+        "description": "bmatrix",
+        "triggerWhenComplete": true
+    },
+    {
         "prefix": "\\bbmat$",
         "body": "\\begin{bmatrix} $$0 \\end{bmatrix} ",
         "mode": "maths",
@@ -333,8 +340,7 @@
         "prefix": "\\bpart$",
         "body": "\\frac{\\partial $${1:V}}{\\partial $${2:x}} ",
         "mode": "maths",
-        "description": "partial derivative",
-        "triggerWhenComplete": true
+        "description": "partial derivative"
     },
     {
         "prefix": "\\bsq$",

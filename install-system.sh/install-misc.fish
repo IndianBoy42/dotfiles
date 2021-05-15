@@ -7,7 +7,7 @@ mv ./up ~/bin/up
 
 # KMonad, cross platform QMK for all keyboards 
 sudo apt install input-utils evtest
-wget https://github.com/david-janssen/kmonad/releases/download/0.4.1/kmonad-0.4.1-linux -O ~/bin/kmonad
+wget https://github.com/kmonad/kmonad/releases/download/0.4.1/kmonad-0.4.1-linux -O ~/bin/kmonad
 chmod +x ~/bin/kmonad
 
 sudo groupadd uinput

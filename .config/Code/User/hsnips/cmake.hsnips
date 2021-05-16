@@ -51,10 +51,18 @@ snippet enispc bA
 enable_language(ISPC)
 endsnippet
 
-snippet `([\w_]+)\.\.v` A
+snippet `([\w_]+)\.\.v` "suffix for variable names" A
 \${``rv=m[1]``} $0
 endsnippet
 
+snippet `cmd;` Ab
+add_custom_command(${1:cmd} $0)
+
+endsnippet
+snippet `(\w+)\.\.cmd` Ab
+add_custom_command(``rv=m[1]`` $0)
+
+endsnippet
 snippet `tar;` Ab
 add_custom_target(${0:target} ${1:``rv=path.replace(/\/CMakeLists\.txt/,'').replace(/^.*[\\\/\:]/, '')``})
 

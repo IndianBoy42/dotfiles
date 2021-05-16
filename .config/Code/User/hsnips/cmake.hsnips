@@ -1,15 +1,16 @@
 snippet template A
 cmake_minimum_required(VERSION 3.19)
 
+# set(CMAKE_BUILD_TYPE Release)
 option(USE_LTO ``rv='"'``Use LTO``rv='"'`` OFF)
 option(OPT_NATIVE ``rv='"'``Use target native for optimization``rv='"'`` ON)
 
 project(${1:``rv=path.replace(/\/CMakeLists\.txt/,'').replace(/^.*[\\\/\:]/, '')``})
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_C_STANDARD_REQUIRED True)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_EXTENSIONS ON)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED True)
 set(CMAKE_C_EXTENSIONS ON)
 
 add_executable($1)
@@ -46,9 +47,16 @@ endsnippet
 
 snippet encuda bA
 enable_language(CUDA)
+set(CMAKE_CUDA_STANDARD 17)
+set(CMAKE_CUDA_STANDARD_REQUIRED True)
+set(CMAKE_CUDA_EXTENSIONS ON)
+set(CMAKE_CUDA_ARCHITECTURES ${CUDA_ARCHITECTURE_VERSIONS})
+target_include_directories(${1:``rv=path.replace(/\/CMakeLists\.txt/,'').replace(/^.*[\\\/\:]/, '')``} PUBLIC ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+
 endsnippet
 snippet enispc bA
 enable_language(ISPC)
+
 endsnippet
 
 snippet `([\w_]+)\.\.v` "suffix for variable names" A
@@ -105,6 +113,12 @@ endsnippet
 snippet `(\w+)\.\.dep` Ab
 find_package(``rv=m[1]``)
 target_link_libraries(${1:``rv=path.replace(/\/CMakeLists\.txt/,'').replace(/^.*[\\\/\:]/, '')``} ``rv=m[1]``)
+
+endsnippet
+snippet fn Ab
+function($1 $2)
+$0
+endfunction($1)
 
 endsnippet
 snippet if Ab

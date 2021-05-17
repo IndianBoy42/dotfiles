@@ -28,7 +28,24 @@ $0
 
 endsnippet
 
-snippet exe Ab
+snippet add_lib Ab
+add_executable(${1:``rv=path.replace(/\/CMakeLists\.txt/,'').replace(/^.*[\\\/\:]/, '')``} $0)
+
+if(USE_LTO)
+    target_compile_options($1 PRIVATE -flto)
+endif(USE_LTO)
+
+if(OPT_NATIVE)
+    target_compile_options($1 PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-march=native -mtune=native -mavx -mavx2>)
+    target_compile_options($1 PRIVATE $<$<COMPILE_LANGUAGE:C>:-march=native -mtune=native -mavx -mavx2>)
+endif(OPT_NATIVE)
+
+inc
+dep
+src
+endsnippet
+
+snippet add_exe Ab
 add_executable(${1:``rv=path.replace(/\/CMakeLists\.txt/,'').replace(/^.*[\\\/\:]/, '')``} $0)
 
 if(USE_LTO)

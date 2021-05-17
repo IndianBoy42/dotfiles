@@ -58,10 +58,10 @@ endsnippet
 snippet {} "curly brackets" A
 \left\{ $0 \right\\}
 endsnippet
-snippet `\| \|` "abs" A
+snippet \abs "abs" A
 \left| $0 \right|
 endsnippet
-snippet \|| "norm" A
+snippet \norm "norm" A
 \left\| $0 \right\|
 endsnippet
 

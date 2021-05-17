@@ -68,14 +68,14 @@
     },
     {
         "prefix": "//$",
-        "body": "\\frac{$$1}{$$2} ",
+        "body": "\\frac{$$1}{$$0} ",
         "mode": "maths",
         "description": "fraction (empty)",
         "triggerWhenComplete": true
     },
     {
         "prefix": "(([\\d\\.]+)|([\\d\\.]*)(\\\\)?([A-Za-z]+)((\\^|_)(\\{\\d+\\}|\\d|[A-Za-z]|\\\\\\w+))*!?)\\/$",
-        "body": "\\frac{$1}{$$1}$$0",
+        "body": "\\frac{$1}{$$0}",
         "mode": "maths",
         "description": "fraction (from regex)",
         "triggerWhenComplete": true

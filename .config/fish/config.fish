@@ -238,7 +238,9 @@ abbr scrts scriptisto template ls
 # abbr scrnew scriptisto new
 
 direnv hook fish | source
-cod init %self fish | source
+if type -q cod
+	cod init %self fish | source
+end
 
 # setup on dir change hook
 __reg_on_dir_change

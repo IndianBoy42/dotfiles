@@ -314,6 +314,7 @@ abbr sptpt " spt play -f '$SPT_FORMAT' --track --name"
 function gvm
   bass source ~/.gvm/scripts/gvm ';' gvm $argv
 end
+gvm use 16 &> /dev/null
 
 # echo the PATH and make each entry in a different line
 function echopath
@@ -358,6 +359,8 @@ function watch-script
 end
 
 direnv hook fish | source
+cod init %self fish | source
 
 # setup on dir change hook
 __reg_on_dir_change
+

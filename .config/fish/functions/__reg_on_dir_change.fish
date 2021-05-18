@@ -6,7 +6,7 @@ function __on_dir_change --on-event fish_prompt
 	if [ $__save_post_exec_dir != $__save_pre_exec_dir ]
 		# TODO: dont onefetch if we are navigating around inside the repo
 		if test -d .git
-			onefetch 2> /dev/null
+			onefetch --no-color-palette 2> /dev/null
 		end
 		lsd -A
 	end

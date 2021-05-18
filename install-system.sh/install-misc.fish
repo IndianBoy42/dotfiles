@@ -36,3 +36,7 @@ git clone https://github.com/facebook/PathPicker --depth 1
 cd PathPicker/debian
 sh ./package.sh
 sudo dpkg -i ../*.deb
+
+# cod -- completion learning daemon
+gvm use 16
+go get -u github.com/dim-an/cod

@@ -8,6 +8,11 @@ function ${1:name}($2)
 end
 endsnippet
 
+snippet import A
+Pkg.add(``rv='"$0"'``)
+using $0
+endsnippet
+
 snippet useiters b
 using IterTools
 using Base.Iterators
@@ -50,4 +55,11 @@ module ${1:``rv=m[1]``}
 $0
 
 end # $1
+endsnippet
+
+snippet <- A
+←
+endsnippet
+snippet -> A
+→
 endsnippet

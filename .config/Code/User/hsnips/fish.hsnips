@@ -12,7 +12,7 @@ ${1:TMPFILE} = ``rv = "(mktemp " + path.replace(/^.*[\\\/\:]/, '').replace(/\..*
 endsnippet
 
 snippet fn "function" A
-function $1
+function ${1:``rv =  path.replace(/^.*[\\\/\:]/, '').replace(/\..*/, '') ``}
     $0
 end
 endsnippet

@@ -25,3 +25,14 @@ sudo systemctl enable kmonad.service
 # Wezterm -- cool terminal?
 wget https://github.com/wez/wezterm/releases/download/nightly/WezTerm-nightly-Ubuntu16.04.AppImage -O ~/bin/wezterm
 chmod +x ~/bin/wezterm
+
+# Zenith -- better top
+wget https://github.com/bvaisvil/zenith/releases/download/0.12.0/zenith_0.12.0-1_amd64.deb -O /tmp/zenith.deb
+sudo dpkg -i /tmp/zenith.deb
+
+# PathPicker -- terminal path picker
+cd ~/git-builds/
+git clone https://github.com/facebook/PathPicker --depth 1
+cd PathPicker/debian
+sh ./package.sh
+sudo dpkg -i ../*.deb

@@ -97,4 +97,4 @@ sudo apt-get install \
 	musl musl-dev musl-tools \
 	direnv \
 	screen tmux \
-	pandoc
+	pandoc progress \

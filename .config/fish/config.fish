@@ -118,12 +118,12 @@ abbr suk ' sudo run_previous_command'
 abbr sukk ' sudo run_prev2_command'
 
 # yadm helper abbreviations
-abbr yad yadm
-abbr yadd 'yadm add'
-abbr yaddi 'yadm addi'
+#abbr yad yadm
+#abbr yadd 'yadm add'
+#abbr yaddi 'yadm addi'
 abbr yads 'yadm status'
 abbr yadf 'yadm fetch'
-abbr yadi yadm enter verco
+#abbr yadi yadm enter verco
 abbr yaddconfigs yadm add --update ~/.config/
 abbr yaddinstall yadm add ~/install-system.sh/
 abbr yaddupdate yadm add --update ~

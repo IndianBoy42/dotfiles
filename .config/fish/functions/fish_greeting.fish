@@ -1,7 +1,12 @@
 function fish_greeting
 # Reindex (indexa) if is-interactive
-if test -x ix
-	status --is-interactive; and ix -u &> /dev/null &
-end
-macchina
+	echo ""
+	if test -x ix
+		status --is-interactive; and ix -u &> /dev/null &
+	end
+	if type -q macchina
+		macchina
+	else
+		set_color red && echo "please cargo install macchina"
+	end
 end

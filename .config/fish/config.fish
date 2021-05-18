@@ -245,3 +245,21 @@ end
 # setup on dir change hook
 __reg_on_dir_change
 
+
+#function postexec_source_profile --on-event fish_postexec
+#	set argv (string split " " "$argv")
+#	if test "$argv[1]" = "$EDITOR" -a (count $argv) -ge 2
+#		set edited $argv[2]
+#		#set edited (realpath $argv[2]) 
+#		if test "$edited" = "(realpath $HOME/.config/fish/config.fish)"
+#			echo -n 'Sourcing (realpath $HOME/.config/fish/config.fish)... '
+#			source ~/.config/fish/config.fish
+#			echo Done.
+#		end
+#		if test "$edited" = "/etc/hosts"
+#			echo -n 'Sourcing (realpath $HOME/.config/fish/config.fish)... '
+#			source ~/.config/fish/config.fish
+#			echo Done.
+#		end
+#	end
+#end

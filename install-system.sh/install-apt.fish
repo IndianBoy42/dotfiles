@@ -96,4 +96,5 @@ sudo apt-get install \
 	docker-ce docker-ce-cli containerd.io \
 	musl musl-dev musl-tools \
 	direnv \
-	screen tmux
+	screen tmux \
+	pandoc progress \

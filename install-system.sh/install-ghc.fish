@@ -12,7 +12,7 @@ else
 end
 
 cd ~/git-builds/
-git clone --depth https://github.com/diku-dk/futhark.git
+git clone --depth 1 https://github.com/diku-dk/futhark.git
 cd futhark
 stack setup
 stack build

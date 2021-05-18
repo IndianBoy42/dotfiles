@@ -50,13 +50,6 @@ end
 
 abbr del rm -vi
 
-function fish_user_key_bindings
-	bind -M insert \cg expand_glob
-	bind -M insert \cz 'kn'
-	bind -M insert \ez 'zi'
-	bind -M default cd kn
-end
-
 alias whch='type -a'
 
 # ripgrep stuff, config and aliases
@@ -67,75 +60,27 @@ abbr fda 'fd -HI'
 
 # profile editing helper functions
 abbr reload_profile 'source ~/.config/fish/config.fish'
-function codeprofile
-	code -w ~/.config/fish/config.fish
-	source ~/.config/fish/config.fish
-end
-function profile
-	$EDITOR ~/.config/fish/config.fish
-	source ~/.config/fish/config.fish
-end
-function install-script
-	set file ~/install-system.sh/install-$argv.fish
-	set tmpfile /(mktemp)
-	cp $file $tmpfile
-	$EDITOR $file
-	delta $tmpfile $file
-end
-function fdinstall
-   fd -IH --type f '.' ~/install-system.sh/ | fzf 
-end
-function fdconfig
-   fd -IH --type f '.' ~/.config/ | fzf 
-end
-function edconfig
-   $EDITOR (   fd -IH --type f '.' ~/.config/ | fzf )
-end
 
-# run the command silently (should use pueue for this tbh)
-function silent
-	$argv &> /dev/null &
-end
 # pueue is really cool
 abbr pu pueue
 abbr pusts pueue status
 
 # repeat the previous command, the problem is you cant do this twice
-function run_history_command
-	echo $history[$argv[1]] $argv[2..-1]
-	eval $history[$argv[1]] $argv[2..-1]
-end
-function run_previous_command
-	run_history_command 1 $argv
-end
-function run_prev2_command
-	run_history_command 2 $argv
-end
 abbr k ' run_previous_command'
 abbr kk ' run_prev2_command'
 abbr K ' run_history_command' 
-abbr suk ' sudo run_previous_command'
 abbr sukk ' sudo run_prev2_command'
 
 # yadm helper abbreviations
-abbr yad yadm
-abbr yadd 'yadm add'
-abbr yaddi 'yadm addi'
+#abbr yad yadm
+#abbr yadd 'yadm add'
+#abbr yaddi 'yadm addi'
 abbr yads 'yadm status'
 abbr yadf 'yadm fetch'
-abbr yadi yadm enter verco
+#abbr yadi yadm enter verco
 abbr yaddconfigs yadm add --update ~/.config/
 abbr yaddinstall yadm add ~/install-system.sh/
 abbr yaddupdate yadm add --update ~
-
-# cat(bat) or ls(lsd) all-in-one
-function v
-	if test -f $argv
-		bat $argv
-	else
-		lsd -A $argv
-	end
-end
 
 # ghcup-env
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME
@@ -180,20 +125,9 @@ abbr ltd "lsd --tree -A --depth"
 abbr la "lsd -alh"
 # zoxide fzf stuff?
 alias zf=__fzf_search_current_dir
-abbr zh 'z ~ && z (__fzf_search_current_dir)'
+#abbr zhome 'z ~ && z (__fzf_search_current_dir)'
 abbr z- 'z -'
 abbr cd kn
-function zh
-	cd (dirh | fzf --tac | sd '\s*[0-9]+\)\s*(.*)' '$1')
-end
-function zl
-	z $argv
-	lsd -A
-end
-function zil
-	zi
-	lsd -A
-end
 
 # apt abbreviations
 abbr apti "sudo apt install"
@@ -205,34 +139,10 @@ abbr aptsi "apt list --installed | fzf"
 
 # mkdir helpers
 abbr mkdp "mkdir -p"
-function mkcd 
-	mkdir -p $argv;
-	cd $argv;
-end
 # make all directories and create the file
-function touchp
-	mkdir -p (dirname $argv)
-	touch $argv
-end
 
 # ranger and then cd, dont think this works
 abbr rcd 'ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
-
-# broken something about rg and fzf
-function rga-fzf-broken
-	set RG_PREFIX "rga --files-with-matches"
-	local file
-	file="(
-		FZF_DEFAULT_COMMAND="$RG_PREFIX '$1'" \
-			fzf --sort --preview="[[ ! -z {} ]] && rga --pretty --context 5 {q} {}" \
-				--phony -q "$1" \
-				--bind "change:reload:$RG_PREFIX {q}" \
-				--preview-window="70%:wrap"
-
-	)" &&
-	echo "opening $file" &&
-	xdg-open "$file"
-end
 
 # define some variables for CMAKE
 abbr cmake-clang "cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
@@ -244,6 +154,7 @@ set -gx CMAKE_BUILD_TYPE "Release"
 set -gx CMAKE_EXE_LINKER_FLAGS "-fuse-ld=gold"
 set -gx CMAKE_EXPORT_COMPILE_COMMANDS "ON"
 set -gx MAKEFLAGS -j (nproc)
+set -gx JULIA_NUM_THREADS (nproc)
 function FASTFLAGS
     set -gx CFLAGS "-O3 -march=native -mtune=native"
     set -gx CXXFLAGS "-O3 -march=native -mtune=native"
@@ -254,27 +165,13 @@ function FASTFLAGS
     set -gx CMAKE_CXX_FLAGS_RELEASE $CPPFLAGS
 end
 
-# edit and then run
-function ed_n_source
-	$EDITOR $argv
-	source $argv
-end
-function code_n_source
-	code -w $argv
-	source $argv
-end
-abbr edex vim_n_source
+abbr edex ed_n_source
 abbr cedex code_n_source
 abbr coda code -a
 
 # for copying across long trees, you can mark a place to copy to (and then copy/go to it)
-function cpmark
-	set -gx CP_TO (pwd)
-	echo $CP_TO
-end
-function gomark 
-	cd $CP_TO
-end
+abbr cpmark 'set -gx CP_TO (pwd) && echo $CP_TO	'
+abbr gomark 'cd $CP_TO'
 function cpto 
 	cp $argv $CP_TO
 end
@@ -309,15 +206,7 @@ abbr sptpa " spt play -f '$SPT_FORMAT' --artist --name"
 abbr sptpal " spt play -f '$SPT_FORMAT' --album --name"
 abbr sptpt " spt play -f '$SPT_FORMAT' --track --name"
 
-# gvm is weird and broken in fish lol
-function gvm
-  bass source ~/.gvm/scripts/gvm ';' gvm $argv
-end
-
-# echo the PATH and make each entry in a different line
-function echopath
-	echo $PATH | sed 's/ /\n/g'
-end
+gvm use 16 &> /dev/null
 
 # what even is xdg
 abbr open xdg-open
@@ -336,24 +225,21 @@ abbr pusts pueue status
 abbr ros2-foxy bass source /opt/ros/foxy/setup.bash
 abbr ros-noetic bass source /opt/ros/noetic/setup.bash
 
-abbr g git
-# Alias all git aliases
-for al in (git config -l | grep '^alias\.' | cut -d'=' -f1 | cut -d'.' -f2)
-    abbr g$al "git $al"
-end
-abbr gdiff git diff
+# abbr g git
+# # Alias all git aliases
+# for al in (git config -l | grep '^alias\.' | cut -d'=' -f1 | cut -d'.' -f2)
+#     abbr g$al "git $al"
+# end
+# abbr gdiff git diff
 
 abbr scr scriptisto
 abbr scrt scriptisto template
 abbr scrts scriptisto template ls
 # abbr scrnew scriptisto new
-function scrnew
-	scriptisto new $argv[1] > $argv[2]
-	chmod +x $argv[2]
-	lsd -Al $argv[2]
-end
-function watch-script
-	watchexec -c -w $argv[1] "$argv[1]"
-end
 
 direnv hook fish | source
+cod init %self fish | source
+
+# setup on dir change hook
+__reg_on_dir_change
+

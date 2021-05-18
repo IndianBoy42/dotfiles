@@ -40,3 +40,9 @@ sudo dpkg -i ../*.deb
 # cod -- completion learning daemon
 gvm use 16
 go get -u github.com/dim-an/cod
+
+# gnome-quake
+# go to https://extensions.gnome.org/extension/1411/quake-mode/
+
+# localtunnel
+npm install -g localtunnel

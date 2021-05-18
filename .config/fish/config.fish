@@ -338,12 +338,12 @@ abbr pusts pueue status
 abbr ros2-foxy bass source /opt/ros/foxy/setup.bash
 abbr ros-noetic bass source /opt/ros/noetic/setup.bash
 
-abbr g git
-# Alias all git aliases
-for al in (git config -l | grep '^alias\.' | cut -d'=' -f1 | cut -d'.' -f2)
-    abbr g$al "git $al"
-end
-abbr gdiff git diff
+# abbr g git
+# # Alias all git aliases
+# for al in (git config -l | grep '^alias\.' | cut -d'=' -f1 | cut -d'.' -f2)
+#     abbr g$al "git $al"
+# end
+# abbr gdiff git diff
 
 abbr scr scriptisto
 abbr scrt scriptisto template

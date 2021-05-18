@@ -358,3 +358,6 @@ function watch-script
 end
 
 direnv hook fish | source
+
+# setup on dir change hook
+__reg_on_dir_change

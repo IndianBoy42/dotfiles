@@ -46,3 +46,7 @@ go get -u github.com/dim-an/cod
 
 # localtunnel
 npm install -g localtunnel
+
+# nnn - not that, its a file manager
+wget https://github.com/jarun/nnn/releases/download/v4.0/nnn_4.0-1_ubuntu20.04.amd64.deb -O /tmp/nnn.deb
+sudo dpkg -i /tmp/nnn.deb

@@ -76,3 +76,4 @@ sudo apt-get install \
 	direnv \
 	screen tmux \
 	pandoc progress \
+	archivemount sshfs

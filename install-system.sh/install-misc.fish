@@ -1,7 +1,6 @@
 #!/usr/bin/env fish
 
-# Ultimate Plumber, live shell pipelines
-cd /tmp/
+# Ultimate Plumber, live shell pipelines cd /tmp/
 wget https://github.com/akavel/up/releases/latest/download/up
 mv ./up ~/bin/up
 
@@ -51,3 +50,10 @@ npm install -g localtunnel
 wget https://github.com/jarun/nnn/releases/download/v4.0/nnn_4.0-1_ubuntu20.04.amd64.deb -O /tmp/nnn.deb
 sudo dpkg -i /tmp/nnn.deb
 sudo apt install suckless-tools sxiv xdotool
+
+# vscode font for broot
+wget https://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
+
+# kitty terminal
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+ln -s $HOME/.local/kitty.app/bin/kitty ~/bin/

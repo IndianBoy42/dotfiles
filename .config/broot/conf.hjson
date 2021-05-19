@@ -25,7 +25,7 @@
 	# if you don't want the hidden files you can launch `br -H`)
 	# A popular flag is the `g` one which displays git related info.
 	#
-	# default_flags:
+	default_flags: gih
 
 	###############################################################
 	# Date/Time format
@@ -71,7 +71,7 @@
 	# and set it to false or true if you notice the colors in
 	# previewed images are too off.
 	#
-	# true_colors: false
+	true_colors: true
 
 	###############################################################
 	# Icons
@@ -155,10 +155,31 @@
 		# Example:
 		#  execution: nvim +{line} {file}
 		{
+			invocation: edit-new-win
+			key: F2
+			shortcut: en
+			execution: "alacritty -e $EDITOR +{line} {file}"
+			leave_broot: false
+		},
+		{
 			invocation: edit
 			key: F2
 			shortcut: e
 			execution: "$EDITOR +{line} {file}"
+			leave_broot: false
+		},
+		{
+			invocation: code
+			key: F2
+			shortcut: c
+			execution: "code {directory}"
+			leave_broot: false
+		},
+		{
+			invocation: code
+			key: F2
+			shortcut: c
+			execution: "code +{line} {file}"
 			leave_broot: false
 		}
 

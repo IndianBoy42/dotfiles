@@ -6,6 +6,15 @@ x-scheme-handler/about=google-chrome.desktop
 x-scheme-handler/unknown=google-chrome.desktop
 application/pdf=org.pwmt.zathura-pdf-poppler.desktop
 x-scheme-handler/mailto=google-chrome.desktop
+text/plain=nvim.desktop
+text/x-chdr=nvim.desktop
+text/x-csrc=nvim.desktop
+text/x-dtd=nvim.desktop
+text/x-java=nvim.desktop
+text/mathml=nvim.desktop
+text/x-python=nvim.desktop
+text/x-sql=nvim.desktop
+text/xml=nvim.desktop
 
 [Added Associations]
 application/octet-stream=code.desktop;org.blender.Blender.desktop;
@@ -16,3 +25,4 @@ video/x-matroska=vlc_vlc.desktop;
 application/json=code.desktop;
 application/pdf=org.pwmt.zathura-pdf-poppler.desktop;
 text/x-tex=code.desktop;
+application/x-perl=nvim.desktop

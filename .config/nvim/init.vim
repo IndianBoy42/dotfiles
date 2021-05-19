@@ -35,7 +35,10 @@ set shiftwidth=4
 set hlsearch
 set incsearch
 set smartindent
-
+set number
+set ignorecase
+set smartcase
+set nobackup
 set ruler
 syntax on
 

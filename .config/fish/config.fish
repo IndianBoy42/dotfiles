@@ -1,6 +1,6 @@
+set -gx TERMINAL alacritty
 set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig/
-set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/local/lib/pkgconfig/
-# Add stuff to path
+set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/local/lib/pkgconfig/ # Add stuff to path
 set -gx PATH "$HOME/bin" $PATH;
 set -gx PATH "$HOME/.cargo/bin" $PATH;
 set -gx PATH "$HOME/.local/bin" $PATH;
@@ -182,7 +182,7 @@ end
 # I guess ill use nvim inside the terminal
 set -gx EDITOR nvim #kak
 set -gx VISUAL $EDITOR
-# set -gx PAGER $EDITOR
+#set -gx PAGER nvim
 abbr vim nvim
 abbr vi nvim
 
@@ -245,7 +245,6 @@ end
 # setup on dir change hook
 __reg_on_dir_change
 
-
 #function postexec_source_profile --on-event fish_postexec
 #	set argv (string split " " "$argv")
 #	if test "$argv[1]" = "$EDITOR" -a (count $argv) -ge 2
@@ -263,3 +262,7 @@ __reg_on_dir_change
 #		end
 #	end
 #end
+
+# nnn file manager settings
+set -gx NNN_PLUG 'z:autojump;f:finder;p:preview-tui-ext;P:preview-tabbed;o:nuke'
+set -gx NNN_OPENER "$HOME/.config/nnn/plugins/nuke"

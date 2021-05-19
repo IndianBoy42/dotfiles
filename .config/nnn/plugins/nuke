@@ -77,7 +77,7 @@ IMAGE_CACHE_PATH="$(dirname "$1")"/.thumbs
 FPATH="$1"
 FNAME=$(basename "$1")
 EDITOR="${VISUAL:-${EDITOR:-vi}}"
-PAGER="${PAGER:-less -R}"
+PAGER="${PAGER:-bat}"
 ext="${FNAME##*.}"
 if [ -n "$ext" ]; then
     ext="$(printf "%s" "${ext}" | tr '[:upper:]' '[:lower:]')"

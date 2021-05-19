@@ -50,8 +50,8 @@
 
 
 XDOTOOL_TIMEOUT=2
-PAGER=${PAGER:-"vim -R"}
-NUKE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/plugins/nuke"
+PAGER=${PAGER:-"bat"}
+#NUKE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/plugins/nuke"
 
 alacritty-wrapper () {
     local xid="$1"

@@ -27,10 +27,18 @@ function n --wraps nnn --description 'support nnn quit and change directory'
     # stty lwrap undef
     # stty lnext undef
 
-    nnn $argv
+	# Add option -e to your alias to open text files in $VISUAL/$EDITOR/ vi
+	# Use -x to sync selection to system clipboard, show notis on cp, mv, rm completion and set xterm title.
+    nnn -a -e -x $argv
 
     if test -e $NNN_TMPFILE
         source $NNN_TMPFILE
         rm $NNN_TMPFILE
+    end
+end
+
+function nnn_exit --on-event fish_exit
+	if not test -z "$NNN_PIPE" 
+        printf "%s\0" "0c$PWD" > "$NNN_PIPE" !&
     end
 end

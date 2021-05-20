@@ -1,7 +1,7 @@
 set -gx TERMINAL alacritty
 set -gx VIRTUAL_ENV_DIR .venv
 set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig/
-set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/local/lib/pkgconfig/ # Add stuff to path
+set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/local/lib/pkgconfig/ 
 set -gx PATH "$HOME/bin" $PATH;
 set -gx PATH "$HOME/.cargo/bin" $PATH;
 set -gx PATH "$HOME/.local/bin" $PATH;
@@ -23,20 +23,15 @@ end
 # git-subrepo
 source ~/git-builds/git-subrepo/.fish.rc
 
-if type -q _kn
-	_kn init fish | source
-end
-
 set -gx CUDACXX /usr/lib/cuda/bin/nvcc
 
 # Use starship (I prefer fish tide for now)
 # starship init fish | source
 
 # alias thefuck for quick correct in the shell
-#thefuck --alias | source
-if type -q thefuck
-	status is-interactive; and thefuck --alias fk | source
-end
+#if type -q thefuck
+#	status is-interactive; and thefuck --alias fk | source
+#end
 
 if type -q ~/anaconda3/bin/conda
 # >>> conda initialize >>>
@@ -50,6 +45,12 @@ end
 ##################################
 
 abbr del rm -vi
+
+abbr pst procs --tree
+abbr psmem 'ps auxf | sort -nr -k 4 | less'
+abbr pscpu 'ps auxf | sort -nr -k 3 | less'
+abbr psmem10 'ps auxf | sort -nr -k 4 | head -10'
+abbr pscpu10 'ps auxf | sort -nr -k 3 | head -10'
 
 alias whch='type -a'
 
@@ -232,11 +233,32 @@ abbr ros-noetic bass source /opt/ros/noetic/setup.bash
 #     abbr g$al "git $al"
 # end
 # abbr gdiff git diff
+abbr addup 'git add -u'
+abbr addall 'git add .'
+abbr branch 'git branch'
+abbr checkout 'git checkout'
+abbr clone 'git clone'
+abbr commit 'git commit -m'
+abbr fetch 'git fetch'
+abbr pull 'git pull origin'
+abbr push 'git push origin'
+abbr tag 'git tag'
+abbr newtag 'git tag -a'
 
 abbr scr scriptisto
 abbr scrt scriptisto template
 abbr scrts scriptisto template ls
 # abbr scrnew scriptisto new
+
+abbr yta-aac "youtube-dl --extract-audio --audio-format aac "
+abbr yta-best "youtube-dl --extract-audio --audio-format best "
+abbr yta-flac "youtube-dl --extract-audio --audio-format flac "
+abbr yta-m4a "youtube-dl --extract-audio --audio-format m4a "
+abbr yta-mp3 "youtube-dl --extract-audio --audio-format mp3 "
+abbr yta-opus "youtube-dl --extract-audio --audio-format opus "
+abbr yta-vorbis "youtube-dl --extract-audio --audio-format vorbis "
+abbr yta-wav "youtube-dl --extract-audio --audio-format wav "
+abbr ytv-best "youtube-dl -f bestvideo+bestaudio "
 
 direnv hook fish | source
 if type -q cod
@@ -267,3 +289,6 @@ __reg_on_dir_change
 # nnn file manager settings
 set -gx NNN_PLUG 'z:autojump;f:finder;p:preview-tui-ext;P:preview-tabbed;o:nuke'
 set -gx NNN_OPENER "$HOME/.config/nnn/plugins/nuke"
+
+alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
+

@@ -156,7 +156,6 @@
 		#  execution: nvim +{line} {file}
 		{
 			invocation: "run-shell {command}"
-			key: F2
 			shortcut: sh
 			execution: "{command} {file}"
 			from_shell: true
@@ -164,21 +163,20 @@
 		}
 		{
 			invocation: edit-new-win
-			key: F2
+			key: ctrl-shift-e
 			shortcut: en
 			execution: "alacritty -e $EDITOR +{line} {file}"
 			leave_broot: false
 		}
 		{
 			invocation: edit
-			key: F2
+			key: ctrl-e
 			shortcut: e
 			execution: "$EDITOR +{line} {file}"
 			leave_broot: false
 		}
 		{
 			invocation: code
-			key: F2
 			shortcut: c
 			execution: "code {directory}"
 			leave_broot: false

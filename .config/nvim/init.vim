@@ -7,6 +7,8 @@ call plug#begin('~/.config/nvim/plugged')
 
 " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 " Plug 'junegunn/vim-easy-align'
+"
+let mapleader = "\<Space>"
 
 Plug 'preservim/nerdcommenter'
 Plug 'tpope/vim-surround'
@@ -20,8 +22,14 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'liuchengxu/vim-which-key'
+Plug 'jiangmiao/auto-pairs'
 
 set clipboard=unnamedplus
+if has("vms")
+  set nobackup		" do not keep a backup file, use versions instead
+else
+  set backup		" keep a backup file
+endif
 
 " Initialize plugin system
 call plug#end()
@@ -49,12 +57,16 @@ inoremap { {}<Left>
 inoremap {<CR> {<CR>}<Esc>O
 inoremap {{ {
 inoremap {} {}
+nnoremap Y yg_
 
-" let mapleader = " "
 " nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 set timeoutlen=100
 
 augroup highlight_yank
     autocmd!
-    autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 1000)
+    au TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=700}
 augroup END
+
+filetype plugin on
+
+let g:NERDCreateDefaultMappings = 1

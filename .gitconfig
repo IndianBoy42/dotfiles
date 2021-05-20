@@ -63,3 +63,5 @@
 	useHttpPath = true
 [diff]
 	tool = smerge
+[merge]
+	tool = smerge

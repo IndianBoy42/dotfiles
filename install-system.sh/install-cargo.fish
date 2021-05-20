@@ -71,5 +71,12 @@ CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
 CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install-update --all
 
 pip install --user alacritty-colorscheme
+wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/logo/alacritty-term.svg -O /tmp/alacritty-term.svg
+sudo cp /tmp/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info -O /tmp/alacritty.info
+sudo tic -xe alacritty,alacritty-direct /tmp/alacritty.info
+wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/linux/Alacritty.desktop -O /tmp/Alacritty.desktop
+sudo desktop-file-install /tmp/Alacritty.desktop
+sudo update-desktop-database
 
 sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)

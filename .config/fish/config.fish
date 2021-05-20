@@ -72,7 +72,7 @@ abbr K ' run_history_command'
 abbr sukk ' sudo run_prev2_command'
 
 # yadm helper abbreviations
-#abbr yad yadm
+abbr yad yadm
 #abbr yadd 'yadm add'
 #abbr yaddi 'yadm addi'
 abbr yads 'yadm status'

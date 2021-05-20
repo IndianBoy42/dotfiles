@@ -63,3 +63,10 @@ cd ~/git-builds/
 git clone https://github.com/TinyCC/tinycc.git
 cd tinycc
 ./configure --extra-cflags='-O3 -march=native -mtune=native' --extra-ldflags='-march=native -mtune=native' --cc=clang-12 && make && checkinstall
+
+# keynav
+cd ~/git-builds/
+git clone --depth 1 https://github.com/jordansissel/keynav.git
+cd keynav
+sudo apt-get install libcairo2-dev libxinerama-dev libxdo-dev
+make && checkinstall

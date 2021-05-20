@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+GenericName=Keynav
+Name=Keynav
+Comment=Control the mouse with your keyboard
+TryExec=keynav
+Exec=keynav
+Icon=keynav
+Terminal=false
+StartupNotify=true
+X-GNOME-Autostart-Delay=60
+

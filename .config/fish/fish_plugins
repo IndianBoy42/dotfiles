@@ -1,3 +1,4 @@
+ilancosman/tide
 jorgebucaran/fisher
 PatrickF1/fzf.fish
 edc/bass
@@ -8,3 +9,6 @@ gazorby/fish-abbreviation-tips
 mattgreen/park.fish
 wfxr/forgit
 indianboy42/foryadm
+oh-my-fish/plugin-await
+oh-my-fish/plugin-bang-bang
+oh-my-fish/plugin-bak

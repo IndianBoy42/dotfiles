@@ -1,19 +1,79 @@
 format = """
-[$directory](bold)\
-$git_branch$git_status\
+$shlvl\
+$battery\
+$directory\
+$time\
+$git_branch$git_status$git_state\
 $docker_context\
+$cmake\
+$julia\
 $rust\
 $nodejs\
 $conda$python\
-$package
-$status$character"""
+$zig
+$status$character$jobs"""
+
+add_newline = true
+
+[directory]
+format = "[$read_only]($read_only_style)[$path]($style)[](blue)"
+truncation_length = 3
+truncation_symbol = "…/"
+truncate_to_repo = true
+style = "bold italic bright-white bg:blue"
+fish_style_pwd_dir_length = 1
+
+[time]
+format = "[$time]($style fg:bright-yellow) "
+disabled=false
+
+[git_branch]
+format="[$symbol$branch]($style) "
+[git_status]
+format='([$state($progress_current/$progress_total)]($style))'
+[git_state]
+format='([\[$all_status$ahead_behind\]]($style) )'	
+
+[battery]
+format = "[$symbol]($style bg:blue)"
+
+[[battery.display]]
+threshold = 20
+style = "bold red"
+
+[[battery.display]]
+threshold = 50
+style = "bold yellow"
+
+[[battery.display]]
+threshold = 100
+style = "bold green"
 
 [character]                            
-success_symbol = "[=>>](bold green) "
-error_symbol = "[✗](bold red) "
+success_symbol = "[➜](bold green)"
+error_symbol = "[✗](bold red)"
 
 [conda]
-format = "[$symbol$environment](dimmed green) "
+format = "[$symbol$environment]($style) "
+
+[cmake]
+format = "[$symbol$version]($style) "
+
+[python]
+format = "[${symbol}${pyenv_prefix}${version}($virtualenv)]($style) "
+style = "bold bright-green"
+
+[julia]
+format = "[$symbol$version]($style) "
+
+[nodejs]
+format = "[$symbol$version]($style) "
+
+[zig]
+format = "[$symbol$version]($style) "
+
+[rust]
+format = "[$symbol$version]($style) "
 
 defaultformat = """
 ($username@$hostname:)\
@@ -66,3 +126,4 @@ $battery\
 $time\
 $status\
 $character"""
+

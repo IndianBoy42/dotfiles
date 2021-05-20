@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=BRoot
+#GenericName=Terminal
+Comment=broot terminal file manager
+Exec=alacritty -e broot -ih
+Terminal=false
+Type=Application
+#Encoding=UTF-8
+Icon=application-x-executable
+Categories=System;TerminalEmulator;
+Keywords=shell;prompt;command;commandline;cmd;
+X-Desktop-File-Install-Version=0.24

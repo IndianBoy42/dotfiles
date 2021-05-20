@@ -1,4 +1,5 @@
 set -gx TERMINAL alacritty
+set -gx VIRTUAL_ENV_DIR .venv
 set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig/
 set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/local/lib/pkgconfig/ # Add stuff to path
 set -gx PATH "$HOME/bin" $PATH;

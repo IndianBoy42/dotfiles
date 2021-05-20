@@ -58,6 +58,7 @@
 	untracked = ls-files . --exclude-standard --others
 	sm = submodule
 	info = !"onefetch"
+	root = rev-parse --show-toplevel
 	
 [credential "https://dev.azure.com"]
 	useHttpPath = true

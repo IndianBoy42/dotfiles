@@ -1,16 +1,14 @@
 begin
-	set default_dir ".venv"
-
 	function _remove_venv
-		if test -d $default_dir
-			rm -rf $default_dir
+		if test -d $VIRTUAL_ENV_DIR
+			rm -rf $VIRTUAL_ENV_DIR
 		else
-			echo -s (set_color yellow) "No venv ($default_dir directory) found" (set_color normal)
+	 		echo -s (set_color yellow) "No venv ($VIRTUAL_ENV_DIR directory) found" (set_color normal)
 		end
 	end
 
 	function _create_venv
-		command python3 -m venv $default_dir
+		command python3 -m venv $VIRTUAL_ENV_DIR
 		and activate -v
 		and pip install -U pip setuptools wheel
 	end

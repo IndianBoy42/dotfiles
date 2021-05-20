@@ -36,14 +36,14 @@ y cut-left,cut-up,warp
 u cut-right,cut-up,warp
 n cut-left,cut-down,warp
 m cut-right,cut-down,warp
-shift+h move-left
-shift+j move-down
-shift+k move-up
-shift+l move-right
-shift+y move-left,move-up
-shift+u move-right,move-up
-shift+n move-left,move-down
-shift+m move-right,move-down
+shift+h move-left,warp
+shift+j move-down,warp
+shift+k move-up,warp
+shift+l move-right,warp
+shift+y move-left,move-up,warp
+shift+u move-right,move-up,warp
+shift+n move-left,move-down,warp
+shift+m move-right,move-down,warp
 space warp,click 1
 shift+space warp,click 3
 ctrl+space warp,click 2

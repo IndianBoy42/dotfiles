@@ -17,7 +17,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'justinmk/vim-sneak'
 "Plug 'easymotion/vim-easymotion'
 Plug 'unblevable/quick-scope'
-Plug 'airblade/vim-gitgutter'
+"Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
@@ -57,6 +57,17 @@ inoremap { {}<Left>
 inoremap {<CR> {<CR>}<Esc>O
 inoremap {{ {
 inoremap {} {}
+
+inoremap [ []<Left>
+inoremap [<CR> [<CR>]<Esc>O
+inoremap [[ [
+inoremap [] []
+
+inoremap ( ()<Left>
+inoremap (<CR> (<CR>)<Esc>O
+inoremap (( (
+inoremap () ()
+
 nnoremap Y yg_
 
 " nnoremap <silent> <leader> :WhichKey '<Space>'<CR>

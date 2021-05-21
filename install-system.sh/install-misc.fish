@@ -57,3 +57,9 @@ wget https://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf
 # kitty terminal
 curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 ln -s $HOME/.local/kitty.app/bin/kitty ~/bin/
+
+# tinycc compiler
+cd ~/git-builds/
+git clone https://github.com/TinyCC/tinycc.git
+cd tinycc
+./configure --extra-cflags='-O3 -march=native -mtune=native' --extra-ldflags='-march=native -mtune=native' --cc=clang-12 && make && checkinstall

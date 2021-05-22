@@ -23,7 +23,7 @@ fn ${1:name}(${2:&} self) -> _ {
     $0
 }
 endsnippet
-snippet fn Ab
+snippet fn bA
 fn ${1:name}() -> _ {
     $0
 }
@@ -51,7 +51,7 @@ mod tests {
 }
 endsnippet
 
-snippet `(\w.*)\s+=>` A
+snippet `(\w.*)\s+==>` A
 |``rv=m[1]``| $0
 endsnippet
 snippet iif = (||{})()" A

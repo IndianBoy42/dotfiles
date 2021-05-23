@@ -1,13 +1,19 @@
 #!/usr/bin/env fish
 
+cd ~/git-builds/
+
+# make sure this is installed and use it for everything
+sudo apt install checkinstall
+
 # Ultimate Plumber, live shell pipelines cd /tmp/
 wget https://github.com/akavel/up/releases/latest/download/up
-mv ./up ~/bin/up
+chmod +x /tmp/up
+mv /tmp/up ~/bin/
 
 # KMonad, cross platform QMK for all keyboards 
 sudo apt install input-utils evtest
-wget https://github.com/kmonad/kmonad/releases/download/0.4.1/kmonad-0.4.1-linux -O ~/bin/kmonad
-chmod +x ~/bin/kmonad
+wget https://github.com/kmonad/kmonad/releases/download/0.4.1/kmonad-0.4.1-linux -O /tmp/kmonad
+chmod +x /tmp/kmonad
 
 sudo groupadd uinput
 sudo usermod -aG uinput $USER
@@ -15,15 +21,18 @@ sudo usermod -aG input $USER
 sudo modprobe uinput
 sudo touch /etc/udev/rules.d/uinput.rules
 echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/uinput.rules
-echo "the next output will help you find the device that your keyboard corresponds to"
+echo "The next output will help you find the device that your keyboard corresponds to"
 cat /proc/bus/input/devices | rg -C5 keyboard
   
-sudo cp ./kmonad.service /etc/systemd/system/kmonad.service
+sudo cp ./kmonad.service /etc/systemd/user/kmonad.service
+mv /tmp/kmonad ~/bin/
+
 sudo systemctl enable kmonad.service
 
 # Wezterm -- cool terminal?
-wget https://github.com/wez/wezterm/releases/download/nightly/WezTerm-nightly-Ubuntu16.04.AppImage -O ~/bin/wezterm
-chmod +x ~/bin/wezterm
+wget https://github.com/wez/wezterm/releases/download/nightly/WezTerm-nightly-Ubuntu16.04.AppImage -O /tmp/wezterm
+chmod +x /tmp/wezterm
+mv /tmp/wezterm ~/bin
 
 # Zenith -- better top
 wget https://github.com/bvaisvil/zenith/releases/download/0.12.0/zenith_0.12.0-1_amd64.deb -O /tmp/zenith.deb
@@ -37,7 +46,7 @@ sh ./package.sh
 sudo dpkg -i ../*.deb
 
 # cod -- completion learning daemon
-gvm use 16
+# remember to activate go: gvm use 16
 go get -u github.com/dim-an/cod
 
 # gnome-quake
@@ -55,7 +64,9 @@ sudo apt install suckless-tools sxiv xdotool
 wget https://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
 
 # kitty terminal
-curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+cd ~/git-builds/
+wget https://sw.kovidgoyal.net/kitty/installer.sh -O /tmp/kitty-installer.sh
+sudo checkinstall sh -c /tmp/kitty-installer.sh
 ln -s $HOME/.local/kitty.app/bin/kitty ~/bin/
 
 # tinycc compiler
@@ -69,4 +80,14 @@ cd ~/git-builds/
 git clone --depth 1 https://github.com/jordansissel/keynav.git
 cd keynav
 sudo apt-get install libcairo2-dev libxinerama-dev libxdo-dev
-make && checkinstall
+make && sudo checkinstall
+
+# zig compiler
+cd ~/git-builds/
+git clone https://github.com/ziglang/zig.git --depth 1
+sudo apt install libllvm12 libclang-12-dev liblld-12-dev
+cd zig
+mkdir build;
+and cd build;
+and cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DZIG_TARGET_MCPU=native ..;
+and checkinstall ninja install

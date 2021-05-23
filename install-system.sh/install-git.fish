@@ -1,6 +1,9 @@
 #!/usr/bin/fish env
 
+# make sure this is installed and use it for everything
+sudo apt install checkinstall
 mkdir -p ~/git-builds
+cd ~/git-builds
 
 # git-subrepo
 cd ~/git-builds

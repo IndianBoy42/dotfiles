@@ -1,9 +1,9 @@
 #!/usr/bin/env fish
 
-cd ~/git-builds/
-
 # make sure this is installed and use it for everything
 sudo apt install checkinstall
+mkdir -p ~/git-builds
+cd ~/git-builds
 
 # Ultimate Plumber, live shell pipelines cd /tmp/
 wget https://github.com/akavel/up/releases/latest/download/up

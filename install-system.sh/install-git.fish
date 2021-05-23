@@ -19,8 +19,9 @@ iler-explorer.git
 cargo install rustfilt
 
 # zapcc
-cd ~/git-builds
-git clone https://github.com/yrnkrn/zapcc.git
+# !! This must only be done manually it takes so much gd RAM and Disk
+# cd ~/git-builds
+# git clone https://github.com/yrnkrn/zapcc.git
 # cmake -DLLVM_ENABLE_WARNINGS -DLLVM_USE_LINKER=gold ..
 
 # google benchmark
@@ -52,6 +53,7 @@ gvm use 16
 make && checkinstall
 sudo ln -s $PWD/bin/fzf ~/bin/fzf
 
+# todoist cli
 cd ~/git-builds/
 git clone https://github.com/sachaos/todoist.git
 cd todoist

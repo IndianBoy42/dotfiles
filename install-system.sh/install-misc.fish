@@ -146,7 +146,7 @@ cd ~/git-builds/
 git clone https://github.com/junegunn/fzf.git
 cd fzf
 gvm use 16
-make && sudo checkinstall
+make 
 sudo ln -s $PWD/bin/fzf ~/bin/fzf
 
 # todoist cli

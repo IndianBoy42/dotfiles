@@ -1,5 +1,9 @@
 #!/usr/bin/env fish
 
+if test (id -u) -eq 0
+    exit 1
+end
+
 # make sure this is installed and use it for everything
 sudo apt install checkinstall
 mkdir -p ~/git-builds
@@ -73,7 +77,9 @@ ln -s $HOME/.local/kitty.app/bin/kitty ~/bin/
 cd ~/git-builds/
 git clone https://github.com/TinyCC/tinycc.git
 cd tinycc
-./configure --extra-cflags='-O3 -march=native -mtune=native' --extra-ldflags='-march=native -mtune=native' --cc=clang-12 && make && checkinstall
+./configure --extra-cflags='-O3 -march=native -mtune=native' --extra-ldflags='-march=native -mtune=native' --cc=clang-12; 
+and make;
+and sudo checkinstall
 
 # keynav
 cd ~/git-builds/
@@ -140,14 +146,14 @@ cd ~/git-builds/
 git clone https://github.com/junegunn/fzf.git
 cd fzf
 gvm use 16
-make && checkinstall
+make && sudo checkinstall
 sudo ln -s $PWD/bin/fzf ~/bin/fzf
 
 # todoist cli
 cd ~/git-builds/
 git clone https://github.com/sachaos/todoist.git
 cd todoist
-make && checkinstall
+make && sudo checkinstall
 
 # tikzit
 cd ~/git-builds/

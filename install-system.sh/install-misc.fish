@@ -146,8 +146,10 @@ cd ~/git-builds/
 git clone https://github.com/junegunn/fzf.git
 cd fzf
 gvm use 16
-make 
-sudo ln -s $PWD/bin/fzf ~/bin/fzf
+make && make install 
+# this make install doesnt actually install,
+# it just copies the binary into another place in the build directory
+sudo ln -s $PWD/bin/fzf ~/bin/fzf # this puts it in the PATH
 
 # todoist cli
 cd ~/git-builds/

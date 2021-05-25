@@ -1,6 +1,6 @@
 #!/usr/bin/env fish
 
-if not type -q gvm
+if not test -e ~/.gvm/scripts/gvm
 	set tmpfile (mktemp)
 	curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer > $tmpfile
 	bash $tmpfile

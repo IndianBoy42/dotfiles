@@ -80,3 +80,6 @@ sudo desktop-file-install /tmp/Alacritty.desktop
 sudo update-desktop-database
 
 sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
+
+curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux -o ~/.local/bin/rust-analyzer;
+and chmod +x ~/.local/bin/rust-analyzer

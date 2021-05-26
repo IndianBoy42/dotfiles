@@ -66,5 +66,6 @@
 	useHttpPath = true
 [diff]
 	tool = smerge
+	submodule = log
 [merge]
 	tool = smerge

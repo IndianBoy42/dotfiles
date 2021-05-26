@@ -1,5 +1,5 @@
 set -gx TERMINAL alacritty
-set -gx VIRTUAL_ENV_DIR .venv
+set -gx VIRTUAL_ENV_DIR .venv 
 set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig/
 set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/local/lib/pkgconfig/ 
 set -gx PATH "$HOME/bin" $PATH;
@@ -266,8 +266,9 @@ if type -q cod
 end
 
 # setup on dir change hook
-set -gx ON_DIR_CHANGE_EN (status is-interactive && echo $status)
-__reg_on_dir_change
+if status is-interactive 
+    __reg_on_dir_change
+end
 
 #function postexec_source_profile --on-event fish_postexec
 #	set argv (string split " " "$argv")

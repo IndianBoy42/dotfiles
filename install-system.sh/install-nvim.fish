@@ -28,5 +28,6 @@ function install-neovide # optional function for installing neovide
     cd ~/git-builds
     git clone "https://github.com/Kethku/neovide"
     cd neovide
-    cargo build --release
+    # cargo build --release
+    cargo install --path .
 end

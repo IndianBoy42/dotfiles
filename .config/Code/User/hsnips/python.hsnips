@@ -315,8 +315,8 @@ opti = cs.Opti()
 endsnippet
 snippet importsp "import scipy" bA
 import scipy as sp
-from scipy import optimize sopt
-from scipy import integrate sint
+from scipy import optimize as sopt
+from scipy import integrate as sint
 endsnippet
 snippet importall "import all math" bA
 import numpy as np
@@ -326,7 +326,7 @@ from matplotlib import pyplot as plt
 import casadi as cs
 from casadi import SX, MX, Opti
 import scipy as sp
-from scipy import optimize sopt
-from scipy import integrate sint
+from scipy import optimize as sopt
+from scipy import integrate as sint
 from numba import jit
 endsnippet

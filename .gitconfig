@@ -34,6 +34,7 @@
 	dp = diff @{1} HEAD
 	s = status
 	c = commit
+	cv = commit -v
 	f = fetch --all
 	a = add
 	u = up
@@ -42,7 +43,7 @@
 	sw = switch
 	addi = add --interactive
 	new-branch = checkout -b
-	save = commit -a
+	save = commit -av
 	save-all = !git add -A && git commit
 	wip = commit -am "WIP"
 	undo = reset HEAD~1 --mixed
@@ -66,5 +67,6 @@
 	useHttpPath = true
 [diff]
 	tool = smerge
+	submodule = log
 [merge]
 	tool = smerge

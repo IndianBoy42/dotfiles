@@ -266,6 +266,7 @@ if type -q cod
 end
 
 # setup on dir change hook
+set -gx ON_DIR_CHANGE_EN (status is-interactive && echo $status)
 __reg_on_dir_change
 
 #function postexec_source_profile --on-event fish_postexec

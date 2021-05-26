@@ -23,7 +23,7 @@ fn ${1:name}(${2:&} self) -> _ {
     $0
 }
 endsnippet
-snippet fn bA
+snippet fun bA
 fn ${1:name}() -> _ {
     $0
 }

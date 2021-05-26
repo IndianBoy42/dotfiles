@@ -5,6 +5,7 @@ sudo apt install neovim
 
 # install from my dotfiles
 yadm submodule update --init ~/.config/nvim
+fish -c "cd ~/.config/nvim/ && git remote add https://github.com/ChristianChiarulli/LunarVim.git upstream"
 nvim -u $HOME/.config/nvim/init.lua +PackerInstall
 nvim --headless +'LspInstall latex'
 nvim --headless +'LspInstall rust'

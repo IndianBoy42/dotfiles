@@ -244,6 +244,8 @@ abbr pull 'git pull origin'
 abbr push 'git push origin'
 abbr tag 'git tag'
 abbr newtag 'git tag -a'
+abbr gits 'git s'
+abbr gitf 'git f'
 
 abbr scr scriptisto
 abbr scrt scriptisto template

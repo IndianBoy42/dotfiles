@@ -2,11 +2,18 @@
 sudo add-apt-repository ppa:neovim-ppa/unstable
 sudo apt update
 sudo apt install neovim
-bash <(curl -s https://raw.githubusercontent.com/ChristianChiarulli/lunarvim/master/utils/installer/install.sh)
-#sh -c 'curl -fLo ~/.config/nvim/site/autoload/plug.vim --create-dirs \
-#       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
-function install-neovide
+# install from my dotfiles
+yadm submodule update --init ~/.config/nvim
+nvim -u $HOME/.config/nvim/init.lua +PackerInstall
+nvim --headless +'LspInstall latex'
+nvim --headless +'LspInstall rust'
+nvim --headless +'LspInstall python'
+nvim --headless +'LspInstall cpp'
+# install from the repo
+# bash <(curl -s https://raw.githubusercontent.com/IndianBoy42/lunarvim/master/utils/installer/install.sh)
+
+function install-neovide # optional function for installing neovide
     sudo apt install -y curl \
         gnupg ca-certificates git \
         gcc-multilib g++-multilib cmake libssl-dev pkg-config \

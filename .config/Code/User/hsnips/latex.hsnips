@@ -95,10 +95,6 @@ endsnippet
 snippet xyz&= "align equals" A
 &= $0 \\\\
 endsnippet
-snippet \\ "newline" A
-\\\\
-
-endsnippet
 
 snippet \psec "section" bA
 \clearpage\section{$0}

@@ -1,0 +1,7 @@
+#!/usr/bin/env fish
+
+# Initialize submodules (nvim,emacs, etc)
+yadm submodule update --recursive --init
+
+# TODO: install some stuff
+

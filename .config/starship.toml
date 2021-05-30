@@ -1,7 +1,7 @@
 format = """
-$shlvl\
-$battery\
 $directory\
+$jobs\
+$shlvl\
 $time\
 $git_branch$git_status$git_state\
 $docker_context\
@@ -11,13 +11,29 @@ $rust\
 $nodejs\
 $conda$python\
 $zig
-$status$character$jobs"""
+$status$character"""
+
+format2 = """
+$status\
+$jobs\
+$shlvl\
+$time\
+$git_branch$git_status$git_state\
+$docker_context\
+$cmake\
+$julia\
+$rust\
+$nodejs\
+$conda$python\
+$zig
+$directory"""
 
 add_newline = true
 
 [directory]
-format = "[$read_only]($read_only_style)[$path]($style)[](blue)"
+format = "[$read_only]($read_only_style)[$path ]($style)[ ](blue)"
 truncation_length = 3
+#truncation_length = 1
 truncation_symbol = "…/"
 truncate_to_repo = true
 style = "bold italic bright-white bg:blue"

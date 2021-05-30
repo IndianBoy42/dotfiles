@@ -76,4 +76,5 @@ sudo apt-get install \
 	direnv \
 	screen tmux \
 	pandoc progress \
-	archivemount sshfs
+	archivemount sshfs \
+    libgpg-error-dev libgpgme-dev

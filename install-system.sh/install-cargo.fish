@@ -66,7 +66,8 @@ CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
     verco  \
     watchexec-cli  \
     xsv  \
-    zoxide 
+    zoxide \
+    gpg-tui
 
 CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install-update --all
 

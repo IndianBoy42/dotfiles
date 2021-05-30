@@ -14,7 +14,6 @@ end
 
 CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
     duma  \
-	just \
     macchina \
 	onefetch \
 	alacritty \
@@ -39,6 +38,7 @@ CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
     flamegraph  \
     flip-link \
     gfold  \
+    gping \
     git-delta \
     gitui  \
     huniq  \

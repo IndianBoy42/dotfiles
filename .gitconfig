@@ -70,3 +70,5 @@
 	submodule = log
 [merge]
 	tool = smerge
+[commit]
+	verbose = true

@@ -25,6 +25,9 @@ opt-level = 3
 opt-level = 3
 
 [target.x86_64-unknown-linux-gnu]
+rustflags = [
+    "-C", "link-arg=-fuse-ld=lld",
+]
 #linker = "rust-lld"
 
 #[target.'cfg(all(target_arch = "arm", target_os = "none"))']

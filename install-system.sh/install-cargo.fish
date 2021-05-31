@@ -40,7 +40,6 @@ CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
     gfold  \
     gping \
     git-delta \
-    gitui  \
     huniq  \
     hyperfine  \
     just  \
@@ -68,6 +67,9 @@ CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
     xsv  \
     zoxide \
     gpg-tui
+
+CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
+    --git https://github.com/IndianBoy42/gitui/
 
 CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install-update --all
 

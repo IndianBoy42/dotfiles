@@ -208,8 +208,8 @@ abbr sptpa " spt play -f '$SPT_FORMAT' --artist --name"
 abbr sptpal " spt play -f '$SPT_FORMAT' --album --name"
 abbr sptpt " spt play -f '$SPT_FORMAT' --track --name"
 
-gvm use 16 &> /dev/null
-nvm use 16 &> /dev/null
+gvm use latest &> /dev/null
+nvm use --lts &> /dev/null
 
 # what even is xdg
 abbr open xdg-open

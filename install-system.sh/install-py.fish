@@ -11,6 +11,8 @@ conda activate base
 pip3 install --user pipx
 pipx ensurepath
 
+pipx install pipenv
+
 pipx install git+https://github.com/mps-youtube/mps-youtube.git
 pipx inject mps-youtube youtube-dl 
 pipx inject mps-youtube pyperclip

@@ -13,6 +13,8 @@ pipx ensurepath
 
 pipx install pipenv
 
+conda install jupyter 
+
 pipx install git+https://github.com/mps-youtube/mps-youtube.git
 pipx inject mps-youtube youtube-dl 
 pipx inject mps-youtube pyperclip

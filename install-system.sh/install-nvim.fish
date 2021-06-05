@@ -1,7 +1,17 @@
 #!/usr/bin/env fish
+
+# Install from unstable ppa (should be up to date enough)
 sudo add-apt-repository ppa:neovim-ppa/unstable
 sudo apt update
 sudo apt install neovim
+#
+function neovim-from-source
+    cd ~/git-builds/
+    git clone https://github.com/neovim/neovim.git
+    cd neovim 
+    make CMAKE_BUILD_TYPE=Release;
+    and make CMAKE_INSTALL_PREFIX=$HOME/.local/nvim install
+end
 
 # install from my dotfiles
 yadm submodule update --init ~/.config/nvim

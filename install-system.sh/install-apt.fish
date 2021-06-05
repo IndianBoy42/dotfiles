@@ -14,6 +14,7 @@ sudo apt-get install \
     libeigen3-dev \
 	libgtk-3-dev \
 	libasound2-dev \
+    libtool-bin libtool \
 	qemu-system-arm \
 	qemu-system-aarch64 \
 	meson \

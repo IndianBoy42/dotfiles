@@ -5,6 +5,7 @@ if not test -f /tmp/code_latest_amd64.deb
 end
 sudo dpkg -i /tmp/code_latest_amd64.deb
 rm /tmp/code_latest_amd64.deb
+sudo ln -s /usr/share/code/bin/code /usr/local/bin
 
 function code-portable-installer
     cd /tmp/

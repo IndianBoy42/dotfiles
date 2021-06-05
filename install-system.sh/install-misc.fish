@@ -62,7 +62,6 @@ npm install -g localtunnel
 # nnn - not that, its a file manager
 wget https://github.com/jarun/nnn/releases/download/v4.0/nnn_4.0-1_ubuntu20.04.amd64.deb -O /tmp/nnn.deb
 sudo dpkg -i /tmp/nnn.deb
-sudo apt install suckless-tools sxiv xdotool
 
 # vscode font for broot
 wget https://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
@@ -85,7 +84,6 @@ and sudo checkinstall
 cd ~/git-builds/
 git clone --depth 1 https://github.com/jordansissel/keynav.git
 cd keynav
-sudo apt-get install libcairo2-dev libxinerama-dev libxdo-dev
 make && sudo checkinstall
 
 # zig compiler
@@ -165,9 +163,3 @@ cd tikzit
 qmake -r
 make
 
-# github-cli
-
-curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
-echo "deb [arch="(dpkg --print-architecture)" signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-sudo apt update
-sudo apt install gh

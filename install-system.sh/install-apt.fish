@@ -77,4 +77,7 @@ sudo apt-get install \
 	screen tmux \
 	pandoc progress \
 	archivemount sshfs \
-    libgpg-error-dev libgpgme-dev
+    libgpg-error-dev libgpgme-dev \
+    suckless-tools sxiv xdotool \
+    libcairo2-dev libxinerama-dev libxdo-dev \
+    gh

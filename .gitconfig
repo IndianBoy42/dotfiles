@@ -52,7 +52,7 @@
 	down = !git pull --rebase --prune $@ && git submodule update --init --recursive
 	up = !git push -u origin HEAD
 	ec = config --global -e
-	unstage = restore . --staged
+	unstage = restore --staged
 	branches = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
 	la = "!git config -l | grep alias | cut -c 7-"
 	rao = remote add origin

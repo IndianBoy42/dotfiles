@@ -158,6 +158,8 @@ set -gx CMAKE_EXE_LINKER_FLAGS "-fuse-ld=gold"
 set -gx CMAKE_EXPORT_COMPILE_COMMANDS "ON"
 set -gx MAKEFLAGS -j (nproc)
 set -gx JULIA_NUM_THREADS (nproc)
+set -gx ZST_NBTHREADS 0 
+set -gx ZST_CLEVEL 1
 function FASTFLAGS
     set -gx CFLAGS "-O3 -march=native -mtune=native"
     set -gx CXXFLAGS "-O3 -march=native -mtune=native"

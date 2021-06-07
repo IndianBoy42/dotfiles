@@ -170,3 +170,9 @@ tar xf --directory=~/git-builds/zstd
 and cd ~/git-builds/zstd
 and make
 and ln -s (realpath zstd) ~/bin/zstd
+
+# clifm
+mkcd /tmp/clifm
+gh release -R leo-arch/clifm download -p '*deb'
+sudo apt install libcap-dev libacl1-dev libreadline-dev
+sudo dpkg -i *deb

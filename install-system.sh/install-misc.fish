@@ -163,3 +163,10 @@ cd tikzit
 qmake -r
 make
 
+# zstd
+cd /tmp/
+gh release -R facebook/zstd download -p '*.tar.gz'
+tar xf --directory=~/git-builds/zstd
+and cd ~/git-builds/zstd
+and make
+and ln -s (realpath zstd) ~/bin/zstd

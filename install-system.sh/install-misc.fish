@@ -176,3 +176,11 @@ mkcd /tmp/clifm
 gh release -R leo-arch/clifm download -p '*deb'
 sudo apt install libcap-dev libacl1-dev libreadline-dev
 sudo dpkg -i *deb
+
+# tectonic
+# sudo apt install texlive-full
+mkcd /tmp/tectonic
+gh release -R tectonic-typesetting/tectonic download -p '*x86_64-unknown-linux-gnu.tar.gz'
+tar xaf *.deb
+mv tectonic ~/bin
+

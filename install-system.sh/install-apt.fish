@@ -44,7 +44,6 @@ sudo apt-get install \
 	libx11-dev \
 	libxpm-dev \
 	libgtk2.0-dev \
-    texlive-full \
     python3-pip \
     sublime-merge \
     libpango1.0-dev \

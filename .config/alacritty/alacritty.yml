@@ -3,7 +3,7 @@ font:
     family: FiraCode Nerd Font Mono
     style: Regular
 
-  size: 10
+  size: 11
 window:
   decorations: none
   padding:

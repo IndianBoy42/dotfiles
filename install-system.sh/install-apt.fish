@@ -3,6 +3,7 @@
 sudo apt update
 
 sudo apt-get install \
+	alacritty \
 	ripgrep \
 	checkinstall \
     openssh-server \

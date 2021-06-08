@@ -1,4 +1,5 @@
-# Defined in /home/amedhi/.config/fish/config.fish @ line 313
+# Defined in ./install-go.fish @ line 7
 function gvm
-  bass source ~/.gvm/scripts/gvm ';' gvm $argv
+      bass source ~/.gvm/scripts/gvm ';' gvm $argv
+    
 end

@@ -2,11 +2,20 @@
 
 ```
 # Install YADM and pull my dotfiles
-wget {install_yadm.sh} && chmod +x install_yadm.sh && ./install_yadm.sh
+# Use a temporary yadm to clone the dotfiles
+# curl -fLo /tmp/yadm https://github.com/TheLocehiliosan/yadm/raw/master/yadm \
+  && chmod +x /tmp/yadm \
+  && /tmp/yadm clone https://github.com/IndianBoy42/dotfiles.git
+# Use official bootstrap script
+curl -L bootstrap.yadm.io | bash -s -- https://github.com/IndianBoy42/dotfiles.git
+
+# Install all the alternatives
 yadm config local.class {Laptop|Desktop} && yadm alt
+
 # On Pop-os, fake distro-info (idk why)
 sudo cp /usr/share/distro-info/ubuntu.csv /usr/share/distro-info/pop.csv
 
+# Start installing all programs 
 cd ~/install-system.sh/
 ./install-fish.sh
 ./install-system.fish

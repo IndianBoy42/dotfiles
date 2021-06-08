@@ -1,5 +1,7 @@
 #!/usr/bin/env fish
 
+set distro (lsb_release -cs)
+
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
 echo "deb [arch="(dpkg --print-architecture)" signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 
@@ -19,11 +21,16 @@ echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo rm /usr/share/keyrings/docker-archive-keyring.gpg
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu groovy stable"
+sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $distro stable"
 
 # sudo cp deb-experimental.list /etc/apt/sources.list.d
 # sudo apt-key adv --keyserver   keyserver.ubuntu.com --recv-keys 7638D0442B90D010
 # sudo apt-key adv --keyserver   keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC
+
+sudo add-apt-repository -y ppa:neovim-ppa/unstable
+
+# wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
+# sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ $distro main'
 
 sudo apt update
 

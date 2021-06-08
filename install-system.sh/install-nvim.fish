@@ -1,9 +1,8 @@
 #!/usr/bin/env fish
 
-# Install from unstable ppa (should be up to date enough)
-sudo add-apt-repository ppa:neovim-ppa/unstable
-sudo apt update
+# ensure
 sudo apt install neovim
+
 #
 function neovim-from-source
     cd ~/git-builds/

@@ -29,7 +29,9 @@ if type -q _kn
 end
 
 # git-subrepo
-source ~/git-builds/git-subrepo/.fish.rc
+if test -e ~/git-builds/git-subrepo/.fish.rc
+	source ~/git-builds/git-subrepo/.fish.rc
+end
 
 set -gx CUDACXX /usr/lib/cuda/bin/nvcc
 
@@ -211,8 +213,12 @@ abbr sptpa " spt play -f '$SPT_FORMAT' --artist --name"
 abbr sptpal " spt play -f '$SPT_FORMAT' --album --name"
 abbr sptpt " spt play -f '$SPT_FORMAT' --track --name"
 
-gvm use latest &> /dev/null
-nvm use --lts &> /dev/null
+if type -q bass
+	gvm use latest &> /dev/null
+end
+if type -q nvm
+	nvm use --lts &> /dev/null
+end
 
 # what even is xdg
 abbr open xdg-open
@@ -266,7 +272,10 @@ abbr yta-vorbis "youtube-dl --extract-audio --audio-format vorbis "
 abbr yta-wav "youtube-dl --extract-audio --audio-format wav "
 abbr ytv-best "youtube-dl -f bestvideo+bestaudio "
 
-direnv hook fish | source
+if type -q direnv
+	direnv hook fish | source
+end
+
 if type -q cod
 	cod init %self fish | source
 end

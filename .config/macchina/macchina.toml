@@ -66,7 +66,7 @@ separator_color = "Magenta"
 short_uptime = false 
 
 # Shorten the shell output
-short_shell = false 
+long_shell = true 
 
 # Specify the title of the box
 # Conflicts with: no_title.

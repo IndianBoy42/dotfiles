@@ -8,6 +8,7 @@ if not type -q rustup
     rustup target add thumbv7em-none-eabihf
     rustup target add aarch64-unknown-linux-musl
     rustup toolchain install stable
+    rustup component add rust-analyzer-preview
 else
     rustup update
 end

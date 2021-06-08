@@ -3,6 +3,7 @@
 ```
 # Install YADM and pull my dotfiles
 wget {install_yadm.sh} && chmod +x install_yadm.sh && ./install_yadm.sh
+yadm config local.class {Laptop|Desktop} && yadm alt
 # On Pop-os, fake distro-info (idk why)
 sudo cp /usr/share/distro-info/ubuntu.csv /usr/share/distro-info/pop.csv
 

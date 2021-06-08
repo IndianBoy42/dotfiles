@@ -1,0 +1,52 @@
+font:
+  normal:
+    family: FiraCode Nerd Font Mono
+    style: Regular
+
+  size: 11
+window:
+  decorations: none
+  padding:
+    x: 3
+    y: 3
+
+colors:
+  # COLORSCHEME: hyper.yaml
+  # Default colors
+  primary:
+    background: '0x000000'
+    foreground: '0xffffff'
+  normal:
+    black: '0x000000'
+    red: '0xfe0100'
+    green: '0x33ff00'
+    yellow: '0xfeff00'
+    blue: '0x0066ff'
+    magenta: '0xcc00ff'
+    cyan: '0x00ffff'
+    white: '0xd0d0d0'
+
+  # Bright colors
+  bright:
+    black: '0x808080'
+    red: '0xfe0100'
+    green: '0x33ff00'
+    yellow: '0xfeff00'
+    blue: '0x0066ff'
+    magenta: '0xcc00ff'
+    cyan: '0x00ffff'
+    white: '0xFFFFFF'
+  dim:
+    black: '0x31363b'
+    red: '0x783228'
+    green: '0x17a262'
+    yellow: '0xb65619'
+    blue: '0x1b668f'
+    magenta: '0x614a73'
+    cyan: '0x186c60'
+    white: '0x63686d'
+  cursor:
+    text: '0xF81CE5'
+    cursor: '0xffffff'
+
+  # Normal colors

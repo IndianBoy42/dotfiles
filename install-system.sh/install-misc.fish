@@ -1,8 +1,14 @@
 #!/usr/bin/env fish
 
+# dont run as root
 if test (id -u) -eq 0
     exit 1
 end
+
+mkcd /tmp/cmake
+gh release -R Kitware/CMake download -p '*linux-x86_64.tar.gz'
+tar xaf *.tar.gz
+mv cmake*/ ~/.local/cmake
 
 # make sure this is installed and use it for everything
 sudo apt install checkinstall

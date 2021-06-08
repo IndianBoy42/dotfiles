@@ -3,6 +3,7 @@
 sudo apt update
 
 sudo apt-get install \
+	ripgrep \
 	checkinstall \
     openssh-server \
     signal-desktop \

@@ -3,6 +3,8 @@
 ```
 # Install YADM and pull my dotfiles
 wget {install_yadm.sh} && chmod +x install_yadm.sh && ./install_yadm.sh
+# On Pop-os
+sudo cp /usr/share/distro-info/ubuntu.csv /usr/share/distro-info/pop.csv
 # Install Fish Shell
 cd ~/install-system.sh/
 ./install-fish.sh

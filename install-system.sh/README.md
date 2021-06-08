@@ -1,4 +1,4 @@
-# Order of operations
+# Order of operation
 
 ```
 # Install YADM and pull my dotfiles
@@ -23,8 +23,10 @@ cd ~/install-system.sh/
 ./install-jl.fish
 ```
 
-The other install scripts can be done in different orders
+The other install scripts can be done in mostly any order. I don't even know if these scripts are in the correct order
 
 You shouldn't do `install-misc.fish` all at once to properly monitor what commands are running
 
 I wish Fish could be made to print the commands before they run, probably a wrapper function could work
+
+I also wish I could install `neovim` earlier because I inevitably have to edit configs and scripts before I get to that stage

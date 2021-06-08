@@ -122,17 +122,22 @@ abbr ninja-targets "ninja -t targets"
 abbr py "python"
 
 # lsd abbreviations
-abbr l "lsd -A"
-abbr lr "lsd -AR --depth 2"
-abbr ll "lsd -alh"
-abbr lt "lsd --tree -A"
-abbr ltd "lsd --tree -A --depth"
-abbr la "lsd -alh"
+if type -q lsd
+    abbr -g l "lsd -A"
+    abbr -g ls "lsd -A"
+    abbr -g lr "lsd -AR --depth 2"
+    abbr -g ll "lsd -alh"
+    abbr -g lt "lsd --tree -A"
+    abbr -g ltd "lsd --tree -A --depth"
+    abbr -g la "lsd -alh"
+end
 # zoxide fzf stuff?
 alias zf=__fzf_search_current_dir
 #abbr zhome 'z ~ && z (__fzf_search_current_dir)'
 abbr z- 'z -'
-abbr cd kn
+if type -q kn
+    abbr -g cd kn
+end
 
 # apt abbreviations
 abbr apti "sudo apt install"
@@ -190,8 +195,10 @@ end
 set -gx EDITOR nvim #kak
 set -gx VISUAL $EDITOR
 #set -gx PAGER nvim
-abbr vim nvim
-abbr vi nvim
+if type -q nvim
+    abbr -g vim nvim
+    abbr -g vi nvim
+end
 
 # so many spotify-tui abbreviations
 set -gx SPT_FORMAT '%f %s %p : %t - %a (%b) - %v% - playing on %d'
@@ -217,7 +224,7 @@ if type -q bass
 	gvm use latest &> /dev/null
 end
 if type -q nvm
-	nvm use --lts &> /dev/null
+	nvm use lts &> /dev/null
 end
 
 # what even is xdg

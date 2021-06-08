@@ -15,5 +15,5 @@ function code-portable-installer
     tar -xzf portable.tar.gz
     mkdir -p ~/portable/vscode
     cp -r VSCode-linux-x64/* ~/portable/vscode/
-    ln -s ~/portable/vscode/bin/code ~/bin/code-portable
+    ln -s ~/portable/vscode/bin/code ~/.local/bin/code-portable
 end

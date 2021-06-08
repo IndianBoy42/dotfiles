@@ -9,9 +9,17 @@ sudo cp /usr/share/distro-info/ubuntu.csv /usr/share/distro-info/pop.csv
 cd ~/install-system.sh/
 ./install-fish.sh
 ./install-system.fish
+./install-fonts.fish
 ./install-git.fish
 ./install-apt-srcs.fish
 ./install-apt.fish
+./install-essential.fish
+./install-go.fish
+./install-node.fish
+./install-py.fish
+./install-nvim.fish
+./install-cargo.fish
+./install-jl.fish
 ```
 
 The other install scripts can be done in different orders

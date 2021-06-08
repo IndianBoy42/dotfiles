@@ -2,30 +2,25 @@
 if not type -q conda
     wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh -O /tmp/anaconda.sh
     sh /tmp/anaconda.sh -b -u
-    bass source ~/.bashrc
-	conda remove anaconda --force
-	conda update --all
+
+    eval /home/amedhi/anaconda3/bin/conda "shell.fish" "hook" $argv | source
+	# conda remove anaconda --force
+    # conda update anaconda python pip
+    conda update -n base -c defaults conda
+	# conda update --all
+
+    conda config --add channels conda-forge
+    conda config --set channel_priority strict 
 end
 
-conda activate base
+conda deactivate 
+
+sudo apt install python3-pip python3-venv
 pip3 install --user pipx
 pipx ensurepath
-
 pipx install pipenv
 
-conda install jupyter 
-
-pipx install git+https://github.com/mps-youtube/mps-youtube.git
-pipx inject mps-youtube youtube-dl 
-pipx inject mps-youtube pyperclip
-sudo add-apt-repository -y ppa:mc3man/mpv-tests
-sudo apt-get update
-sudo apt install mpv
-
-pipx install outrun
-pipx install xxh-xxh
-pipx install thefuck
-pip3 install --user click argcomplete 
+conda activate base # install this stuff to the base environment
 
 for f in conda-env-*.yml
 	echo $f

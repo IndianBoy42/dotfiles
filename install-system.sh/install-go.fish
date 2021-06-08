@@ -10,3 +10,4 @@ if not test -e ~/.gvm/scripts/gvm
     funcsave gvm
 end
 gvm install go1.16 -B && gvm use go1.16 --default
+gvm alias create latest go1.16

@@ -1,9 +1,9 @@
 #!/usr/bin/env fish
 
-# ensure
+# ensure latest is installed
+sudo add-apt-repository -y ppa:neovim-ppa/unstable
 sudo apt install neovim
 
-#
 function neovim-from-source
     cd ~/git-builds/
     git clone https://github.com/neovim/neovim.git
@@ -15,11 +15,14 @@ end
 # install from my dotfiles
 yadm submodule update --init ~/.config/nvim
 fish -c "cd ~/.config/nvim/ && git remote add upstream https://github.com/ChristianChiarulli/LunarVim.git"
+
+sudo apt install ranger libjpeg8-dev zlib1g-dev libxtst-dev
+pip3 install ueberzug
+pip3 install neovim-remote
+pip3 install pynvim --user
+npm install -g tree-sitter-cli
 nvim -u $HOME/.config/nvim/init.lua +PackerInstall
-nvim --headless +'LspInstall latex'
-nvim --headless +'LspInstall rust'
-nvim --headless +'LspInstall python'
-nvim --headless +'LspInstall cpp'
+
 # install from the repo
 # bash <(curl -s https://raw.githubusercontent.com/IndianBoy42/lunarvim/master/utils/installer/install.sh)
 

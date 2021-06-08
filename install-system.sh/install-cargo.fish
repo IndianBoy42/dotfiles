@@ -81,8 +81,11 @@ sudo tic -xe alacritty,alacritty-direct /tmp/alacritty.info
 wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/linux/Alacritty.desktop -O /tmp/Alacritty.desktop
 sudo desktop-file-install /tmp/Alacritty.desktop
 sudo update-desktop-database
+sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which alacritty) 99
 
 sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
 
 curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux -o ~/.local/bin/rust-analyzer;
 and chmod +x ~/.local/bin/rust-analyzer
+
+# vscode font for broot wget https://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf

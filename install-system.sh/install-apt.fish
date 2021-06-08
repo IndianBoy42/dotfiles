@@ -42,7 +42,6 @@ sudo apt-get install \
 	gcc-arm-none-eabi \
 	libglibmm-2.4-dev \
 	libglib2.0-dev \
-	python \
 	bison \
 	binutils \
 	lld \
@@ -63,7 +62,9 @@ sudo apt-get install \
 	libx11-dev \
 	libxpm-dev \
 	libgtk2.0-dev \
+	python \
     python3-pip \
+    python3-venv \
     sublime-merge \
     libpango1.0-dev \
     librsvg2-dev \

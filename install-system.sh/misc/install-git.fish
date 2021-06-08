@@ -7,7 +7,7 @@ sudo apt install gh
 
 function install-gcm
 	mkcd /tmp/gcmcore
-	gh releases -R microsoft/Git-Credential-Manager-Core download -p '*amd64*.deb'
+	gh release -R microsoft/Git-Credential-Manager-Core download -p '*amd64*.deb'
 	# wget https://github.com/microsoft/Git-Credential-Manager-Core/releases/download/v2.0.394-beta/gcmcore-linux_amd64.2.0.394.50751.deb -O /tmp/gcmcore.deb
 	sudo dpkg -i *.deb
 	git-credential-manager-core configure

@@ -90,3 +90,6 @@ curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/
 and chmod +x ~/.local/bin/rust-analyzer
 
 # vscode font for broot wget https://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
+
+systemctl --user enable pueued.service
+and systemctl --user start pueued.service

@@ -6,7 +6,7 @@ status is-interactive && eval /home/amedhi/anaconda3/bin/conda "shell.fish" "hoo
 end
 
 set -gx PIPENV_VENV_IN_PROJECT 1
-set -gx TERMINAL alacritty
+set -gx TERMINAL $TERM
 set -gx VIRTUAL_ENV_DIR .venv 
 set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig/
 set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/local/lib/pkgconfig/ 

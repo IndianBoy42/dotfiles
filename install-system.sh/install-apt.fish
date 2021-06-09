@@ -8,7 +8,7 @@ sudo apt update
   libeigen3-doc libmpfrc++-dev libfftw3-bin libfftw3-dev freetype2-doc glew-utils \
   libgirepository1.0-dev libglib2.0-doc libglibmm-2.4-doc libgtkmm-3.0-dev libgraphite2-utils \
   libgtk-3-doc libgtk2.0-doc libice-doc liblapack-doc libtool-doc liblzma-doc ncurses-doc \
-  libnewlib-doc libomp-12-doc libportaudio2 imagemagick libpango1.0-doc librsvg2-doc \
+  libnewlib-doc libomp-12-doc libportaudio2 libpango1.0-doc librsvg2-doc \
   libsigc++-2.0-doc libsm-doc sndiod sordi gstreamer1.0-libav gstreamer1.0-plugins-ugly libssl-doc \
   libthai-doc gfortran fortran95-compiler gcj-jdk libwayland-doc libx11-doc libxcb-doc libxext-doc \
   libxt-doc llvm-12-doc read-edid i2c-tools m4-doc ctags vim-scripts molly-guard monkeysphere \
@@ -26,6 +26,7 @@ sudo apt-get install \
 	alacritty \
 	ripgrep \
 	checkinstall \
+    imagemagick \
     openssh-server \
 	libusb-1.0-0-dev \
     libopenblas-dev \
@@ -40,6 +41,10 @@ sudo apt-get install \
 	qemu-system-aarch64 \
 	meson \
 	gcc-arm-none-eabi \
+    gcc-arm-linux-gnueabi \
+    g++-arm-linux-gnueabi \
+    gcc-aarch64-linux-gnu \
+    g++-aarch64-linux-gnu \
 	libglibmm-2.4-dev \
 	libglib2.0-dev \
 	bison \

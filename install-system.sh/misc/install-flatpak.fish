@@ -13,4 +13,7 @@ org.kde.kdenlive \
 org.telegram \
 com.discordapp.Discord \
 org.signal.Signal \
-org.videolan.VLC
+org.videolan.VLC \
+com.slack.Slack \
+com.todoist.Todoist \
+org.blender.Blender

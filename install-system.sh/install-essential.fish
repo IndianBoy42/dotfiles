@@ -1,5 +1,8 @@
 #!/usr/bin/env fish
 
+mkdir -p ~/git-builds
+cd ~/git-builds
+
 # dont run as root
 if test (id -u) -eq 0
     exit 1
@@ -42,8 +45,9 @@ sudo cp ~/install-system.sh/uinput.rules /etc/udev/rules.d/uinput.rules
 # sudo touch /etc/udev/rules.d/uinput.rules
 # echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/uinput.rules
 
-sudo cp ~/install-system.sh/kmonad.service /etc/systemd/user/kmonad.service
-and sudo systemctl enable kmonad.service
+# cp ~/install-system.sh/kmonad.service ~/.config/systemd/user/kmonad.service # synced by yadm
+systemctl --user enable kmonad.service
+and systemctl --user start kmonad.service
 
 echo "The next output will help you find the device that your keyboard corresponds to"
 cat /proc/bus/input/devices | rg -C5 keyboard

@@ -22,11 +22,11 @@ sudo apt update
 
 
 sudo apt-get install \
+    aptitude \
 	alacritty \
 	ripgrep \
 	checkinstall \
     openssh-server \
-    signal-desktop \
 	libusb-1.0-0-dev \
     libopenblas-dev \
     liblapack-dev \

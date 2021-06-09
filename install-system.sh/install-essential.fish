@@ -30,22 +30,23 @@ and ln -s (realpath zstd) ~/.local/bin/zstd
 # KMonad, cross platform QMK for all keyboards 
 sudo apt install input-utils evtest
 mkcd /tmp/kmonad
-gh release -R kmonad/kmonad download -p '*linux'
-mv ./*linux ~/.local/bin/kmonad
-chmod +x ~/.local/bin/kmonad
+gh release -R kmonad/kmonad download '0.4.1' -p '*linux'
+and mv ./*linux ~/.local/bin/kmonad
+and chmod +x ~/.local/bin/kmonad
 
-sudo groupadd uinput
+getent group uinput || groupadd uinput
 sudo usermod -aG uinput $USER
-sudo usermod -aG input $USER
-sudo modprobe uinput
-sudo touch /etc/udev/rules.d/uinput.rules
-echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/uinput.rules
+and sudo usermod -aG input $USER
+and sudo modprobe uinput
+sudo cp ~/install-system.sh/uinput.rules /etc/udev/rules.d/uinput.rules
+# sudo touch /etc/udev/rules.d/uinput.rules
+# echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/uinput.rules
+
+sudo cp ~/install-system.sh/kmonad.service /etc/systemd/user/kmonad.service
+and sudo systemctl enable kmonad.service
+
 echo "The next output will help you find the device that your keyboard corresponds to"
 cat /proc/bus/input/devices | rg -C5 keyboard
-
-sudo cp ./kmonad.service /etc/systemd/user/kmonad.service
-
-sudo systemctl enable kmonad.service
 
 # git-subrepo
 cd ~/git-builds

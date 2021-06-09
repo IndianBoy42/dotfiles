@@ -316,3 +316,7 @@ set -gx NNN_OPENER "$HOME/.config/nnn/plugins/nuke"
 
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 
+abbr tarz 'tar --zstd'
+
+abbr syctl 'systemctl --user'
+abbr ssyctl 'sudo systemctl'

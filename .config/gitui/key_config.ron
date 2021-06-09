@@ -55,8 +55,9 @@
     edit_file: ( code: Char('I'), modifiers: ( bits: 1,),),
 
     status_stage_all: ( code: Char('a'), modifiers: ( bits: 0,),),
-    status_update_all: ( code: Char('u'), modifiers: ( bits: 0,),),
-    status_reset_item: ( code: Char('U'), modifiers: ( bits: 1,),),
+    status_update_all: ( code: Char('A'), modifiers: ( bits: 1,),),
+    status_reset_item: ( code: Char('u'), modifiers: ( bits: 0,),),
+    undo_commit: ( code: Char('U'), modifiers: ( bits: 1,),),
     status_ignore_file: ( code: Char('i'), modifiers: ( bits: 0,),),
 
     diff_reset_lines: ( code: Char('u'), modifiers: ( bits: 0,),),

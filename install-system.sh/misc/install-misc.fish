@@ -170,3 +170,6 @@ cd futhark
 stack setup
 stack build
 stack install
+
+# Ansi aware column command
+curl -sL http://cpanmin.us | sudo perl - App::ansicolumn

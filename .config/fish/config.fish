@@ -124,12 +124,15 @@ abbr py "python"
 # lsd abbreviations
 if type -q lsd
     abbr -g l "lsd -A"
+    abbr -g lsc "lsd -A --color always --icon always"
     abbr -g ls "lsd -A"
     abbr -g lr "lsd -AR --depth 2"
     abbr -g ll "lsd -alh"
     abbr -g lt "lsd --tree -A"
     abbr -g ltd "lsd --tree -A --depth"
     abbr -g la "lsd -alh"
+else
+    # TODO: Backup pretty ls abbrs
 end
 # zoxide fzf stuff?
 alias zf=__fzf_search_current_dir

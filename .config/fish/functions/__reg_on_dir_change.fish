@@ -20,5 +20,13 @@ function __on_dir_change --on-variable PWD
 	end
 	set -gx CURR_GIT_ROOT "$_root"
 
-	lsd -A --color always --icon always --group-dirs first --timesort | head -5
+    if type -q ansicolumn
+        lsd -A --color always --icon always --timesort \
+            | ansicolumn -x \
+            | awk 'NR <= 5; NR > 5 { print "...Output truncated..."; exit }'
+    else
+        lsd -A --color always --icon always --timesort \
+            | column -x \
+            | awk 'NR <= 5; NR > 5 { print "...Output truncated..."; exit }'
+    end
 end

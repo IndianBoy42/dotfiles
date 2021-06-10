@@ -9,7 +9,6 @@ if not type -q conda
     conda update -n base -c defaults conda
 	# conda update --all
     conda config --add channels conda-forge
-    conda config --set channel_priority strict 
 end
 
 pip3 install --user click argcomplete 

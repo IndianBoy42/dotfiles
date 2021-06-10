@@ -1,1 +1,2 @@
-echo "run install commands??"
+#!/bin/sh -xv
+echo "Hello"

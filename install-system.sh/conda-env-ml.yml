@@ -1,16 +1,16 @@
 name: machine-learning
 channels: 
-        - conda-forge
-        - pytorch
+  - conda-forge
+  - pytorch
 dependencies:
-        - python
-        - numpy
-        - scipy
-        - matplotlib
-        - ipykernel
-        - seaborn
-        - pytorch
-        - tensorflow-gpu
-        - torchvision
-        - tqdm
-        - black
+  - python
+  - numpy
+  - scipy
+  - matplotlib
+  - ipykernel
+  - seaborn
+  - pytorch
+  - tensorflow-gpu
+  - torchvision
+  - tqdm
+  - black

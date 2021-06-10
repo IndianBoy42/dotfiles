@@ -6,12 +6,12 @@ if not type -q conda
     eval /home/amedhi/anaconda3/bin/conda "shell.fish" "hook" $argv | source
 	# conda remove anaconda --force
     # conda update anaconda python pip
-    conda update -n base -c defaults conda
 	# conda update --all
     conda config --add channels conda-forge
 end
+conda update -n base -c defaults --all
 
-pip3 install --user click argcomplete 
+pip3 install --user click argcomplete rich
 
 sudo apt install python3-pip python3-venv
 pip3 install --user pipx
@@ -23,5 +23,5 @@ conda install jupyter pip
 
 for f in conda-env-*.yml
 	echo $f
-	conda env create -f $f || conda env update --prune -n (cat conda-env-comp-vision.yml | rg 'name: ([\S]+)' -C0 -r '$1')
+	conda env create -f $f || conda env update --prune -n (cat $f | rg 'name: ([\S]+)' -C0 -r '$1')
 end

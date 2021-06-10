@@ -1,17 +1,17 @@
 name: optimal-control
 channels: 
-        - conda-forge
+  - conda-forge
 dependencies:
-        - python
-        - numpy
-        - scipy
-        - cvxpy
-        - matplotlib
-        - ipykernel
-        - pip
-        - opencv
-        - numba
-        - black
-        - pip:
-                - casadi
-                - gradient-free-optimizers 
+  - python
+  - numpy
+  - scipy
+  - cvxpy
+  - matplotlib
+  - ipykernel
+  - pip
+  - opencv
+  - numba
+  - black
+  - casadi
+  - pip:
+    - gradient-free-optimizers 

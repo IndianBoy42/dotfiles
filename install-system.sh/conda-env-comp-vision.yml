@@ -1,13 +1,13 @@
 name: comp-vision
 channels: 
-        - conda-forge
+  - conda-forge
 dependencies:
-        - python
-        - numpy
-        - scipy
-        - matplotlib
-        - ipykernel
-        - pip
-        - opencv
-        - numba
-        - black
+  - python
+  - numpy
+  - scipy
+  - matplotlib
+  - ipykernel
+  - pip
+  - opencv
+  - numba
+  - black

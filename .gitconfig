@@ -64,6 +64,7 @@
 	root = rev-parse --show-toplevel
     ui = !gitui
     pre-pull = diff @ @{upstream}
+    any-changes = diff --no-ext-diff --quiet --exit-code
 	
 [credential "https://dev.azure.com"]
 	useHttpPath = true

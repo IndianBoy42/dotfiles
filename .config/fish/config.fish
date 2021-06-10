@@ -10,10 +10,10 @@ set -gx TERMINAL $TERM
 set -gx VIRTUAL_ENV_DIR .venv 
 set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig/
 set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/local/lib/pkgconfig/ 
-set -gx PATH "$HOME/bin" $PATH;
-set -gx PATH "$HOME/.cargo/bin" $PATH;
-set -gx PATH "$HOME/.local/bin" $PATH;
-# set -gx PATH "$HOME/anaconda3/bin" $PATH;
+fish_add_path ~/bin
+fish_add_path ~/.cargo/bin
+fish_add_path ~/.local/bin
+# fish_add_path ~/anaconda3/bin
 
 # linuxbrew add to env
 if type -q ~/../linuxbrew/.linuxbrew/bin/brew
@@ -30,7 +30,8 @@ end
 
 # git-subrepo
 if test -e ~/git-builds/git-subrepo/.fish.rc
-	source ~/git-builds/git-subrepo/.fish.rc
+    set GIT_SUBREPO_ROOT (dirname (realpath (status --current-filename)))
+    fish_add_path $GIT_SUBREPO_ROOT/lib
 end
 
 set -gx CUDACXX /usr/lib/cuda/bin/nvcc
@@ -89,7 +90,8 @@ abbr yaddupdate yadm add --update ~
 
 # ghcup-env
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME
-test -f /home/amedhi/.ghcup/env ; and set -gx PATH $HOME/.cabal/bin /home/amedhi/.ghcup/bin $PATH
+test -f /home/amedhi/.ghcup/env
+and fish_add_path ~/.cabal/bin ~/.ghcup/bin
 
 # super short cargo abbreviations
 abbr cg "cargo"
@@ -127,10 +129,10 @@ if type -q lsd
     abbr -g lsc "lsd -A --color always --icon always"
     abbr -g ls "lsd -A"
     abbr -g lr "lsd -AR --depth 2"
-    abbr -g ll "lsd -alh"
+    abbr -g ll "lsd -al"
     abbr -g lt "lsd --tree -A"
     abbr -g ltd "lsd --tree -A --depth"
-    abbr -g la "lsd -alh"
+    abbr -g la "lsd -al"
 else
     # TODO: Backup pretty ls abbrs
 end
@@ -151,8 +153,11 @@ abbr aptar "sudo apt autoremove"
 abbr aptsi "apt list --installed | fzf"
 
 # mkdir helpers
-abbr mkdp "mkdir -p"
 # make all directories and create the file
+abbr mkd "mkdir -p"
+
+abbr justc "just --choose"
+abbr justl "just --list"
 
 # ranger and then cd, dont think this works
 abbr rcd 'ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'

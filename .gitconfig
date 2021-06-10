@@ -62,6 +62,7 @@
 	sm = submodule
 	info = !"onefetch"
 	root = rev-parse --show-toplevel
+    ui = !gitui
 	
 [credential "https://dev.azure.com"]
 	useHttpPath = true

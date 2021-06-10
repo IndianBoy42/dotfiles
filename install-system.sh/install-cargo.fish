@@ -93,3 +93,5 @@ and chmod +x ~/.local/bin/rust-analyzer
 
 systemctl --user enable pueued.service
 and systemctl --user start pueued.service
+
+tldr --update

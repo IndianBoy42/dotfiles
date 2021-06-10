@@ -8,6 +8,9 @@ if test (id -u) -eq 0
     exit 1
 end
 
+# Just command runner
+curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ~/.local/bin
+
 # cmake
 mkcd /tmp/cmake
 gh release -R Kitware/CMake download -p '*linux-x86_64.tar.gz'
@@ -60,6 +63,6 @@ git clone https://github.com/ingydotnet/git-subrepo
 # sudo apt install texlive-full
 mkcd /tmp/tectonic
 gh release -R tectonic-typesetting/tectonic download -p '*x86_64-unknown-linux-gnu.tar.gz'
-tar xaf *.deb
+tar xaf "*x86_64-unknown-linux-gnu.tar.gz"
 mv tectonic ~/.local/bin
 

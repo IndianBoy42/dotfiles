@@ -8,12 +8,11 @@ if not type -q conda
     # conda update anaconda python pip
     conda update -n base -c defaults conda
 	# conda update --all
-
     conda config --add channels conda-forge
     conda config --set channel_priority strict 
 end
 
-conda deactivate 
+pip3 install --user click argcomplete 
 
 sudo apt install python3-pip python3-venv
 pip3 install --user pipx
@@ -21,6 +20,7 @@ pipx ensurepath
 pipx install pipenv
 
 conda activate base # install this stuff to the base environment
+conda install jupyter pip
 
 for f in conda-env-*.yml
 	echo $f

@@ -19,7 +19,6 @@ sudo cp /usr/share/distro-info/ubuntu.csv /usr/share/distro-info/pop.csv
 cd ~/install-system.sh/
 ./install-fish.sh
 ./install-system.fish
-./install-fonts.fish
 ./install-git.fish
 ./install-apt-srcs.fish
 ./install-apt.fish
@@ -28,6 +27,7 @@ cd ~/install-system.sh/
 ./install-node.fish
 ./install-py.fish
 ./install-nvim.fish
+./install-fonts.fish
 ./install-cargo.fish
 ./install-jl.fish
 ```

@@ -11,7 +11,6 @@ function nf-install-helper
     # set link "https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/$argv.zip"
     # echo "$link"
     # wget $link -O $fontfilename
-    cd ~/Downloads/fonts
     gh release -R ryanoasis/nerd-fonts download -p $fontfilename
 
     and unzip $fontfilename -d ~/.fonts

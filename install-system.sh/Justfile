@@ -1,0 +1,405 @@
+set shell := ["fish", "-c"]
+
+bindir := "~/.local/bin"
+blddir := "~/git-builds"
+compflags := "-O3 -march=native -mtune=native"
+ldflags := "-march=native -mtune=native"
+export CMAKE_GENERATOR := "Ninja"
+export CMAKE_BUILD_TYPE := "Release"
+export CMAKE_EXE_LINKER_FLAGS := "-fuse-ld=gold"
+export CMAKE_SHARED_LINKER_FLAGS := "-fuse-ld=gold"
+export CMAKE_EXPORT_COMPILE_COMMANDS := "OFF"
+nprocs := `nproc`
+export MAKEFLAGS := "-j " + nprocs
+
+export CFLAGS := "-O3 -march=native -mtune=native"
+export CXXFLAGS := "-O3 -march=native -mtune=native"
+export CPPFLAGS := CXXFLAGS
+export FFLAGS := "-O3 -march=native -mtune=native"
+export FCFLAGS := "-O3 -march=native -mtune=native"
+export CMAKE_C_FLAGS_RELEASE := CFLAGS
+export CMAKE_CXX_FLAGS_RELEASE := CXXFLAGS
+
+##############################################333
+# Helpers
+##############################################333
+
+# Link from a directory inside ~/.local
+linkbin name:
+    chmod +x ~/.local/{{name}}/bin/*
+    ln -s ~/.local/{{name}}/bin/* {{bindir}}
+
+mkblddir name:
+    mkdir -p {{blddir}}/{{name}}
+
+# Clone or update a git repo (into blddir)
+gitclone url name:
+    #!/usr/bin/env fish
+    mkdir -p {{blddir}} && cd {{blddir}}
+    if test -d {{blddir}}/{{name}}
+        cd {{blddir}}/{{name}} && git pull && git submodule update --init --recursive
+    else
+        git clone {{url}} {{blddir}}/{{name}} --depth 1
+    end
+
+_tmpdir name:
+    mkdir -p /tmp/{{name}}
+
+# Download an asset from Github releases (to /tmp/name)
+gh name repo pattern: (_tmpdir name)
+	cd /tmp/{{name}} \
+	&& gh release -R {{repo}} download -p '{{pattern}}' \
+	&& mv {{pattern}} {{name}} \
+	|| mv {{pattern}} {{name}} 
+
+# Download a tarball from Github releases and extract it
+targh name repo pattern: (gh name repo pattern)
+    cd /tmp/{{name}} && tar xavf {{name}}
+
+# Download a debian from Github releases and install it with dpkg
+debgh name repo pattern: (gh name repo pattern)
+	cd /tmp/{{name}} && sudo dpkg -i ./{{name}}
+
+# Download a binary from Github releases and move it to bindir
+bingh name repo pattern: (gh name repo pattern)
+	chmod +x /tmp/{{name}}/{{name}}
+	mv /tmp/{{name}}/{{name}} {{bindir}}
+
+# Download a program tarball from Github releases, extract the source to ~/.local/, and link the binary folder
+insgh name repo pattern: (targh name repo pattern)
+	cp -r /tmp/{{name}}/*/* ~/.local/{{name}}
+	rm -rf /tmp/{{name}}
+	just linkbin {{name}}
+	# TODO: Link libraries and stuff also? this works for now
+
+# Download a source tarball from Github releases and extract the source to blddir
+srcgh name repo pattern: (targh name repo pattern) (mkblddir name)
+	cp -r /tmp/{{name}}/*/* {{blddir}}/{{name}}
+	rm -rf /tmp/{{name}}
+
+curlbin url name: 
+	curl -L {{url}} -o {{bindir}}/name
+	chmod +x {{bindir}}/name
+
+##############################################333
+# Programs
+##############################################333
+
+# arm embedded gcc - newer than apt
+gcc-arm-none-eabi: (targh "arm-none-eabi-gcc" "xpack-dev-tools/arm-none-eabi-gcc-xpack" "*linux-x64.tar.gz")
+    mv /tmp/arm-none-eabi-gcc/xpack-arm-* ~/.local/arm-none-eabi-gcc
+    just linkbin arm-none-eabi-gcc
+
+# riscv embedded gcc - from xpack
+gcc-riscv-none-embed: (targh "riscv-none-embed-gcc" "xpack-dev-tools/riscv-none-embed-gcc-xpack" "*linux-x64.tar.gz")
+    mv /tmp/riscv-none-embed-gcc/xpack-arm-* ~/.local/riscv-none-embed-gcc
+    just linkbin riscv-none-embed-gcc
+
+# Ultimate Plumber, live shell pipelines 
+ultimate-plumber: (bingh "up" "akavel/up" "up")
+	echo "Installed UP"
+
+# Wezterm -- cool terminal?
+wezterm: (bingh "wezterm" "wez/wezterm" "*.AppImage")
+    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator "{{bindir}}/wezterm" 90
+
+# kitty terminal -- pretty graphics in terminal
+kitty: 
+    curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+    just linkbin "kitty.app"
+    # ln -s $HOME/.local/kitty.app/bin/kitty {{bindir}}/kitty
+
+# Zenith -- better top
+zenith: (debgh "zenith" "bvaisvil/zenith" "*amd64.deb")
+	echo "Installed zenith"
+
+# PathPicker -- terminal path picker
+pathpicker: (gitclone "https://github.com/facebook/PathPicker" "pathpicker")
+	#!/usr/bin/env -S bash -euxo pipefail
+	cd {{blddir}}/pathpicker/debian 
+	sh ./package.sh
+	sudo dpkg -i ../*.deb
+
+# cod -- completion learning daemon
+cod:
+    go get -u github.com/dim-an/cod
+
+# gnome-quake
+# go to https://extensions.gnome.org/extension/1411/quake-mode/
+
+# localtunnel
+localtunnel:
+    npm install -g localtunnel
+
+# nnn - not that, its a file manager
+nnn:
+    echo 'deb http://download.opensuse.org/repositories/home:/stig124:/nnn/xUbuntu_20.04/ /' | sudo tee /etc/apt/sources.list.d/home:stig124:nnn.list
+    curl -fsSL https://download.opensuse.org/repositories/home:stig124:nnn/xUbuntu_20.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_stig124_nnn.gpg > /dev/null
+    sudo apt update
+    sudo apt install nnn
+
+# tinycc compiler
+tinycc: (gitclone "https://github.com/TinyCC/tinycc.git" "tinycc")
+	#!/usr/bin/env bash -euxo pipefail
+	cd {{blddir}}/tinycc
+	./configure --prefix=~/.local/tinycc --extra-cflags={{compflags}} --extra-ldflags={{ldflags}} --cc=clang-12
+	make
+	make install
+	just linkbin "tinycc"
+
+# keynav
+keynav: (gitclone "https://github.com/jordansissel/keynav.git" "keynav")
+	#!/usr/bin/env bash -euxo pipefail
+	cd {{blddir}}
+	make 
+	ln -s $PWD/keynav {{bindir}}
+
+# zig compiler
+zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
+	#!/usr/bin/env bash -euxo pipefail
+	sudo apt install libllvm12 libclang-12-dev liblld-12-dev
+	cd {{blddir}}/zig
+	mkdir -p build && cd build
+	cmake -DZIG_TARGET_MCPU=native -DCMAKE_INSTALL_PREFIX="~/.local/zig/" ..
+	ninja install
+	just linkbin "zig"
+
+# indexa
+indexa:
+    cargo install --git https://github.com/mosmeh/indexa.git
+
+# godbolt
+godbolt: (gitclone "https://github.com/compiler-explorer/compiler-explorer.git" "compiler-explorer")
+    cargo install rustfilt
+
+# !! This must only be done manually it takes so much gd RAM and Disk
+zapcc: (gitclone "https://github.com/yrnkrn/zapcc.git" "zapcc")
+	#!/usr/bin/env bash -euxo pipefail
+	mkdir -p {{blddir}}/zapcc/build && cd {{blddir}}/zapcc/build
+	cmake -DLLVM_ENABLE_WARNINGS -DLLVM_USE_LINKER=gold -DCMAKE_INSTALL_PREFIX="~/.local/zapcc/" ..
+	ninja install
+	just linkbin "zapcc"
+
+# google benchmark
+googbench: (gitclone "https://github.com/google/benchmark.git" "googbench")
+	mkdir -p build && cd build
+	cmake .. -DBENCHMARK_DOWNLOAD_DEPENDENCIES=ON -DBENCHMARK_ENABLE_GTEST_TESTS=OFF
+	sudo apt install checkinstall
+	ninja && sudo checkinstall ninja install
+
+# drake
+# cd ~/git-builds
+# git clone https://github.com/RobotLocomotion/drake.git
+# cd drake
+# git remote add upstream git@github.com:RobotLocomotion/drake.git
+# git remote set-url --push upstream no_push
+# sudo setup/ubuntu/install_prereqs.sh
+# bazel build
+# docker pull robotlocomation/drake:latest
+# cd tools/install/dockerhub/focal
+# wget https://drake-packages.csail.mit.edu/drake/nightly/drake-latest-focal.tar.gz
+# docker build -t robotlocomation/drake:focal
+
+# todoist cli
+todoist-cli: (gitclone "https://github.com/sachaos/todoist.git" "todoist")
+    go install 
+
+# tikzit
+tikzit: (gitclone "https://github.com/tikzit/tikzit.git" "tikzit")
+    sudo apt install flex bison qt5-default libpoppler-dev libpoppler-qt5-dev
+    qmake -r
+    make
+
+# clifm
+clifm: (debgh "clifm" "leo-arch/clifm" "*deb")
+    sudo apt install libcap-dev libacl1-dev libreadline-dev
+
+# mpv video player
+mpv:
+    sudo add-apt-repository -y ppa:mc3man/mpv-tests
+    sudo apt-get update
+    sudo apt install mpv
+
+# mps-youtube -- cli youtube client
+mps-youtube: mpv
+    pipx install git+https://github.com/mps-youtube/mps-youtube.git
+    pipx inject mps-youtube youtube-dl 
+    pipx inject mps-youtube pyperclip
+
+# Run a program on a remote computer
+outrun:
+    pipx install outrun
+
+# SSH with your shell environment
+xxh:
+    pipx install xxh-xxh
+
+# Futhark
+futhark: (gitclone "https://github.com/diku-dk/futhark.git" "futhark")
+    stack setup
+    stack build
+    stack install
+
+# Ansi aware column command
+ansicolumn:
+    curl -sL http://cpanmin.us | sudo perl - App::ansicolumn
+
+# Install systemwide VSCode (update via apt)
+vscode: 
+	#!/usr/bin/env bash -euxo pipefail
+	cd /tmp/
+	wget "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" -O code.deb
+	sudo dpkg -i code.deb
+	sudo ln -s /usr/share/code/bin/code /usr/local/bin
+
+# Install portable version of vscode
+code-portable: (_tmpdir "code-portable")
+	#!/usr/bin/env bash -euxo pipefail
+	cd /tmp/code-portable
+	wget "https://code.visualstudio.com/sha/download?build=stable&os=linux-x64" -O portable.tar.gz
+	tar -xzf portable.tar.gz
+	mkdir -p ~/.local/vscode-portable 
+	cp -r VSCode-linux-x64 ~/.local/vscode-portable
+	just linkbin vscode-portable
+
+# TODO: add doom to yadm submodule
+# EMACS, a great OS and a mediocre editor
+emacs: (gitclone "https://github.com/emacs-mirror/emacs.git" "emacs")
+	#!/usr/bin/env bash -euxo pipefail
+	cd {{blddir}}/emacs
+	sudo apt install libxaw7-dev libgnutls30 xaw3dg xutils-dev libgnutls28-dev libgccjit-10-dev
+	./autogen.sh
+	./configure --with-native-compilation --with-modules=on --prefix="~/.local/emacs"
+	make -C lisp autoloads-force
+	make
+	make install
+	just linkbin "emacs"
+    
+# Git Credential Manager Core
+gcm: (debgh "gcmcore" "microsoft/Git-Credential-Manager-Core" "*amd64*.deb")
+	git-credential-manager-core configure
+	# git config --global credential.credentialStore secretservice # requires GUI (ok?)
+
+# Quantum Mechanical Keyboard firmware
+qmk: (gitclone "https://github.com/IndianBoy42/qmk_firmware.git" "qmk_firmware")
+	pip3 install --user qmk
+	cd ~/qmk_firmware \
+	&& git remote add upstream "https://github.com/qmk/qmk_firmware.git" && \
+	git fetch --unshallow
+	sudo cp ~/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
+	qmk setup
+	qmk doctor
+	~/qmk_firmware/util/qmk_install.sh
+
+# CMake (not a) build system
+cmake: (targh "cmake" "Kitware/CMake" "*linux-x86_64.tar.gz")
+	mv ~/tmp/cmake/cmake* ~/.local/cmake
+	just linkbin cmake
+
+# Fuzzy finder
+fzf: (targh "fzf" "junegunn/fzf" "*linux-amd64.tar.gz")
+	mv ~/tmp/fzf/fzf ~/.local/bin
+
+# Fast realtime compression/decompression
+zstd: (srcgh "zstd" "facebook/zstd" "*.tar.gz")
+	cd {{blddir}}/zstd && make
+	ln -s {{blddir}}/zstd/zstd {{bindir}}
+
+# Computer-side QMK mapping for builtin keyboards
+kmonad: (bingh "kmonad" "kmonad/kmonad" "*linux")
+	getent group uinput || groupadd uinput
+	sudo usermod -aG uinput $USER
+	sudo usermod -aG input $USER
+	sudo modprobe uinput
+	sudo cp ~/install-system.sh/uinput.rules /etc/udev/rules.d/uinput.rules
+	# sudo touch /etc/udev/rules.d/uinput.rules
+	# echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/uinput.rules
+	# cp ~/install-system.sh/kmonad.service ~/.config/systemd/user/kmonad.service # synced by yadm
+	systemctl --user enable kmonad.service
+	systemctl --user start kmonad.service
+	echo "The next output will help you find the device that your keyboard corresponds to"
+	cat /proc/bus/input/devices | rg -C5 keyboard
+
+# Alternative to submodules
+git-subrepo: (gitclone "ingydotnet/git-subrepo" "git-subrepo")
+	ln -s {{blddir}}/git-subrepo/lib/* {{bindir}}
+
+# Modern Latex distribution
+tectonic: (targh "tec" "tectonic-typesetting/tectonic" "*x86_64-unknown-linux-gnu.tar.gz")
+	mv /tmp/tec/tectonic {{bindir}}
+
+# A Version manager for Julia
+jill: 
+	curl -fsSL https://raw.githubusercontent.com/abelsiqueira/jill/master/jill.sh > {{bindir}}/jill.sh
+	sudo chmod +x {{bindir}}/jill.sh
+	jill.sh
+
+# Install a Nerdfont by name
+nerdfont name:
+	#!/usr/bin/env fish
+	echo "[-] Download font ($argv) [-]"
+	mkdir -p ~/Downloads/fonts
+	cd ~/Downloads/fonts
+	set fontfilename "$argv.zip"
+	gh release -R ryanoasis/nerd-fonts download -p $fontfilename
+	and unzip $fontfilename -d ~/.fonts
+	echo "done!"
+
+# Install Fira Code|Mono Nerd Font
+firacode: (nerdfont "FiraCode") (nerdfont "FiraMono")
+	fc-cache -fv
+
+# Installer/Updater for GHC
+ghcup:
+	#!/usr/bin/env fish
+	if not type -q ghcup
+		curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+	else
+		ghcup
+	end
+
+# Build system for Haskell (uses isolated GHC instances)
+stack:
+	#!/usr/bin/env fish
+	if not type -q stack
+		curl -sSL https://get.haskellstack.org/ | sh
+	else
+		stack upgrade
+	end
+
+rustc:
+	#!/usr/bin/env fish
+	if not type -q rustup
+		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --profile default
+		rustup target add x86_64-unknown-linux-musl
+		rustup target add thumbv7m-none-eabi
+		rustup target add thumbv7em-none-eabi
+		rustup target add thumbv7em-none-eabihf
+		rustup target add aarch64-unknown-linux-musl
+		rustup toolchain install stable
+		rustup component add rust-analyzer-preview
+	else
+		rustup target add x86_64-unknown-linux-musl
+		rustup target add thumbv7m-none-eabi
+		rustup target add thumbv7em-none-eabi
+		rustup target add thumbv7em-none-eabihf
+		rustup target add aarch64-unknown-linux-musl
+		rustup toolchain install stable
+		rustup component add rust-analyzer-preview
+		rustup update
+	end
+
+rust-analyzer: (bingh "rust-analyzer" "rust-analyzer/rust-analyzer" "*-linux")
+	echo "Installed rust-analyzer"
+
+just:
+	curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ~/.local/bin
+
+# rust-analyzer: (curlbin "https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux" "rust-analyzer")
+# 	echo "Installed rust-analyzer"
+
+conda-env name:
+	conda env create -f {{name}} || conda env update --prune -n (cat {{name}} | rg 'name: ([\S]+)' -C0 -r '$1')
+
+conda-optimal-control: (conda-env "conda-env-optimal-control.yml")
+    conda activate optimal-control

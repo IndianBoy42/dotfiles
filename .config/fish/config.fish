@@ -235,9 +235,6 @@ if type -q nvm
 	nvm use lts &> /dev/null
 end
 
-# what even is xdg
-abbr open xdg-open
-
 # Reindex (indexa) if is-interactive
 if test -x ix
 	status --is-interactive; and ix -u &> /dev/null &

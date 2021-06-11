@@ -56,7 +56,6 @@ CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
     rustfilt  \
     scriptisto  \
     sd  \
-    serial-monitor \
     shy  \
     skim \
     so  \
@@ -70,7 +69,10 @@ CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
     gpg-tui
 
 CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
-    --git https://github.com/IndianBoy42/gitui/
+    --git https://github.com/IndianBoy42/gitui.git
+
+CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install  \
+    --git https://github.com/IndianBoy42/serial-monitor.git
 
 CARGO_BUILD_TARGET=x86_64-unknown-linux-gnu cargo install-update --all
 

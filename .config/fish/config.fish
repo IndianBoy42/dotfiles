@@ -66,7 +66,9 @@ abbr rgl 'rg -C0'
 abbr fda 'fd -HI'
 
 # profile editing helper functions
-abbr reload_profile 'source ~/.config/fish/config.fish'
+set -gx FISH_CONFIG_PATH (status filename)
+set -gx FISH_CONFIG_DIR (status dirname)
+abbr reload_profile "source $FISH_CONFIG_PATH"
 
 # pueue is really cool
 abbr pu pueue

@@ -141,6 +141,7 @@ else
 end
 # zoxide fzf stuff?
 alias zf=__fzf_search_current_dir
+abbr fzfp 'fzf --preview=\'v {}\''
 #abbr zhome 'z ~ && z (__fzf_search_current_dir)'
 abbr z- 'z -'
 if type -q kn

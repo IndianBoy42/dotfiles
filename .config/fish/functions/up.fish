@@ -1,4 +1,4 @@
-function up
+function up -d "Go up till you get to a directory that contains the folder name that you've specified"
 # https://gist.github.com/zlksnk/81a4993be410586c038f8b3fc140b1c7
   set -l dir_to_be_child $argv[1]
 

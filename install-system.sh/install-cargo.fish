@@ -2,12 +2,13 @@
 
 if not type -q rustup
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --profile default
-    rustup target add x86_64-unknown-linux-musl      
-    rustup target add aarch64-unknown-linux-gnu      
-    rustup target add thumbv7m-none-eabi
-    rustup target add thumbv7em-none-eabi
-    rustup target add thumbv7em-none-eabihf
-    rustup target add aarch64-unknown-linux-musl
+    rustup target add x86_64-unknown-linux-gnu      
+	rustup target add x86_64-unknown-linux-musl
+	rustup target add thumbv7m-none-eabi
+	rustup target add thumbv7em-none-eabi
+	rustup target add thumbv7em-none-eabihf
+	rustup target add aarch64-unknown-linux-musl
+    rustup target add arm-unknown-linux-musl
     rustup toolchain install stable
     rustup component add rust-analyzer-preview
 else
@@ -17,7 +18,7 @@ end
 # TODO: use quickinstall (but no native compile :/)
 type -q sccache && cargo install-update sccache
 type -q sccache || cargo install sccache
-type -q sccache && set -x RUSTC_WRAPPER (which sccache)
+set -x RUSTC_WRAPPER (which sccache)
 
 # These cannot be compiled with musl (mostly due to OpenSSL-sys crate)
 set -x CARGO_BUILD_TARGET "x86_64-unknown-linux-gnu"

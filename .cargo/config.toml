@@ -11,7 +11,12 @@ wc = "watch -x check --clear"
 rustflags = ["-C", "target-cpu=native", "-Z", "share-generics=y", "-C", "link-arg=-fuse-ld=lld"]
 
 [profile.dev]
-opt-level = 1
+#opt-level = 1
+split-debuginfo = "unpacked"
+
+[profile.release]
+lto = true
+panic = 'abort'
 split-debuginfo = "unpacked"
 
 [profile.test]

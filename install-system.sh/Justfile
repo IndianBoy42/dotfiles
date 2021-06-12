@@ -23,6 +23,8 @@ export CMAKE_CXX_FLAGS_RELEASE := CXXFLAGS
 rust-gnu := "x86_64-unknown-linux-gnu"
 rust-musl := "x86_64-unknown-linux-musl"
 cargo-install := "cargo install" # TODO: can use quickinstall
+export RUSTC_WRAPPER := "sccache"
+export CARGO_BUILD_TARGET := rust-musl
 
 @_default:
 	just -l -f {{justfile()}}
@@ -35,7 +37,7 @@ edit:
 ##############################################333
 
 # Link from a directory inside ~/.local
-linkbin name:
+link_local name:
     chmod +x ~/.local/{{name}}/bin/*
     ln -s ~/.local/{{name}}/bin/* {{bindir}}
 
@@ -49,22 +51,25 @@ gitclone url name:
     if test -d {{blddir}}/{{name}}
         cd {{blddir}}/{{name}} && git pull && git submodule update --init --recursive
     else
-        git clone {{url}} {{blddir}}/{{name}} --depth 1
+        git clone {{url}} {{blddir}}/{{name}}
     end
 
 _tmpdir name:
     mkdir -p /tmp/{{name}}
 
 @install-gh:
-	sudo apt install gh
-	gh auth login
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+    echo "deb [arch="(dpkg --print-architecture)" signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+    sudo apt update
+    sudo apt install gh
+    gh auth login
 
 # Download an asset from Github releases (to /tmp/name)
-gh name repo pattern: (_tmpdir name) install-gh
-	cd /tmp/{{name}} \
-	&& gh release -R {{repo}} download -p '{{pattern}}' \
-	&& mv {{pattern}} {{name}} \
-	|| mv {{pattern}} {{name}} 
+gh name repo pattern: (_tmpdir name) 
+    cd /tmp/{{name}} \
+    && gh release -R {{repo}} download -p '{{pattern}}' \
+    && mv {{pattern}} {{name}} \
+    || mv {{pattern}} {{name}} 
 
 # Download a tarball from Github releases and extract it
 targh name repo pattern: (gh name repo pattern)
@@ -72,28 +77,28 @@ targh name repo pattern: (gh name repo pattern)
 
 # Download a debian from Github releases and install it with dpkg
 debgh name repo pattern: (gh name repo pattern)
-	cd /tmp/{{name}} && sudo dpkg -i ./{{name}}
+    cd /tmp/{{name}} && sudo dpkg -i ./{{name}}
 
 # Download a binary from Github releases and move it to bindir
 bingh name repo pattern: (gh name repo pattern)
-	chmod +x /tmp/{{name}}/{{name}}
-	mv /tmp/{{name}}/{{name}} {{bindir}}
+    chmod +x /tmp/{{name}}/{{name}}
+    mv /tmp/{{name}}/{{name}} {{bindir}}
 
 # Download a program tarball from Github releases, extract the source to ~/.local/, and link the binary folder
 insgh name repo pattern: (targh name repo pattern)
-	cp -r /tmp/{{name}}/*/* ~/.local/{{name}}
-	rm -rf /tmp/{{name}}
-	just linkbin {{name}}
-	# TODO: Link libraries and stuff also? this works for now
+    cp -r /tmp/{{name}}/*/* ~/.local/{{name}}/
+    rm -rf /tmp/{{name}}
+    just link_local {{name}}
+    # TODO: Link libraries and stuff also? this works for now
 
 # Download a source tarball from Github releases and extract the source to blddir
 srcgh name repo pattern: (targh name repo pattern) (mkblddir name)
-	cp -r /tmp/{{name}}/*/* {{blddir}}/{{name}}
-	rm -rf /tmp/{{name}}
+    cp -r /tmp/{{name}}/*/* {{blddir}}/{{name}}
+    rm -rf /tmp/{{name}}
 
 curlbin url name: 
-	curl -L {{url}} -o {{bindir}}/name
-	chmod +x {{bindir}}/name
+    curl -L {{url}} -o {{bindir}}/name
+    chmod +x {{bindir}}/name
 
 ##############################################333
 # Programs
@@ -102,16 +107,16 @@ curlbin url name:
 # arm embedded gcc - newer than apt
 gcc-arm-none-eabi: (targh "arm-none-eabi-gcc" "xpack-dev-tools/arm-none-eabi-gcc-xpack" "*linux-x64.tar.gz")
     mv /tmp/arm-none-eabi-gcc/xpack-arm-* ~/.local/arm-none-eabi-gcc
-    just linkbin arm-none-eabi-gcc
+    just link_local arm-none-eabi-gcc
 
 # riscv embedded gcc - from xpack
 gcc-riscv-none-embed: (targh "riscv-none-embed-gcc" "xpack-dev-tools/riscv-none-embed-gcc-xpack" "*linux-x64.tar.gz")
     mv /tmp/riscv-none-embed-gcc/xpack-arm-* ~/.local/riscv-none-embed-gcc
-    just linkbin riscv-none-embed-gcc
+    just link_local riscv-none-embed-gcc
 
 # Ultimate Plumber, live shell pipelines 
 ultimate-plumber: (bingh "up" "akavel/up" "up")
-	echo "Installed UP"
+    echo "Installed UP"
 
 # Wezterm -- cool terminal?
 wezterm: (bingh "wezterm" "wez/wezterm" "*.AppImage")
@@ -120,19 +125,51 @@ wezterm: (bingh "wezterm" "wez/wezterm" "*.AppImage")
 # kitty terminal -- pretty graphics in terminal
 kitty: 
     curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
-    just linkbin "kitty.app"
+    just link_local "kitty.app"
     # ln -s $HOME/.local/kitty.app/bin/kitty {{bindir}}/kitty
 
 # Zenith -- better top
 zenith: (debgh "zenith" "bvaisvil/zenith" "*amd64.deb")
-	echo "Installed zenith"
+    echo "Installed zenith"
 
 # PathPicker -- terminal path picker
 pathpicker: (gitclone "https://github.com/facebook/PathPicker" "pathpicker")
-	#!/usr/bin/env -S bash -euxo pipefail
-	cd {{blddir}}/pathpicker/debian 
-	sh ./package.sh
-	sudo dpkg -i ../*.deb
+    #!/usr/bin/env -S bash -euxo pipefail
+    cd {{blddir}}/pathpicker/debian 
+    sh ./package.sh
+    sudo dpkg -i ../*.deb
+
+gvm:
+    #!/usr/bin/env fish
+    if not test -e ~/.gvm/scripts/gvm
+        set tmpfile (mktemp)
+        curl -sSL https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer > $tmpfile
+        bash $tmpfile
+
+        function gvm
+          bass source ~/.gvm/scripts/gvm ';' gvm $argv
+        end
+        funcsave gvm
+    end
+
+go: gvm
+    gvm install --binary go1.16
+    gvm use go.1.16 --default
+    gvm alias create latest go1.16
+
+nvm:
+    #!/usr/bin/env fish
+    if type -q nvm
+        fisher install jorgebucaran/nvm.fish
+    end
+
+npm: nvm
+    nvm install latest
+    nvm install lts
+    nvm use latest
+
+node: npm
+    echo "Installed node+npm"
 
 # cod -- completion learning daemon
 cod:
@@ -154,29 +191,29 @@ nnn:
 
 # tinycc compiler
 tinycc: (gitclone "https://github.com/TinyCC/tinycc.git" "tinycc")
-	#!/usr/bin/env bash -euxo pipefail
-	cd {{blddir}}/tinycc
-	./configure --prefix=~/.local/tinycc --extra-cflags={{compflags}} --extra-ldflags={{ldflags}} --cc=clang-12
-	make
-	make install
-	just linkbin "tinycc"
+    #!/usr/bin/env bash -euxo pipefail
+    cd {{blddir}}/tinycc
+    ./configure --prefix=~/.local/tinycc --extra-cflags={{compflags}} --extra-ldflags={{ldflags}} --cc=clang-12
+    make
+    make install
+    just link_local "tinycc"
 
 # keynav
 keynav: (gitclone "https://github.com/jordansissel/keynav.git" "keynav")
-	#!/usr/bin/env bash -euxo pipefail
-	cd {{blddir}}
-	make 
-	ln -s $PWD/keynav {{bindir}}
+    #!/usr/bin/env bash -euxo pipefail
+    cd {{blddir}}
+    make 
+    ln -s $PWD/keynav {{bindir}}
 
 # zig compiler
 zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
-	#!/usr/bin/env bash -euxo pipefail
-	sudo apt install libllvm12 libclang-12-dev liblld-12-dev
-	cd {{blddir}}/zig
-	mkdir -p build && cd build
-	cmake -DZIG_TARGET_MCPU=native -DCMAKE_INSTALL_PREFIX="~/.local/zig/" ..
-	ninja install
-	just linkbin "zig"
+    #!/usr/bin/env bash -euxo pipefail
+    sudo apt install libllvm12 libclang-12-dev liblld-12-dev
+    cd {{blddir}}/zig
+    mkdir -p build && cd build
+    cmake -DZIG_TARGET_MCPU=native -DCMAKE_INSTALL_PREFIX="~/.local/zig/" ..
+    ninja install
+    just link_local "zig"
 
 # godbolt
 godbolt: (gitclone "https://github.com/compiler-explorer/compiler-explorer.git" "compiler-explorer")
@@ -184,18 +221,18 @@ godbolt: (gitclone "https://github.com/compiler-explorer/compiler-explorer.git" 
 
 # !! This must only be done manually it takes so much gd RAM and Disk
 zapcc: (gitclone "https://github.com/yrnkrn/zapcc.git" "zapcc")
-	#!/usr/bin/env bash -euxo pipefail
-	mkdir -p {{blddir}}/zapcc/build && cd {{blddir}}/zapcc/build
-	cmake -DLLVM_ENABLE_WARNINGS -DLLVM_USE_LINKER=gold -DCMAKE_INSTALL_PREFIX="~/.local/zapcc/" ..
-	ninja install
-	just linkbin "zapcc"
+    #!/usr/bin/env bash -euxo pipefail
+    mkdir -p {{blddir}}/zapcc/build && cd {{blddir}}/zapcc/build
+    cmake -DLLVM_ENABLE_WARNINGS -DLLVM_USE_LINKER=gold -DCMAKE_INSTALL_PREFIX="~/.local/zapcc/" ..
+    ninja install
+    just link_local "zapcc"
 
 # google benchmark
 googbench: (gitclone "https://github.com/google/benchmark.git" "googbench")
-	mkdir -p build && cd build
-	cmake .. -DBENCHMARK_DOWNLOAD_DEPENDENCIES=ON -DBENCHMARK_ENABLE_GTEST_TESTS=OFF
-	sudo apt install checkinstall
-	ninja && sudo checkinstall ninja install
+    mkdir -p build && cd build
+    cmake .. -DBENCHMARK_DOWNLOAD_DEPENDENCIES=ON -DBENCHMARK_ENABLE_GTEST_TESTS=OFF
+    sudo apt install checkinstall
+    ninja && sudo checkinstall ninja install
 
 # drake
 # cd ~/git-builds
@@ -256,250 +293,291 @@ ansicolumn:
 
 # Install systemwide VSCode (update via apt)
 vscode: 
-	#!/usr/bin/env bash -euxo pipefail
-	cd /tmp/
-	wget "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" -O code.deb
-	sudo dpkg -i code.deb
-	sudo ln -s /usr/share/code/bin/code /usr/local/bin
+    #!/usr/bin/env bash -euxo pipefail
+    cd /tmp/
+    wget "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" -O code.deb
+    sudo dpkg -i code.deb
+    sudo ln -s /usr/share/code/bin/code /usr/local/bin
 
 # Install portable version of vscode
 code-portable: (_tmpdir "code-portable")
-	#!/usr/bin/env bash -euxo pipefail
-	cd /tmp/code-portable
-	wget "https://code.visualstudio.com/sha/download?build=stable&os=linux-x64" -O portable.tar.gz
-	tar -xzf portable.tar.gz
-	mkdir -p ~/.local/vscode-portable 
-	cp -r VSCode-linux-x64 ~/.local/vscode-portable
-	just linkbin vscode-portable
+    #!/usr/bin/env bash -euxo pipefail
+    cd /tmp/code-portable
+    wget "https://code.visualstudio.com/sha/download?build=stable&os=linux-x64" -O portable.tar.gz
+    tar -xzf portable.tar.gz
+    mkdir -p ~/.local/vscode-portable 
+    cp -r VSCode-linux-x64 ~/.local/vscode-portable
+    ln -s $HOME/.local/vscode-portable/bin/code {{bindir}}/bin/code-portable
+    just link_local vscode-portable
 
 # TODO: add doom to yadm submodule
 # EMACS, a great OS and a mediocre editor
 emacs: (gitclone "https://github.com/emacs-mirror/emacs.git" "emacs")
-	#!/usr/bin/env bash -euxo pipefail
-	cd {{blddir}}/emacs
-	sudo apt install libxaw7-dev libgnutls30 xaw3dg xutils-dev libgnutls28-dev libgccjit-10-dev
-	./autogen.sh
-	./configure --with-native-compilation --with-modules=on --prefix="~/.local/emacs"
-	make -C lisp autoloads-force
-	make
-	make install
-	just linkbin "emacs"
+    #!/usr/bin/env bash -euxo pipefail
+    cd {{blddir}}/emacs
+    sudo apt install libxaw7-dev libgnutls30 xaw3dg xutils-dev libgnutls28-dev libgccjit-10-dev
+    ./autogen.sh
+    ./configure --with-native-compilation --with-modules=on --prefix="~/.local/emacs"
+    make -C lisp autoloads-force
+    make
+    make install
+    just link_local "emacs"
     
 # Git Credential Manager Core
 gcm: (debgh "gcmcore" "microsoft/Git-Credential-Manager-Core" "*amd64*.deb")
-	git-credential-manager-core configure
-	# git config --global credential.credentialStore secretservice # requires GUI (ok?)
+    git-credential-manager-core configure
+    # git config --global credential.credentialStore secretservice # requires GUI (ok?)
 
 # Quantum Mechanical Keyboard firmware
 qmk: (gitclone "https://github.com/IndianBoy42/qmk_firmware.git" "qmk_firmware")
-	pip3 install --user qmk
-	cd ~/qmk_firmware \
-	&& git remote add upstream "https://github.com/qmk/qmk_firmware.git" && \
-	git fetch --unshallow
-	sudo cp ~/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
-	qmk setup
-	qmk doctor
-	~/qmk_firmware/util/qmk_install.sh
+    pip3 install --user qmk
+    cd ~/qmk_firmware \
+    && git remote add upstream "https://github.com/qmk/qmk_firmware.git" && \
+    git fetch --unshallow
+    sudo cp ~/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
+    qmk setup
+    qmk doctor
+    ~/qmk_firmware/util/qmk_install.sh
 
 # CMake (not a) build system
-cmake: (targh "cmake" "Kitware/CMake" "*linux-x86_64.tar.gz")
-	mv ~/tmp/cmake/cmake* ~/.local/cmake
-	just linkbin cmake
+cmake: (insgh "cmake" "Kitware/CMake" "*linux-x86_64.tar.gz")
+    echo "CMake Installed"
 
 # Fuzzy finder
 fzf: (targh "fzf" "junegunn/fzf" "*linux-amd64.tar.gz")
-	mv ~/tmp/fzf/fzf ~/.local/bin
+    mv ~/tmp/fzf/fzf ~/.local/bin
 
 # Fast realtime compression/decompression
 zstd: (srcgh "zstd" "facebook/zstd" "*.tar.gz")
-	cd {{blddir}}/zstd && make
-	ln -s {{blddir}}/zstd/zstd {{bindir}}
+    cd {{blddir}}/zstd && make
+    ln -s {{blddir}}/zstd/zstd {{bindir}}
 
 # Computer-side QMK mapping for builtin keyboards
 kmonad: (bingh "kmonad" "kmonad/kmonad" "*linux")
-	getent group uinput || groupadd uinput
-	sudo usermod -aG uinput $USER
-	sudo usermod -aG input $USER
-	sudo modprobe uinput
-	sudo cp ~/install-system.sh/uinput.rules /etc/udev/rules.d/uinput.rules
-	# sudo touch /etc/udev/rules.d/uinput.rules
-	# echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/uinput.rules
-	# cp ~/install-system.sh/kmonad.service ~/.config/systemd/user/kmonad.service # synced by yadm
-	systemctl --user enable kmonad.service
-	systemctl --user start kmonad.service
-	echo "The next output will help you find the device that your keyboard corresponds to"
-	cat /proc/bus/input/devices | rg -C5 keyboard
+    getent group uinput || groupadd uinput
+    sudo usermod -aG uinput $USER
+    sudo usermod -aG input $USER
+    sudo modprobe uinput
+    sudo cp ~/install-system.sh/uinput.rules /etc/udev/rules.d/uinput.rules
+    # sudo touch /etc/udev/rules.d/uinput.rules
+    # echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/uinput.rules
+    # cp ~/install-system.sh/kmonad.service ~/.config/systemd/user/kmonad.service # synced by yadm
+    systemctl --user enable kmonad.service
+    systemctl --user start kmonad.service
+    echo "The next output will help you find the device that your keyboard corresponds to"
+    cat /proc/bus/input/devices | rg -C5 keyboard
 
 # Alternative to submodules
 git-subrepo: (gitclone "ingydotnet/git-subrepo" "git-subrepo")
-	ln -s {{blddir}}/git-subrepo/lib/* {{bindir}}
+    ln -s {{blddir}}/git-subrepo/lib/* {{bindir}}
 
 # Modern Latex distribution
 tectonic: (targh "tec" "tectonic-typesetting/tectonic" "*x86_64-unknown-linux-gnu.tar.gz")
-	mv /tmp/tec/tectonic {{bindir}}
+    mv /tmp/tec/tectonic {{bindir}}
 
 # A Version manager for Julia
 jill: 
-	curl -fsSL https://raw.githubusercontent.com/abelsiqueira/jill/master/jill.sh > {{bindir}}/jill.sh
-	sudo chmod +x {{bindir}}/jill.sh
-	jill.sh
+    curl -fsSL https://raw.githubusercontent.com/abelsiqueira/jill/master/jill.sh > {{bindir}}/jill.sh
+    sudo chmod +x {{bindir}}/jill.sh
+
+julia: jill
+    jill.sh -y
 
 # Install a Nerdfont by name
 nerdfont name: install-gh
-	#!/usr/bin/env fish
-	echo "[-] Download font ($argv) [-]"
-	mkdir -p ~/Downloads/fonts
-	cd ~/Downloads/fonts
-	set fontfilename "$argv.zip"
-	gh release -R ryanoasis/nerd-fonts download -p $fontfilename
-	and unzip $fontfilename -d ~/.fonts
-	echo "done!"
+    #!/usr/bin/env fish
+    echo "[-] Download font ({{name}}) [-]"
+    mkdir -p ~/Downloads/fonts
+    cd ~/Downloads/fonts
+    set fontfilename "$argv.zip"
+    gh release -R ryanoasis/nerd-fonts download -p $fontfilename
+    and unzip $fontfilename -d ~/.fonts
+    echo "done!"
 
 # Install Fira Code|Mono Nerd Font
 firacode: (nerdfont "FiraCode") (nerdfont "FiraMono")
-	fc-cache -fv
+    fc-cache -fv
 
 # Installer/Updater for GHC
 ghcup:
-	#!/usr/bin/env fish
-	if not type -q ghcup
-		curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
-	else
-		ghcup
-	end
+    #!/usr/bin/env fish
+    if not type -q ghcup
+        curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+    else
+        ghcup
+    end
 
 # Build system for Haskell (uses isolated GHC instances)
 stack:
-	#!/usr/bin/env fish
-	if not type -q stack
-		curl -sSL https://get.haskellstack.org/ | sh
-	else
-		stack upgrade
-	end
+    #!/usr/bin/env fish
+    if not type -q stack
+        curl -sSL https://get.haskellstack.org/ | sh
+    else
+        stack upgrade
+    end
 
 rustup_targets:
-	rustup target add x86_64-unknown-linux-musl
-	rustup target add thumbv7m-none-eabi
-	rustup target add thumbv7em-none-eabi
-	rustup target add thumbv7em-none-eabihf
-	rustup target add aarch64-unknown-linux-musl
-	rustup component add rust-analyzer-preview
+    rustup target add x86_64-unknown-linux-gnu      
+    rustup target add x86_64-unknown-linux-musl
+    rustup target add thumbv7m-none-eabi
+    rustup target add thumbv7em-none-eabi
+    rustup target add thumbv7em-none-eabihf
+    rustup target add aarch64-unknown-linux-musl
+    rustup target add arm-unknown-linux-musl
+    rustup component add rust-analyzer-preview
 
-rustupdate: rustup_targets
-	rustup update
-_rustupinstall: 
-	#!/usr/bin/env fish
-	if not type -q rustup
-		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --profile default
-	end
-rustupinstall: _rustupinstall rustup_targets
-	echo "Installed Rustup"
-rustc: _rustupinstall rustup_targets rustupdate
-	echo "Installed Rustc"
+_rustup: 
+    #!/usr/bin/env fish
+    if not type -q rustup
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --profile default
+    end
+rustup: _rustup rustup_targets
+    echo "Installed Rustup"
+rustc: _rustup rustup_targets
+    rustup update
 
-cargo-quickinstall $CARGO_BUILD_TARGET=rust-musl:
-	cargo install cargo-quickinstall
+cargo-quickinstall:
+    cargo install cargo-quickinstall
 
-cargo-update $CARGO_BUILD_TARGET=rust-gnu:
-    {{cargo-install}} cargo-update
+cargo-update:
+    CARGO_BUILD_TARGET={{rust-gnu}} {{cargo-install}} cargo-update
 
-sccache $CARGO_BUILD_TARGET=rust-gnu:
-	echo "Installing sccache"
-	@type -q sccache && cargo install-update sccache
-	@type -q sccache || cargo install sccache
-	@type -q sccache && set -gx RUSTC_WRAPPER (which sccache)
+sccache-gh: (bingh "sccache" "mozilla/sccache" "sccache-*-x86_64-unknown-linux-musl.tar.gz")
+    echo "Installed"
+
+sccache:
+    echo "Installing sccache"
+    @type -q sccache && cargo install-update sccache
+    @type -q sccache || cargo install sccache
 
 cargo-install: cargo-quickinstall cargo-update sccache
-	echo "Cargo install tools installed"
+    echo "Cargo install tools installed"
 
-cargo-essentials $CARGO_BUILD_TARGET=rust-musl: cargo-install gitui
-	{{cargo-install}} bat kn zoxide lsd bottom broot fd-find git-delta just ripgrep
+gitui: cargo-install
+    cargo install --git https://github.com/IndianBoy42/gitui.git
 
-gitui $CARGO_BUILD_TARGET=rust-musl: cargo-install
-	cargo install --git https://github.com/IndianBoy42/gitui.git
+serial-monitor: cargo-install
+    cargo install --git https://github.com/IndianBoy42/serial-monitor.git
 
-serial-monitor $CARGO_BUILD_TARGET=rust-musl: cargo-install
-	cargo install --git https://github.com/IndianBoy42/serial-monitor.git
+indexa: cargo-install 
+    cargo install --git https://github.com/mosmeh/indexa.git
 
-indexa $CARGO_BUILD_TARGET=rust-musl: cargo-install 
-	cargo install --git https://github.com/mosmeh/indexa.git
+tealdeer: cargo-install
+    {{cargo-install}} pueued
+    tldr --update
 
-tealdeer $CARGO_BUILD_TARGET=rust-musl: cargo-install
-	{{cargo-install}} pueued
-	tldr --update
+pueue: cargo-install
+    {{cargo-install}} $argv[1]
+    systemctl --user enable pueued.service
+    and systemctl --user start pueued.service
 
-pueue $CARGO_BUILD_TARGET=rust-musl: cargo-install
-	{{cargo-install}} $argv[1]
-	systemctl --user enable pueued.service
-	and systemctl --user start pueued.service
+bandwhich: cargo-install
+    {{cargo-install}} $argv[1]
+    sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
 
-bandwhich $CARGO_BUILD_TARGET=rust-musl: cargo-install
-	{{cargo-install}} $argv[1]
-	sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
+cargo-essentials: cargo-install gitui
+    {{cargo-install}} bat kn zoxide lsd bottom broot fd-find git-delta just ripgrep
 
-cargo-all-gnu $CARGO_BUILD_TARGET=rust-gnu: cargo-install
-	cargo install \
-		alacritty \
-		cargo-edit \
-		cargo-generate \
-		cargo-outdated \
-		probe-run \
-		cargo-update \
-		spotify-tui \
-		so \
-		starship  \
-		tealdeer  \
-		duma  
-cargo-all-musl $CARGO_BUILD_TARGET=rust-musl: cargo-install
-	cargo install \
-		macchina onefetch kn bandwhich  bat  \
-		bottom  broot  cargo-binutils cargo-do \
-		cargo-watch cargo-equip drone  du-dust \
-		dua  eva  exa  fd-find flamegraph  flip-link \
-		gfold  gping git-delta huniq  hyperfine  \
-		just  lsd  mdbook  mdcat  pipe-rename \
-		procs  ptail  pueue  ripgrep  rustfilt  \
-		scriptisto  sd  shy  skim verco \
-		watchexec-cli  xsv  zoxide gpg-tui
+alacritty: cargo-install
+    cargo install alacritty
+    pip install --user alacritty-colorscheme
+    wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/logo/alacritty-term.svg -O /tmp/alacritty-term.svg
+    sudo cp /tmp/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+    wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info -O /tmp/alacritty.info
+    sudo tic -xe alacritty,alacritty-direct /tmp/alacritty.info
+    wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/linux/Alacritty.desktop -O /tmp/Alacritty.desktop
+    sudo desktop-file-install /tmp/Alacritty.desktop
+    sudo update-desktop-database
+    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which alacritty) 99
+
+broot: cargo-install
+    mkdir -p ~/.local/share/fonts
+    wget https://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
+    cargo install broot
+
+cargo-all-gnu: cargo-install
+    CARGO_BUILD_TARGET={{rust-gnu}} cargo install \
+        cargo-edit \
+        cargo-generate \
+        cargo-outdated \
+        probe-run \
+        cargo-update \
+        spotify-tui \
+        so \
+        starship  \
+        tealdeer  \
+        duma  
+
+cargo-all-musl: cargo-install broot
+    cargo install \
+        macchina onefetch kn bandwhich  bat  \
+        bottom  cargo-binutils cargo-do \
+        cargo-watch cargo-equip drone  du-dust \
+        dua  eva  exa  fd-find flamegraph  flip-link \
+        gfold  gping git-delta huniq  hyperfine  \
+        just  lsd  mdbook  mdcat  pipe-rename \
+        procs  ptail  pueue  ripgrep  rustfilt  \
+        scriptisto  sd  shy  skim verco \
+        watchexec-cli  xsv  zoxide gpg-tui
 
 cargo-all: cargo-all-gnu cargo-all-musl
-	cargo install-update --all --list
+    cargo install-update --all --list
 
 rust-analyzer: (bingh "rust-analyzer" "rust-analyzer/rust-analyzer" "*-linux")
-	echo "Installed rust-analyzer"
+    echo "Installed rust-analyzer"
 
 just:
-	curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ~/.local/bin
+    curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ~/.local/bin
 
 # rust-analyzer: (curlbin "https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux" "rust-analyzer")
-# 	echo "Installed rust-analyzer"
+#   echo "Installed rust-analyzer"
+
+conda:
+    #!/usr/bin/env fish
+    if not type -q conda
+        wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh -O /tmp/anaconda.sh
+        sh /tmp/anaconda.sh -b -u
+        conda config --add channels conda-forge
+    end
+    conda update -n base -c defaults --all
+
+py-essentials:
+    pip3 install --user click argcomplete rich
+    conda install jupyter
+
+pipx:
+    pip3 install --user pipx
+    pipx ensurepath
+
+pipenv: pipx
+    pipx install pipenv
 
 conda-env name:
-	conda env create -f {{name}} || conda env update --prune -n (cat {{name}} | rg 'name: ([\S]+)' -C0 -r '$1')
+    conda env create -f {{name}} || conda env update --prune -n (cat {{name}} | rg 'name: ([\S]+)' -C0 -r '$1')
 
 conda-optimal-control: (conda-env "conda-env-optimal-control.yml")
     conda activate optimal-control
 
 vulcan-sdk:
-	wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
-	sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-focal.list https://packages.lunarg.com/vulkan/lunarg-vulkan-focal.list
-	sudo apt update
-	sudo apt install vulkan-sdk
+    wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
+    sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-focal.list https://packages.lunarg.com/vulkan/lunarg-vulkan-focal.list
+    sudo apt update
+    sudo apt install vulkan-sdk
 
 flatpak:
-	#!/usr/bin/env fish
-	if not type -q flatpak
-		sudo apt install flatpak
-		flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-	end
+    #!/usr/bin/env fish
+    if not type -q flatpak
+        sudo apt install flatpak
+        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    end
 
 kicad: flatpak
-	flatpak install org.kicad.KiCad \
-		org.kicad.KiCad.Library.Templates   \
-		org.kicad.KiCad.Library.Symbols     \
-		org.kicad.KiCad.Library.Packages3D  \
-		org.kicad.KiCad.Library.Packages3D  \
-		org.kicad.KiCad.Library.Footprints 
+    flatpak install org.kicad.KiCad \
+        org.kicad.KiCad.Library.Templates   \
+        org.kicad.KiCad.Library.Symbols     \
+        org.kicad.KiCad.Library.Packages3D  \
+        org.kicad.KiCad.Library.Packages3D  \
+        org.kicad.KiCad.Library.Footprints 
 
 @apt: 
 	sudo apt update > /tmp/aptupdate.log
@@ -509,3 +587,27 @@ docker: apt
 	sudo groupadd docker
 	sudo usermod -aG docker $USER
 	newgrp docker 
+
+nvim:
+	sudo add-apt-repository -y ppa:neovim-ppa/unstable
+	sudo apt install neovim
+	test -d ~/.config/nvim || https://github.com/IndianBoy42/LunarVim.git ~/.config/nvim
+	cd ~/.config/nvim && just install
+
+nvim-src: (gitclone "https://github.com/neovim/neovim.git" "neovim")
+	cd {{blddir}} && make CMAKE_BUILD_TYPE=Release 
+	cd {{blddir}} && make CMAKE_INSTALL_PREFIX=$HOME/.local/nvim install
+
+neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
+	#!/usr/bin/env fish
+	if not type -q neovide
+		sudo apt install -y curl \
+			gcc-multilib g++-multilib \
+			libfreetype6-dev libasound2-dev libexpat1-dev libxcb-composite0-dev \
+			libbz2-dev libsndio-dev freeglut3-dev libxmu-dev libxi-dev libsdl2-dev
+		wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
+		sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-focal.list https://packages.lunarg.com/vulkan/lunarg-vulkan-focal.list
+		sudo apt update
+		sudo apt install vulkan-sdk
+	end
+	cd {{blddir}}/neovide && cargo install --path .

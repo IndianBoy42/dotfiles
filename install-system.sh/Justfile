@@ -164,10 +164,6 @@ zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
 	ninja install
 	just linkbin "zig"
 
-# indexa
-indexa:
-    cargo install --git https://github.com/mosmeh/indexa.git
-
 # godbolt
 godbolt: (gitclone "https://github.com/compiler-explorer/compiler-explorer.git" "compiler-explorer")
     cargo install rustfilt
@@ -367,27 +363,25 @@ stack:
 		stack upgrade
 	end
 
-rustc:
+rustup_targets:
+	rustup target add x86_64-unknown-linux-musl
+	rustup target add thumbv7m-none-eabi
+	rustup target add thumbv7em-none-eabi
+	rustup target add thumbv7em-none-eabihf
+	rustup target add aarch64-unknown-linux-musl
+	rustup component add rust-analyzer-preview
+
+rustupdate: rustup_targets
+	rustup update
+_rustupinstall: 
 	#!/usr/bin/env fish
 	if not type -q rustup
 		curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --profile default
-		rustup target add x86_64-unknown-linux-musl
-		rustup target add thumbv7m-none-eabi
-		rustup target add thumbv7em-none-eabi
-		rustup target add thumbv7em-none-eabihf
-		rustup target add aarch64-unknown-linux-musl
-		rustup toolchain install stable
-		rustup component add rust-analyzer-preview
-	else
-		rustup target add x86_64-unknown-linux-musl
-		rustup target add thumbv7m-none-eabi
-		rustup target add thumbv7em-none-eabi
-		rustup target add thumbv7em-none-eabihf
-		rustup target add aarch64-unknown-linux-musl
-		rustup toolchain install stable
-		rustup component add rust-analyzer-preview
-		rustup update
 	end
+rustupinstall: _rustupinstall rustup_targets
+	echo "Installed Rustup"
+rustc: _rustupinstall rustup_targets rustupdate
+	echo "Installed Rustc"
 
 rust-analyzer: (bingh "rust-analyzer" "rust-analyzer/rust-analyzer" "*-linux")
 	echo "Installed rust-analyzer"

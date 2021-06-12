@@ -16,9 +16,9 @@ fish_add_path ~/.local/bin
 # fish_add_path ~/anaconda3/bin
 
 # linuxbrew add to env
-if type -q ~/../linuxbrew/.linuxbrew/bin/brew
-	eval (~/../linuxbrew/.linuxbrew/bin/brew shellenv)
-end
+# if type -q ~/../linuxbrew/.linuxbrew/bin/brew
+# 	eval (~/../linuxbrew/.linuxbrew/bin/brew shellenv)
+# end
 
 # Initialize zoxide (terminal cd jumper)
 if type -q zoxide
@@ -300,24 +300,6 @@ end
 if status is-interactive 
     __reg_on_dir_change
 end
-
-#function postexec_source_profile --on-event fish_postexec
-#	set argv (string split " " "$argv")
-#	if test "$argv[1]" = "$EDITOR" -a (count $argv) -ge 2
-#		set edited $argv[2]
-#		#set edited (realpath $argv[2]) 
-#		if test "$edited" = "(realpath $HOME/.config/fish/config.fish)"
-#			echo -n 'Sourcing (realpath $HOME/.config/fish/config.fish)... '
-#			source ~/.config/fish/config.fish
-#			echo Done.
-#		end
-#		if test "$edited" = "/etc/hosts"
-#			echo -n 'Sourcing (realpath $HOME/.config/fish/config.fish)... '
-#			source ~/.config/fish/config.fish
-#			echo Done.
-#		end
-#	end
-#end
 
 # nnn file manager settings
 set -gx NNN_PLUG 'z:autojump;f:finder;p:preview-tui-ext;P:preview-tabbed;o:nuke'

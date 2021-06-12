@@ -15,13 +15,13 @@ else
 end
 
 # TODO: use quickinstall (but no native compile :/)
-CARGO_BUILD_TARGET="x86_64-unknown-linux-gnu" \
-    cargo install cargo-quickinstall sccache
-
+type -q sccache && cargo install-update sccache
+type -q sccache || cargo install sccache
 type -q sccache && set -x RUSTC_WRAPPER (which sccache)
 
-set -x CARGO_BUILD_TARGET "x86_64-unknown-linux-gnu"
 # These cannot be compiled with musl (mostly due to OpenSSL-sys crate)
+set -x CARGO_BUILD_TARGET "x86_64-unknown-linux-gnu"
+cargo install cargo-quickinstall
 cargo install \
 	alacritty \
     cargo-edit \
@@ -69,7 +69,6 @@ cargo install \
     mdbook  \
     mdcat  \
     pipe-rename \
-    probe-run \
     procs  \
     ptail  \
     pueue  \
@@ -91,7 +90,7 @@ cargo install --git https://github.com/IndianBoy42/serial-monitor.git
 
 cargo install --git https://github.com/mosmeh/indexa.git
 
-tldr --update
+echo "tealdeer:" && tldr --update
 
 function post-cargo-install
     pip install --user alacritty-colorscheme

@@ -2,8 +2,9 @@
 
 if not test -e ~/.gvm/scripts/gvm
 	set tmpfile (mktemp)
-	curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer > $tmpfile
+	curl -sSL https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer > $tmpfile
 	bash $tmpfile
+
     function gvm
       bass source ~/.gvm/scripts/gvm ';' gvm $argv
     end

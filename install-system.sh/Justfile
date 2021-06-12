@@ -52,8 +52,12 @@ gitclone url name:
 _tmpdir name:
     mkdir -p /tmp/{{name}}
 
+@install-gh:
+	sudo apt install gh
+	gh auth login
+
 # Download an asset from Github releases (to /tmp/name)
-gh name repo pattern: (_tmpdir name)
+gh name repo pattern: (_tmpdir name) install-gh
 	cd /tmp/{{name}} \
 	&& gh release -R {{repo}} download -p '{{pattern}}' \
 	&& mv {{pattern}} {{name}} \
@@ -338,7 +342,7 @@ jill:
 	jill.sh
 
 # Install a Nerdfont by name
-nerdfont name:
+nerdfont name: install-gh
 	#!/usr/bin/env fish
 	echo "[-] Download font ($argv) [-]"
 	mkdir -p ~/Downloads/fonts
@@ -478,3 +482,27 @@ vulcan-sdk:
 	sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-focal.list https://packages.lunarg.com/vulkan/lunarg-vulkan-focal.list
 	sudo apt update
 	sudo apt install vulkan-sdk
+
+flatpak:
+	#!/usr/bin/env fish
+	if not type -q flatpak
+		sudo apt install flatpak
+		flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+	end
+
+kicad: flatpak
+	flatpak install org.kicad.KiCad \
+		org.kicad.KiCad.Library.Templates   \
+		org.kicad.KiCad.Library.Symbols     \
+		org.kicad.KiCad.Library.Packages3D  \
+		org.kicad.KiCad.Library.Packages3D  \
+		org.kicad.KiCad.Library.Footprints 
+
+@apt: 
+	sudo apt update > /tmp/aptupdate.log
+
+docker: apt
+	sudo apt install docker-ce docker-ce-cli containerd.io
+	sudo groupadd docker
+	sudo usermod -aG docker $USER
+	newgrp docker 

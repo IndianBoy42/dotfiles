@@ -19,17 +19,18 @@ sudo cp /usr/share/distro-info/ubuntu.csv /usr/share/distro-info/pop.csv
 cd ~/install-system.sh/
 ./install-fish.sh
 ./install-system.fish
-./install-git.fish
 ./install-apt-srcs.fish
 ./install-apt.fish
-./install-essential.fish
-./install-go.fish
-./install-node.fish
-./install-py.fish
-./install-nvim.fish
-./install-fonts.fish
-./install-cargo.fish
-./install-jl.fish
+ # TODO: move to Justfile
+just cmake fzf zstd kmonad git-subrepo
+just go # ./install-go.fish
+just node # ./install-node.fish
+just conda # ./install-py.fish
+just nvim # ./install-just.fish
+just firacode
+just rustc
+just cargo-install
+just julia
 ```
 
 The other install scripts can be done in mostly any order. I don't even know if these scripts are in the correct order

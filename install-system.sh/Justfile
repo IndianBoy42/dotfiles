@@ -1,4 +1,5 @@
 set shell := ["fish", "-c"]
+set positional-arguments
 
 bindir := "~/.local/bin"
 blddir := "~/git-builds"
@@ -19,6 +20,12 @@ export FFLAGS := "-O3 -march=native -mtune=native"
 export FCFLAGS := "-O3 -march=native -mtune=native"
 export CMAKE_C_FLAGS_RELEASE := CFLAGS
 export CMAKE_CXX_FLAGS_RELEASE := CXXFLAGS
+rust-gnu := "x86_64-unknown-linux-gnu"
+rust-musl := "x86_64-unknown-linux-musl"
+cargo-install := "cargo install" # TODO: can use quickinstall
+
+default:
+	@just -l
 
 ##############################################333
 # Helpers
@@ -382,6 +389,74 @@ rustupinstall: _rustupinstall rustup_targets
 	echo "Installed Rustup"
 rustc: _rustupinstall rustup_targets rustupdate
 	echo "Installed Rustc"
+
+cargo-quickinstall $CARGO_BUILD_TARGET=rust-musl:
+	cargo install cargo-quickinstall
+
+cargo-update $CARGO_BUILD_TARGET=rust-gnu:
+    {{cargo-install}} cargo-update
+
+sccache $CARGO_BUILD_TARGET=rust-gnu:
+	echo "Installing sccache"
+	@type -q sccache && cargo install-update sccache
+	@type -q sccache || cargo install sccache
+	@type -q sccache && set -gx RUSTC_WRAPPER (which sccache)
+
+cargo-install: cargo-quickinstall cargo-update sccache
+	echo "Cargo install tools installed"
+
+cargo-essentials $CARGO_BUILD_TARGET=rust-musl: cargo-install gitui
+	{{cargo-install}} bat kn zoxide lsd bottom broot fd-find git-delta just ripgrep
+
+gitui $CARGO_BUILD_TARGET=rust-musl: cargo-install
+	cargo install --git https://github.com/IndianBoy42/gitui.git
+
+serial-monitor $CARGO_BUILD_TARGET=rust-musl: cargo-install
+	cargo install --git https://github.com/IndianBoy42/serial-monitor.git
+
+indexa $CARGO_BUILD_TARGET=rust-musl: cargo-install 
+	cargo install --git https://github.com/mosmeh/indexa.git
+
+tealdeer $CARGO_BUILD_TARGET=rust-musl: cargo-install
+	{{cargo-install}} pueued
+	tldr --update
+
+pueue $CARGO_BUILD_TARGET=rust-musl: cargo-install
+	{{cargo-install}} $argv[1]
+	systemctl --user enable pueued.service
+	and systemctl --user start pueued.service
+
+bandwhich $CARGO_BUILD_TARGET=rust-musl: cargo-install
+	{{cargo-install}} $argv[1]
+	sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
+
+cargo-all-gnu $CARGO_BUILD_TARGET=rust-gnu: cargo-install
+	cargo install \
+		alacritty \
+		cargo-edit \
+		cargo-generate \
+		cargo-outdated \
+		probe-run \
+		cargo-update \
+		spotify-tui \
+		so \
+		starship  \
+		tealdeer  \
+		duma  
+cargo-all-musl $CARGO_BUILD_TARGET=rust-musl: cargo-install
+	cargo install \
+		macchina onefetch kn bandwhich  bat  \
+		bottom  broot  cargo-binutils cargo-do \
+		cargo-watch cargo-equip drone  du-dust \
+		dua  eva  exa  fd-find flamegraph  flip-link \
+		gfold  gping git-delta huniq  hyperfine  \
+		just  lsd  mdbook  mdcat  pipe-rename \
+		procs  ptail  pueue  ripgrep  rustfilt  \
+		scriptisto  sd  shy  skim verco \
+		watchexec-cli  xsv  zoxide gpg-tui
+
+cargo-all: cargo-all-gnu cargo-all-musl
+	cargo install-update --all --list
 
 rust-analyzer: (bingh "rust-analyzer" "rust-analyzer/rust-analyzer" "*-linux")
 	echo "Installed rust-analyzer"

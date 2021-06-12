@@ -65,6 +65,7 @@
     ui = !gitui
     pre-pull = diff @ @{upstream}
     any-changes = diff --no-ext-diff --quiet --exit-code
+    tracked = ls-tree -r HEAD --name-only 
 	
 [credential "https://dev.azure.com"]
 	useHttpPath = true

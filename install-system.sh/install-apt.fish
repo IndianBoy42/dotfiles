@@ -66,4 +66,4 @@ sudo apt-get install \
 	pandoc progress \
 	archivemount sshfs \
     suckless-tools sxiv xdotool \
-    gh gnupg ca-certificates ranger
+    gh ranger

@@ -1,0 +1,18 @@
+wd := invocation_directory()
+
+@_default: 
+    just -f {{justfile()}} -l
+
+@edit:
+    cd {{justfile_directory()}} && nvim {{justfile()}}
+
+@new-lets name:
+    cp {{justfile_directory()}}/template {{justfile_directory()}}/{{name}}.just
+    nvim {{justfile_directory()}}/{{name}}.just
+
+@config-nvim:
+    cd .config/nvim && nvim .config/nvim/init.lua
+
+@config-fish:
+    cd .config/fish && nvim .config/fish/config.fish
+

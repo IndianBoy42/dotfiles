@@ -1,0 +1,7 @@
+wd := invocation_directory()
+
+@_default: 
+    just -f {{justfile()}} -l
+
+edit:
+    nvim {{justfile_directory()}}

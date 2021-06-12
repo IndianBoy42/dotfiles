@@ -1,0 +1,1 @@
+/home/amedhi/install-system.sh/Justfile

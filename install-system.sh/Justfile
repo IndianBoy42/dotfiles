@@ -24,8 +24,11 @@ rust-gnu := "x86_64-unknown-linux-gnu"
 rust-musl := "x86_64-unknown-linux-musl"
 cargo-install := "cargo install" # TODO: can use quickinstall
 
-default:
-	@just -l
+@_default:
+	just -l -f {{justfile()}}
+
+edit:
+    nvim {{justfile()}}
 
 ##############################################333
 # Helpers

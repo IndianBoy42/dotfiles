@@ -48,7 +48,8 @@ set -gx CUDACXX /usr/lib/cuda/bin/nvcc
 # functions / abbrs
 ##################################
 
-abbr del rm -vi
+abbr del 'rm -vi'
+abbr lc 'wc -l'
 
 abbr pst procs --tree
 abbr psmem 'ps auxf | sort -nr -k 4 | less'

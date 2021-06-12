@@ -22,89 +22,48 @@ sudo apt update
 
 
 sudo apt-get install \
+	libusb-1.0-0-dev libgpg-error-dev libgpgme-dev \
+    libcairo2-dev libxinerama-dev libxdo-dev \
+    libopenblas-dev liblapack-dev libomp-dev \
+    libpomp-dev libeigen3-dev libgtk-3-dev \
+	libasound2-dev libtool-bin libtool \
+	libglibmm-2.4-dev libglib2.0-dev \
+    libudev-dev libusb-dev libjpeg-dev \
+    libgif-dev libtiff-dev libx11-dev \
+	libxpm-dev libgtk2.0-dev libpango1.0-dev \
+    librsvg2-dev libssl-dev libxcb1-dev \
+    libxcb-render0-dev libxcb-shape0-dev \
+    libxcb-xfixes0-dev libgl1-mesa-glx \
+    libegl1-mesa libxrandr2 libxss1 \
+    libxcursor1 libxcomposite1 libasound2 \
+    libxi6 libxtst6 freeglut3-dev \
     aptitude \
 	alacritty \
 	ripgrep \
 	checkinstall \
     imagemagick \
     openssh-server \
-	libusb-1.0-0-dev \
-    libopenblas-dev \
-    liblapack-dev \
-    libomp-dev \
-    libpomp-dev \
-    libeigen3-dev \
-	libgtk-3-dev \
-	libasound2-dev \
-    libtool-bin libtool \
-	qemu-system-arm \
-	qemu-system-aarch64 \
+	qemu-system-arm qemu-system-aarch64 \
 	meson \
 	gcc-arm-none-eabi \
-    gcc-arm-linux-gnueabi \
-    g++-arm-linux-gnueabi \
-    gcc-aarch64-linux-gnu \
-    g++-aarch64-linux-gnu \
-	libglibmm-2.4-dev \
-	libglib2.0-dev \
+    gcc-arm-linux-gnueabi g++-arm-linux-gnueabi \
+    gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
 	bison \
-	binutils \
-	lld \
-	googletest \
-    cmake \
-    ninja-build \
+	binutils lld ninja-build \
     openocd \
     zathura \
-    sublime-merge \
-    neovim \
     x11-xserver-utils \
-    libudev-dev \
-    libusb-dev \
-    libcairo2-dev \
-    libjpeg-dev \
-    libgif-dev \
-    libtiff-dev \
-	libx11-dev \
-	libxpm-dev \
-	libgtk2.0-dev \
-	python \
-    python3-pip \
-    python3-venv \
+	python python3-pip python3-venv \
     sublime-merge \
-    libpango1.0-dev \
-    librsvg2-dev \
-    libssl-dev \
-    libxcb1-dev \
-    libxcb-render0-dev \
-    libxcb-shape0-dev \
-    libxcb-xfixes0-dev \
-    libgl1-mesa-glx \
-    libegl1-mesa \
-    libxrandr2 \
-    libxrandr2 \
-    libxss1 \
-    libxcursor1 \
-    libxcomposite1 \
-    libasound2 \
-    libxi6 \
-    libxtst6 \
-    clang \
-    libclang-dev \
-    freeglut3-dev \
-    meson \
     sshpass \
     google-chrome-stable \
-    kicad \
     ffmpeg \
 	fancontrol lm-sensors psensor sensors-applet \
     linux-tools-common linux-tools-generic linux-tools-(uname -r) \
-	docker-ce docker-ce-cli containerd.io \
 	musl musl-dev musl-tools \
 	direnv \
 	screen tmux \
 	pandoc progress \
 	archivemount sshfs \
-    libgpg-error-dev libgpgme-dev \
     suckless-tools sxiv xdotool \
-    libcairo2-dev libxinerama-dev libxdo-dev \
     gh

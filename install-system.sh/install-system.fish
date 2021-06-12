@@ -1,9 +1,6 @@
 #!/usr/bin/env fish
 mkdir -p ~/bin
 
-sudo groupadd docker
-sudo usermod -aG docker $USER
-newgrp docker 
 
 # just upgrade everything once
 sudo apt-get update

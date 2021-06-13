@@ -1,12 +1,13 @@
 set shell := ["fish", "-c"]
 set positional-arguments
 
-prefix := "$HOME/.local"
-bindir := prefix + "/bin"
-libdir := prefix + "/lib"
-libexecdir := prefix + "/libexec"
-incdir := prefix + "/include"
-sharedir := prefix + "/share"
+prefix := "$HOME/.local/packages"
+installdir := "$HOME/.local"
+bindir := installdir + "/bin"
+libdir := installdir + "/lib"
+libexecdir := installdir + "/libexec"
+incdir := installdir + "/include"
+sharedir := installdir + "/share"
 blddir := "~/git-builds"
 compflags := "-O3 -march=native -mtune=native"
 ldflags := "-march=native -mtune=native"
@@ -62,9 +63,11 @@ getpkg-mkrepo:
     wget https://gist.github.com/jeanlescure/084dd6113931ea5a0fd9/archive/5866e3e50e452b3a97bb3e534d51d2bba14679a3.zip 
     unzip 5866e3e50e452b3a97bb3e534d51d2bba14679a3.zip 
     chmod +x ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/*.sh
-    mv ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/mkrepo.sh {{bindir}}
-    mv ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/getpkg.sh {{bindir}}
-    chmod +x ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/dependencies.sh
+    mkdir -p {{prefix}}/mkrepo/bin/
+    cp ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/mkrepo.sh \
+        ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/getpkg.sh \
+        {{prefix}}/mkrepo/bin/
+    {{justrun}} link_local "mkrepo"
     sudo ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/dependencies.sh
 
 # Add a local repo (created using mkrepo, give the directory containing the Packages.gz)
@@ -80,11 +83,15 @@ mkrepo:
 # Link from a directory inside {{prefix}}
 link_local name:
     chmod +x {{prefix}}/{{name}}/bin/*
-    ln -s {{prefix}}/{{name}}/bin/* {{bindir}}
-    ln -s {{prefix}}/{{name}}/lib/* {{libdir}}
-    ln -s {{prefix}}/{{name}}/libexec/* {{libexecdir}}
-    ln -s {{prefix}}/{{name}}/include/* {{incdir}}
-    ln -s {{prefix}}/{{name}}/share/* {{sharedir}}
+    {{justrun}} stow -S {{name}}
+    # ln -s {{prefix}}/{{name}}/bin/* {{bindir}}
+    # ln -s {{prefix}}/{{name}}/lib/* {{libdir}}
+    # ln -s {{prefix}}/{{name}}/libexec/* {{libexecdir}}
+    # ln -s {{prefix}}/{{name}}/include/* {{incdir}}
+    # ln -s {{prefix}}/{{name}}/share/* {{sharedir}}
+
+stow arg name:
+    stow -d {{prefix}} -t {{installdir}} {{arg}} {{name}}
 
 mkblddir name:
     mkdir -p {{blddir}}/{{name}}
@@ -113,8 +120,8 @@ _tmpdir name:
 gh name repo pattern: (_tmpdir name) 
     cd /tmp/{{name}} \
     && gh release -R {{repo}} download -p '{{pattern}}' \
-    && mv {{pattern}} {{name}} \
-    || mv {{pattern}} {{name}} 
+    && cp {{pattern}} {{name}} \
+    || cp {{pattern}} {{name}} 
 
 # Download a tarball from Github releases and extract it
 targh name repo pattern: (gh name repo pattern)
@@ -128,15 +135,26 @@ debgh name repo pattern: (gh name repo pattern)
 
 # Download a binary from Github releases and move it to bindir
 bingh name repo pattern: (gh name repo pattern)
-    chmod +x /tmp/{{name}}/{{name}}
-    cp /tmp/{{name}}/{{name}} {{local-tar-repo}}
-    mv /tmp/{{name}}/{{name}} {{bindir}}
+    mkdir -p /tmp/{{name}}/bin/
+    cp /tmp/{{name}}/{{name}} /tmp/{{name}}/bin/
+    {{justrun}} link_local {{name}}
+
+# Install a program directory structure using stow
+ins-copy name from:
+    mkdir -p {{prefix}}/{{name}}
+    cp -r {{from}}/{{name}}/*/ {{prefix}}/{{name}}/
+    #rm -rf /tmp/{{name}} # TODO: should delete?
+    {{justrun}} link_local {{name}}
+
+# Install one or more binaries using stow
+ins-bin name from:
+    mkdir -p {{from}}/{{name}}/bin
+    cp {{from}}/{{name}}/{{name}} {{from}}/{{name}}/bin
+    {{justrun}} ins-copy {{name}} {{from}}
 
 # Download a program tarball from Github releases, extract the source to {{prefix}}/, and link the binary folder
-insgh name repo pattern: (targh name repo pattern)
-    cp -r /tmp/{{name}}/*/* {{prefix}}/{{name}}/
-    rm -rf /tmp/{{name}}
-    {{justrun}} link_local {{name}}
+insgh name repo pattern: (targh name repo pattern) (ins-copy name "/tmp")
+    echo "GH Installed"
     # TODO: Link libraries and stuff also? this works for now
 
 # Download a source tarball from Github releases and extract the source to blddir
@@ -144,24 +162,33 @@ srcgh name repo pattern: (targh name repo pattern) (mkblddir name)
     cp -r /tmp/{{name}}/*/* {{blddir}}/{{name}}
     rm -rf /tmp/{{name}}
 
+autotoolsgh name repo pattern: (srcgh name repo pattern)
+    ./configure --prefix="{{prefix}}/{{name}}" 
+    make
+    make install
+
+cmakegh name repo pattern: (srcgh name repo pattern)
+    mkdir -p {{blddir}}/{{name}}/build
+    cd {{blddir}}/{{name}}/build && cmake -DCMAKE_INSTALL_PREFIX="{{prefix}}/{{name}}"
+    cd {{blddir}}/{{name}}/build && ninja
+    cd {{blddir}}/{{name}}/build && ninja install
+
 curlbin url name: 
-    curl -L {{url}} -o {{bindir}}/{{name}}
-    cp {{bindir}}/{{name}} {{local-tar-repo}}
-    chmod +x {{bindir}}/{{name}}
+    mkdir -p {{prefix}}/{{name}}/bin
+    curl -L {{url}} -o {{prefix}}/{{name}}/bin/{{name}}
+    chmod +x {{prefix}}/{{name}}/bin/{{name}}
 
 ##############################################333
 # Programs
 ##############################################333
 
 # arm embedded gcc - newer than apt
-gcc-arm-none-eabi: (targh "arm-none-eabi-gcc" "xpack-dev-tools/arm-none-eabi-gcc-xpack" "*linux-x64.tar.gz")
-    mv /tmp/arm-none-eabi-gcc/xpack-arm-* {{prefix}}/arm-none-eabi-gcc
-    {{justrun}} link_local arm-none-eabi-gcc
+gcc-arm-none-eabi: (insgh "arm-none-eabi-gcc" "xpack-dev-tools/arm-none-eabi-gcc-xpack" "*linux-x64.tar.gz")
+    echo "Installed $argv"
 
 # riscv embedded gcc - from xpack
-gcc-riscv-none-embed: (targh "riscv-none-embed-gcc" "xpack-dev-tools/riscv-none-embed-gcc-xpack" "*linux-x64.tar.gz")
-    mv /tmp/riscv-none-embed-gcc/xpack-arm-* {{prefix}}/riscv-none-embed-gcc
-    {{justrun}} link_local riscv-none-embed-gcc
+gcc-riscv-none-embed: (insgh "riscv-none-embed-gcc" "xpack-dev-tools/riscv-none-embed-gcc-xpack" "*linux-x64.tar.gz")
+    echo "Installed $argv"
 
 # Ultimate Plumber, live shell pipelines 
 ultimate-plumber: (bingh "up" "akavel/up" "up")
@@ -266,8 +293,9 @@ zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
 godbolt: (gitclone "https://github.com/compiler-explorer/compiler-explorer.git" "compiler-explorer")
     cargo install rustfilt
 
-# !! This must only be done manually it takes so much gd RAM and Disk
+# Caching C/C++ compiler for higher compile speed (not updated?)
 zapcc: (gitclone "https://github.com/yrnkrn/zapcc.git" "zapcc")
+    read --prompt "Are you sure you wanna build zapcc?"
     #!/usr/bin/env bash -euxo pipefail
     mkdir -p {{blddir}}/zapcc/build && cd {{blddir}}/zapcc/build
     cmake -DLLVM_ENABLE_WARNINGS -DLLVM_USE_LINKER=gold -DCMAKE_INSTALL_PREFIX="{{prefix}}/zapcc/" ..
@@ -279,7 +307,7 @@ googbench: (gitclone "https://github.com/google/benchmark.git" "googbench")
     mkdir -p build && cd build
     cmake .. -DBENCHMARK_DOWNLOAD_DEPENDENCIES=ON -DBENCHMARK_ENABLE_GTEST_TESTS=OFF -DCMAKE_INSTALL_PREFIX={{prefix}}/googbench
     ninja && ninja install
-    # TODO: link what?
+    {{justrun}} link_local "googbench"
 
 # drake
 # cd ~/git-builds
@@ -355,7 +383,6 @@ code-portable: (_tmpdir "code-portable")
     mkdir -p {{prefix}}/vscode-portable 
     cp -r VSCode-linux-x64 {{prefix}}/vscode-portable
     ln -s {{prefix}}/vscode-portable/bin/code {{bindir}}/bin/code-portable
-    {{justrun}} link_local vscode-portable
 
 # TODO: add doom to yadm submodule
 # EMACS, a great OS and a mediocre editor
@@ -391,8 +418,8 @@ cmake: (insgh "cmake" "Kitware/CMake" "*linux-x86_64.tar.gz")
     echo "CMake Installed"
 
 # Fuzzy finder
-fzf: (targh "fzf" "junegunn/fzf" "*linux_amd64.tar.gz")
-    mv /tmp/fzf/fzf {{bindir}}
+fzf: (targh "fzf" "junegunn/fzf" "*linux_amd64.tar.gz") (ins-bin "fzf" "/tmp")
+    echo "Installed fzf"
 
 # Fast realtime compression/decompression
 zstd: (srcgh "zstd" "facebook/zstd" "*.tar.gz")
@@ -419,8 +446,8 @@ git-subrepo: (gitclone "ingydotnet/git-subrepo" "git-subrepo")
     ln -s {{blddir}}/git-subrepo/lib/* {{bindir}}
 
 # Modern Latex distribution
-tectonic: (targh "tec" "tectonic-typesetting/tectonic" "*x86_64-unknown-linux-gnu.tar.gz")
-    mv /tmp/tec/tectonic {{bindir}}
+tectonic: (targh "tectonic" "tectonic-typesetting/tectonic" "*x86_64-unknown-linux-gnu.tar.gz") (ins-bin "tectonic" "/tmp")
+    echo "Installed tectonic"
 
 # A Version manager for Julia
 jill: 
@@ -741,8 +768,8 @@ neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
 
 kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune")
     sudo apt install libncursesw5-dev pkg-config
-    cd {{blddir}}/kakoune/src && \
-    make && \
+    cd {{blddir}}/kakoune/src 
+    make 
     PREFIX={{prefix}}/kakoune make install
     {{justrun}} link_local "kakoune"
 

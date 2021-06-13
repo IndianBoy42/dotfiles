@@ -19,6 +19,7 @@ sudo cp /usr/share/distro-info/ubuntu.csv /usr/share/distro-info/pop.csv
 cd ~/install-system.sh/
 ./install-fish.sh
 ./install-system.fish
+just add-local-repo
 ./install-apt-srcs.fish
 ./install-apt.fish
  # TODO: move to Justfile

@@ -25,6 +25,7 @@ rust-musl := "x86_64-unknown-linux-musl"
 cargo-install := "cargo install" # TODO: can use quickinstall
 export RUSTC_WRAPPER := "sccache"
 export CARGO_BUILD_TARGET := rust-musl
+justrun := "just -f " + justfile()
 
 @_default:
 	just -l -f {{justfile()}}
@@ -88,7 +89,7 @@ bingh name repo pattern: (gh name repo pattern)
 insgh name repo pattern: (targh name repo pattern)
     cp -r /tmp/{{name}}/*/* ~/.local/{{name}}/
     rm -rf /tmp/{{name}}
-    just link_local {{name}}
+    {{justrun}} link_local {{name}}
     # TODO: Link libraries and stuff also? this works for now
 
 # Download a source tarball from Github releases and extract the source to blddir
@@ -107,12 +108,12 @@ curlbin url name:
 # arm embedded gcc - newer than apt
 gcc-arm-none-eabi: (targh "arm-none-eabi-gcc" "xpack-dev-tools/arm-none-eabi-gcc-xpack" "*linux-x64.tar.gz")
     mv /tmp/arm-none-eabi-gcc/xpack-arm-* ~/.local/arm-none-eabi-gcc
-    just link_local arm-none-eabi-gcc
+    {{justrun}} link_local arm-none-eabi-gcc
 
 # riscv embedded gcc - from xpack
 gcc-riscv-none-embed: (targh "riscv-none-embed-gcc" "xpack-dev-tools/riscv-none-embed-gcc-xpack" "*linux-x64.tar.gz")
     mv /tmp/riscv-none-embed-gcc/xpack-arm-* ~/.local/riscv-none-embed-gcc
-    just link_local riscv-none-embed-gcc
+    {{justrun}} link_local riscv-none-embed-gcc
 
 # Ultimate Plumber, live shell pipelines 
 ultimate-plumber: (bingh "up" "akavel/up" "up")
@@ -125,7 +126,7 @@ wezterm: (bingh "wezterm" "wez/wezterm" "*.AppImage")
 # kitty terminal -- pretty graphics in terminal
 kitty: 
     curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
-    just link_local "kitty.app"
+    {{justrun}} link_local "kitty.app"
     # ln -s $HOME/.local/kitty.app/bin/kitty {{bindir}}/kitty
 
 # Zenith -- better top
@@ -196,7 +197,7 @@ tinycc: (gitclone "https://github.com/TinyCC/tinycc.git" "tinycc")
     ./configure --prefix=~/.local/tinycc --extra-cflags={{compflags}} --extra-ldflags={{ldflags}} --cc=clang-12
     make
     make install
-    just link_local "tinycc"
+    {{justrun}} link_local "tinycc"
 
 # keynav
 keynav: (gitclone "https://github.com/jordansissel/keynav.git" "keynav")
@@ -213,7 +214,7 @@ zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
     mkdir -p build && cd build
     cmake -DZIG_TARGET_MCPU=native -DCMAKE_INSTALL_PREFIX="~/.local/zig/" ..
     ninja install
-    just link_local "zig"
+    {{justrun}} link_local "zig"
 
 # godbolt
 godbolt: (gitclone "https://github.com/compiler-explorer/compiler-explorer.git" "compiler-explorer")
@@ -225,7 +226,7 @@ zapcc: (gitclone "https://github.com/yrnkrn/zapcc.git" "zapcc")
     mkdir -p {{blddir}}/zapcc/build && cd {{blddir}}/zapcc/build
     cmake -DLLVM_ENABLE_WARNINGS -DLLVM_USE_LINKER=gold -DCMAKE_INSTALL_PREFIX="~/.local/zapcc/" ..
     ninja install
-    just link_local "zapcc"
+    {{justrun}} link_local "zapcc"
 
 # google benchmark
 googbench: (gitclone "https://github.com/google/benchmark.git" "googbench")
@@ -308,7 +309,7 @@ code-portable: (_tmpdir "code-portable")
     mkdir -p ~/.local/vscode-portable 
     cp -r VSCode-linux-x64 ~/.local/vscode-portable
     ln -s $HOME/.local/vscode-portable/bin/code {{bindir}}/bin/code-portable
-    just link_local vscode-portable
+    {{justrun}} link_local vscode-portable
 
 # TODO: add doom to yadm submodule
 # EMACS, a great OS and a mediocre editor
@@ -321,7 +322,7 @@ emacs: (gitclone "https://github.com/emacs-mirror/emacs.git" "emacs")
     make -C lisp autoloads-force
     make
     make install
-    just link_local "emacs"
+    {{justrun}} link_local "emacs"
     
 # Git Credential Manager Core
 gcm: (debgh "gcmcore" "microsoft/Git-Credential-Manager-Core" "*amd64*.deb")
@@ -448,10 +449,16 @@ sccache-gh: (bingh "sccache" "mozilla/sccache" "sccache-*-x86_64-unknown-linux-m
 sccache:
     echo "Installing sccache"
     @type -q sccache && cargo install-update sccache
-    @type -q sccache || cargo install sccache
+    @type -q sccache || {{cargo-install}} sccache
 
 cargo-install: cargo-quickinstall cargo-update sccache
     echo "Cargo install tools installed"
+
+ripgrep:
+    {{cargo-install}} ripgrep
+
+ripgrep_all: ripgrep
+    cargo +nightly install --git https://github.com/phiresky/ripgrep-all.git
 
 gitui: cargo-install
     cargo install --git https://github.com/IndianBoy42/gitui.git
@@ -463,7 +470,7 @@ indexa: cargo-install
     cargo install --git https://github.com/mosmeh/indexa.git
 
 tealdeer: cargo-install
-    {{cargo-install}} pueued
+    CARGO_BUILD_TARGET={{rust-gnu}} {{cargo-install}} $argv[1]
     tldr --update
 
 pueue: cargo-install
@@ -475,11 +482,11 @@ bandwhich: cargo-install
     {{cargo-install}} $argv[1]
     sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
 
-cargo-essentials: cargo-install gitui
-    {{cargo-install}} bat kn zoxide lsd bottom broot fd-find git-delta just ripgrep
+cargo-essentials: cargo-install gitui ripgrep broot
+    {{cargo-install}} bat kn zoxide lsd bottom fd-find git-delta just 
 
 alacritty: cargo-install
-    cargo install alacritty
+    {{cargo-install}} alacritty
     pip install --user alacritty-colorscheme
     wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/logo/alacritty-term.svg -O /tmp/alacritty-term.svg
     sudo cp /tmp/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
@@ -493,10 +500,20 @@ alacritty: cargo-install
 broot: cargo-install
     mkdir -p ~/.local/share/fonts
     wget https://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
-    cargo install broot
+    {{cargo-install}} broot
 
-cargo-all-gnu: cargo-install
-    CARGO_BUILD_TARGET={{rust-gnu}} cargo install \
+cargo-build-tools:
+    CARGO_BUILD_TARGET={{rust-gnu}} {{cargo-install}} \
+        cargo-edit \
+        cargo-generate \
+        cargo-outdated \
+        probe-run \
+        cargo-update
+    {{cargo-install}} cargo-binutils cargo-do \
+        cargo-watch cargo-equip flamegraph  
+
+cargo-all-gnu: cargo-install tealdeer
+    CARGO_BUILD_TARGET={{rust-gnu}} {{cargo-install}} \
         cargo-edit \
         cargo-generate \
         cargo-outdated \
@@ -505,22 +522,23 @@ cargo-all-gnu: cargo-install
         spotify-tui \
         so \
         starship  \
-        tealdeer  \
         duma  
 
-cargo-all-musl: cargo-install broot
-    cargo install \
-        macchina onefetch kn bandwhich  bat  \
-        bottom  cargo-binutils cargo-do \
-        cargo-watch cargo-equip drone  du-dust \
-        dua  eva  exa  fd-find flamegraph  flip-link \
+cargo-all-musl: cargo-install serial-monitor bandwhich
+    {{cargo-install}} \
+        macchina onefetch kn bat  \
+        bottom drone du-dust dua  eva  exa \
+        fd-find flip-link \
         gfold  gping git-delta huniq  hyperfine  \
-        just  lsd  mdbook  mdcat  pipe-rename \
-        procs  ptail  pueue  ripgrep  rustfilt  \
+        lsd  mdbook  mdcat  pipe-rename \
+        procs  ptail  rustfilt  \
         scriptisto  sd  shy  skim verco \
-        watchexec-cli  xsv  zoxide gpg-tui
+        watchexec-cli  xsv  zoxide gpg-tui 
 
-cargo-all: cargo-all-gnu cargo-all-musl
+cargo-all: cargo-essentials cargo-build-tools cargo-all-gnu cargo-all-musl
+    {{justrun}} cargo-needs-update
+
+cargo-needs-update: 
     cargo install-update --all --list
 
 rust-analyzer: (bingh "rust-analyzer" "rust-analyzer/rust-analyzer" "*-linux")

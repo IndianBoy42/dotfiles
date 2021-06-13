@@ -8,8 +8,11 @@ end
 set -gx PIPENV_VENV_IN_PROJECT 1
 set -gx TERMINAL $TERM
 set -gx VIRTUAL_ENV_DIR .venv 
-set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/lib/x86_64-linux-gnu/pkgconfig/
-set -gx PKG_CONFIG_PATH $PKG_CONFIG_PATH /usr/local/lib/pkgconfig/ 
+add_to_path "/usr/lib/x86_64-linux-gnu/pkgconfig/" PKG_CONFIG_PATH
+add_to_path "/usr/local/lib/pkgconfig" PKG_CONFIG_PATH
+add_to_path "/usr/lib/pkgconfig" PKG_CONFIG_PATH
+add_to_path "$HOME/.local/lib" LD_LIBRARY_PATH
+add_to_path "$HOME/.local/libexec" LD_LIBRARY_PATH
 fish_add_path ~/bin
 fish_add_path ~/.cargo/bin
 fish_add_path ~/.local/bin

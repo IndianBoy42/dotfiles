@@ -1,7 +1,12 @@
 set shell := ["fish", "-c"]
 set positional-arguments
 
-bindir := "~/.local/bin"
+prefix := "$HOME/.local"
+bindir := prefix + "/bin"
+libdir := prefix + "/lib"
+libexecdir := prefix + "/libexec"
+incdir := prefix + "/include"
+sharedir := prefix + "/share"
 blddir := "~/git-builds"
 compflags := "-O3 -march=native -mtune=native"
 ldflags := "-march=native -mtune=native"
@@ -72,10 +77,14 @@ mkrepo:
     rm {{local-apt-repo}}/Packages.gz || true
     mkrepo.sh {{local-apt-repo}}
 
-# Link from a directory inside ~/.local
+# Link from a directory inside {{prefix}}
 link_local name:
-    chmod +x ~/.local/{{name}}/bin/*
-    ln -s ~/.local/{{name}}/bin/* {{bindir}}
+    chmod +x {{prefix}}/{{name}}/bin/*
+    ln -s {{prefix}}/{{name}}/bin/* {{bindir}}
+    ln -s {{prefix}}/{{name}}/lib/* {{libdir}}
+    ln -s {{prefix}}/{{name}}/libexec/* {{libexecdir}}
+    ln -s {{prefix}}/{{name}}/include/* {{incdir}}
+    ln -s {{prefix}}/{{name}}/share/* {{sharedir}}
 
 mkblddir name:
     mkdir -p {{blddir}}/{{name}}
@@ -123,9 +132,9 @@ bingh name repo pattern: (gh name repo pattern)
     cp /tmp/{{name}}/{{name}} {{local-tar-repo}}
     mv /tmp/{{name}}/{{name}} {{bindir}}
 
-# Download a program tarball from Github releases, extract the source to ~/.local/, and link the binary folder
+# Download a program tarball from Github releases, extract the source to {{prefix}}/, and link the binary folder
 insgh name repo pattern: (targh name repo pattern)
-    cp -r /tmp/{{name}}/*/* ~/.local/{{name}}/
+    cp -r /tmp/{{name}}/*/* {{prefix}}/{{name}}/
     rm -rf /tmp/{{name}}
     {{justrun}} link_local {{name}}
     # TODO: Link libraries and stuff also? this works for now
@@ -146,12 +155,12 @@ curlbin url name:
 
 # arm embedded gcc - newer than apt
 gcc-arm-none-eabi: (targh "arm-none-eabi-gcc" "xpack-dev-tools/arm-none-eabi-gcc-xpack" "*linux-x64.tar.gz")
-    mv /tmp/arm-none-eabi-gcc/xpack-arm-* ~/.local/arm-none-eabi-gcc
+    mv /tmp/arm-none-eabi-gcc/xpack-arm-* {{prefix}}/arm-none-eabi-gcc
     {{justrun}} link_local arm-none-eabi-gcc
 
 # riscv embedded gcc - from xpack
 gcc-riscv-none-embed: (targh "riscv-none-embed-gcc" "xpack-dev-tools/riscv-none-embed-gcc-xpack" "*linux-x64.tar.gz")
-    mv /tmp/riscv-none-embed-gcc/xpack-arm-* ~/.local/riscv-none-embed-gcc
+    mv /tmp/riscv-none-embed-gcc/xpack-arm-* {{prefix}}/riscv-none-embed-gcc
     {{justrun}} link_local riscv-none-embed-gcc
 
 # Ultimate Plumber, live shell pipelines 
@@ -166,7 +175,6 @@ wezterm: (bingh "wezterm" "wez/wezterm" "*.AppImage")
 kitty: 
     curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
     {{justrun}} link_local "kitty.app"
-    # ln -s $HOME/.local/kitty.app/bin/kitty {{bindir}}/kitty
 
 # Zenith -- better top
 zenith: (debgh "zenith" "bvaisvil/zenith" "*amd64.deb")
@@ -182,9 +190,7 @@ pathpicker: (gitclone "https://github.com/facebook/PathPicker" "pathpicker")
 gvm:
     #!/usr/bin/env fish
     if not test -e ~/.gvm/scripts/gvm
-        set tmpfile (mktemp)
-        curl -sSL https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer > $tmpfile
-        bash $tmpfile
+        curl -sSL https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash
 
         function gvm
           bass source ~/.gvm/scripts/gvm ';' gvm $argv
@@ -234,7 +240,7 @@ nnn:
 tinycc: (gitclone "https://github.com/TinyCC/tinycc.git" "tinycc")
     #!/usr/bin/env bash -euxo pipefail
     cd {{blddir}}/tinycc
-    ./configure --prefix=~/.local/tinycc --extra-cflags={{compflags}} --extra-ldflags={{ldflags}} --cc=clang-12
+    ./configure --prefix={{prefix}}/tinycc --extra-cflags={{compflags}} --extra-ldflags={{ldflags}} --cc=clang-12
     make
     make install
     {{justrun}} link_local "tinycc"
@@ -252,7 +258,7 @@ zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
     {{apt-install}} libllvm12 libclang-12-dev liblld-12-dev
     cd {{blddir}}/zig
     mkdir -p build && cd build
-    cmake -DZIG_TARGET_MCPU=native -DCMAKE_INSTALL_PREFIX="~/.local/zig/" ..
+    cmake -DZIG_TARGET_MCPU=native -DCMAKE_INSTALL_PREFIX="{{prefix}}/zig/" ..
     ninja install
     {{justrun}} link_local "zig"
 
@@ -264,14 +270,14 @@ godbolt: (gitclone "https://github.com/compiler-explorer/compiler-explorer.git" 
 zapcc: (gitclone "https://github.com/yrnkrn/zapcc.git" "zapcc")
     #!/usr/bin/env bash -euxo pipefail
     mkdir -p {{blddir}}/zapcc/build && cd {{blddir}}/zapcc/build
-    cmake -DLLVM_ENABLE_WARNINGS -DLLVM_USE_LINKER=gold -DCMAKE_INSTALL_PREFIX="~/.local/zapcc/" ..
+    cmake -DLLVM_ENABLE_WARNINGS -DLLVM_USE_LINKER=gold -DCMAKE_INSTALL_PREFIX="{{prefix}}/zapcc/" ..
     ninja install
     {{justrun}} link_local "zapcc"
 
 # google benchmark
 googbench: (gitclone "https://github.com/google/benchmark.git" "googbench")
     mkdir -p build && cd build
-    cmake .. -DBENCHMARK_DOWNLOAD_DEPENDENCIES=ON -DBENCHMARK_ENABLE_GTEST_TESTS=OFF -DCMAKE_INSTALL_PREFIX=$HOME/.local/googbench
+    cmake .. -DBENCHMARK_DOWNLOAD_DEPENDENCIES=ON -DBENCHMARK_ENABLE_GTEST_TESTS=OFF -DCMAKE_INSTALL_PREFIX={{prefix}}/googbench
     ninja && ninja install
     # TODO: link what?
 
@@ -346,9 +352,9 @@ code-portable: (_tmpdir "code-portable")
     cd /tmp/code-portable
     wget "https://code.visualstudio.com/sha/download?build=stable&os=linux-x64" -O portable.tar.gz
     tar -xzf portable.tar.gz
-    mkdir -p ~/.local/vscode-portable 
-    cp -r VSCode-linux-x64 ~/.local/vscode-portable
-    ln -s $HOME/.local/vscode-portable/bin/code {{bindir}}/bin/code-portable
+    mkdir -p {{prefix}}/vscode-portable 
+    cp -r VSCode-linux-x64 {{prefix}}/vscode-portable
+    ln -s {{prefix}}/vscode-portable/bin/code {{bindir}}/bin/code-portable
     {{justrun}} link_local vscode-portable
 
 # TODO: add doom to yadm submodule
@@ -358,7 +364,7 @@ emacs: (gitclone "https://github.com/emacs-mirror/emacs.git" "emacs")
     cd {{blddir}}/emacs
     {{apt-install}} libxaw7-dev libgnutls30 xaw3dg xutils-dev libgnutls28-dev libgccjit-10-dev
     ./autogen.sh
-    ./configure --with-native-compilation --with-modules=on --prefix="~/.local/emacs"
+    ./configure --with-native-compilation --with-modules=on --prefix="{{prefix}}/emacs"
     make -C lisp autoloads-force
     make
     make install
@@ -386,7 +392,7 @@ cmake: (insgh "cmake" "Kitware/CMake" "*linux-x86_64.tar.gz")
 
 # Fuzzy finder
 fzf: (targh "fzf" "junegunn/fzf" "*linux_amd64.tar.gz")
-    mv /tmp/fzf/fzf ~/.local/bin
+    mv /tmp/fzf/fzf {{bindir}}
 
 # Fast realtime compression/decompression
 zstd: (srcgh "zstd" "facebook/zstd" "*.tar.gz")
@@ -395,7 +401,7 @@ zstd: (srcgh "zstd" "facebook/zstd" "*.tar.gz")
 
 # Computer-side QMK mapping for builtin keyboards
 kmonad: (bingh "kmonad" "kmonad/kmonad" "*linux")
-    getent group uinput || groupadd uinput
+    getent group uinput || sudo groupadd uinput
     sudo usermod -aG uinput $USER
     sudo usermod -aG input $USER
     sudo modprobe uinput
@@ -587,7 +593,7 @@ rust-analyzer: (bingh "rust-analyzer" "rust-analyzer/rust-analyzer" "*-linux")
 #   echo "Installed rust-analyzer"
 
 just:
-    curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ~/.local/bin
+    curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to {{bindir}}
 
 conda:
     #!/usr/bin/env fish
@@ -614,7 +620,7 @@ poetry:
     if type -q poetry
         poetry self update
     else
-        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - --preview
     end
 
 conda-env name:
@@ -686,7 +692,7 @@ apt-srcs:
 
 docker: apt
     {{apt-install}} docker-ce docker-ce-cli containerd.io
-    sudo groupadd docker
+    getent group docker || sudo groupadd docker
     sudo usermod -aG docker $USER
     newgrp docker 
 
@@ -717,7 +723,7 @@ nvim:
 
 nvim-src: (gitclone "https://github.com/neovim/neovim.git" "neovim")
     cd {{blddir}} && make CMAKE_BUILD_TYPE=Release 
-    cd {{blddir}} && make CMAKE_INSTALL_PREFIX=$HOME/.local/nvim install
+    cd {{blddir}} && make CMAKE_INSTALL_PREFIX={{prefix}}/nvim install
 
 neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
     #!/usr/bin/env fish
@@ -737,7 +743,17 @@ kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune")
     sudo apt install libncursesw5-dev pkg-config
     cd {{blddir}}/kakoune/src && \
     make && \
-    PREFIX=$HOME/.local make install
+    PREFIX={{prefix}}/kakoune make install
+    {{justrun}} link_local "kakoune"
 
 pack-repos:
-    tar --zstd -cf {{install-sys-dir}}/repos.tar.zst {{local-apt-repo}} {{local-flatpak-repo}} {{local-tar-repo}} ~/.cargo/bin {{bindir}}
+    #tar --zstd -cf {{install-sys-dir}}/repos.tar.zst \
+    #
+    tar --zstd -cvf /dev/null \
+        --exclude='.local/share' \
+        {{local-apt-repo}}  \
+        {{local-flatpak-repo}}  \
+        {{local-tar-repo}}  \
+        ~/.cargo/bin  \
+        ~/.cargo/.crates.toml  \
+        {{prefix}} 

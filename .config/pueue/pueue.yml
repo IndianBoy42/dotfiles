@@ -10,7 +10,8 @@ daemon:
   pause_group_on_failure: false
   pause_all_on_failure: false
   callback: ~
-  groups: {}
+  groups:
+    default: 16
 shared:
   pueue_directory: /home/amedhi/.local/share/pueue
   use_unix_socket: true

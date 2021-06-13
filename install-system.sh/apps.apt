@@ -34,8 +34,6 @@ psensor
 sensors-applet
 linux-tools-common
 linux-tools-generic
-linux-tools-(uname
--r)
 musl
 musl-dev
 musl-tools

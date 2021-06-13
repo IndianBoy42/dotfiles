@@ -21,5 +21,6 @@ sudo apt update
   libjpeg-progs zathura-ps zathura-djvu zathura-cb
 
 sudo apt install (cat libs.apt)
+sudo apt install linux-tools-(uname -r)
 sudo apt install (cat apps.apt)
 

@@ -63,6 +63,7 @@ sudo apt-get install \
 	musl musl-dev musl-tools \
 	direnv \
 	screen tmux \
+    poppler-utils \
 	pandoc progress \
 	archivemount sshfs \
     suckless-tools sxiv xdotool \

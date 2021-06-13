@@ -515,7 +515,7 @@ bandwhich: cargo-install
     sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
 
 cargo-essentials: cargo-install gitui ripgrep broot
-    {{cargo-install}} bat kn zoxide lsd bottom fd-find git-delta just 
+    {{cargo-install}} bat kn zoxide lsd bottom fd-find git-delta 
 
 alacritty: cargo-install
     {{cargo-install}} alacritty

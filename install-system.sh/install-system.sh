@@ -13,4 +13,6 @@ sudo apt-get install \
     lsb-release
 
 # Install Just command runner for installing the rest of the stuff
-curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ~/.local/bin
+if ! command -v just
+    curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ~/.local/bin
+end

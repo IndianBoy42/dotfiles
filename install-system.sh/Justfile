@@ -22,13 +22,24 @@ export CMAKE_C_FLAGS_RELEASE := CFLAGS
 export CMAKE_CXX_FLAGS_RELEASE := CXXFLAGS
 rust-gnu := "x86_64-unknown-linux-gnu"
 rust-musl := "x86_64-unknown-linux-musl"
-cargo-install := "cargo install" # TODO: can use quickinstall
 export RUSTC_WRAPPER := "sccache"
 export CARGO_BUILD_TARGET := rust-musl
-justrun := "just -f " + justfile()
+justrun := "just -d ~/install-system.sh/ -f " + justfile()
+
+local-apt-repo := "~/install-system.sh/apt-repo"
+local-flatpak-repo := "~/install-system.sh/flatpaks"
+
+cargo-install := "cargo install" # TODO: can use quickinstall
+
+flatpak-download := "flatpak create-usb " + local-flatpak-repo
+flatpak-install-local := "flatpak install --sideload-repo " + local-flatpak-repo + "/.ostree/repo flathub"
+flatpak-install-remote := "sudo flatpak install"
+flatpak-install := flatpak-install-local
+
+apt-install := "sudo apt install"
 
 @_default:
-	just -l -f {{justfile()}}
+    just -l -f {{justfile()}}
 
 edit:
     nvim {{justfile()}}
@@ -36,6 +47,27 @@ edit:
 ##############################################333
 # Helpers
 ##############################################333
+
+# Install getpkg, mkrepo for creating offline repositories
+getpkg-mkrepo:
+    #!/usr/bin/env fish
+    cd /tmp/
+    wget https://gist.github.com/jeanlescure/084dd6113931ea5a0fd9/archive/5866e3e50e452b3a97bb3e534d51d2bba14679a3.zip 
+    unzip 5866e3e50e452b3a97bb3e534d51d2bba14679a3.zip 
+    chmod +x ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/*.sh
+    mv ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/mkrepo.sh {{bindir}}
+    mv ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/getpkg.sh {{bindir}}
+    chmod +x ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/dependencies.sh
+    ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/dependencies.sh
+
+# Add a local repo (created using mkrepo, give the directory containing the Package.gz)
+add-local-repo dir=local-apt-repo:
+    echo "deb [trusted=yes] file:{{dir}} ./" | sudo tee -a /etc/apt/sources.list
+
+getpkg name: getpkg-mkrepo
+    getpkg.sh {{name}} {{local-apt-repo}}
+mkrepo: getpkg-mkrepo
+    mkrepo.sh {{local-apt-repo}}
 
 # Link from a directory inside ~/.local
 link_local name:
@@ -62,7 +94,7 @@ _tmpdir name:
     curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
     echo "deb [arch="(dpkg --print-architecture)" signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
     sudo apt update
-    sudo apt install gh
+    {{apt-install}} gh
     gh auth login
 
 # Download an asset from Github releases (to /tmp/name)
@@ -188,7 +220,7 @@ nnn:
     echo 'deb http://download.opensuse.org/repositories/home:/stig124:/nnn/xUbuntu_20.04/ /' | sudo tee /etc/apt/sources.list.d/home:stig124:nnn.list
     curl -fsSL https://download.opensuse.org/repositories/home:stig124:nnn/xUbuntu_20.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_stig124_nnn.gpg > /dev/null
     sudo apt update
-    sudo apt install nnn
+    {{apt-install}} nnn
 
 # tinycc compiler
 tinycc: (gitclone "https://github.com/TinyCC/tinycc.git" "tinycc")
@@ -209,7 +241,7 @@ keynav: (gitclone "https://github.com/jordansissel/keynav.git" "keynav")
 # zig compiler
 zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
     #!/usr/bin/env bash -euxo pipefail
-    sudo apt install libllvm12 libclang-12-dev liblld-12-dev
+    {{apt-install}} libllvm12 libclang-12-dev liblld-12-dev
     cd {{blddir}}/zig
     mkdir -p build && cd build
     cmake -DZIG_TARGET_MCPU=native -DCMAKE_INSTALL_PREFIX="~/.local/zig/" ..
@@ -232,7 +264,7 @@ zapcc: (gitclone "https://github.com/yrnkrn/zapcc.git" "zapcc")
 googbench: (gitclone "https://github.com/google/benchmark.git" "googbench")
     mkdir -p build && cd build
     cmake .. -DBENCHMARK_DOWNLOAD_DEPENDENCIES=ON -DBENCHMARK_ENABLE_GTEST_TESTS=OFF
-    sudo apt install checkinstall
+    {{apt-install}} checkinstall
     ninja && sudo checkinstall ninja install
 
 # drake
@@ -254,19 +286,19 @@ todoist-cli: (gitclone "https://github.com/sachaos/todoist.git" "todoist")
 
 # tikzit
 tikzit: (gitclone "https://github.com/tikzit/tikzit.git" "tikzit")
-    sudo apt install flex bison qt5-default libpoppler-dev libpoppler-qt5-dev
+    {{apt-install}} flex bison qt5-default libpoppler-dev libpoppler-qt5-dev
     qmake -r
     make
 
 # clifm
 clifm: (debgh "clifm" "leo-arch/clifm" "*deb")
-    sudo apt install libcap-dev libacl1-dev libreadline-dev
+    {{apt-install}} libcap-dev libacl1-dev libreadline-dev
 
 # mpv video player
 mpv:
     sudo add-apt-repository -y ppa:mc3man/mpv-tests
     sudo apt-get update
-    sudo apt install mpv
+    {{apt-install}} mpv
 
 # mps-youtube -- cli youtube client
 mps-youtube: mpv
@@ -316,7 +348,7 @@ code-portable: (_tmpdir "code-portable")
 emacs: (gitclone "https://github.com/emacs-mirror/emacs.git" "emacs")
     #!/usr/bin/env bash -euxo pipefail
     cd {{blddir}}/emacs
-    sudo apt install libxaw7-dev libgnutls30 xaw3dg xutils-dev libgnutls28-dev libgccjit-10-dev
+    {{apt-install}} libxaw7-dev libgnutls30 xaw3dg xutils-dev libgnutls28-dev libgccjit-10-dev
     ./autogen.sh
     ./configure --with-native-compilation --with-modules=on --prefix="~/.local/emacs"
     make -C lisp autoloads-force
@@ -580,52 +612,86 @@ vulcan-sdk:
     wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
     sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-focal.list https://packages.lunarg.com/vulkan/lunarg-vulkan-focal.list
     sudo apt update
-    sudo apt install vulkan-sdk
+    {{apt-install}} vulkan-sdk
+
+@flatpak-list:
+    flatpak list --app --columns=name:f | tail -n +1     
 
 flatpak:
     #!/usr/bin/env fish
     if not type -q flatpak
-        sudo apt install flatpak
+        {{apt-install}} flatpak
         flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+        flatpak remote-modify --collection-id=org.flathub.Stable flathub
     end
 
 kicad: flatpak
-    flatpak install org.kicad.KiCad \
+    {{flatpak-install}} org.kicad.KiCad \
         org.kicad.KiCad.Library.Templates   \
         org.kicad.KiCad.Library.Symbols     \
         org.kicad.KiCad.Library.Packages3D  \
         org.kicad.KiCad.Library.Packages3D  \
         org.kicad.KiCad.Library.Footprints 
+spotify: 
+    {{flatpak-install}} com.spotify.Client 
+anydesk: 
+    {{flatpak-install}} com.anydesk.Anydesk 
+gimp: 
+    {{flatpak-install}} org.gimp.GIMP 
+inkscape: 
+    {{flatpak-install}} org.inkscape.Inkscape 
+whatsapp: 
+    {{flatpak-install}} io.bit3.WhatsAppQT 
+kdenlive: 
+    {{flatpak-install}} org.kde.kdenlive 
+telegram: 
+    {{flatpak-install}} org.telegram 
+discord: 
+    {{flatpak-install}} com.discordapp.Discord 
+signal: 
+    {{flatpak-install}} org.signal.Signal 
+vlc: 
+    {{flatpak-install}} org.videolan.VLC 
+slack: 
+    {{flatpak-install}} com.slack.Slack 
+todoist: 
+    {{flatpak-install}} com.todoist.Todoist 
+blender: 
+    {{flatpak-install}} org.blender.Blender
+
+flatpak-dl command:
+    {{justrun}} {{command}} # Install first 
+    {{justrun}} flatpak-install="{{flatpak-download}}" {{command}} # Then pack into the repo
 
 @apt: 
-	sudo apt update > /tmp/aptupdate.log
+    sudo apt update > /tmp/aptupdate.log
 
 docker: apt
-	sudo apt install docker-ce docker-ce-cli containerd.io
-	sudo groupadd docker
-	sudo usermod -aG docker $USER
-	newgrp docker 
+    {{apt-install}} docker-ce docker-ce-cli containerd.io
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+    newgrp docker 
 
 nvim:
-	sudo add-apt-repository -y ppa:neovim-ppa/unstable
-	sudo apt install neovim
-	test -d ~/.config/nvim || https://github.com/IndianBoy42/LunarVim.git ~/.config/nvim
-	cd ~/.config/nvim && just install
+    sudo add-apt-repository -y ppa:neovim-ppa/unstable
+    {{apt-install}} neovim
+    test -d ~/.config/nvim || https://github.com/IndianBoy42/LunarVim.git ~/.config/nvim
+    cd ~/.config/nvim && just install
 
 nvim-src: (gitclone "https://github.com/neovim/neovim.git" "neovim")
-	cd {{blddir}} && make CMAKE_BUILD_TYPE=Release 
-	cd {{blddir}} && make CMAKE_INSTALL_PREFIX=$HOME/.local/nvim install
+    cd {{blddir}} && make CMAKE_BUILD_TYPE=Release 
+    cd {{blddir}} && make CMAKE_INSTALL_PREFIX=$HOME/.local/nvim install
 
 neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
-	#!/usr/bin/env fish
-	if not type -q neovide
-		sudo apt install -y curl \
-			gcc-multilib g++-multilib \
-			libfreetype6-dev libasound2-dev libexpat1-dev libxcb-composite0-dev \
-			libbz2-dev libsndio-dev freeglut3-dev libxmu-dev libxi-dev libsdl2-dev
-		wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
-		sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-focal.list https://packages.lunarg.com/vulkan/lunarg-vulkan-focal.list
-		sudo apt update
-		sudo apt install vulkan-sdk
-	end
-	cd {{blddir}}/neovide && cargo install --path .
+    #!/usr/bin/env fish
+    if not type -q neovide
+        wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
+        sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-focal.list https://packages.lunarg.com/vulkan/lunarg-vulkan-focal.list
+        sudo apt update
+        {{apt-install}} curl \
+            gcc-multilib g++-multilib \
+            libfreetype6-dev libasound2-dev libexpat1-dev libxcb-composite0-dev \
+            libbz2-dev libsndio-dev freeglut3-dev libxmu-dev libxi-dev libsdl2-dev \
+            vulkan-sdk
+    end
+    cd {{blddir}}/neovide && cargo install --path .

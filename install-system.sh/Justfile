@@ -695,3 +695,9 @@ neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
             vulkan-sdk
     end
     cd {{blddir}}/neovide && cargo install --path .
+
+kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune")
+    sudo apt install libncursesw5-dev pkg-config
+    cd {{blddir}}/kakoune/src && \
+    make && \
+    PREFIX=$HOME/.local make install

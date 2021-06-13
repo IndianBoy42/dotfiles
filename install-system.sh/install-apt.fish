@@ -36,7 +36,7 @@ sudo apt-get install \
     libxcb-xfixes0-dev libgl1-mesa-glx \
     libegl1-mesa libxrandr2 libxss1 \
     libxcursor1 libxcomposite1 libasound2 \
-    libxi6 libxtst6 freeglut3-dev \
+    libxi6 libxtst6 freeglut3-dev libncursesw5-dev \
     aptitude apt-rdepends dpkg-dev \
 	alacritty \
 	ripgrep \

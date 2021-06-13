@@ -24,16 +24,18 @@ rust-gnu := "x86_64-unknown-linux-gnu"
 rust-musl := "x86_64-unknown-linux-musl"
 export RUSTC_WRAPPER := "sccache"
 export CARGO_BUILD_TARGET := rust-musl
-justrun := "just -d ~/install-system.sh/ -f " + justfile()
+install-sys-dir := "~/install-system.sh"
+justrun := "just -d " + install-sys-dir + " -f " + justfile()
 
-local-apt-repo := "~/install-system.sh/apt-repo"
-local-flatpak-repo := "~/install-system.sh/flatpaks"
+local-apt-repo := install-sys-dir + "/apt-repo"
+local-tar-repo := install-sys-dir + "/tar-repo"
+local-flatpak-repo := install-sys-dir + "/flatpak-repo"
 
 cargo-install := "cargo install" # TODO: can use quickinstall
 
 flatpak-download := "flatpak create-usb " + local-flatpak-repo
 flatpak-install-local := "flatpak install --sideload-repo " + local-flatpak-repo + "/.ostree/repo flathub"
-flatpak-install-remote := "sudo flatpak install"
+flatpak-install-remote := "flatpak install flathub"
 flatpak-install := flatpak-install-local
 
 apt-install := "sudo apt install"
@@ -58,15 +60,16 @@ getpkg-mkrepo:
     mv ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/mkrepo.sh {{bindir}}
     mv ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/getpkg.sh {{bindir}}
     chmod +x ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/dependencies.sh
-    ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/dependencies.sh
+    sudo ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/dependencies.sh
 
-# Add a local repo (created using mkrepo, give the directory containing the Package.gz)
+# Add a local repo (created using mkrepo, give the directory containing the Packages.gz)
 add-local-repo dir=local-apt-repo:
     echo "deb [trusted=yes] file:{{dir}} ./" | sudo tee -a /etc/apt/sources.list
 
-getpkg name: getpkg-mkrepo
+getpkg name: 
     getpkg.sh {{name}} {{local-apt-repo}}
-mkrepo: getpkg-mkrepo
+mkrepo: 
+    rm {{local-apt-repo}}/Packages.gz || true
     mkrepo.sh {{local-apt-repo}}
 
 # Link from a directory inside ~/.local
@@ -107,10 +110,12 @@ gh name repo pattern: (_tmpdir name)
 # Download a tarball from Github releases and extract it
 targh name repo pattern: (gh name repo pattern)
     cd /tmp/{{name}} && tar xavf {{name}}
+    cp /tmp/{{name}}/{{name}} {{local-tar-repo}}
 
 # Download a debian from Github releases and install it with dpkg
 debgh name repo pattern: (gh name repo pattern)
     cd /tmp/{{name}} && sudo dpkg -i ./{{name}}
+    cp /tmp/{{name}}/{{name}} {{local-apt-repo}}
 
 # Download a binary from Github releases and move it to bindir
 bingh name repo pattern: (gh name repo pattern)
@@ -130,7 +135,7 @@ srcgh name repo pattern: (targh name repo pattern) (mkblddir name)
     rm -rf /tmp/{{name}}
 
 curlbin url name: 
-    curl -L {{url}} -o {{bindir}}/name
+    curl -L {{url}} -o {{bindir}}/{{name}}
     chmod +x {{bindir}}/name
 
 ##############################################333
@@ -221,6 +226,7 @@ nnn:
     curl -fsSL https://download.opensuse.org/repositories/home:stig124:nnn/xUbuntu_20.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_stig124_nnn.gpg > /dev/null
     sudo apt update
     {{apt-install}} nnn
+    {{justrun}} getpkg nnn
 
 # tinycc compiler
 tinycc: (gitclone "https://github.com/TinyCC/tinycc.git" "tinycc")
@@ -263,9 +269,9 @@ zapcc: (gitclone "https://github.com/yrnkrn/zapcc.git" "zapcc")
 # google benchmark
 googbench: (gitclone "https://github.com/google/benchmark.git" "googbench")
     mkdir -p build && cd build
-    cmake .. -DBENCHMARK_DOWNLOAD_DEPENDENCIES=ON -DBENCHMARK_ENABLE_GTEST_TESTS=OFF
-    {{apt-install}} checkinstall
-    ninja && sudo checkinstall ninja install
+    cmake .. -DBENCHMARK_DOWNLOAD_DEPENDENCIES=ON -DBENCHMARK_ENABLE_GTEST_TESTS=OFF -DCMAKE_INSTALL_PREFIX=$HOME/.local/googbench
+    ninja && ninja install
+    # TODO: link what?
 
 # drake
 # cd ~/git-builds
@@ -391,10 +397,10 @@ kmonad: (bingh "kmonad" "kmonad/kmonad" "*linux")
     sudo usermod -aG uinput $USER
     sudo usermod -aG input $USER
     sudo modprobe uinput
-    sudo cp ~/install-system.sh/uinput.rules /etc/udev/rules.d/uinput.rules
+    sudo cp {{install-sys-dir}}/uinput.rules /etc/udev/rules.d/uinput.rules
     # sudo touch /etc/udev/rules.d/uinput.rules
     # echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/uinput.rules
-    # cp ~/install-system.sh/kmonad.service ~/.config/systemd/user/kmonad.service # synced by yadm
+    # cp {{install-sys-dir}}/kmonad.service ~/.config/systemd/user/kmonad.service # synced by yadm
     systemctl --user enable kmonad.service
     systemctl --user start kmonad.service
     echo "The next output will help you find the device that your keyboard corresponds to"
@@ -575,12 +581,11 @@ cargo-needs-update:
 
 rust-analyzer: (bingh "rust-analyzer" "rust-analyzer/rust-analyzer" "*-linux")
     echo "Installed rust-analyzer"
+# rust-analyzer: (curlbin "https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux" "rust-analyzer")
+#   echo "Installed rust-analyzer"
 
 just:
     curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to ~/.local/bin
-
-# rust-analyzer: (curlbin "https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux" "rust-analyzer")
-#   echo "Installed rust-analyzer"
 
 conda:
     #!/usr/bin/env fish
@@ -601,6 +606,14 @@ pipx:
 
 pipenv: pipx
     pipx install pipenv
+
+poetry: 
+    #!/usr/bin/env fish
+    if type -q poetry
+        poetry self update
+    else
+        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+    end
 
 conda-env name:
     conda env create -f {{name}} || conda env update --prune -n (cat {{name}} | rg 'name: ([\S]+)' -C0 -r '$1')
@@ -645,7 +658,7 @@ whatsapp:
 kdenlive: 
     {{flatpak-install}} org.kde.kdenlive 
 telegram: 
-    {{flatpak-install}} org.telegram 
+    {{flatpak-install}} org.telegram.desktop
 discord: 
     {{flatpak-install}} com.discordapp.Discord 
 signal: 
@@ -660,17 +673,38 @@ blender:
     {{flatpak-install}} org.blender.Blender
 
 flatpak-dl command:
-    {{justrun}} {{command}} # Install first 
+    {{justrun}} flatpak-install="{{flatpak-install-remote}}" {{command}} # Install first 
     {{justrun}} flatpak-install="{{flatpak-download}}" {{command}} # Then pack into the repo
 
 @apt: 
-    sudo apt update > /tmp/aptupdate.log
+    sudo apt update > /tmp/aptupdate.log || echo "Not connected to the internet, hope you have a cache"
+
+apt-srcs:
+    {{install-sys-dir}}/install-apt-srcs.fish
 
 docker: apt
     {{apt-install}} docker-ce docker-ce-cli containerd.io
     sudo groupadd docker
     sudo usermod -aG docker $USER
     newgrp docker 
+
+@apt-libs: apt
+    {{apt-install}} (cat {{install-sys-dir}}/libs.apt)
+@apt-apps: apt
+    {{apt-install}} (cat apps.apt)
+
+# Install all apt packages from a file in install-system.sh
+@apt-all file: apt
+    {{apt-install}} (cat {{install-sys-dir}}/{{file}}.apt)
+
+@_apt-repo name:
+    echo "The getpkg.sh scrip throws a lot of errors about missing dependencies, and returns error even when successfull"
+    xargs -P(math (nproc) "* 8") -i sh -c "just getpkg {} || true" < {{install-sys-dir}}/{{name}}.apt
+@apt-repo:
+    {{justrun}} _apt-repo "system"
+    {{justrun}} _apt-repo "libs"
+    {{justrun}} _apt-repo "apps"
+    {{justrun}} mkrepo
 
 nvim:
     sudo add-apt-repository -y ppa:neovim-ppa/unstable

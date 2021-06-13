@@ -37,7 +37,7 @@ sudo apt-get install \
     libegl1-mesa libxrandr2 libxss1 \
     libxcursor1 libxcomposite1 libasound2 \
     libxi6 libxtst6 freeglut3-dev \
-    aptitude \
+    aptitude apt-rdepends dpkg-dev \
 	alacritty \
 	ripgrep \
 	checkinstall \
@@ -67,4 +67,6 @@ sudo apt-get install \
 	pandoc progress \
 	archivemount sshfs \
     suckless-tools sxiv xdotool \
-    gh ranger
+    gh ranger flex bison qt5-default \
+    libpoppler-dev libpoppler-qt5-dev \
+    libcap-dev libacl1-dev libreadline-dev

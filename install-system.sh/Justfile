@@ -120,6 +120,7 @@ debgh name repo pattern: (gh name repo pattern)
 # Download a binary from Github releases and move it to bindir
 bingh name repo pattern: (gh name repo pattern)
     chmod +x /tmp/{{name}}/{{name}}
+    cp /tmp/{{name}}/{{name}} {{local-tar-repo}}
     mv /tmp/{{name}}/{{name}} {{bindir}}
 
 # Download a program tarball from Github releases, extract the source to ~/.local/, and link the binary folder
@@ -136,7 +137,8 @@ srcgh name repo pattern: (targh name repo pattern) (mkblddir name)
 
 curlbin url name: 
     curl -L {{url}} -o {{bindir}}/{{name}}
-    chmod +x {{bindir}}/name
+    cp {{bindir}}/{{name}} {{local-tar-repo}}
+    chmod +x {{bindir}}/{{name}}
 
 ##############################################333
 # Programs
@@ -688,17 +690,18 @@ docker: apt
     sudo usermod -aG docker $USER
     newgrp docker 
 
-@apt-libs: apt
-    {{apt-install}} (cat {{install-sys-dir}}/libs.apt)
-@apt-apps: apt
-    {{apt-install}} (cat apps.apt)
-
 # Install all apt packages from a file in install-system.sh
 @apt-all file: apt
     {{apt-install}} (cat {{install-sys-dir}}/{{file}}.apt)
 
+@apt-libs: apt
+    just apt-all libs
+    {{apt-install}} linux-tools-(uname -r)
+@apt-apps: apt
+    just apt-all apps
+
 @_apt-repo name:
-    echo "The getpkg.sh scrip throws a lot of errors about missing dependencies, and returns error even when successfull"
+    echo "The getpkg.sh script throws a lot of errors about missing dependencies, and returns error even when successfull"
     xargs -P(math (nproc) "* 8") -i sh -c "just getpkg {} || true" < {{install-sys-dir}}/{{name}}.apt
 @apt-repo:
     {{justrun}} _apt-repo "system"
@@ -735,3 +738,6 @@ kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune")
     cd {{blddir}}/kakoune/src && \
     make && \
     PREFIX=$HOME/.local make install
+
+pack-repos:
+    tar --zstd -cf {{install-sys-dir}}/repos.tar.zst {{local-apt-repo}} {{local-flatpak-repo}} {{local-tar-repo}} ~/.cargo/bin {{bindir}}

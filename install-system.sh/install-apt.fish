@@ -20,53 +20,6 @@ sudo apt update
   python3.9-venv python3.9-doc samba vde2 sharutils-doc \
   libjpeg-progs zathura-ps zathura-djvu zathura-cb
 
+sudo apt install (cat libs.apt)
+sudo apt install (cat apps.apt)
 
-sudo apt-get install \
-	libusb-1.0-0-dev libgpg-error-dev libgpgme-dev \
-    libcairo2-dev libxinerama-dev libxdo-dev \
-    libopenblas-dev liblapack-dev libomp-dev \
-    libpomp-dev libeigen3-dev libgtk-3-dev \
-	libasound2-dev libtool-bin libtool \
-	libglibmm-2.4-dev libglib2.0-dev \
-    libudev-dev libusb-dev libjpeg-dev \
-    libgif-dev libtiff-dev libx11-dev \
-	libxpm-dev libgtk2.0-dev libpango1.0-dev \
-    librsvg2-dev libssl-dev libxcb1-dev \
-    libxcb-render0-dev libxcb-shape0-dev \
-    libxcb-xfixes0-dev libgl1-mesa-glx \
-    libegl1-mesa libxrandr2 libxss1 \
-    libxcursor1 libxcomposite1 libasound2 \
-    libxi6 libxtst6 freeglut3-dev libncursesw5-dev \
-    aptitude apt-rdepends dpkg-dev \
-	alacritty \
-	ripgrep \
-	checkinstall \
-    imagemagick \
-    openssh-server \
-	qemu-system-arm qemu-system-aarch64 \
-	meson \
-	gcc-arm-none-eabi \
-    gcc-arm-linux-gnueabi g++-arm-linux-gnueabi \
-    gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
-	bison \
-	binutils lld ninja-build \
-    openocd \
-    zathura \
-    x11-xserver-utils \
-	python python3-pip python3-venv \
-    sublime-merge \
-    sshpass \
-    google-chrome-stable \
-    ffmpeg \
-	fancontrol lm-sensors psensor sensors-applet \
-    linux-tools-common linux-tools-generic linux-tools-(uname -r) \
-	musl musl-dev musl-tools \
-	direnv \
-	screen tmux \
-    poppler-utils \
-	pandoc progress \
-	archivemount sshfs \
-    suckless-tools sxiv xdotool \
-    gh ranger flex bison qt5-default \
-    libpoppler-dev libpoppler-qt5-dev \
-    libcap-dev libacl1-dev libreadline-dev

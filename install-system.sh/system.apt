@@ -1,0 +1,8 @@
+apt-transport-https
+curl
+wget
+build-essential
+gnupg2
+gnupg
+ca-certificates
+lsb-release

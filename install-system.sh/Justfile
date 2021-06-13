@@ -38,6 +38,7 @@ local-tar-repo := install-sys-dir + "/tar-repo"
 local-flatpak-repo := install-sys-dir + "/flatpak-repo"
 
 cargo-install := "cargo install" # TODO: can use quickinstall
+# cargo-install := "pueue add -- cargo install --force --jobs 1" # TODO: can use quickinstall
 
 flatpak-download := "flatpak create-usb " + local-flatpak-repo
 flatpak-install-local := "flatpak install --sideload-repo " + local-flatpak-repo + "/.ostree/repo flathub"
@@ -57,13 +58,12 @@ edit:
 ##############################################333
 
 # Install getpkg, mkrepo for creating offline repositories
-getpkg-mkrepo:
+getpkg-mkrepo: (mkpackdir "mkrepo")
     #!/usr/bin/env fish
     cd /tmp/
     wget https://gist.github.com/jeanlescure/084dd6113931ea5a0fd9/archive/5866e3e50e452b3a97bb3e534d51d2bba14679a3.zip 
     unzip 5866e3e50e452b3a97bb3e534d51d2bba14679a3.zip 
     chmod +x ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/*.sh
-    mkdir -p {{prefix}}/mkrepo/bin/
     cp ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/mkrepo.sh \
         ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/getpkg.sh \
         {{prefix}}/mkrepo/bin/
@@ -84,14 +84,17 @@ mkrepo:
 link_local name:
     chmod +x {{prefix}}/{{name}}/bin/*
     {{justrun}} stow -S {{name}}
-    # ln -s {{prefix}}/{{name}}/bin/* {{bindir}}
-    # ln -s {{prefix}}/{{name}}/lib/* {{libdir}}
-    # ln -s {{prefix}}/{{name}}/libexec/* {{libexecdir}}
-    # ln -s {{prefix}}/{{name}}/include/* {{incdir}}
-    # ln -s {{prefix}}/{{name}}/share/* {{sharedir}}
+# ln -s {{prefix}}/{{name}}/bin/* {{bindir}}
+# ln -s {{prefix}}/{{name}}/lib/* {{libdir}}
+# ln -s {{prefix}}/{{name}}/libexec/* {{libexecdir}}
+# ln -s {{prefix}}/{{name}}/include/* {{incdir}}
+# ln -s {{prefix}}/{{name}}/share/* {{sharedir}}
 
-stow arg name:
+packstow arg name:
     stow -d {{prefix}} -t {{installdir}} {{arg}} {{name}}
+
+mkpackdir name:
+    mkdir -p {{prefix}}/{{name}}/bin
 
 mkblddir name:
     mkdir -p {{blddir}}/{{name}}
@@ -116,6 +119,18 @@ _tmpdir name:
     {{apt-install}} gh
     gh auth login
 
+# Install a program directory structure using stow
+ins-copy name from: (mkpackdir name)
+    cp -r {{from}}/{{name}}/*/ {{prefix}}/{{name}}/
+    #rm -rf /tmp/{{name}} # TODO: should delete?
+    {{justrun}} link_local {{name}}
+
+# Install one or more binaries using stow
+ins-bin name from:
+    mkdir -p {{from}}/{{name}}/bin
+    cp {{from}}/{{name}}/{{name}} {{from}}/{{name}}/bin
+    {{justrun}} ins-copy {{name}} {{from}}
+
 # Download an asset from Github releases (to /tmp/name)
 gh name repo pattern: (_tmpdir name) 
     cd /tmp/{{name}} \
@@ -134,23 +149,8 @@ debgh name repo pattern: (gh name repo pattern)
     cp /tmp/{{name}}/{{name}} {{local-apt-repo}}
 
 # Download a binary from Github releases and move it to bindir
-bingh name repo pattern: (gh name repo pattern)
-    mkdir -p /tmp/{{name}}/bin/
-    cp /tmp/{{name}}/{{name}} /tmp/{{name}}/bin/
-    {{justrun}} link_local {{name}}
-
-# Install a program directory structure using stow
-ins-copy name from:
-    mkdir -p {{prefix}}/{{name}}
-    cp -r {{from}}/{{name}}/*/ {{prefix}}/{{name}}/
-    #rm -rf /tmp/{{name}} # TODO: should delete?
-    {{justrun}} link_local {{name}}
-
-# Install one or more binaries using stow
-ins-bin name from:
-    mkdir -p {{from}}/{{name}}/bin
-    cp {{from}}/{{name}}/{{name}} {{from}}/{{name}}/bin
-    {{justrun}} ins-copy {{name}} {{from}}
+bingh name repo pattern: (gh name repo pattern) (ins-bin name "/tmp")
+    echo "Installed Binary from GH"
 
 # Download a program tarball from Github releases, extract the source to {{prefix}}/, and link the binary folder
 insgh name repo pattern: (targh name repo pattern) (ins-copy name "/tmp")
@@ -196,7 +196,7 @@ ultimate-plumber: (bingh "up" "akavel/up" "up")
 
 # Wezterm -- cool terminal?
 wezterm: (bingh "wezterm" "wez/wezterm" "*.AppImage")
-    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator "{{bindir}}/wezterm" 90
+    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which wezterm) 90
 
 # kitty terminal -- pretty graphics in terminal
 kitty: 
@@ -273,11 +273,12 @@ tinycc: (gitclone "https://github.com/TinyCC/tinycc.git" "tinycc")
     {{justrun}} link_local "tinycc"
 
 # keynav
-keynav: (gitclone "https://github.com/jordansissel/keynav.git" "keynav")
+keynav: (gitclone "https://github.com/jordansissel/keynav.git" "keynav") (mkpackdir "keynav")
     #!/usr/bin/env bash -euxo pipefail
-    cd {{blddir}}
+    cd {{blddir}}/keynav
     make 
-    ln -s $PWD/keynav {{bindir}}
+    ln -s $PWD/keynav {{prefix}}/keynav/bin
+    {{justrun}} link_local "keynav"
 
 # zig compiler
 zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
@@ -422,9 +423,10 @@ fzf: (targh "fzf" "junegunn/fzf" "*linux_amd64.tar.gz") (ins-bin "fzf" "/tmp")
     echo "Installed fzf"
 
 # Fast realtime compression/decompression
-zstd: (srcgh "zstd" "facebook/zstd" "*.tar.gz")
+zstd: (srcgh "zstd" "facebook/zstd" "*.tar.gz") (mkpackdir "zstd")
     cd {{blddir}}/zstd && make
-    ln -s {{blddir}}/zstd/zstd {{bindir}}
+    ln -s {{blddir}}/zstd/zstd {{prefix}}/zstd/bin
+    {{justrun}} link_local "zstd"
 
 # Computer-side QMK mapping for builtin keyboards
 kmonad: (bingh "kmonad" "kmonad/kmonad" "*linux")
@@ -442,8 +444,9 @@ kmonad: (bingh "kmonad" "kmonad/kmonad" "*linux")
     cat /proc/bus/input/devices | rg -C5 keyboard
 
 # Alternative to submodules
-git-subrepo: (gitclone "ingydotnet/git-subrepo" "git-subrepo")
-    ln -s {{blddir}}/git-subrepo/lib/* {{bindir}}
+git-subrepo: (gitclone "ingydotnet/git-subrepo" "git-subrepo") (mkpackdir "git-subrepo")
+    ln -s {{blddir}}/git-subrepo/lib/* {{prefix}}/git-subrepo/bin
+    {{justrun}} link_local "git-subrepo"
 
 # Modern Latex distribution
 tectonic: (targh "tectonic" "tectonic-typesetting/tectonic" "*x86_64-unknown-linux-gnu.tar.gz") (ins-bin "tectonic" "/tmp")
@@ -528,19 +531,19 @@ cargo-install: cargo-quickinstall cargo-update sccache
     echo "Cargo install tools installed"
 
 ripgrep:
-    {{cargo-install}} ripgrep
+    {{cargo-install}} $argv[1]
 
 ripgrep_all: ripgrep
-    cargo +nightly install --git https://github.com/phiresky/ripgrep-all.git
+    {{cargo-install}} --git https://github.com/phiresky/ripgrep-all.git
 
 gitui: cargo-install
-    cargo install --git https://github.com/IndianBoy42/gitui.git
+    {{cargo-install}} --git https://github.com/IndianBoy42/gitui.git
 
 serial-monitor: cargo-install
-    cargo install --git https://github.com/IndianBoy42/serial-monitor.git
+    {{cargo-install}} --git https://github.com/IndianBoy42/serial-monitor.git
 
 indexa: cargo-install 
-    cargo install --git https://github.com/mosmeh/indexa.git
+    {{cargo-install}} --git https://github.com/mosmeh/indexa.git
 
 tealdeer: cargo-install
     CARGO_BUILD_TARGET={{rust-gnu}} {{cargo-install}} $argv[1]
@@ -550,16 +553,24 @@ pueue: cargo-install
     {{cargo-install}} $argv[1]
     systemctl --user enable pueued.service
     and systemctl --user start pueued.service
+    pueue parallel (nproc)
 
 bandwhich: cargo-install
     {{cargo-install}} $argv[1]
-    sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
+    type -q bandwhich && sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
 
 cargo-essentials: cargo-install gitui ripgrep broot
-    {{cargo-install}} bat kn zoxide lsd bottom fd-find git-delta 
+    {{cargo-install}} bat
+    {{cargo-install}} kn
+    {{cargo-install}} zoxide
+    {{cargo-install}} lsd
+    {{cargo-install}} bottom
+    {{cargo-install}} fd-find
+    {{cargo-install}} git-delta 
 
 alacritty: cargo-install
     {{cargo-install}} alacritty
+    not type -q alacritty
     pip install --user alacritty-colorscheme
     wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/logo/alacritty-term.svg -O /tmp/alacritty-term.svg
     sudo cp /tmp/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
@@ -576,37 +587,66 @@ broot: cargo-install
     {{cargo-install}} broot
 
 cargo-build-tools:
-    CARGO_BUILD_TARGET={{rust-gnu}} {{cargo-install}} \
-        cargo-edit \
-        cargo-generate \
-        cargo-outdated \
-        probe-run \
-        cargo-update
-    {{cargo-install}} cargo-binutils cargo-do \
-        cargo-watch cargo-equip flamegraph  
+    #!/usr/bin/env fish
+    set -x CARGO_BUILD_TARGET {{rust-gnu}}
+    {{cargo-install}} cargo-edit 
+    {{cargo-install}} cargo-generate 
+    {{cargo-install}} cargo-outdated 
+    {{cargo-install}} probe-run 
+    {{cargo-install}} cargo-update
+    {{cargo-install}} cargo-binutils cargo-do 
+    {{cargo-install}} cargo-watch
+    {{cargo-install}} cargo-equip
+    {{cargo-install}} flamegraph  
 
 cargo-all-gnu: cargo-install tealdeer
-    CARGO_BUILD_TARGET={{rust-gnu}} {{cargo-install}} \
-        cargo-edit \
-        cargo-generate \
-        cargo-outdated \
-        probe-run \
-        cargo-update \
-        spotify-tui \
-        so \
-        starship  \
-        duma  
+    #!/usr/bin/env fish
+    set -x CARGO_BUILD_TARGET {{rust-gnu}}
+    {{cargo-install}} cargo-edit 
+    {{cargo-install}} cargo-generate 
+    {{cargo-install}} cargo-outdated 
+    {{cargo-install}} probe-run 
+    {{cargo-install}} cargo-update 
+    {{cargo-install}} spotify-tui 
+    {{cargo-install}} so 
+    {{cargo-install}} starship  
+    {{cargo-install}} duma  
 
-cargo-all-musl: cargo-install serial-monitor bandwhich
-    {{cargo-install}} \
-        macchina onefetch kn bat  \
-        bottom drone du-dust dua  eva  exa \
-        fd-find flip-link \
-        gfold  gping git-delta huniq  hyperfine  \
-        lsd  mdbook  mdcat  pipe-rename \
-        procs  ptail  rustfilt  \
-        scriptisto  sd  shy  skim verco \
-        watchexec-cli  xsv  zoxide gpg-tui 
+cargo-all-musl: cargo-install serial-monitor bandwhich pueue indexa
+    {{cargo-install}} macchina
+    {{cargo-install}} onefetch
+    {{cargo-install}} kn
+    {{cargo-install}} bat
+    {{cargo-install}} bottom
+    {{cargo-install}} drone
+    {{cargo-install}} du-dust
+    {{cargo-install}} dua
+    {{cargo-install}} eva
+    {{cargo-install}} exa 
+    {{cargo-install}} fd-find
+    {{cargo-install}} flip-link 
+    {{cargo-install}} gfold
+    {{cargo-install}} gping
+    {{cargo-install}} git-delta
+    {{cargo-install}} huniq
+    {{cargo-install}} hyperfine  
+    {{cargo-install}} lsd
+    {{cargo-install}} mdbook
+    {{cargo-install}} mdcat
+    {{cargo-install}} pipe-rename 
+    {{cargo-install}} procs
+    {{cargo-install}} ptail
+    {{cargo-install}} rustfilt  
+    {{cargo-install}} scriptisto
+    {{cargo-install}} sd
+    {{cargo-install}} shy
+    {{cargo-install}} skim 
+    {{cargo-install}} verco 
+    {{cargo-install}} watchexec-cli
+    {{cargo-install}} xsv
+    {{cargo-install}} tokei
+    {{cargo-install}} zoxide
+    {{cargo-install}} gpg-tui 
 
 cargo-all: cargo-essentials cargo-build-tools cargo-all-gnu cargo-all-musl
     {{justrun}} cargo-needs-update
@@ -619,8 +659,9 @@ rust-analyzer: (bingh "rust-analyzer" "rust-analyzer/rust-analyzer" "*-linux")
 # rust-analyzer: (curlbin "https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux" "rust-analyzer")
 #   echo "Installed rust-analyzer"
 
-just:
-    curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to {{bindir}}
+just: (mkpackdir "just")
+    curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to {{prefix}}/just/bin
+    {{justrun}} link_local "just"
 
 conda:
     #!/usr/bin/env fish
@@ -764,7 +805,7 @@ neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
             libbz2-dev libsndio-dev freeglut3-dev libxmu-dev libxi-dev libsdl2-dev \
             vulkan-sdk
     end
-    cd {{blddir}}/neovide && cargo install --path .
+    cd {{blddir}}/neovide && {{cargo-install}} --path .
 
 kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune")
     sudo apt install libncursesw5-dev pkg-config

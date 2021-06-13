@@ -385,8 +385,8 @@ cmake: (insgh "cmake" "Kitware/CMake" "*linux-x86_64.tar.gz")
     echo "CMake Installed"
 
 # Fuzzy finder
-fzf: (targh "fzf" "junegunn/fzf" "*linux-amd64.tar.gz")
-    mv ~/tmp/fzf/fzf ~/.local/bin
+fzf: (targh "fzf" "junegunn/fzf" "*linux_amd64.tar.gz")
+    mv /tmp/fzf/fzf ~/.local/bin
 
 # Fast realtime compression/decompression
 zstd: (srcgh "zstd" "facebook/zstd" "*.tar.gz")

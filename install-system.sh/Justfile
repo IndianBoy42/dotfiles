@@ -47,6 +47,8 @@ flatpak-install := flatpak-install-local
 
 apt-install := "sudo apt install"
 
+stow := "stow"
+
 @_default:
     just -l -f {{justfile()}}
 
@@ -67,7 +69,7 @@ getpkg-mkrepo: (mkpackdir "mkrepo")
     cp ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/mkrepo.sh \
         ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/getpkg.sh \
         {{prefix}}/mkrepo/bin/
-    {{justrun}} link_local "mkrepo"
+    {{justrun}} link-pack "mkrepo"
     sudo ./084dd6113931ea5a0fd9-5866e3e50e452b3a97bb3e534d51d2bba14679a3/dependencies.sh
 
 # Add a local repo (created using mkrepo, give the directory containing the Packages.gz)
@@ -81,17 +83,21 @@ mkrepo:
     mkrepo.sh {{local-apt-repo}}
 
 # Link from a directory inside {{prefix}}
-link_local name:
-    chmod +x {{prefix}}/{{name}}/bin/*
-    {{justrun}} stow -S {{name}}
+link-pack name:
+    {{justrun}} dostow -R {{name}}
+# chmod +x {{prefix}}/{{name}}/bin/*
 # ln -s {{prefix}}/{{name}}/bin/* {{bindir}}
 # ln -s {{prefix}}/{{name}}/lib/* {{libdir}}
 # ln -s {{prefix}}/{{name}}/libexec/* {{libexecdir}}
 # ln -s {{prefix}}/{{name}}/include/* {{incdir}}
 # ln -s {{prefix}}/{{name}}/share/* {{sharedir}}
 
-packstow arg name:
-    stow -d {{prefix}} -t {{installdir}} {{arg}} {{name}}
+sustow arg name:
+    sudo {{stow}} -d /usr/local/packages/ -t /usr/local {{arg}} {{name}}
+
+dostow arg name:
+    cd ~ && {{stow}} -d {{prefix}} -t {{installdir}} {{arg}} {{name}}
+# FIXME: share/info/dir ignoring may not work correctly
 
 mkpackdir name:
     mkdir -p {{prefix}}/{{name}}/bin
@@ -123,12 +129,13 @@ _tmpdir name:
 ins-copy name from: (mkpackdir name)
     cp -r {{from}}/{{name}}/*/ {{prefix}}/{{name}}/
     #rm -rf /tmp/{{name}} # TODO: should delete?
-    {{justrun}} link_local {{name}}
+    {{justrun}} link-pack {{name}}
 
 # Install one or more binaries using stow
 ins-bin name from:
     mkdir -p {{from}}/{{name}}/bin
     cp {{from}}/{{name}}/{{name}} {{from}}/{{name}}/bin
+    chmod +x {{from}}/{{name}}/bin
     {{justrun}} ins-copy {{name}} {{from}}
 
 # Download an asset from Github releases (to /tmp/name)
@@ -163,9 +170,9 @@ srcgh name repo pattern: (targh name repo pattern) (mkblddir name)
     rm -rf /tmp/{{name}}
 
 autotoolsgh name repo pattern: (srcgh name repo pattern)
-    ./configure --prefix="{{prefix}}/{{name}}" 
+    ./configure --prefix="{{installdir}}"
     make
-    make install
+    make install prefix="{{prefix}}/{{name}}"
 
 cmakegh name repo pattern: (srcgh name repo pattern)
     mkdir -p {{blddir}}/{{name}}/build
@@ -199,9 +206,9 @@ wezterm: (bingh "wezterm" "wez/wezterm" "*.AppImage")
     sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which wezterm) 90
 
 # kitty terminal -- pretty graphics in terminal
-kitty: 
-    curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
-    {{justrun}} link_local "kitty.app"
+kitty: (mkpackdir "kitty")
+    curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest={{prefix}}/kitty
+    {{justrun}} link-pack "kitty"
 
 # Zenith -- better top
 zenith: (debgh "zenith" "bvaisvil/zenith" "*amd64.deb")
@@ -270,7 +277,7 @@ tinycc: (gitclone "https://github.com/TinyCC/tinycc.git" "tinycc")
     ./configure --prefix={{prefix}}/tinycc --extra-cflags={{compflags}} --extra-ldflags={{ldflags}} --cc=clang-12
     make
     make install
-    {{justrun}} link_local "tinycc"
+    {{justrun}} link-pack "tinycc"
 
 # keynav
 keynav: (gitclone "https://github.com/jordansissel/keynav.git" "keynav") (mkpackdir "keynav")
@@ -278,7 +285,7 @@ keynav: (gitclone "https://github.com/jordansissel/keynav.git" "keynav") (mkpack
     cd {{blddir}}/keynav
     make 
     ln -s $PWD/keynav {{prefix}}/keynav/bin
-    {{justrun}} link_local "keynav"
+    {{justrun}} link-pack "keynav"
 
 # zig compiler
 zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
@@ -288,7 +295,7 @@ zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
     mkdir -p build && cd build
     cmake -DZIG_TARGET_MCPU=native -DCMAKE_INSTALL_PREFIX="{{prefix}}/zig/" ..
     ninja install
-    {{justrun}} link_local "zig"
+    {{justrun}} link-pack "zig"
 
 # godbolt
 godbolt: (gitclone "https://github.com/compiler-explorer/compiler-explorer.git" "compiler-explorer")
@@ -301,14 +308,14 @@ zapcc: (gitclone "https://github.com/yrnkrn/zapcc.git" "zapcc")
     mkdir -p {{blddir}}/zapcc/build && cd {{blddir}}/zapcc/build
     cmake -DLLVM_ENABLE_WARNINGS -DLLVM_USE_LINKER=gold -DCMAKE_INSTALL_PREFIX="{{prefix}}/zapcc/" ..
     ninja install
-    {{justrun}} link_local "zapcc"
+    {{justrun}} link-pack "zapcc"
 
 # google benchmark
 googbench: (gitclone "https://github.com/google/benchmark.git" "googbench")
     mkdir -p build && cd build
     cmake .. -DBENCHMARK_DOWNLOAD_DEPENDENCIES=ON -DBENCHMARK_ENABLE_GTEST_TESTS=OFF -DCMAKE_INSTALL_PREFIX={{prefix}}/googbench
     ninja && ninja install
-    {{justrun}} link_local "googbench"
+    {{justrun}} link-pack "googbench"
 
 # drake
 # cd ~/git-builds
@@ -396,7 +403,7 @@ emacs: (gitclone "https://github.com/emacs-mirror/emacs.git" "emacs")
     make -C lisp autoloads-force
     make
     make install
-    {{justrun}} link_local "emacs"
+    {{justrun}} link-pack "emacs"
     
 # Git Credential Manager Core
 gcm: (debgh "gcmcore" "microsoft/Git-Credential-Manager-Core" "*amd64*.deb")
@@ -426,7 +433,7 @@ fzf: (targh "fzf" "junegunn/fzf" "*linux_amd64.tar.gz") (ins-bin "fzf" "/tmp")
 zstd: (srcgh "zstd" "facebook/zstd" "*.tar.gz") (mkpackdir "zstd")
     cd {{blddir}}/zstd && make
     ln -s {{blddir}}/zstd/zstd {{prefix}}/zstd/bin
-    {{justrun}} link_local "zstd"
+    {{justrun}} link-pack "zstd"
 
 # Computer-side QMK mapping for builtin keyboards
 kmonad: (bingh "kmonad" "kmonad/kmonad" "*linux")
@@ -446,7 +453,7 @@ kmonad: (bingh "kmonad" "kmonad/kmonad" "*linux")
 # Alternative to submodules
 git-subrepo: (gitclone "ingydotnet/git-subrepo" "git-subrepo") (mkpackdir "git-subrepo")
     ln -s {{blddir}}/git-subrepo/lib/* {{prefix}}/git-subrepo/bin
-    {{justrun}} link_local "git-subrepo"
+    {{justrun}} link-pack "git-subrepo"
 
 # Modern Latex distribution
 tectonic: (targh "tectonic" "tectonic-typesetting/tectonic" "*x86_64-unknown-linux-gnu.tar.gz") (ins-bin "tectonic" "/tmp")
@@ -661,7 +668,7 @@ rust-analyzer: (bingh "rust-analyzer" "rust-analyzer/rust-analyzer" "*-linux")
 
 just: (mkpackdir "just")
     curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to {{prefix}}/just/bin
-    {{justrun}} link_local "just"
+    {{justrun}} link-pack "just"
 
 conda:
     #!/usr/bin/env fish
@@ -812,7 +819,7 @@ kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune")
     cd {{blddir}}/kakoune/src 
     make 
     PREFIX={{prefix}}/kakoune make install
-    {{justrun}} link_local "kakoune"
+    {{justrun}} link-pack "kakoune"
 
 pack-repos:
     #tar --zstd -cf {{install-sys-dir}}/repos.tar.zst \
@@ -825,3 +832,12 @@ pack-repos:
         ~/.cargo/bin  \
         ~/.cargo/.crates.toml  \
         {{prefix}} 
+
+stow: (gitclone "https://github.com/aspiers/stow.git" "stow") (mkpackdir "stow")
+    #!/usr/bin/env fish
+    cd {{blddir}}/stow
+    autoreconf -iv
+    ./configure --prefix="{{installdir}}"
+    make
+    make install prefix="{{prefix}}/stow"
+    {{justrun}} link-pack "stow"

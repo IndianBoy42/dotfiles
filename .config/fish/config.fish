@@ -1,3 +1,13 @@
+##################################
+# conf.d scripts run before this 
+##################################
+
+set -gx TERMINAL $TERM
+
+##################################
+# PATH setup
+##################################
+
 if type -q ~/anaconda3/bin/conda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -5,9 +15,6 @@ status is-interactive && eval /home/amedhi/anaconda3/bin/conda "shell.fish" "hoo
 # <<< conda initialize <<<
 end
 
-set -gx PIPENV_VENV_IN_PROJECT 1
-set -gx TERMINAL $TERM
-set -gx VIRTUAL_ENV_DIR .venv 
 add_to_path "/usr/lib/x86_64-linux-gnu/pkgconfig/" PKG_CONFIG_PATH
 add_to_path "/usr/local/lib/pkgconfig" PKG_CONFIG_PATH
 add_to_path "/usr/lib/pkgconfig" PKG_CONFIG_PATH
@@ -23,33 +30,24 @@ fish_add_path ~/.local/bin
 # 	eval (~/../linuxbrew/.linuxbrew/bin/brew shellenv)
 # end
 
-# Initialize zoxide (terminal cd jumper)
-if type -q zoxide
-	zoxide init fish | source
-end
-if type -q _kn
-	_kn init fish | source
-end
-
 # git-subrepo
 if test -e ~/git-builds/git-subrepo/.fish.rc
     set GIT_SUBREPO_ROOT (dirname (realpath (status --current-filename)))
     fish_add_path $GIT_SUBREPO_ROOT/lib
 end
 
+##################################
+# functions / abbrs / settings
+##################################
+
+# profile editing helper functions
+set -gx FISH_CONFIG_PATH (status filename)
+set -gx FISH_CONFIG_DIR (status dirname)
+abbr reload_profile "source $FISH_CONFIG_PATH"
+
+set -gx PIPENV_VENV_IN_PROJECT 1
 set -gx CUDACXX /usr/lib/cuda/bin/nvcc
-
-# Use starship (I prefer fish tide for now)
-# starship init fish | source
-
-# alias thefuck for quick correct in the shell
-#if type -q thefuck
-#	status is-interactive; and thefuck --alias fk | source
-#end
-
-##################################
-# functions / abbrs
-##################################
+set -gx VIRTUAL_ENV_DIR .venv 
 
 abbr del 'rm -vi'
 abbr lc 'wc -l'
@@ -65,11 +63,6 @@ set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/config
 alias rgrep 'rg --no-config'
 abbr rgl 'rg -C0'
 abbr fda 'fd -HI'
-
-# profile editing helper functions
-set -gx FISH_CONFIG_PATH (status filename)
-set -gx FISH_CONFIG_DIR (status dirname)
-abbr reload_profile "source $FISH_CONFIG_PATH"
 
 # pueue is really cool
 abbr pu pueue
@@ -139,9 +132,10 @@ alias zf=__fzf_search_current_dir
 abbr fzfp 'fzf --preview=\'v {}\''
 #abbr zhome 'z ~ && z (__fzf_search_current_dir)'
 abbr z- 'z -'
-if type -q kn
-    abbr -g cd kn
-end
+type -q zoxide
+and abbr -g cd z
+type -q _kn
+and abbr -g cd kn
 
 # apt abbreviations
 abbr apti "sudo apt install"
@@ -200,7 +194,6 @@ abbr coda code -a
 # 	mv $argv $CP_TO
 # end
 
-# I guess ill use nvim inside the terminal
 set -gx EDITOR nvim #kak
 set -gx VISUAL $EDITOR
 #set -gx PAGER nvim
@@ -242,13 +235,16 @@ if test -x ix
 end
 set -g fish_key_bindings fish_vi_key_bindings
 
-
 # pueue is really cool
 abbr pu pueue
 abbr pusts pueue status
 
-abbr ros2-foxy bass source /opt/ros/foxy/setup.bash
-abbr ros-noetic bass source /opt/ros/noetic/setup.bash
+if test -f /opt/ros/foxy/setup.bash
+    abbr ros2-foxy bass source /opt/ros/foxy/setup.bash
+end
+if test -f /opt/ros/noetic/setup.bash
+    abbr ros-noetic bass source /opt/ros/noetic/setup.bash
+end
 
 # abbr g git
 # # Alias all git aliases
@@ -285,14 +281,6 @@ abbr yta-vorbis "youtube-dl --extract-audio --audio-format vorbis "
 abbr yta-wav "youtube-dl --extract-audio --audio-format wav "
 abbr ytv-best "youtube-dl -f bestvideo+bestaudio "
 
-if type -q direnv
-	direnv hook fish | source
-end
-
-if type -q cod
-	cod init %self fish | source
-end
-
 # nnn file manager settings
 set -gx NNN_PLUG 'z:autojump;f:finder;p:preview-tui-ext;P:preview-tabbed;o:nuke'
 set -gx NNN_OPENER "$HOME/.config/nnn/plugins/nuke"
@@ -303,3 +291,9 @@ abbr tarz 'tar --zstd'
 
 abbr syctl 'systemctl --user'
 abbr ssyctl 'sudo systemctl'
+
+##################################
+# Run other configs
+##################################
+
+source $FISH_CONFIG_PATH.d/*.fish &> /dev/null

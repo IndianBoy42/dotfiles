@@ -50,11 +50,3 @@ sxiv
 xdotool
 gh
 ranger
-flex
-bison
-qt5-default
-libpoppler-dev
-libpoppler-qt5-dev
-libcap-dev
-libacl1-dev
-libreadline-dev

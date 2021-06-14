@@ -293,11 +293,6 @@ if type -q cod
 	cod init %self fish | source
 end
 
-# setup on dir change hook
-if status is-interactive 
-    __reg_on_dir_change
-end
-
 # nnn file manager settings
 set -gx NNN_PLUG 'z:autojump;f:finder;p:preview-tui-ext;P:preview-tabbed;o:nuke'
 set -gx NNN_OPENER "$HOME/.config/nnn/plugins/nuke"

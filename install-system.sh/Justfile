@@ -803,14 +803,10 @@ nvim-src: (gitclone "https://github.com/neovim/neovim.git" "neovim")
 neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
     #!/usr/bin/env fish
     if not type -q neovide
-        wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
-        sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-focal.list https://packages.lunarg.com/vulkan/lunarg-vulkan-focal.list
-        sudo apt update
         {{apt-install}} curl \
             gcc-multilib g++-multilib \
             libfreetype6-dev libasound2-dev libexpat1-dev libxcb-composite0-dev \
-            libbz2-dev libsndio-dev freeglut3-dev libxmu-dev libxi-dev libsdl2-dev \
-            vulkan-sdk
+            libbz2-dev libsndio-dev freeglut3-dev libxmu-dev libxi-dev libsdl2-dev
     end
     cd {{blddir}}/neovide && {{cargo-install}} --path .
 

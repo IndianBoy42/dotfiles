@@ -96,7 +96,7 @@ sustow arg name:
     sudo {{stow}} -d /usr/local/packages/ -t /usr/local {{arg}} {{name}}
 
 dostow arg name:
-    cd ~ && {{stow}} -d {{prefix}} -t {{installdir}} {{arg}} {{name}}
+    {{stow}} --ignore="share/info/dir" -d {{prefix}} -t {{installdir}} {{arg}} {{name}}
 # FIXME: share/info/dir ignoring may not work correctly
 
 mkpackdir name:

@@ -60,8 +60,6 @@ abbr pscpu 'ps auxf | sort -nr -k 3 | less'
 abbr psmem10 'ps auxf | sort -nr -k 4 | head -10'
 abbr pscpu10 'ps auxf | sort -nr -k 3 | head -10'
 
-alias whch='type -a'
-
 # ripgrep stuff, config and aliases
 set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/config
 alias rgrep 'rg --no-config'

@@ -190,15 +190,15 @@ abbr edex ed_n_source
 abbr cedex code_n_source
 abbr coda code -a
 
-# for copying across long trees, you can mark a place to copy to (and then copy/go to it)
-abbr cpmark 'set -gx CP_TO (pwd) && echo $CP_TO	'
-abbr gomark 'cd $CP_TO'
-function cpto 
-	cp $argv $CP_TO
-end
-function mvto
-	mv $argv $CP_TO
-end
+# # for copying across long trees, you can mark a place to copy to (and then copy/go to it)
+# abbr cpmark 'set -gx CP_TO (pwd) && echo $CP_TO	'
+# abbr gomark 'cd $CP_TO'
+# function cpto --wraps "cp"
+# 	cp $argv $CP_TO
+# end
+# function mvto --wraps "mv"
+# 	mv $argv $CP_TO
+# end
 
 # I guess ill use nvim inside the terminal
 set -gx EDITOR nvim #kak

@@ -153,8 +153,10 @@ end
 abbr apti "sudo apt install"
 abbr apts "apt search"
 abbr aptr "sudo apt remove"
-abbr aptu "sudo apt update && sudo apt upgrade"
+abbr aptu "sudo apt update"
+abbr aptug "sudo apt upgrade"
 abbr aptar "sudo apt autoremove"
+abbr aptli "apt list --installed"
 abbr aptsi "apt list --installed | fzf"
 
 # mkdir helpers

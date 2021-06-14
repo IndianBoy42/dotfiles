@@ -75,12 +75,6 @@ abbr reload_profile "source $FISH_CONFIG_PATH"
 abbr pu pueue
 abbr pusts pueue status
 
-# repeat the previous command, the problem is you cant do this twice
-abbr k ' run_previous_command'
-abbr kk ' run_prev2_command'
-abbr K ' run_history_command' 
-abbr sukk ' sudo run_prev2_command'
-
 # yadm helper abbreviations
 abbr yad yadm
 #abbr yadd 'yadm add'

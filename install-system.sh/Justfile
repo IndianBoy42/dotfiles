@@ -38,7 +38,7 @@ local-tar-repo := install-sys-dir + "/tar-repo"
 local-flatpak-repo := install-sys-dir + "/flatpak-repo"
 
 cargo-install := "cargo install" # TODO: can use quickinstall
-# cargo-install := "pueue add -- cargo install --force --jobs 1" # TODO: can use quickinstall
+# cargo-install := "pueue add -- cargo install --force --jobs 1" # TODO: background compile
 
 flatpak-download := "flatpak create-usb " + local-flatpak-repo
 flatpak-install-local := "flatpak install --sideload-repo " + local-flatpak-repo + "/.ostree/repo flathub"
@@ -169,16 +169,25 @@ srcgh name repo pattern: (targh name repo pattern) (mkblddir name)
     cp -r /tmp/{{name}}/*/* {{blddir}}/{{name}}
     rm -rf /tmp/{{name}}
 
-autotoolsgh name repo pattern: (srcgh name repo pattern)
+autotool-install name:
+    #!/usr/bin/env fish
+    cd {{blddir}}/{{name}}
     ./configure --prefix="{{installdir}}"
     make
     make install prefix="{{prefix}}/{{name}}"
 
+autotoolsgh name repo pattern: (srcgh name repo pattern)
+    {{justrun}} autotool-install "{{name}}"
+
+cmake-install name:
+    #!/usr/bin/env fish
+    mkdir -p build && cd build
+    cmake -DCMAKE_INSTALL_PREFIX="{{prefix}}/{{name}}" ..
+    ninja
+    ninja install
+
 cmakegh name repo pattern: (srcgh name repo pattern)
-    mkdir -p {{blddir}}/{{name}}/build
-    cd {{blddir}}/{{name}}/build && cmake -DCMAKE_INSTALL_PREFIX="{{prefix}}/{{name}}"
-    cd {{blddir}}/{{name}}/build && ninja
-    cd {{blddir}}/{{name}}/build && ninja install
+    {{justrun}} cmake-install "{{name}}"
 
 curlbin url name: 
     mkdir -p {{prefix}}/{{name}}/bin
@@ -272,16 +281,16 @@ nnn:
 
 # tinycc compiler
 tinycc: (gitclone "https://github.com/TinyCC/tinycc.git" "tinycc")
-    #!/usr/bin/env bash -euxo pipefail
+    #!/usr/bin/env -S bash -euxo pipefail
     cd {{blddir}}/tinycc
     ./configure --prefix={{prefix}}/tinycc --extra-cflags={{compflags}} --extra-ldflags={{ldflags}} --cc=clang-12
-    make
+    make cross
     make install
     {{justrun}} link-pack "tinycc"
 
 # keynav
 keynav: (gitclone "https://github.com/jordansissel/keynav.git" "keynav") (mkpackdir "keynav")
-    #!/usr/bin/env bash -euxo pipefail
+    #!/usr/bin/env -S bash -euxo pipefail
     cd {{blddir}}/keynav
     make 
     ln -s $PWD/keynav {{prefix}}/keynav/bin
@@ -289,7 +298,7 @@ keynav: (gitclone "https://github.com/jordansissel/keynav.git" "keynav") (mkpack
 
 # zig compiler
 zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
-    #!/usr/bin/env bash -euxo pipefail
+    #!/usr/bin/env -S bash -euxo pipefail
     {{apt-install}} libllvm12 libclang-12-dev liblld-12-dev
     cd {{blddir}}/zig
     mkdir -p build && cd build
@@ -304,7 +313,7 @@ godbolt: (gitclone "https://github.com/compiler-explorer/compiler-explorer.git" 
 # Caching C/C++ compiler for higher compile speed (not updated?)
 zapcc: (gitclone "https://github.com/yrnkrn/zapcc.git" "zapcc")
     read --prompt "Are you sure you wanna build zapcc?"
-    #!/usr/bin/env bash -euxo pipefail
+    #!/usr/bin/env -S bash -euxo pipefail
     mkdir -p {{blddir}}/zapcc/build && cd {{blddir}}/zapcc/build
     cmake -DLLVM_ENABLE_WARNINGS -DLLVM_USE_LINKER=gold -DCMAKE_INSTALL_PREFIX="{{prefix}}/zapcc/" ..
     ninja install
@@ -376,7 +385,7 @@ ansicolumn:
 
 # Install systemwide VSCode (update via apt)
 vscode: 
-    #!/usr/bin/env bash -euxo pipefail
+    #!/usr/bin/env -S bash -euxo pipefail
     cd /tmp/
     wget "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" -O code.deb
     sudo dpkg -i code.deb
@@ -384,7 +393,7 @@ vscode:
 
 # Install portable version of vscode
 code-portable: (_tmpdir "code-portable")
-    #!/usr/bin/env bash -euxo pipefail
+    #!/usr/bin/env -S bash -euxo pipefail
     cd /tmp/code-portable
     wget "https://code.visualstudio.com/sha/download?build=stable&os=linux-x64" -O portable.tar.gz
     tar -xzf portable.tar.gz
@@ -395,7 +404,7 @@ code-portable: (_tmpdir "code-portable")
 # TODO: add doom to yadm submodule
 # EMACS, a great OS and a mediocre editor
 emacs: (gitclone "https://github.com/emacs-mirror/emacs.git" "emacs")
-    #!/usr/bin/env bash -euxo pipefail
+    #!/usr/bin/env -S bash -euxo pipefail
     cd {{blddir}}/emacs
     {{apt-install}} libxaw7-dev libgnutls30 xaw3dg xutils-dev libgnutls28-dev libgccjit-10-dev
     ./autogen.sh
@@ -477,6 +486,18 @@ nerdfont name: install-gh
     gh release -R ryanoasis/nerd-fonts download -p $fontfilename
     and unzip $fontfilename -d ~/.fonts
     echo "done!"
+
+# For patching nerdfonts yourself
+fontforge: 
+    sudo add-apt-repository ppa:fontforge/fontforge
+    sudo apt-get update
+    sudo apt-get install fontforge
+font-patcher: fontforge (mkpackdir "nerd-font-patcher")
+    wget https://raw.githubusercontent.com/ryanoasis/nerd-fonts/master/font-patcher -O {{prefix}}/nerd-font-patcher/bin
+    {{justrun}} nerd-font-patcher
+
+patch-font path: 
+    font-patcher --complete --progressbars -out ~/.fonts {{path}}  
 
 # Install Fira Code|Mono Nerd Font
 firacode: (nerdfont "FiraCode") (nerdfont "FiraMono")
@@ -810,11 +831,11 @@ neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
     end
     cd {{blddir}}/neovide && {{cargo-install}} --path .
 
-kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune")
+kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune") (mkpackdir "kakoune")
     sudo apt install libncursesw5-dev pkg-config
-    cd {{blddir}}/kakoune/src 
-    make 
-    PREFIX={{prefix}}/kakoune make install
+    cd {{blddir}}/kakoune/src\
+    && make \
+    && PREFIX={{prefix}}/kakoune make install
     {{justrun}} link-pack "kakoune"
 
 pack-repos:

@@ -53,7 +53,7 @@ stow := "stow"
     just -l -f {{justfile()}}
 
 edit:
-    nvim {{justfile()}}
+    cd {{install-sys-dir}} && nvim {{justfile()}}
 
 ##############################################333
 # Helpers

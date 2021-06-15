@@ -10,6 +10,7 @@ set -gx TERMINAL $TERM
 
 # https://github.com/lilyball/nix-env.fish
 # bass source ~/.nix-profile/etc/profile.d/nix.sh
+# any-nix-shell fish --info-right | source
 
 if type -q ~/anaconda3/bin/conda
 # >>> conda initialize >>>
@@ -300,3 +301,4 @@ abbr ssyctl 'sudo systemctl'
 ##################################
 
 source $FISH_CONFIG_PATH.d/*.fish &> /dev/null
+

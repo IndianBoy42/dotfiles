@@ -8,23 +8,19 @@ set -gx TERMINAL $TERM
 # PATH setup
 ##################################
 
-if not set -q IN_NIX_SHELL
-    if set -q FISH_ACTIVATE_NIX
-        set -g FISH_ACTIVATE_NIX_PROFILE "~/.nix-profile"
-    end
-    if set -q FISH_ACTIVATE_NIX_PROFILE
-        # TODO: https://github.com/lilyball/nix-env.fish
-        bass source $FISH_ACTIVATE_NIX_PROFILE/etc/profile.d/nix.sh
-        any-nix-shell fish --info-right | source
-    end
-end
-
 if type -q ~/anaconda3/bin/conda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 status is-interactive && eval /home/amedhi/anaconda3/bin/conda "shell.fish" "hook" $argv | source
 # <<< conda initialize <<<
 end
+
+# linuxbrew add to env
+# if type -q ~/../linuxbrew/.linuxbrew/bin/brew
+# 	eval (~/../linuxbrew/.linuxbrew/bin/brew shellenv)
+#   linuxbrew low priority
+#   fish_add_path --append --move --path "~/../linuxbrew/.linuxbrew/bin"
+# end
 
 add_to_path "/usr/lib/x86_64-linux-gnu/pkgconfig/" PKG_CONFIG_PATH
 add_to_path "/usr/local/lib/pkgconfig" PKG_CONFIG_PATH
@@ -36,15 +32,35 @@ fish_add_path ~/.cargo/bin
 fish_add_path ~/.local/bin
 # fish_add_path ~/anaconda3/bin
 
-# linuxbrew add to env
-# if type -q ~/../linuxbrew/.linuxbrew/bin/brew
-# 	eval (~/../linuxbrew/.linuxbrew/bin/brew shellenv)
-# end
-
 # git-subrepo
 if test -e ~/git-builds/git-subrepo/.fish.rc
     set GIT_SUBREPO_ROOT (dirname (realpath (status --current-filename)))
     fish_add_path $GIT_SUBREPO_ROOT/lib
+end
+
+if not set -q IN_NIX_SHELL 
+    ## Inside a Nix Environment
+    and not set -q FISH_NIX_ACTIVATED
+
+    # Default nix profile
+    if set -q FISH_ACTIVATE_NIX
+        set -g FISH_ACTIVATE_NIX_PROFILE "~/.nix-profile"
+    end
+
+    # Activate the profile
+    if set -q FISH_ACTIVATE_NIX_PROFILE
+        # TODO: https://github.com/lilyball/nix-env.fish
+        bass source $FISH_ACTIVATE_NIX_PROFILE/etc/profile.d/nix.sh
+        any-nix-shell fish --info-right | source
+    end
+
+    # Guard repeated activations
+    set -g FISH_NIX_ACTIVATED 1
+else
+    ## Inside a Nix Shell
+
+    # Move nix paths to the top of the PATH variable
+    fish_add_path --move --global (echo $PATH | tr ' ' '\n' | grep 'nix/')        
 end
 
 ##################################
@@ -194,6 +210,8 @@ end
 abbr edex ed_n_source
 abbr cedex code_n_source
 abbr coda code -a
+
+abbr echov 'set --show'
 
 # # for copying across long trees, you can mark a place to copy to (and then copy/go to it)
 # abbr cpmark 'set -gx CP_TO (pwd) && echo $CP_TO	'

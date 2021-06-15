@@ -1,0 +1,1 @@
+../plugins-manual/razzius/functions/new-notebook.fish

@@ -1,3 +1,1 @@
-function cd-root
-    cd (git root)
-end
+../plugins-manual/razzius/functions/cd-root.fish

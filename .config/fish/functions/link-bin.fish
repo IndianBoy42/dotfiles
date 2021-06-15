@@ -1,0 +1,1 @@
+../plugins-manual/razzius/functions/link-bin.fish

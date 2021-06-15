@@ -44,7 +44,8 @@ if not set -q IN_NIX_SHELL
 
     # Default nix profile
     if set -q FISH_ACTIVATE_NIX
-        set -g FISH_ACTIVATE_NIX_PROFILE "~/.nix-profile"
+        set -q FISH_ACTIVATE_NIX_PROFILE
+        or set -g FISH_ACTIVATE_NIX_PROFILE "~/.nix-profile"
     end
 
     # Activate the profile

@@ -698,21 +698,29 @@ cargo-all-musl: cargo-install serial-monitor bandwhich pueue indexa
     {{cargo-install}} gpg-tui 
     {{cargo-install}} jq  
 
+# Install 'all' the cargo binaries (that i like)
 cargo-all: cargo-essentials cargo-build-tools cargo-all-gnu cargo-all-musl
     {{justrun}} cargo-needs-update
 
+# List cargo binaries that need updates
 cargo-needs-update: 
     cargo install-update --all --list
 
+# Install rust-analyzer from github
 rust-analyzer: (bingh "rust-analyzer" "rust-analyzer/rust-analyzer" "*-linux")
     echo "Installed rust-analyzer"
 # rust-analyzer: (curlbin "https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux" "rust-analyzer")
 #   {{justrun}} link-pack "rust-analyzer"
 
+# Install just prebuilt
 just: (mkpackdir "just")
     curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to {{prefix}}/just/bin
     {{justrun}} link-pack "just"
+# Install just from source
+just-cargo:
+    {{cargo-install}} just
 
+# Install/update Anaconda
 conda:
     #!/usr/bin/env fish
     if not type -q conda
@@ -722,17 +730,21 @@ conda:
     end
     conda update -n base -c defaults --all
 
+# 'Essential' python packages
 py-essentials:
-    pip3 install --user click argcomplete rich
+    pip3 install --user click argcomplete rich black
     conda install jupyter
 
+# Isolated pip installs
 pipx:
     pip3 install --user pipx
     pipx ensurepath
 
+# Pipenv venv manager
 pipenv: pipx
     pipx install pipenv
 
+# Poetry python dev environment manager
 poetry: 
     #!/usr/bin/env fish
     if type -q poetry
@@ -741,21 +753,26 @@ poetry:
         curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - --preview
     end
 
+# Create conda environment from file
 conda-env name:
     conda env create -f {{name}} || conda env update --prune -n (cat {{name}} | rg 'name: ([\S]+)' -C0 -r '$1')
+    conda activate (cat {{name}} | rg 'name: ([\S]+)' -C0 -r '$1') && {{justrun}} py-essentials
 
 conda-optimal-control: (conda-env "conda-env-optimal-control.yml")
     conda activate optimal-control
 
+# vulkan api sdk
 vulcan-sdk:
     wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
     sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-focal.list https://packages.lunarg.com/vulkan/lunarg-vulkan-focal.list
     sudo apt update
     {{apt-install}} vulkan-sdk
 
+# List installed flatpaks
 @flatpak-list:
     flatpak list --app --columns=name:f | tail -n +1     
 
+# install flatpak and add flathub
 flatpak:
     #!/usr/bin/env fish
     if not type -q flatpak
@@ -798,6 +815,7 @@ todoist:
 blender: 
     {{flatpak-install}} org.blender.Blender
 
+# Simulate another flatpak install but just download local-flatpak-repo
 flatpak-dl command:
     {{justrun}} flatpak-install="{{flatpak-install-remote}}" {{command}} # Install first 
     {{justrun}} flatpak-install="{{flatpak-download}}" {{command}} # Then pack into the repo
@@ -805,11 +823,17 @@ flatpak-dl command:
 @apt: 
     sudo apt update > /tmp/aptupdate.log || echo "Not connected to the internet, hope you have a cache"
 
+# Some apt sources
 apt-srcs:
     {{inst-script-dir}}/install-apt-srcs.fish
 
 # Install docker and enable permissions
 docker:
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo rm /usr/share/keyrings/docker-archive-keyring.gpg
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $distro stable"
+    apt update
     {{apt-install}} docker-ce docker-ce-cli containerd.io
     getent group docker || sudo groupadd docker
     sudo usermod -aG docker $USER
@@ -834,16 +858,33 @@ docker:
     {{justrun}} _apt-repo "apps"
     {{justrun}} mkrepo
 
+# Install newer git
+git:
+    sudo add-apt-repository -y ppa:git-core/ppa
+    apt update
+    {{apt-install}} git
+
+# Sublime merge
+smerge: 
+    wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add - 
+    echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
+    apt update
+    {{apt-install}} sublime-merge
+
+# Install neovim from unstable ppa (also install my lunarvim)
 nvim:
     sudo add-apt-repository -y ppa:neovim-ppa/unstable
+    apt update
     {{apt-install}} neovim
     test -d ~/.config/nvim || https://github.com/IndianBoy42/LunarVim.git ~/.config/nvim
     cd ~/.config/nvim && just install
 
+# Compile neovim from source
 nvim-src: (gitclone "https://github.com/neovim/neovim.git" "neovim")
     cd {{blddir}} && make CMAKE_BUILD_TYPE=Release 
     cd {{blddir}} && make CMAKE_INSTALL_PREFIX={{prefix}}/nvim install
 
+# Pretty GUI for neovim written in rust
 neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
     #!/usr/bin/env fish
     if not type -q neovide
@@ -854,6 +895,7 @@ neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
     end
     cd {{blddir}}/neovide && {{cargo-install}} --path .
 
+# Selection first modal editor
 kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune") (mkpackdir "kakoune")
     sudo apt install libncursesw5-dev pkg-config
     cd {{blddir}}/kakoune/src\
@@ -861,18 +903,21 @@ kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune") (mkpackdir 
     && PREFIX={{prefix}}/kakoune make install
     {{justrun}} link-pack "kakoune"
 
+# Pack all necessary sources/repos
 pack-repos:
-    #tar --zstd -cf {{install-sys-dir}}/repos.tar.zst \
+    #tar --zstd -cf {{inst-script-dir}}/repos.tar.zst \
     #
     tar --zstd -cvf /dev/null \
         --exclude='.local/share' \
         {{local-apt-repo}}  \
         {{local-flatpak-repo}}  \
         {{local-tar-repo}}  \
+        {{blddir}}  \
         ~/.cargo/bin  \
         ~/.cargo/.crates.toml  \
         {{prefix}} 
 
+# GNU Stow symlink farm manager -- build stow from source 
 stow: (gitclone "https://github.com/aspiers/stow.git" "stow") (mkpackdir "stow")
     #!/usr/bin/env fish
     cd {{blddir}}/stow
@@ -882,6 +927,7 @@ stow: (gitclone "https://github.com/aspiers/stow.git" "stow") (mkpackdir "stow")
     make install prefix="{{prefix}}/stow"
     {{justrun}} link-pack "stow"
 
+# JSON query CLI
 jq: (bingh "jq" "stedolan/jq" "jq-linux64")
     echo "Installed jq"
 
@@ -900,10 +946,12 @@ gnome-extension path:
     cp -r $name $uuid
     gnome-shell-extension-tool enable $uuid
 
+# Nix package manager
 nix:
     curl -L https://nixos.org/nix/install | sh
     echo "bass source .nix-profile/etc/profile.d/nix.sh"
 
+# Traceroute + ping gtk/curses
 mtr: (gitclone "https://github.com/traviscross/mtr.git" "mtr")
     cd {{blddir}}/mtr && ./bootstrap.sh
     {{justrun}} autotool-install mtr

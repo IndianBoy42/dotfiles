@@ -744,7 +744,7 @@ pydev: conda pipx pipenv poetry
 
 # 'Essential' python packages
 py-essentials:
-    pip3 install --user click argcomplete rich ptpython ipython
+    pip3 install --user click argcomplete rich ptpython ipython bpython
     conda install jupyter
 
 # Isolated pip installs
@@ -769,7 +769,7 @@ poetry:
 # Temporary venvs for quick scripts
 pip-run:
     {{justrun}} pipx-install pip-run 
-    pipx inject pip-run click rich ptpython ipython numpy matplotlib ipython ptpython
+    pipx inject pip-run click rich ptpython ipython numpy matplotlib ipython ptpython bpython
 
 # Create conda environment from file
 conda-env name:

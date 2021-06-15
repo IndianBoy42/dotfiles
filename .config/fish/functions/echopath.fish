@@ -1,5 +1,5 @@
-# Defined in /home/amedhi/.config/fish/config.fish @ line 319
+# Defined in /tmp/fish.gby1JA/echopath.fish @ line 2
 function echopath
-	# echo $PATH | sed 's/ /\n/g'
+	# echo $PATH | tr ' ' '\n'
 	set --show PATH
 end

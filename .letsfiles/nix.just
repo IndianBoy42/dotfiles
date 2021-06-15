@@ -12,8 +12,11 @@ nix-env := 'nix-env -p ' + profile
 @edit:
     cd {{justfile_directory()}} && nvim {{justfile()}}
 
-activate:
-    fish -iC "bass source ~/.nix-profile/etc/profile.d/nix.sh"
+@enter:
+    FISH_ACTIVATE_NIX=1 fish -i
+
+@activate name="~/.nix-profile":
+    FISH_ACTIVATE_NIX="{{name}}" fish -i
 
 installed:
     {{nix-env}} -q 
@@ -31,7 +34,7 @@ install-file file="~/install-system.sh/user.nix":
     cat {{file}}.new
 
 # What would change in my enviroment if I reinstall from the nix file
-diff file="~/install-system.sh/user.nix":
+@diff file="~/install-system.sh/user.nix":
     #!/usr/bin/env bash
     set -euo pipefail
     diff -U 0 \

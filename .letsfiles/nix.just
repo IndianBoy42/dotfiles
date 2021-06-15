@@ -12,6 +12,9 @@ nix-env := 'nix-env -p ' + profile
 @edit:
     cd {{justfile_directory()}} && nvim {{justfile()}}
 
+activate:
+    fish -iC "bass source ~/.nix-profile/etc/profile.d/nix.sh"
+
 installed:
     {{nix-env}} -q 
 

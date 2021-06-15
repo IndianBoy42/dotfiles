@@ -55,8 +55,9 @@ stow := "stow"
 edit:
     cd {{install-sys-dir}} && nvim {{justfile()}}
 
+
 ##############################################333
-# Helpers
+# mkrepo for offlline apt installs
 ##############################################333
 
 # Install getpkg, mkrepo for creating offline repositories
@@ -81,6 +82,14 @@ getpkg name:
 mkrepo: 
     rm {{local-apt-repo}}/Packages.gz || true
     mkrepo.sh {{local-apt-repo}}
+
+
+##############################################333
+# Helpers
+##############################################333
+
+common: 
+    echo "TODO: save list of packages installed by this"
 
 # Link from a directory inside {{prefix}}
 link-pack name:
@@ -169,30 +178,39 @@ srcgh name repo pattern: (targh name repo pattern) (mkblddir name)
     cp -r /tmp/{{name}}/*/* {{blddir}}/{{name}}
     rm -rf /tmp/{{name}}
 
-autotool-install name:
+autotool-install name options="":
     #!/usr/bin/env fish
     cd {{blddir}}/{{name}}
-    ./configure --prefix="{{installdir}}"
+    ./configure --prefix="{{installdir}}" {{options}}
     make
     make install prefix="{{prefix}}/{{name}}"
 
 autotoolsgh name repo pattern: (srcgh name repo pattern)
     {{justrun}} autotool-install "{{name}}"
 
-cmake-install name:
+autotoolscurl name repo pattern: (srcgh name repo pattern)
+    {{justrun}} autotool-install "{{name}}"
+
+autotoolsgit name repo pattern: (gitclone name repo)
+    {{justrun}} autotool-install "{{name}}"
+
+cmake-install name options="":
     #!/usr/bin/env fish
     mkdir -p build && cd build
-    cmake -DCMAKE_INSTALL_PREFIX="{{prefix}}/{{name}}" ..
+    cmake -DCMAKE_INSTALL_PREFIX="{{prefix}}/{{name}}" {{options}} ..
     ninja
     ninja install
 
 cmakegh name repo pattern: (srcgh name repo pattern)
     {{justrun}} cmake-install "{{name}}"
 
-curlbin url name: 
-    mkdir -p {{prefix}}/{{name}}/bin
+curlbin url name: (mkpackdir name)
     curl -L {{url}} -o {{prefix}}/{{name}}/bin/{{name}}
     chmod +x {{prefix}}/{{name}}/bin/{{name}}
+
+curlsrc url name: (mkblddir name)
+    curl -L {{url}} -o {{blddir}}/{{name}}/{{name}}
+    cd {{blddir}}/{{name}} && tar -zavf {{name}}
 
 ##############################################333
 # Programs
@@ -686,7 +704,7 @@ cargo-needs-update:
 rust-analyzer: (bingh "rust-analyzer" "rust-analyzer/rust-analyzer" "*-linux")
     echo "Installed rust-analyzer"
 # rust-analyzer: (curlbin "https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux" "rust-analyzer")
-#   echo "Installed rust-analyzer"
+#   {{justrun}} link-pack "rust-analyzer"
 
 just: (mkpackdir "just")
     curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to {{prefix}}/just/bin
@@ -881,3 +899,7 @@ gnome-extension path:
 nix:
     curl -L https://nixos.org/nix/install | sh
     echo "bass source .nix-profile/etc/profile.d/nix.sh"
+
+mtr: (gitclone "https://github.com/traviscross/mtr.git" "mtr")
+    cd {{blddir}}/mtr && ./bootstrap.sh
+    {{justrun}} autotool-install mtr

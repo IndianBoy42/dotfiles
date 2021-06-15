@@ -8,6 +8,9 @@ set -gx TERMINAL $TERM
 # PATH setup
 ##################################
 
+# https://github.com/lilyball/nix-env.fish
+# bass source ~/.nix-profile/etc/profile.d/nix.sh
+
 if type -q ~/anaconda3/bin/conda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

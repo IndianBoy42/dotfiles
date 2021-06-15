@@ -26,3 +26,4 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 source "$HOME/.cargo/env"
+if [ -e /home/amedhi/.nix-profile/etc/profile.d/nix.sh ]; then . /home/amedhi/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

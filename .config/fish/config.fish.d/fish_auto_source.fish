@@ -20,4 +20,4 @@ function auto_source --on-event fish_prompt -d 'auto source config.fish if gets 
 end
 
 auto_source
-abbr profile "$EDITOR $FISH_CONFIG_PATH"
+abbr -g profile "$EDITOR $FISH_CONFIG_PATH"

@@ -12,10 +12,10 @@ wd := invocation_directory()
     nvim {{justfile_directory()}}/{{name}}.just
 
 @config-nvim:
-    cd .config/nvim && $EDITOR init.lua
+    cd ~/.config/nvim && $EDITOR init.lua
 
 @config-fish:
-    cd .config/fish && $EDITOR config.fish
+    cd ~/.config/fish && $EDITOR config.fish
 
 @config-edit:
     nvim (fd -IH --type f '.' ~/.config/ | fzf)

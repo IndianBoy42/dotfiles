@@ -26,4 +26,12 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 source "$HOME/.cargo/env"
+
 if [ -e /home/amedhi/.nix-profile/etc/profile.d/nix.sh ]; then . /home/amedhi/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+[[ -s "/home/amedhi/.gvm/scripts/gvm" ]] && source "/home/amedhi/.gvm/scripts/gvm"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+

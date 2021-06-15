@@ -39,8 +39,8 @@ if test -e ~/git-builds/git-subrepo/.fish.rc
 end
 
 if not set -q IN_NIX_SHELL 
-    ## Inside a Nix Environment
     and not set -q FISH_NIX_ACTIVATED
+    ## Inside a Nix Environment
 
     # Default nix profile
     if set -q FISH_ACTIVATE_NIX

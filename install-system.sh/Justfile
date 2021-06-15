@@ -843,15 +843,20 @@ docker:
 @apt-all file: apt
     {{apt-install}} (cat {{inst-script-dir}}/{{file}}.apt)
 
+# Install apt libraries
 @apt-libs: apt
     just apt-all libs
     {{apt-install}} linux-tools-(uname -r)
+# Install apt applications
 @apt-apps: apt
     just apt-all apps
 
+# Download all apt packages from a file in install-system.sh
 @_apt-repo name:
     echo "The getpkg.sh script throws a lot of errors about missing dependencies, and returns error even when successfull"
     xargs -P(math (nproc) "* 8") -i sh -c "just getpkg {} || true" < {{inst-script-dir}}/{{name}}.apt
+
+# Download all my apt packages into a repo
 @apt-repo:
     {{justrun}} _apt-repo "system"
     {{justrun}} _apt-repo "libs"

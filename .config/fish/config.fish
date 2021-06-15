@@ -325,5 +325,7 @@ abbr ssyctl 'sudo systemctl'
 # Run other configs
 ##################################
 
-source $FISH_CONFIG_PATH.d/*.fish &> /dev/null
+for file in $FISH_CONFIG_PATH.d/*.fish
+    source $file
+end
 

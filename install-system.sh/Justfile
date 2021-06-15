@@ -1,8 +1,11 @@
 set shell := ["fish", "-c"]
 set positional-arguments
 
-prefix := "$HOME/.local/packages"
+sysinstalldir := "/usr/local"
 installdir := "$HOME/.local"
+stow-package-dir := "packages"
+sysprefix := sysinstalldir + "/" + stow-package-dir
+prefix := installdir + "/" + stow-package-dir
 bindir := installdir + "/bin"
 libdir := installdir + "/lib"
 libexecdir := installdir + "/libexec"
@@ -903,3 +906,7 @@ nix:
 mtr: (gitclone "https://github.com/traviscross/mtr.git" "mtr")
     cd {{blddir}}/mtr && ./bootstrap.sh
     {{justrun}} autotool-install mtr
+
+# Install as root
+root name:
+    {{justrun}} prefix={{sysprefix}} installdir={{sysinstalldir}} stow='sudo stow' {{name}}

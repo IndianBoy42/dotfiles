@@ -91,6 +91,10 @@ mkrepo:
 # Helpers
 ##############################################333
 
+# Install as root
+root name:
+    {{justrun}} prefix={{sysprefix}} installdir={{sysinstalldir}} stow='sudo stow' {{name}}
+
 common: 
     echo "TODO: save list of packages installed by this"
 
@@ -620,7 +624,7 @@ cargo-essentials: cargo-install gitui ripgrep broot
 alacritty: cargo-install
     {{cargo-install}} alacritty
     not type -q alacritty
-    pip install --user alacritty-colorscheme
+    pipx install alacritty-colorscheme
     wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/logo/alacritty-term.svg -O /tmp/alacritty-term.svg
     sudo cp /tmp/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
     wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info -O /tmp/alacritty.info
@@ -730,9 +734,13 @@ conda:
     end
     conda update -n base -c defaults --all
 
+# Python dev tools
+pydev: conda pipx pipenv poetry
+    pipx install black mypy
+
 # 'Essential' python packages
 py-essentials:
-    pip3 install --user click argcomplete rich black
+    pip3 install --user click argcomplete rich ptpython ipython
     conda install jupyter
 
 # Isolated pip installs
@@ -747,11 +755,12 @@ pipenv: pipx
 # Poetry python dev environment manager
 poetry: 
     #!/usr/bin/env fish
-    if type -q poetry
-        poetry self update
-    else
-        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - --preview
-    end
+    pipx install poetry
+    #if type -q poetry
+    #    poetry self update
+    #else
+    #    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - --preview
+    #end
 
 # Create conda environment from file
 conda-env name:
@@ -961,6 +970,5 @@ mtr: (gitclone "https://github.com/traviscross/mtr.git" "mtr")
     cd {{blddir}}/mtr && ./bootstrap.sh
     {{justrun}} autotool-install mtr
 
-# Install as root
-root name:
-    {{justrun}} prefix={{sysprefix}} installdir={{sysinstalldir}} stow='sudo stow' {{name}}
+platformio: 
+    pipx install platformio

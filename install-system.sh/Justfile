@@ -129,13 +129,13 @@ _tmpdir name:
 ins-copy name from: (mkpackdir name)
     cp -r {{from}}/{{name}}/*/ {{prefix}}/{{name}}/
     #rm -rf /tmp/{{name}} # TODO: should delete?
+    chmod +x {{prefix}}/{{name}}/bin/*
     {{justrun}} link-pack {{name}}
 
 # Install one or more binaries using stow
 ins-bin name from:
     mkdir -p {{from}}/{{name}}/bin
     cp {{from}}/{{name}}/{{name}} {{from}}/{{name}}/bin
-    chmod +x {{from}}/{{name}}/bin
     {{justrun}} ins-copy {{name}} {{from}}
 
 # Download an asset from Github releases (to /tmp/name)
@@ -675,6 +675,7 @@ cargo-all-musl: cargo-install serial-monitor bandwhich pueue indexa
     {{cargo-install}} tokei
     {{cargo-install}} zoxide
     {{cargo-install}} gpg-tui 
+    {{cargo-install}} jq  
 
 cargo-all: cargo-essentials cargo-build-tools cargo-all-gnu cargo-all-musl
     {{justrun}} cargo-needs-update
@@ -858,6 +859,24 @@ stow: (gitclone "https://github.com/aspiers/stow.git" "stow") (mkpackdir "stow")
     make
     make install prefix="{{prefix}}/stow"
     {{justrun}} link-pack "stow"
+
+jq: (bingh "jq" "stedolan/jq" "jq-linux64")
+    echo "Installed jq"
+
+# https://medium.com/@ankurloriya/install-gnome-extension-using-command-line-736199be1cda
+# Install extension from the command line
+gnome-extension path:
+    #!/usr/bin/env fish
+    set name (basename {{path}})
+    mkdir -p /tmp/$name
+    cd /tmp/$name
+    cp {{path}} .
+    extract $name
+    test -d $name
+    set uuid (cat $name/metadata.json | jq -r '.uuid')
+    mkdir -p ~/.local/share/gnome-shell/extensions/
+    cp -r $name $uuid
+    gnome-shell-extension-tool enable $uuid
 
 nix:
     curl -L https://nixos.org/nix/install | sh

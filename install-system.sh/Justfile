@@ -33,12 +33,12 @@ rust-gnu := "x86_64-unknown-linux-gnu"
 rust-musl := "x86_64-unknown-linux-musl"
 export RUSTC_WRAPPER := "sccache"
 export CARGO_BUILD_TARGET := rust-musl
-install-sys-dir := "~/install-system.sh"
-justrun := "just -d " + install-sys-dir + " -f " + justfile()
+inst-script-dir := "~/install-system.sh"
+justrun := "just -d " + inst-script-dir + " -f " + justfile()
 
-local-apt-repo := install-sys-dir + "/apt-repo"
-local-tar-repo := install-sys-dir + "/tar-repo"
-local-flatpak-repo := install-sys-dir + "/flatpak-repo"
+local-apt-repo := inst-script-dir + "/apt-repo"
+local-tar-repo := inst-script-dir + "/tar-repo"
+local-flatpak-repo := inst-script-dir + "/flatpak-repo"
 
 cargo-install := "cargo install" # TODO: can use quickinstall
 # cargo-install := "pueue add -- cargo install --force --jobs 1" # TODO: background compile
@@ -56,7 +56,7 @@ stow := "stow"
     just -l -f {{justfile()}}
 
 edit:
-    cd {{install-sys-dir}} && nvim {{justfile()}}
+    cd {{inst-script-dir}} && nvim {{justfile()}}
 
 
 ##############################################333
@@ -471,10 +471,10 @@ kmonad: (bingh "kmonad" "kmonad/kmonad" "*linux")
     sudo usermod -aG uinput $USER
     sudo usermod -aG input $USER
     sudo modprobe uinput
-    sudo cp {{install-sys-dir}}/uinput.rules /etc/udev/rules.d/uinput.rules
+    sudo cp {{inst-script-dir}}/uinput.rules /etc/udev/rules.d/uinput.rules
     # sudo touch /etc/udev/rules.d/uinput.rules
     # echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/uinput.rules
-    # cp {{install-sys-dir}}/kmonad.service ~/.config/systemd/user/kmonad.service # synced by yadm
+    # cp {{inst-script-dir}}/kmonad.service ~/.config/systemd/user/kmonad.service # synced by yadm
     systemctl --user enable kmonad.service
     systemctl --user start kmonad.service
     echo "The next output will help you find the device that your keyboard corresponds to"
@@ -806,9 +806,10 @@ flatpak-dl command:
     sudo apt update > /tmp/aptupdate.log || echo "Not connected to the internet, hope you have a cache"
 
 apt-srcs:
-    {{install-sys-dir}}/install-apt-srcs.fish
+    {{inst-script-dir}}/install-apt-srcs.fish
 
-docker: apt
+# Install docker and enable permissions
+docker:
     {{apt-install}} docker-ce docker-ce-cli containerd.io
     getent group docker || sudo groupadd docker
     sudo usermod -aG docker $USER
@@ -816,7 +817,7 @@ docker: apt
 
 # Install all apt packages from a file in install-system.sh
 @apt-all file: apt
-    {{apt-install}} (cat {{install-sys-dir}}/{{file}}.apt)
+    {{apt-install}} (cat {{inst-script-dir}}/{{file}}.apt)
 
 @apt-libs: apt
     just apt-all libs
@@ -826,7 +827,7 @@ docker: apt
 
 @_apt-repo name:
     echo "The getpkg.sh script throws a lot of errors about missing dependencies, and returns error even when successfull"
-    xargs -P(math (nproc) "* 8") -i sh -c "just getpkg {} || true" < {{install-sys-dir}}/{{name}}.apt
+    xargs -P(math (nproc) "* 8") -i sh -c "just getpkg {} || true" < {{inst-script-dir}}/{{name}}.apt
 @apt-repo:
     {{justrun}} _apt-repo "system"
     {{justrun}} _apt-repo "libs"

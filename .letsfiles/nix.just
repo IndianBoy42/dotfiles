@@ -1,8 +1,8 @@
 set shell := ["fish", "-c"]
 wd := invocation_directory()
 
-profile := '~/.nix-profile'
-nix-env := 'nix-env -p ' + profile
+default-profile := '~/.nix-profile'
+nix-env := 'nix-env -p ' + default-profile
 
 # https://ianthehenry.com/posts/how-to-learn-nix/declarative-user-environment/
 
@@ -15,8 +15,14 @@ nix-env := 'nix-env -p ' + profile
 @enter:
     FISH_ACTIVATE_NIX=1 fish -i
 
-@activate name="~/.nix-profile":
-    FISH_ACTIVATE_NIX="{{name}}" fish -i
+@activate profile=default-profile:
+    FISH_ACTIVATE_NIX_PROFILE="{{profile}}" fish -i
+
+@shell name profile=default-profile:
+    FISH_ACTIVATE_NIX_PROFILE="{{profile}}" fish -ic "nix-shell -p {{name}}"
+
+@pshell name profile=default-profile:
+    FISH_ACTIVATE_NIX_PROFILE="{{profile}}" fish -ic "nix-shell -p {{name}} --pure"
 
 installed:
     {{nix-env}} -q 

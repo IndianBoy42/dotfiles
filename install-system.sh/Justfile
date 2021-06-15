@@ -98,6 +98,10 @@ root name:
 common: 
     echo "TODO: save list of packages installed by this"
 
+# Install-Upgrade using pipx
+pipx-install name: pipx
+    pipx install {{name}} || pipx upgrade {{name}}
+
 # Link from a directory inside {{prefix}}
 link-pack name:
     {{justrun}} dostow -R {{name}}
@@ -386,17 +390,17 @@ mpv:
 
 # mps-youtube -- cli youtube client
 mps-youtube: mpv
-    pipx install git+https://github.com/mps-youtube/mps-youtube.git
+    {{justrun}} pipx-install git+https://github.com/mps-youtube/mps-youtube.git
     pipx inject mps-youtube youtube-dl 
     pipx inject mps-youtube pyperclip
 
 # Run a program on a remote computer
 outrun:
-    pipx install outrun
+    {{justrun}} pipx-install outrun
 
 # SSH with your shell environment
 xxh:
-    pipx install xxh-xxh
+    {{justrun}} pipx-install xxh-xxh
 
 # Futhark
 futhark: (gitclone "https://github.com/diku-dk/futhark.git" "futhark")
@@ -624,7 +628,7 @@ cargo-essentials: cargo-install gitui ripgrep broot
 alacritty: cargo-install
     {{cargo-install}} alacritty
     not type -q alacritty
-    pipx install alacritty-colorscheme
+    {{justrun}} pipx-install alacritty-colorscheme
     wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/logo/alacritty-term.svg -O /tmp/alacritty-term.svg
     sudo cp /tmp/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
     wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info -O /tmp/alacritty.info
@@ -736,7 +740,7 @@ conda:
 
 # Python dev tools
 pydev: conda pipx pipenv poetry
-    pipx install black mypy
+    {{justrun}} pipx-install black mypy
 
 # 'Essential' python packages
 py-essentials:
@@ -750,17 +754,22 @@ pipx:
 
 # Pipenv venv manager
 pipenv: pipx
-    pipx install pipenv
+    {{justrun}} pipx-install pipenv
 
 # Poetry python dev environment manager
 poetry: 
     #!/usr/bin/env fish
-    pipx install poetry
+    {{justrun}} pipx-install poetry
     #if type -q poetry
     #    poetry self update
     #else
     #    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - --preview
     #end
+
+# Temporary venvs for quick scripts
+pip-run:
+    {{justrun}} pipx-install pip-run 
+    pipx inject pip-run click rich ptpython ipython numpy matplotlib ipython ptpython
 
 # Create conda environment from file
 conda-env name:
@@ -971,4 +980,4 @@ mtr: (gitclone "https://github.com/traviscross/mtr.git" "mtr")
     {{justrun}} autotool-install mtr
 
 platformio: 
-    pipx install platformio
+    {{justrun}} pipx-install platformio

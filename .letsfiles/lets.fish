@@ -1,5 +1,6 @@
 # Defined interactively
 function lets
+    set -l argc (count $argv)
     if count $argv > /dev/null
         # Run from a justfile if exists
         if test -e ~/.letsfiles/$argv[1].just
@@ -8,12 +9,13 @@ function lets
         end
         # Run a script/binary if exists
         if test -x ~/.letsfiles/$argv[1]
-            cd ~ && ~/.letsfiles/$argv[1] $argv[2..-1]
+            ~/.letsfiles/$argv[1] $argv[2..-1]
             return 0
         end
         # Run a nested script/binary if exists
-        if test -x ~/.letsfiles/$argv[1]/$argv[2]
-            cd ~ && ~/.letsfiles/$argv[1]/$argv[2] $argv[3..-1]
+        if test $argc -ge 2
+           and test -x ~/.letsfiles/$argv[1]/$argv[2]
+            ~/.letsfiles/$argv[1]/$argv[2] $argv[3..-1]
             return 0
         end
     end

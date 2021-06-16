@@ -6,9 +6,14 @@ nix-env := 'nix-env -p ' + default-profile
 
 # https://ianthehenry.com/posts/how-to-learn-nix/declarative-user-environment/
 
+# Enter a nix environment
 @env profile="":
     {{ if profile == "" { "FISH_ACTIVATE_NIX=1" } else { "FISH_ACTIVATE_NIX_PROFILE=" + profile } }} \
     fish -i
+
+@do command profile="":
+    {{ if profile == "" { "FISH_ACTIVATE_NIX=1" } else { "FISH_ACTIVATE_NIX_PROFILE=" + profile } }} \
+    fish -ic {{command}}
 
 @_default:
     just -f {{justfile()}} --list

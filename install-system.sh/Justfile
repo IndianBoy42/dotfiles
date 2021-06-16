@@ -843,6 +843,8 @@ todoist:
     {{flatpak-install}} com.todoist.Todoist 
 blender: 
     {{flatpak-install}} org.blender.Blender
+megasync:
+    {{flatpak-install}} nz.mega.MEGAsync
 
 # Simulate another flatpak install but just download to local-flatpak-repo
 flatpak-dl +command:

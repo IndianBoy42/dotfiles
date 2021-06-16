@@ -8,7 +8,7 @@ stow-package-dir := "packages"
 sysinstalldir := "/usr/local"
 blddir := "~/git-builds"
 inst-script-dir := "~/install-system.sh"
-installdir := if to-root != "0" { "$HOME/.local" } else { sysinstalldir }
+installdir := if to-root != "0" { sysinstalldir } else {  "$HOME/.local" }
 
 prefix := installdir + "/" + stow-package-dir
 
@@ -55,7 +55,8 @@ cargo-bg := "0"
 cargo-install := if cargo-bg != "0" { "pueue add -- cargo install --force --jobs 1" } else { "cargo install" }# TODO: can use quickinstall
 # cargo-install := "pueue add -- cargo install --force --jobs 1" # TODO: background compile
 
-flatpak-exe := if to-root != "0" { "sudo flatpak" } else { "flatpak" }
+# TODO: figure out why/how/what is user vs system
+flatpak-exe := if to-root != "0" { "flatpak" } else { "flatpak" }
 flatpak-download := flatpak-exe + " create-usb " + local-flatpak-repo
 flatpak-install-local := flatpak-exe + " install --or-update --sideload-repo " + local-flatpak-repo + "/.ostree/repo flathub"
 flatpak-install-remote := flatpak-exe + " install --or-update flathub"
@@ -63,7 +64,7 @@ flatpak-install := flatpak-install-local
 
 apt-install := "sudo apt install"
 
-stow := if to-root != "0" { "stow" } else { "sudo stow" }
+stow := if to-root != "0" { "sudo stow" } else { "stow" }
 
 @_default:
     {{justrun}} --choose --chooser 'fzf --preview="just --show {}"' # --list
@@ -953,14 +954,23 @@ pack-repos:
         {{prefix}} 
 
 # GNU Stow symlink farm manager -- build stow from source 
-stow: (gitclone "https://github.com/aspiers/stow.git" "stow") (mkpackdir "stow")
+stow-src: (gitclone "https://github.com/aspiers/stow.git" "stow") (mkpackdir "stow")
     #!/usr/bin/env fish
     cd {{blddir}}/stow
     autoreconf -iv
     ./configure --prefix="{{installdir}}"
     make
     make install prefix="{{prefix}}/stow"
-    {{justrun}} link-pack "stow"
+    {{justrun}} stow="./bin/stow" link-pack "stow"
+
+# GNU Stow symlink farm manager -- Choose apt or src
+stow: 
+    #!/usr/bin/env fish
+    if confirm "Install from source? [y/N]"
+        {{justrun}} stow-src
+    else
+        {{apt-install}} stow
+    end
 
 # JSON query CLI
 jq: (bingh "jq" "stedolan/jq" "jq-linux64")

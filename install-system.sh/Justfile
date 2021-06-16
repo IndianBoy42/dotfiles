@@ -1,59 +1,72 @@
 set shell := ["fish", "-c"]
 set positional-arguments
 
-sysinstalldir := "/usr/local"
-installdir := "$HOME/.local"
-stow-package-dir := "packages"
-sysprefix := sysinstalldir + "/" + stow-package-dir
-prefix := installdir + "/" + stow-package-dir
-bindir := installdir + "/bin"
-libdir := installdir + "/lib"
-libexecdir := installdir + "/libexec"
-incdir := installdir + "/include"
-sharedir := installdir + "/share"
-blddir := "~/git-builds"
-compflags := "-O3 -march=native -mtune=native"
-ldflags := "-march=native -mtune=native"
-export CMAKE_GENERATOR := "Ninja"
-export CMAKE_BUILD_TYPE := "Release"
-export CMAKE_EXE_LINKER_FLAGS := "-fuse-ld=gold"
-export CMAKE_SHARED_LINKER_FLAGS := "-fuse-ld=gold"
-export CMAKE_EXPORT_COMPILE_COMMANDS := "OFF"
-nprocs := `nproc`
-export MAKEFLAGS := "-j " + nprocs
-
-export CFLAGS := "-O3 -march=native -mtune=native"
-export CXXFLAGS := "-O3 -march=native -mtune=native"
-export CPPFLAGS := CXXFLAGS
-export FFLAGS := "-O3 -march=native -mtune=native"
-export FCFLAGS := "-O3 -march=native -mtune=native"
-export CMAKE_C_FLAGS_RELEASE := CFLAGS
-export CMAKE_CXX_FLAGS_RELEASE := CXXFLAGS
-rust-gnu := "x86_64-unknown-linux-gnu"
-rust-musl := "x86_64-unknown-linux-musl"
-export RUSTC_WRAPPER := "sccache"
-export CARGO_BUILD_TARGET := rust-musl
-inst-script-dir := "~/install-system.sh"
 justrun := "just -d " + inst-script-dir + " -f " + justfile()
+
+to-root := "0"
+stow-package-dir := "packages"
+sysinstalldir := "/usr/local"
+blddir := "~/git-builds"
+inst-script-dir := "~/install-system.sh"
+installdir := if to-root != "0" { "$HOME/.local" } else { sysinstalldir }
+
+prefix := installdir + "/" + stow-package-dir
 
 local-apt-repo := inst-script-dir + "/apt-repo"
 local-tar-repo := inst-script-dir + "/tar-repo"
 local-flatpak-repo := inst-script-dir + "/flatpak-repo"
 
-cargo-install := "cargo install" # TODO: can use quickinstall
+bindir := installdir + "/bin"
+libdir := installdir + "/lib"
+libexecdir := installdir + "/libexec"
+incdir := installdir + "/include"
+sharedir := installdir + "/share"
+
+export CMAKE_GENERATOR := "Ninja"
+export CMAKE_BUILD_TYPE := "Release"
+export CMAKE_EXPORT_COMPILE_COMMANDS := "ON"
+
+nprocs := `nproc`
+
+export MAKEFLAGS := "-j " + nprocs
+
+compflags := "-O3 -march=native -mtune=native"
+ldflags := "-march=native -mtune=native"
+export CFLAGS := compflags
+export CXXFLAGS := compflags
+export CPPFLAGS := CXXFLAGS
+export FFLAGS := compflags
+export FCFLAGS := compflags
+
+export CMAKE_C_FLAGS_RELEASE := CFLAGS
+export CMAKE_CXX_FLAGS_RELEASE := CXXFLAGS
+export CMAKE_EXE_LINKER_FLAGS := "-fuse-ld=gold"
+export CMAKE_SHARED_LINKER_FLAGS := CMAKE_EXE_LINKER_FLAGS
+
+use-sccache := "1"
+export RUSTC_WRAPPER := if use-sccache != "0" { "sccache" } else { "" }
+
+cargo-build-gnu := "x86_64-unknown-linux-gnu"
+cargo-build-musl := "x86_64-unknown-linux-musl"
+use-musl := "1" # Used only for cargo for now
+export CARGO_BUILD_TARGET := if use-musl != "0" { cargo-build-musl } else { "" }
+
+cargo-bg := "0"
+cargo-install := if cargo-bg != "0" { "pueue add -- cargo install --force --jobs 1" } else { "cargo install" }# TODO: can use quickinstall
 # cargo-install := "pueue add -- cargo install --force --jobs 1" # TODO: background compile
 
-flatpak-download := "flatpak create-usb " + local-flatpak-repo
-flatpak-install-local := "flatpak install --sideload-repo " + local-flatpak-repo + "/.ostree/repo flathub"
-flatpak-install-remote := "flatpak install flathub"
+flatpak-exe := if to-root != "0" { "sudo flatpak" } else { "flatpak" }
+flatpak-download := flatpak-exe + " create-usb " + local-flatpak-repo
+flatpak-install-local := flatpak-exe + " install --or-update --sideload-repo " + local-flatpak-repo + "/.ostree/repo flathub"
+flatpak-install-remote := flatpak-exe + " install --or-update flathub"
 flatpak-install := flatpak-install-local
 
 apt-install := "sudo apt install"
 
-stow := "stow"
+stow := if to-root != "0" { "stow" } else { "sudo stow" }
 
 @_default:
-    just -l -f {{justfile()}}
+    {{justrun}} --choose --chooser 'fzf --preview="just --show {}"' # --list
 
 edit:
     cd {{inst-script-dir}} && nvim {{justfile()}}
@@ -92,8 +105,8 @@ mkrepo:
 ##############################################333
 
 # Install as root
-root name:
-    {{justrun}} prefix={{sysprefix}} installdir={{sysinstalldir}} stow='sudo stow' {{name}}
+as-root +name:
+    {{justrun}} installdir={{sysinstalldir}} stow='sudo stow' {{name}} 
 
 common: 
     echo "TODO: save list of packages installed by this"
@@ -450,14 +463,14 @@ gcm: (debgh "gcmcore" "microsoft/Git-Credential-Manager-Core" "*amd64*.deb")
 
 # Quantum Mechanical Keyboard firmware
 qmk: (gitclone "https://github.com/IndianBoy42/qmk_firmware.git" "qmk_firmware")
-    pip3 install --user qmk
-    cd ~/qmk_firmware \
-    && git remote add upstream "https://github.com/qmk/qmk_firmware.git" && \
-    git fetch --unshallow
+    cd ~/qmk_firmware
+    git remote add upstream "https://github.com/qmk/qmk_firmware.git" && \
     sudo cp ~/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
-    qmk setup
-    qmk doctor
-    ~/qmk_firmware/util/qmk_install.sh
+    nix-shell
+    #pip3 install --user qmk
+    #qmk setup
+    #qmk doctor
+    #~/qmk_firmware/util/qmk_install.sh
 
 # CMake (not a) build system
 cmake: (insgh "cmake" "Kitware/CMake" "*linux-x86_64.tar.gz")
@@ -574,7 +587,7 @@ cargo-quickinstall:
     cargo install cargo-quickinstall
 
 cargo-update:
-    CARGO_BUILD_TARGET={{rust-gnu}} {{cargo-install}} cargo-update
+    CARGO_BUILD_TARGET={{cargo-build-gnu}} {{cargo-install}} cargo-update
 
 sccache-gh: (bingh "sccache" "mozilla/sccache" "sccache-*-x86_64-unknown-linux-musl.tar.gz")
     echo "Installed"
@@ -603,7 +616,7 @@ indexa: cargo-install
     {{cargo-install}} --git https://github.com/mosmeh/indexa.git
 
 tealdeer: cargo-install
-    CARGO_BUILD_TARGET={{rust-gnu}} {{cargo-install}} $argv[1]
+    CARGO_BUILD_TARGET={{cargo-build-gnu}} {{cargo-install}} $argv[1]
     tldr --update
 
 pueue: cargo-install
@@ -615,15 +628,6 @@ pueue: cargo-install
 bandwhich: cargo-install
     {{cargo-install}} $argv[1]
     type -q bandwhich && sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
-
-cargo-essentials: cargo-install gitui ripgrep broot
-    {{cargo-install}} bat
-    {{cargo-install}} kn
-    {{cargo-install}} zoxide
-    {{cargo-install}} lsd
-    {{cargo-install}} bottom
-    {{cargo-install}} fd-find
-    {{cargo-install}} git-delta 
 
 alacritty: cargo-install
     {{cargo-install}} alacritty
@@ -645,7 +649,7 @@ broot: cargo-install
 
 cargo-build-tools:
     #!/usr/bin/env fish
-    set -x CARGO_BUILD_TARGET {{rust-gnu}}
+    set -x CARGO_BUILD_TARGET {{cargo-build-gnu}}
     {{cargo-install}} cargo-edit 
     {{cargo-install}} cargo-generate 
     {{cargo-install}} cargo-outdated 
@@ -654,11 +658,26 @@ cargo-build-tools:
     {{cargo-install}} cargo-binutils cargo-do 
     {{cargo-install}} cargo-watch
     {{cargo-install}} cargo-equip
+    {{cargo-install}} crate2nix
     {{cargo-install}} flamegraph  
+
+cargo-essentials: cargo-install gitui ripgrep broot tealdeer
+    {{cargo-install}} bat
+    {{cargo-install}} kn
+    {{cargo-install}} zoxide
+    {{cargo-install}} lsd
+    {{cargo-install}} bottom
+    {{cargo-install}} fd-find
+    {{cargo-install}} jq  
+    {{cargo-install}} git-delta 
+    {{cargo-install}} huniq
+    {{cargo-install}} hyperfine  
+    {{cargo-install}} pipe-rename 
+    {{cargo-install}} du-dust
 
 cargo-all-gnu: cargo-install tealdeer
     #!/usr/bin/env fish
-    set -x CARGO_BUILD_TARGET {{rust-gnu}}
+    set -x CARGO_BUILD_TARGET {{cargo-build-gnu}}
     {{cargo-install}} cargo-edit 
     {{cargo-install}} cargo-generate 
     {{cargo-install}} cargo-outdated 
@@ -672,11 +691,7 @@ cargo-all-gnu: cargo-install tealdeer
 cargo-all-musl: cargo-install serial-monitor bandwhich pueue indexa
     {{cargo-install}} macchina
     {{cargo-install}} onefetch
-    {{cargo-install}} kn
-    {{cargo-install}} bat
-    {{cargo-install}} bottom
     {{cargo-install}} drone
-    {{cargo-install}} du-dust
     {{cargo-install}} dua
     {{cargo-install}} eva
     {{cargo-install}} exa 
@@ -684,13 +699,8 @@ cargo-all-musl: cargo-install serial-monitor bandwhich pueue indexa
     {{cargo-install}} flip-link 
     {{cargo-install}} gfold
     {{cargo-install}} gping
-    {{cargo-install}} git-delta
-    {{cargo-install}} huniq
-    {{cargo-install}} hyperfine  
-    {{cargo-install}} lsd
     {{cargo-install}} mdbook
     {{cargo-install}} mdcat
-    {{cargo-install}} pipe-rename 
     {{cargo-install}} procs
     {{cargo-install}} ptail
     {{cargo-install}} rustfilt  
@@ -702,9 +712,7 @@ cargo-all-musl: cargo-install serial-monitor bandwhich pueue indexa
     {{cargo-install}} watchexec-cli
     {{cargo-install}} xsv
     {{cargo-install}} tokei
-    {{cargo-install}} zoxide
     {{cargo-install}} gpg-tui 
-    {{cargo-install}} jq  
 
 # Install 'all' the cargo binaries (that i like)
 cargo-all: cargo-essentials cargo-build-tools cargo-all-gnu cargo-all-musl
@@ -799,6 +807,9 @@ flatpak:
         flatpak remote-modify --collection-id=org.flathub.Stable flathub
     end
 
+pak-install +name:
+    {{flatpak-install}} {{name}}
+
 kicad: flatpak
     {{flatpak-install}} org.kicad.KiCad \
         org.kicad.KiCad.Library.Templates   \
@@ -833,8 +844,8 @@ todoist:
 blender: 
     {{flatpak-install}} org.blender.Blender
 
-# Simulate another flatpak install but just download local-flatpak-repo
-flatpak-dl command:
+# Simulate another flatpak install but just download to local-flatpak-repo
+flatpak-dl +command:
     {{justrun}} flatpak-install="{{flatpak-install-remote}}" {{command}} # Install first 
     {{justrun}} flatpak-install="{{flatpak-download}}" {{command}} # Then pack into the repo
 
@@ -928,8 +939,7 @@ kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune") (mkpackdir 
 
 # Pack all necessary sources/repos
 pack-repos:
-    #tar --zstd -cf {{inst-script-dir}}/repos.tar.zst \
-    #
+    #tar --zstd -cf {{inst-script-dir}}/repos.tar.zst
     tar --zstd -cvf /dev/null \
         --exclude='.local/share' \
         {{local-apt-repo}}  \

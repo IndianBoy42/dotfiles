@@ -18,5 +18,7 @@ wd := invocation_directory()
     cd ~/.config/fish && $EDITOR config.fish
 
 @config-edit:
-    nvim (fd -IH --type f '.' ~/.config/ | fzf)
 
+    #!/usr/bin/env fish
+    set chosen (yadm tracked ~ | fzf --preview='bat {}')
+    test -n chosen && nvim $chosen

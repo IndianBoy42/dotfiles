@@ -253,6 +253,7 @@ abbr sptpal " spt play -f '$SPT_FORMAT' --album --name"
 abbr sptpt " spt play -f '$SPT_FORMAT' --track --name"
 
 if type -q bass
+    and type -q gvm
 	gvm use latest &> /dev/null
 end
 if type -q nvm

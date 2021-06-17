@@ -22,7 +22,7 @@ wd := invocation_directory()
     set chosen (yadm tracked ~ | fzf --preview='bat {}')
     test -n chosen && nvim $chosen
 
-@qmk +command
+@qmk +command:
     #!/usr/bin/env fish
     test -n "{{command}}"
     and lets nix do "cd ~/qmk_firmware && nix-shell "qmk {{command}}""}

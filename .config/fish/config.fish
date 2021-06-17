@@ -43,20 +43,22 @@ if not set -q IN_NIX_SHELL
     ## Inside a Nix Environment
 
     # Default nix profile
-    if set -q FISH_ACTIVATE_NIX
-        set -q FISH_ACTIVATE_NIX_PROFILE
+    if test -n "$FISH_ACTIVATE_NIX"
+        test -n "$FISH_ACTIVATE_NIX_PROFILE"
         or set -g FISH_ACTIVATE_NIX_PROFILE "~/.nix-profile"
     end
 
     # Activate the profile
-    if set -q FISH_ACTIVATE_NIX_PROFILE
+    if test -n "$FISH_ACTIVATE_NIX_PROFILE"
         # TODO: https://github.com/lilyball/nix-env.fish
-        bass source $FISH_ACTIVATE_NIX_PROFILE/etc/profile.d/nix.sh
-        any-nix-shell fish --info-right | source
+        if bass source $FISH_ACTIVATE_NIX_PROFILE/etc/profile.d/nix.sh 
+            any-nix-shell fish --info-right | source
+
+            # Guard repeated activations
+            set -g FISH_NIX_ACTIVATED 1
+        end
     end
 
-    # Guard repeated activations
-    set -g FISH_NIX_ACTIVATED 1
 else
     ## Inside a Nix Shell
 

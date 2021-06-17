@@ -1,5 +1,5 @@
-set CONDA_ENVS (conda env list --json | jq '.envs[] | select(test("env")) | split("/") | .[-1]' -r)
-set CONDA_ABBRS (conda env list --json | jq '.envs[] | select(test("env")) | split("/") | .[-1] | "py-\(.)"' -r)
+# set CONDA_ENVS (conda env list --json | jq '.envs[] | select(test("env")) | split("/") | .[-1]' -r)
+set CONDA_ENVS (find ~/anaconda3/envs/ -maxdepth 1 -type d | tail -n+2 | xargs -i basename "{}" )
 set -g CONDA_CMDS "install" "run" "update" "list" "remove" "clean" "update"
 function conda-abbrs
     set abbr $argv

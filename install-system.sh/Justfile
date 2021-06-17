@@ -908,6 +908,7 @@ smerge:
     apt update
     {{apt-install}} sublime-merge
 
+# TODO: install in an isolated virutal environment? (use pipx)
 # Install neovim from unstable ppa (also install my lunarvim)
 nvim:
     sudo add-apt-repository -y ppa:neovim-ppa/unstable

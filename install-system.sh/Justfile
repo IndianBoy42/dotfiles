@@ -466,11 +466,11 @@ qmk: (gitclone "https://github.com/IndianBoy42/qmk_firmware.git" "qmk_firmware")
     cd ~/qmk_firmware
     git remote add upstream "https://github.com/qmk/qmk_firmware.git" && \
     sudo cp ~/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
-    nix-shell
-    #pip3 install --user qmk
-    #qmk setup
-    #qmk doctor
-    #~/qmk_firmware/util/qmk_install.sh
+    # nix-shell
+    pipx install --user qmk
+    qmk setup
+    qmk doctor
+    ~/qmk_firmware/util/qmk_install.sh
 
 # CMake (not a) build system
 cmake: (insgh "cmake" "Kitware/CMake" "*linux-x86_64.tar.gz")
@@ -755,7 +755,7 @@ py-essentials:
     pip3 install --user click argcomplete rich ptpython ipython bpython
     conda install jupyter
 
-# Isolated pip installs
+# Isolated pip installs for applications
 pipx:
     pip3 install --user pipx
     pipx ensurepath

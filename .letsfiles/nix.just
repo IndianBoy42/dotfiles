@@ -18,18 +18,19 @@ nix-gc-roots-dir := "~/.nix-gc-roots"
 
 # https://ianthehenry.com/posts/how-to-learn-nix/declarative-user-environment/
 
-# Enter a nix environment (or run commands)
+# Enter a nix environment determined by the `profile variable` (or run commands)
 @do *commands:
     {{ if commands != "" { commands } else { "fish -i" } }}
 
+# Enter a specific nix profile (equiv to `profile=$argv[1] do`)
 @enter prof *commands:
     {{justrun}} profile={{prof}} do {{commands}}
 
-# Enter a nix shell (or run commands)
+# Enter a nix-shell (or run commands)
 @sh *command="":
     {{nix-shell}} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
 
-# Enter a nix shell with a certain package
+# Enter a nix-shell with certain packages installed
 @sh-with name="" *command="":
     {{nix-shell}} {{ if name != "" { "-p " + name } else { "" } }} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
 
@@ -37,9 +38,11 @@ nix-gc-roots-dir := "~/.nix-gc-roots"
 @sh-of name *command="":
     {{nix-shell}} {{name}} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
 
+# Edit this Letsfile
 @edit:
     cd {{justfile_directory()}} && nvim {{justfile()}}
 
+# List installed derivations (must be in an environment to do)
 installed:
     {{nix-env}} -q 
 
@@ -47,7 +50,7 @@ installed:
 #  Manage nix environment  #
 ############################
 
-# Install into enviroment from file 
+# Install into enviroment from file (generally use the result of `lets nix export-user`)
 install-user:
     {{nix-env}} -irf {{user-nix}}
 
@@ -67,7 +70,7 @@ edit-user:
     diff {{user-nix}}.new {{user-nix}}.old || true
     echo "replace {{user-nix}}? [y/N]" && confirm && cp {{user-nix}}.new {{user-nix}}
 
-# What would change in my enviroment if I reinstall from the nix file
+# What would change in my enviroment if I install from the user.nix file
 @diff:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -83,22 +86,26 @@ edit-user:
 fetch:
     nix-channel --update
 
+# Delete old generations and GC the rest
 gc:
     nix-collect-garbage
 
 zipper := "zstd"
 zipext := zipper
+# Export the closure of a derivation into a file (uses the zipper file to compress the data)
 export name out="": 
     nix-store --export (nix-store -qR {{name}}) \
     {{ if zipper != "" { "| " + zipper } else { "" } }} \
     >  {{ if out == "" { "(basename " + name + ")" } else { out } }}.closure\
     {{ if zipper != "" { "." + zipext } else { "" } }}
 
+# Import all the packages from a closure file, will decompress the file on the fly (thanks zst)
 import name:
     {{ if zipper != "" { zipper + " -dc " + name + " |" } else { "" } }} \
     nix-store --import \
     {{ if zipper != "" { "" } else { "< " + name } }} \
 #< `basename {{name}} {{zipext}}`
 
+# Pin a nix-shell dev environment so it doesn't get garbage collected
 pin name="shell.nix":
     nix-instantiate {{name}} --indirect --add-root {{nix-gc-roots-dir}}$PWD/{{name}}.drv

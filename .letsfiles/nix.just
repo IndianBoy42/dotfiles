@@ -1,65 +1,65 @@
+pure := "0"
+profile := '~/.nix-profile'
+user-nix := '~/install-system.sh/user.nix'
+
+export FISH_ACTIVATE_NIX := if profile == "" { "1" } else { "" }
+export FISH_ACTIVATE_NIX_PROFILE := if profile != "" { profile } else { "" }
+
 set shell := ["fish", "-c"]
+
 wd := invocation_directory()
 
-default-profile := '~/.nix-profile'
-nix-env := 'nix-env -p ' + default-profile
+nix-env := 'nix-env -p ' + profile
+nix-shell := if pure != "0" { "nix-shell --pure" } else { "nix-shell" }
 
 # https://ianthehenry.com/posts/how-to-learn-nix/declarative-user-environment/
 
-# Enter a nix environment
-@env profile="":
-    {{ if profile == "" { "FISH_ACTIVATE_NIX=1" } else { "FISH_ACTIVATE_NIX_PROFILE=" + profile } }} \
-    fish -i
+# Enter a nix environment (or run commands)
+@do *commands:
+    {{ if commands != "" { commands } else { "fish -i" } }}
 
-@do command profile="":
-    {{ if profile == "" { "FISH_ACTIVATE_NIX=1" } else { "FISH_ACTIVATE_NIX_PROFILE=" + profile } }} \
-    fish -ic {{command}}
-
-@_default:
-    just -f {{justfile()}} --list
+# Enter a nix shell (or run commands)
+@sh name="" *command="":
+    {{nix-shell}} {{ if name != "" { "-p " + name } else { "" } }} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
 
 @edit:
     cd {{justfile_directory()}} && nvim {{justfile()}}
 
-@sh name command="" profile=default-profile:
-    FISH_ACTIVATE_NIX_PROFILE="{{profile}}" \
-    fish -c 'nix-shell -p {{name}} {{ if command != "" {"--command \""+command + "\""} else {""} }}'
-
-@prsh name command="" profile=default-profile:
-    FISH_ACTIVATE_NIX_PROFILE="{{profile}}" \
-    fish -c 'nix-shell -p {{name}} {{ if command != "" {"--command \""+command + "\""} else {""} }}'
-
 installed:
     {{nix-env}} -q 
 
+############################
+#  Manage nix environment  #
+############################
+
 # Install into enviroment from file 
-install file="~/install-system.sh/user.nix":
-    {{nix-env}} -irf {{file}}
+install-user:
+    {{nix-env}} -irf {{user-nix}}
 
 # Edit the user.nix file
-edit-user file="~/install-system.sh/user.nix":
-    $EDITOR {{file}}
-    echo "Install now? [y/N]" && confirm && just -f {{justfile()}} install-file {{file}}
+edit-user:
+    $EDITOR {{user-nix}}
+    echo "Install now? [y/N]" && confirm && just -f {{justfile()}} install-file {{user-nix}}
 
 # Export a declarative file of the enviroment
-@export file="~/install-system.sh/user.nix":
-    echo "Exporting to {{file}}.new"
-    cp {{file}} {{file}}.old || true
-    echo "with import <nixpkgs> {}; [" > {{file}}.new
-    {{nix-env}} -q  | cut -d '-' -f 1 >> {{file}}.new
-    echo "]" >> {{file}}.new
-    cat {{file}}.new
-    diff {{file}}.new {{file}}.old || true
-    echo "replace {{file}}? [y/N]" && confirm && cp {{file}}.new {{file}}
+@export-user:
+    echo "Exporting to {{user-nix}}.new"
+    cp {{user-nix}} {{user-nix}}.old || true
+    echo "with import <nixpkgs> {}; [" > {{user-nix}}.new
+    {{nix-env}} -q  | cut -d '-' -f 1 >> {{user-nix}}.new
+    echo "]" >> {{user-nix}}.new
+    cat {{user-nix}}.new
+    diff {{user-nix}}.new {{user-nix}}.old || true
+    echo "replace {{user-nix}}? [y/N]" && confirm && cp {{user-nix}}.new {{user-nix}}
 
 # What would change in my enviroment if I reinstall from the nix file
-@diff file="~/install-system.sh/user.nix":
+@diff:
     #!/usr/bin/env bash
     set -euo pipefail
     echo "======================================================="
     diff -U 0 \
       --label current <({{nix-env}} -q) \
-      --label user.nix <({{nix-env}} -qaf {{file}}) \
+      --label user.nix <({{nix-env}} -qaf {{user-nix}}) \
     | grep -v '^@' || echo "Changes are above"
 
 # Fetch updates from nix-channel
@@ -68,3 +68,14 @@ fetch:
 
 gc:
     nix-collect-garbage
+
+zipper := "zstd"
+zipext := zipper
+export name out="": 
+    nix-store --export (nix-store -qR {{name}}) \
+    {{ if zipper != "" { "| " + zipper } else { "" } }} \
+    >  {{ if out == "" { "(basename " + name + ")" } else { out } }}.closure\
+    {{ if zipper != "" { "." + zipext } else { "" } }}
+
+import name:
+    nix-store --import < {{name}}

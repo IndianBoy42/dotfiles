@@ -4,7 +4,7 @@ function lets
     if count $argv > /dev/null
         # Run from a justfile if exists
         if test -e ~/.letsfiles/$argv[1].just
-            just --justfile ~/.letsfiles/$argv[1].just $argv[2..-1]
+            just -d . --justfile ~/.letsfiles/$argv[1].just $argv[2..-1]
             return 0
         end
         # Run a script/binary if exists
@@ -19,5 +19,5 @@ function lets
             return 0
         end
     end
-    just --justfile ~/.letsfiles/Justfile $argv
+    just -d . --justfile ~/.letsfiles/Justfile $argv
 end

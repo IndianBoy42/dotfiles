@@ -1,1 +1,0 @@
-../plugins-manual/razzius/functions/ls.fish

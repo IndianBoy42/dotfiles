@@ -1,5 +1,7 @@
+justrun := "just -d " + wd + " -f " + justfile()
 pure := "0"
-profile := '~/.nix-profile'
+#profile := `realpath ~/.nix-profile` # DONT USE THIS: it derefs too many times
+profile := '' # DONT MAKE THIS ~/.nix-profile, it should be the pointee of that symlink
 user-nix := '~/install-system.sh/user.nix'
 
 export FISH_ACTIVATE_NIX := if profile == "" { "1" } else { "" }
@@ -9,7 +11,7 @@ set shell := ["fish", "-c"]
 
 wd := invocation_directory()
 
-nix-env := 'nix-env -p ' + profile
+nix-env := 'nix-env' + if profile == "" { "" } else { " -p " + profile }
 nix-shell := if pure != "0" { "nix-shell --pure" } else { "nix-shell" }
 
 # https://ianthehenry.com/posts/how-to-learn-nix/declarative-user-environment/
@@ -18,9 +20,20 @@ nix-shell := if pure != "0" { "nix-shell --pure" } else { "nix-shell" }
 @do *commands:
     {{ if commands != "" { commands } else { "fish -i" } }}
 
+@enter prof *commands:
+    {{justrun}} profile={{prof}} do {{commands}}
+
 # Enter a nix shell (or run commands)
-@sh name="" *command="":
+@sh *command="":
+    {{nix-shell}} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
+
+# Enter a nix shell with a certain package
+@sh-with name="" *command="":
     {{nix-shell}} {{ if name != "" { "-p " + name } else { "" } }} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
+
+# Enter a nix shell for building a certain derivation
+@sh-of name *command="":
+    {{nix-shell}} {{name}} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
 
 @edit:
     cd {{justfile_directory()}} && nvim {{justfile()}}
@@ -56,11 +69,13 @@ edit-user:
 @diff:
     #!/usr/bin/env bash
     set -euo pipefail
+    {{nix-env}} --version # Check we are in an environment
     echo "======================================================="
+    #delta  <({{nix-env}} -q)  <({{nix-env}} -qaf {{user-nix}})
     diff -U 0 \
       --label current <({{nix-env}} -q) \
       --label user.nix <({{nix-env}} -qaf {{user-nix}}) \
-    | grep -v '^@' || echo "Changes are above"
+    || echo "Changes are above"
 
 # Fetch updates from nix-channel
 fetch:
@@ -78,4 +93,10 @@ export name out="":
     {{ if zipper != "" { "." + zipext } else { "" } }}
 
 import name:
-    nix-store --import < {{name}}
+    {{ if zipper != "" { zipper + " -dc " + name + " |" } else { "" } }} \
+    nix-store --import \
+    {{ if zipper != "" { "" } else { "< " + name } }} \
+#< `basename {{name}} {{zipext}}`
+
+pin name="shell.nix":
+    nix-instantiate shell.nix --indirect --add-root ./.nix-gc-roots/shell.drv

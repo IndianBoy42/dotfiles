@@ -14,6 +14,8 @@ wd := invocation_directory()
 nix-env := 'nix-env' + if profile == "" { "" } else { " -p " + profile }
 nix-shell := if pure != "0" { "nix-shell --pure" } else { "nix-shell" }
 
+nix-gc-roots-dir := "~/.nix-gc-roots"
+
 # https://ianthehenry.com/posts/how-to-learn-nix/declarative-user-environment/
 
 # Enter a nix environment (or run commands)
@@ -99,4 +101,4 @@ import name:
 #< `basename {{name}} {{zipext}}`
 
 pin name="shell.nix":
-    nix-instantiate shell.nix --indirect --add-root ./.nix-gc-roots/shell.drv
+    nix-instantiate {{name}} --indirect --add-root {{nix-gc-roots-dir}}$PWD/{{name}}.drv

@@ -6,5 +6,4 @@ gnupg2
 gnupg
 ca-certificates
 lsb-release
-stow
 texinfo

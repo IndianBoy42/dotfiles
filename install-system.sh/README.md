@@ -17,17 +17,18 @@ sudo cp /usr/share/distro-info/ubuntu.csv /usr/share/distro-info/pop.csv
 
 # Start installing all programs 
 cd ~/install-system.sh/
-./install-fish.sh
-./install-system.fish
-just add-local-repo
+./install-system.sh
+#./install-fish.sh
+## REBOOT
+# just add-local-repo # if have
 ./install-apt-srcs.fish
 ./install-apt.fish
- # TODO: move to Justfile
+just stow
 just cmake fzf zstd kmonad git-subrepo
-just go # ./install-go.fish
-just node # ./install-node.fish
-just conda # ./install-py.fish
-just nvim # ./install-just.fish
+just go 
+just node 
+just conda 
+just nvim 
 just firacode
 just rustc
 just cargo-install

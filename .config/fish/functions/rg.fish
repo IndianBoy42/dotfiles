@@ -1,1 +1,0 @@
-../plugins-manual/razzius/functions/rg.fish

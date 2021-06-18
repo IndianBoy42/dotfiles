@@ -30,12 +30,15 @@ nix-gc-roots-dir := "~/.nix-gc-roots"
 @sh *command="":
     {{nix-shell}} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
 
+# Can use "nix run"
 # Enter a nix-shell with certain packages installed
-@sh-with name="" *command="":
-    {{nix-shell}} {{ if name != "" { "-p " + name } else { "" } }} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
+@run name *command="":
+    nix run {{name}} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
+#{{nix-shell}} -p {{name}} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
 
+# Can use "nix develop" when available
 # Enter a nix shell for building a certain derivation
-@sh-of name *command="":
+@dev name *command="":
     {{nix-shell}} {{name}} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
 
 # Edit this Letsfile

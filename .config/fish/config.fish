@@ -90,7 +90,7 @@ abbr pscpu10 'ps auxf | sort -nr -k 3 | head -10'
 
 # ripgrep stuff, config and aliases
 set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/config
-alias rgrep 'rg --no-config'
+abbr rgrep 'rg --no-config'
 abbr rgl 'rg -C0'
 abbr fda 'fd -HI'
 

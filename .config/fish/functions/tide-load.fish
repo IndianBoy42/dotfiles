@@ -59,7 +59,7 @@ set $argv tide_pwd_color_dirs E4E4E4
 set $argv tide_pwd_color_truncated_dirs BCBCBC
 set $argv tide_pwd_dir_icon 
 set $argv tide_pwd_home_icon 
-set $argv tide_pwd_markers '.bzr'  '.citc'  '.git'  '.hg'  '.node-version'  '.python-ve…
+set $argv tide_pwd_markers '.bzr'  '.citc'  '.git'  '.hg'  '.node-version'  '.python-version'  '.ruby-version'  '.shorten_folder_marker'  '.svn'  '.terraform'  'Cargo.toml'  'composer.json'  'CVS'  'go.mod'  'package.json'
 set $argv tide_pwd_truncate_margin 10
 set $argv tide_pwd_unwritable_icon 
 set $argv tide_right_prompt_frame_color 808080
@@ -67,7 +67,7 @@ set $argv tide_right_prompt_frame_enabled false
 set $argv tide_right_prompt_item_separator_diff_color 
 set $argv tide_right_prompt_item_separator_same_color 
 set $argv tide_right_prompt_item_separator_same_color_color 949494
-set $argv tide_right_prompt_items 'status'  'cmd_duration'  'context'  'jobs'  'nvm'  'virtual…
+set $argv tide_right_prompt_items 'status'  'cmd_duration'  'context'  'jobs'  'nvm'  'virtual_env'  'rust'  'time'
 set $argv tide_right_prompt_pad_items true
 set $argv tide_right_prompt_prefix 
 set $argv tide_right_prompt_suffix

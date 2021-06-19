@@ -2,7 +2,9 @@
 function v
     test (count $argv) -lt 1 && lsd -A && return
     for arg in $argv
-        if test -f $arg
+        if set -q $arg
+            set --show $arg
+        else if test -f $arg
             lsd -al $arg
             bat $arg
         else

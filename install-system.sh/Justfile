@@ -469,9 +469,10 @@ qmk: (gitclone "https://github.com/IndianBoy42/qmk_firmware.git" "qmk_firmware")
     sudo cp ~/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
     # nix-shell
     pipx install --user qmk
+    # TODO: not sure about these steps:
     qmk setup
     qmk doctor
-    ~/qmk_firmware/util/qmk_install.sh
+    #~/qmk_firmware/util/qmk_install.sh
 
 # CMake (not a) build system
 cmake: (insgh "cmake" "Kitware/CMake" "*linux-x86_64.tar.gz")

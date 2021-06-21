@@ -9,6 +9,7 @@ function lets
         end
         # Run a script/binary if exists
         if test -x ~/.letsfiles/$argv[1]
+            and not test -d ~/.letsfiles/$argv[1]
             ~/.letsfiles/$argv[1] $argv[2..-1]
             return 0
         end

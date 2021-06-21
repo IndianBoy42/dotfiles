@@ -146,7 +146,7 @@ gitclone url name:
     if test -d {{blddir}}/{{name}}
         cd {{blddir}}/{{name}} && git pull && git submodule update --init --recursive
     else
-        git clone {{url}} {{blddir}}/{{name}}
+        git clone --filter=blob:none {{url}} {{blddir}}/{{name}} # --filter=tree:0
     end
 
 _tmpdir name:
@@ -174,10 +174,16 @@ ins-bin name from:
 
 # Download an asset from Github releases (to /tmp/name)
 gh name repo pattern: (_tmpdir name) 
-    cd /tmp/{{name}} \
-    && gh release -R {{repo}} download -p '{{pattern}}' \
-    && cp {{pattern}} {{name}} \
-    || cp {{pattern}} {{name}} 
+    #!/usr/bin/env fish
+    echo "Downloading"
+    if not test -e "/tmp/{{name}}/{{pattern}}"
+        cd /tmp/{{name}} && gh release -R {{repo}} download -p '{{pattern}}'
+    end
+    test '/tmp/{{name}}/{{name}}' != '/tmp/{{name}}/{{pattern}}'
+    and echo "Renaming" '/tmp/{{name}}/{{name}}' != '/tmp/{{name}}/{{pattern}}'
+    and test -e "/tmp/{{name}}/{{pattern}}"
+    and cp "/tmp/{{name}}/{{pattern}}" '/tmp/{{name}}/{{name}}'
+    or true
 
 # Download a tarball from Github releases and extract it
 targh name repo pattern: (gh name repo pattern)

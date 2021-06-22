@@ -137,7 +137,7 @@ mkpackdir name:
     mkdir -p {{prefix}}/{{name}}/bin
 
 mkblddir name:
-    mkdir -p {{blddir}}/{{name}}
+    mkdir -p {{blddir}}/{{name}}/build
 
 # Clone or update a git repo (into blddir)
 gitclone url name:
@@ -225,12 +225,15 @@ autotoolscurl name repo pattern: (srcgh name repo pattern)
 autotoolsgit name repo pattern: (gitclone name repo)
     {{justrun}} autotool-install "{{name}}"
 
-cmake-install name options="":
-    #!/usr/bin/env fish
-    mkdir -p build && cd build
-    cmake -DCMAKE_INSTALL_PREFIX="{{prefix}}/{{name}}" {{options}} ..
-    ninja
-    ninja install
+cmake-build from in *options:
+    cmake -DCMAKE_INSTALL_PREFIX=(basename (realpath {{from}})) {{options}} -S {{from}} -B {{in}} ..
+    cmake --build {{in}}
+
+cmake-install name *options: 
+    {{justrun}} cmake-build "{{blddir}}/{{name}}" "{{blddir}}/{{name}}/build" options
+    cmake --install {{blddir}}/{{name}}/build
+#   ninja
+#   ninja install
 
 cmakegh name repo pattern: (srcgh name repo pattern)
     {{justrun}} cmake-install "{{name}}"

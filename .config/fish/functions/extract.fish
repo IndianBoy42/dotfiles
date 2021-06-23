@@ -1,7 +1,7 @@
-# Defined in /tmp/fish.kHdBpO/extract.fish @ line 2
+# Defined in /tmp/fish.cBZmNN/extract.fish @ line 2
 function extract --description 'Expand or extract bundled & compressed files'
   set --local ext (echo $argv[1] | awk -F. '{print $NF}')
-  test -n $argv[2];
+  test -n "$argv[2]";
   and set --local tar_to "-C $argv[2]"
   and set --local unzip_to "-d $argv[2]"
   switch $ext

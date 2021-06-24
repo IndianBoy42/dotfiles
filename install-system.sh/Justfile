@@ -213,8 +213,8 @@ autotool-install name options="":
     #!/usr/bin/env fish
     cd {{blddir}}/{{name}}
     ./configure --prefix="{{installdir}}" {{options}}
-    make
-    make install prefix="{{prefix}}/{{name}}"
+    and make
+    and make install prefix="{{prefix}}/{{name}}"
 
 autotoolsgh name repo pattern: (srcgh name repo pattern)
     {{justrun}} autotool-install "{{name}}"
@@ -286,7 +286,8 @@ gvm:
     #!/usr/bin/env fish
     if not test -e ~/.gvm/scripts/gvm
         curl -sSL https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash
-
+    end
+    if functions -q gvm
         function gvm
           bass source ~/.gvm/scripts/gvm ';' gvm $argv
         end

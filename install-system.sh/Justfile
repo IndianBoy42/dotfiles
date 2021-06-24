@@ -680,7 +680,6 @@ cargo-essentials: cargo-install gitui ripgrep broot tealdeer
     {{cargo-install}} lsd
     {{cargo-install}} bottom
     {{cargo-install}} fd-find
-    {{cargo-install}} jq  
     {{cargo-install}} git-delta 
     {{cargo-install}} huniq
     {{cargo-install}} hyperfine  

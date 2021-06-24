@@ -92,7 +92,8 @@ abbr pscpu10 'ps auxf | sort -nr -k 3 | head -10'
 set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/config
 abbr rgrep 'rg --no-config'
 abbr rgl 'rg -C0'
-abbr fda 'fd -HI'
+abbr rga 'rg -uu'
+abbr fda 'fd -uu'
 
 # pueue is really cool
 abbr pu pueue

@@ -98,7 +98,10 @@ getpkg name:
     getpkg.sh {{name}} {{local-apt-repo}}
 mkrepo: 
     rm {{local-apt-repo}}/Packages.gz || true
+    rm {{local-apt-repo}}/Packages || true
     mkrepo.sh {{local-apt-repo}}
+    gzip -d {{local-apt-repo}}/Packages.gz
+# FIXME: why have to extract Packages??
 
 
 ##############################################333

@@ -656,7 +656,8 @@ alacritty: cargo-install
 
 broot: cargo-install
     mkdir -p ~/.local/share/fonts
-    wget https://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
+    test -f ~/.local/share/fonts/vscode.ttf; \
+    or wget https://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
     {{cargo-install}} broot
 
 cargo-build-tools:

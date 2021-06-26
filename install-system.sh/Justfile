@@ -182,10 +182,18 @@ gh name repo pattern: (_tmpdir name)
         cd /tmp/{{name}} && gh release -R {{repo}} download -p '{{pattern}}'
     end
     test '/tmp/{{name}}/{{name}}' != '/tmp/{{name}}/{{pattern}}'
+    and test -e /tmp/{{name}}/{{pattern}}
     and echo "Renaming" '/tmp/{{name}}/{{name}}' != '/tmp/{{name}}/{{pattern}}'
-    and test -e "/tmp/{{name}}/{{pattern}}"
-    and cp "/tmp/{{name}}/{{pattern}}" '/tmp/{{name}}/{{name}}'
-    or true
+    and cp -v /tmp/{{name}}/{{pattern}} '/tmp/{{name}}/{{name}}'
+    or echo "not renamed"
+    {{justrun}} gh-check-update {{name}} {{repo}}
+
+gh-check-update name repo:
+    #!/usr/bin/env fish
+    echo "#!/usr/bin/env fish" > {{blddir}}/{{name}}.sh
+    set CURR (gh release -R {{repo}} list | head -1 | cut -f1)
+    echo "echo $CURR -> (gh release -R {{repo}} list | head -1 | cut -f1)" >> {{blddir}}/{{name}}.sh
+    chmod +x {{blddir}}/{{name}}.sh
 
 # Download a tarball from Github releases and extract it
 targh name repo pattern: (gh name repo pattern)
@@ -638,20 +646,20 @@ ripgrep:
     {{cargo-install}} $argv[1]
 
 # Use ripgrep to search inside all kinds of files
-ripgrep_all: ripgrep
-    {{cargo-install}} --git https://github.com/phiresky/ripgrep-all.git
+ripgrep_all: ripgrep (gitclone "https://github.com/phiresky/ripgrep-all.git" "ripgrep_all")
+    {{cargo-install}} --path {{blddir}}/ripgrep_all
 
 # Easy to use TUI for git
-gitui: cargo-install
-    {{cargo-install}} --git https://github.com/IndianBoy42/gitui.git
+gitui: cargo-install (gitclone "https://github.com/IndianBoy42/gitui.git" "gitui")
+    {{cargo-install}} --path {{blddir}}/gitui
 
 # Minimal serial terminal/monitor
-serial-monitor: cargo-install
-    {{cargo-install}} --git https://github.com/IndianBoy42/serial-monitor.git
+serial-monitor: cargo-install (gitclone "https://github.com/IndianBoy42/serial-monitor.git" "serial-monitor")
+    {{cargo-install}} --path {{blddir}}/serial-monitor
 
 # Index and search all local files
-indexa: cargo-install 
-    {{cargo-install}} --git https://github.com/mosmeh/indexa.git
+indexa: cargo-install (gitclone "https://github.com/mosmeh/indexa.git" "indexa")
+    {{cargo-install}} --path {{blddir}}/indexa
 
 # Fast implementation of the tldr standard
 tealdeer: cargo-install

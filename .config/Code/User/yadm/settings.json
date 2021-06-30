@@ -1,5 +1,4 @@
 {
-    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, UseTab: Always, IndentWidth: 4, TabWidth: 4, ColumnLimit: 80}",
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "C_Cpp.updateChannel": "Insiders",
     "[cpp]": {
@@ -36,12 +35,11 @@
     "editor.fontFamily": "FiraCode NF, FiraCode Nerd Font",
     "editor.fontLigatures": true,
     "editor.fontSize": 12,
-    "editor.formatOnSaveMode": "modifications",
+    "editor.formatOnSaveMode": "file",
     "editor.glyphMargin": false,
     "editor.lineNumbers": "relative",
     "editor.multiCursorModifier": "ctrlCmd",
     "editor.quickSuggestions": true,
-    "editor.smoothScrolling": true,
     "editor.suggestSelection": "first",
     "editor.wordWrap": "on",
     "files.associations": {
@@ -56,7 +54,6 @@
         "data/ccpd_lpr_**/**": true
     },
     "git.autofetch": true,
-    "grammarly.userWords": ["eatigo"],
     "ispc.compilerPath": "~/bin/ispc.exe",
     "ispc.compilerTarget": "avx2",
     "ispc.compilerTargetOS": "linux",
@@ -148,9 +145,62 @@
     // "terminal.integrated.fontFamily": "'CaskaydiaCove Nerd Font'",
     // "terminal.integrated.fontSize": 14,
     "terminal.integrated.fontFamily": "FiraMono NF, FiraCode Nerd Font Mono",
-    "terminal.integrated.fontSize": 14,
-    "terminal.integrated.shell.linux": "/usr/bin/fish",
-    "terminal.integrated.shell.windows": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+    "terminal.integrated.fontSize": 13,
+    "terminal.integrated.profiles.linux": {
+        "fish": {
+            "path": "fish"
+        },
+        "zsh": {
+            "path": "zsh"
+        },
+        "bash": {
+            "path": "bash"
+        },
+        "tmux": {
+            "path": "tmux",
+            "icon": "terminal-tmux"
+        },
+        "pwsh": {
+            "path": "pwsh",
+            "icon": "terminal-powershell"
+        }
+    },
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        }
+    },
+    "terminal.integrated.profiles.osx": {
+        "fish": {
+            "path": "fish"
+        },
+        "zsh": {
+            "path": "zsh"
+        },
+        "bash": {
+            "path": "bash"
+        },
+        "tmux": {
+            "path": "tmux",
+            "icon": "terminal-tmux"
+        },
+        "pwsh": {
+            "path": "pwsh",
+            "icon": "terminal-powershell"
+        }
+    },
     "todo-tree.general.tags": [
         "BUG",
         "HACK",
@@ -178,6 +228,11 @@
     "vim.hlsearch": true,
     "vim.incsearch": true,
     "vim.insertModeKeyBindingsNonRecursive": [
+        {
+            "before": ["k", "j"],
+            // "commands": ["extension.vim_escape"]
+            "commands": ["workbench.action.files.save", "extension.vim_escape"]
+        }
         // {
         //     "before": ["<Esc>"],
         //     "commands": ["workbench.action.files.save", "extension.vim_escape"]
@@ -188,6 +243,14 @@
         {
             "after": [],
             "before": ["."]
+        },
+        {
+            "before": ["u"],
+            "commands": ["undo"]
+        },
+        {
+            "before": ["U"],
+            "commands": ["redo"]
         },
         {
             "after": ["^"],
@@ -316,8 +379,8 @@
         {
             "before": ["g", "f"],
             "commands": [
+                "workbench.action.files.save",
                 "editor.action.formatDocument",
-                "workbench.action.files.save"
             ]
         },
         // {
@@ -417,6 +480,18 @@
             "commands": ["extension.subword-select"]
         },
         {
+            "before": ["<"],
+            "after": ["<", "g", "v"]
+        },
+        {
+            "before": [">"],
+            "after": [">", "g", "v"]
+        },
+        {
+            "before": ["p"],
+            "after": ["\"", "_", "d", "P"]
+        },
+        {
             "before": ["r"],
             "after": ["\"", "_", "c"]
         },
@@ -503,12 +578,65 @@
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "vspacecode.bindingOverrides": [
         {
+            "keys": "\t",
+            "name": "Rerun last command",
+            "type": "commands",
+            "commands": ["workbench.action.showCommands", "list.select"]
+        },
+        {
+            "keys": "l.t",
+            "name": "Toggle Sidebar",
+            "type": "conditional",
+            "bindings": [
+                {
+                    "key": "",
+                    "name": "Show explorer view",
+                    "type": "command",
+                    "command": "workbench.view.explorer"
+                },
+                {
+                    "key": "when:sideBarVisible && explorerViewletVisible",
+                    "name": "Hide side bar",
+                    "type": "command",
+                    "command": "workbench.action.toggleSidebarVisibility"
+                }
+            ]
+        },
+        {
             "command": "git-graph.view",
             "keys": "g.l",
             "name": "View Git Graph",
             "type": "command"
         },
         // TODO: Need a lot more git commands if I wanna use it, but do I wanna use it?
+        {
+            // "command": "editor.action.jumpToBracket",
+            "command": "bracket-jumper.selectAscendLeft",
+            "keys": "s.(",
+            "name": "Jump to bracket",
+            "type": "command"
+        },
+        {
+            // "command": "editor.action.jumpToBracket",
+            "command": "bracket-jumper.selectAscendRight",
+            "keys": "s.)",
+            "name": "Jump to bracket",
+            "type": "command"
+        },
+        {
+            // "command": "editor.action.jumpToBracket",
+            "command": "bracket-jumper.selectAscendLeft",
+            "keys": "s.[",
+            "name": "Jump to bracket",
+            "type": "command"
+        },
+        {
+            // "command": "editor.action.jumpToBracket",
+            "command": "bracket-jumper.selectAscendRight",
+            "keys": "s.]",
+            "name": "Jump to bracket",
+            "type": "command"
+        },
         {
             "command": "workbench.action.editor.previousChange",
             "keys": "e.C",
@@ -680,6 +808,15 @@
                     "name": "Quick fix",
                     "type": "command",
                     "command": "editor.action.quickFix"
+                },
+                {
+                    "key": "N",
+                    "name": "Quick fix (next error)",
+                    "type": "commands",
+                    "commands": [
+                        "editor.action.marker.next",
+                        "editor.action.quickFix"
+                    ]
                 },
                 {
                     "key": "a",
@@ -871,6 +1008,60 @@
             ]
         },
         {
+            "keys": "l.a",
+            "name": "Fold Toggle: around a point",
+            "type": "command",
+            "command": "editor.toggleFold"
+        },
+        {
+            "keys": "l.b",
+            "name": "Fold Close: all block comments",
+            "type": "command",
+            "command": "editor.foldAllBlockComments"
+        },
+        {
+            "keys": "l.c",
+            "name": "Fold Close: at a point",
+            "type": "command",
+            "command": "editor.fold"
+        },
+        {
+            "keys": "l.g",
+            "name": "Fold Close: all regions",
+            "type": "command",
+            "command": "editor.foldAllMarkerRegions"
+        },
+        {
+            "keys": "l.m",
+            "name": "Fold Close: all",
+            "type": "command",
+            "command": "editor.foldAll"
+        },
+        {
+            "keys": "l.o",
+            "name": "Fold Open: at a point",
+            "type": "command",
+            "command": "editor.unfold"
+        },
+        {
+            "keys": "l.r",
+            "name": "Fold Open: all",
+            "type": "command",
+            "command": "editor.unfoldAll"
+        },
+        {
+            "keys": "l.G",
+            "name": "Fold Open: all regions",
+            "type": "command",
+            "command": "editor.unfoldAllMarkerRegions"
+        },
+        {
+            "keys": "l.O",
+            "name": "Fold Open: recursively",
+            "type": "command",
+            "command": "editor.unfoldRecursively"
+        },
+        {
             "command": "workbench.action.positionPanelDown",
             "keys": "l.j",
             "name": "Move Panel Down",
@@ -883,24 +1074,12 @@
             "type": "command"
         },
         {
-            "command": "cmake.build",
-            "keys": "c.m",
-            "name": "CMake Build",
-            "type": "command"
-        },
-        {
             "command": "workbench.action.tasks.build",
             "keys": "c.b",
             "name": "Build Task",
             "type": "command"
         },
 
-        {
-            "command": "cmake.buildWithTarget",
-            "keys": "c.t",
-            "name": "CMake",
-            "type": "command"
-        },
         {
             "command": "workbench.action.tasks.runTask",
             "keys": "c.r",
@@ -944,20 +1123,93 @@
             "type": "command"
         },
         {
+            "command": "cmake.build",
+            "keys": ["m", "languageId:cpp", "b"],
+            "name": "CMake Build",
+            "type": "command"
+        },
+        {
+            "command": "cmake.setDefaultTarget",
+            "keys": ["m", "languageId:cpp", "t"],
+            "name": "CMake Target",
+            "type": "command"
+        },
+        {
+            "command": "cmake.buildWithTarget",
+            "keys": ["m", "languageId:cpp", "T"],
+            "name": "CMake Target",
+            "type": "command"
+        },
+        {
+            "keys": ["m", "languageId:julia"],
+            "name": "Julia mode",
+            "type": "bindings",
+            "bindings": [
+                {
+                    "command": "language-julia.executeCell",
+                    "key": " ",
+                    "name": "Execute Code Cell",
+                    "type": "command"
+                },
+                {
+                    "command": "language-julia.executeCellAndMove",
+                    "key": "\n",
+                    "name": "Execute Code Cell and Move",
+                    "type": "command"
+                },
+                {
+                    "command": "language-julia.executeJuliaCodeInREPL",
+                    "key": ",",
+                    "name": "Send Selection to REPL",
+                    "type": "command"
+                },
+                {
+                    "command": "language-julia.executeCodeBlockOrSelection",
+                    "key": "b",
+                    "name": "Execute Code Block",
+                    "type": "command"
+                },
+                {
+                    "command": "language-julia.executeCodeBlockOrSelectionAndMove",
+                    "key": "B",
+                    "name": "Execute Code Block and Move",
+                    "type": "command"
+                },
+                {
+                    "command": "language-julia.executeFile",
+                    "key": "f",
+                    "name": "Execute File",
+                    "type": "command"
+                },
+                {
+                    "command": "language-julia.startREPL",
+                    "key": "r",
+                    "name": "Start REPL",
+                    "type": "command"
+                }
+            ]
+        },
+        {
+            "command": "jupyter.runcurrentcell",
+            "keys": ["m", "languageId:python", "\n"], //"c.a",
+            "name": "Run Cell",
+            "type": "command"
+        },
+        {
             "command": "jupyter.runcurrentcelladvance",
-            "keys": "c.a",
+            "keys": ["m", "languageId:python", " "], //"c.a",
             "name": "Run Cell and Advance",
             "type": "command"
         },
         {
             "command": "jupyter.runallcells",
-            "keys": "c.J",
+            "keys": ["m", "languageId:python", "A"], //"c.J",
             "name": "Run All Cell",
             "type": "command"
         },
         {
             "command": "jupyter.runcurrentcellandallbelow.palette",
-            "keys": "c.j",
+            "keys": ["m", "languageId:python", "a"], //"c.j",
             "name": "Run Cell and Below",
             "type": "command"
         },
@@ -1299,7 +1551,7 @@
                             "type": "command"
                         }
                     ],
-                    "key": "P",
+                    "key": "a",
                     "name": "+Aside",
                     "type": "bindings"
                 },
@@ -1349,6 +1601,34 @@
                     "type": "command"
                 },
                 {
+                    // "command": "editor.action.jumpToBracket",
+                    "command": "bracket-jumper.ascendLeft",
+                    "key": "(",
+                    "name": "Jump to bracket",
+                    "type": "command"
+                },
+                {
+                    // "command": "editor.action.jumpToBracket",
+                    "command": "bracket-jumper.ascendRight",
+                    "key": ")",
+                    "name": "Jump to bracket",
+                    "type": "command"
+                },
+                {
+                    // "command": "editor.action.jumpToBracket",
+                    "command": "bracket-jumper.ascendLeft",
+                    "key": "[",
+                    "name": "Jump to bracket",
+                    "type": "command"
+                },
+                {
+                    // "command": "editor.action.jumpToBracket",
+                    "command": "bracket-jumper.ascendRight",
+                    "key": "]",
+                    "name": "Jump to bracket",
+                    "type": "command"
+                },
+                {
                     "command": "workbench.action.navigateBack",
                     "key": "f",
                     "name": "Jump forward",
@@ -1392,13 +1672,30 @@
         // "editor.selectionBackground": "#ff000050"
     },
     "workbench.colorTheme": "Dark+ Material",
-    "workbench.editorAssociations": [
-        {
-            "filenamePattern": "*.ipynb",
-            "viewType": "jupyter.notebook.ipynb"
-        }
-    ],
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter.notebook.ipynb"
+    },
     "workbench.panel.defaultLocation": "right",
     "zenMode.fullScreen": false,
-    "zenMode.restore": true
+    "zenMode.restore": true,
+    "editor.cursorBlinking": "smooth",
+    "editor.cursorSmoothCaretAnimation": true,
+    "editor.smoothScrolling": true,
+    "workbench.list.smoothScrolling": true,
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, UseTab: Always, IndentWidth: 4, TabWidth: 4, ColumnLimit: 100}",
+    "[julia]": {
+        "editor.defaultFormatter": "julialang.language-julia"
+    },
+    "terminal.explorerKind": "external",
+    "terminal.integrated.confirmOnExit": true,
+    "terminal.integrated.defaultProfile.linux": "fish",
+    "terminal.integrated.enableBell": true,
+    "rust-analyzer.assist.importMergeBehavior": "module",
+    "editor.semanticHighlighting.enabled": true,
+    "editor.semanticTokenColorCustomizations": {
+        "enabled": true
+    }
 }

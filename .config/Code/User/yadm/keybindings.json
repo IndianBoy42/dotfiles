@@ -234,8 +234,7 @@
     },
     {
         "key": "ctrl+alt+x",
-        "command": "workbench.action.focusNextGroup",
-        "when": "editorFocus"
+        "command": "workbench.action.focusNextGroup"
     },
     {
         "key": "shift+ctrl+alt+q",
@@ -326,7 +325,7 @@
     {
         "key": "ctrl+alt+x",
         "command": "workbench.action.splitEditorRight",
-        "when": "!editorFocus"
+        "when": "!editorFocus && false"
     },
     {
         "key": "ctrl+alt+y",

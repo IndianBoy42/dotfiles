@@ -971,8 +971,9 @@ nvim:
 
 # Compile neovim from source
 nvim-src: (gitclone "https://github.com/neovim/neovim.git" "neovim")
-    cd {{blddir}}/neovim && make CMAKE_BUILD_TYPE=Release 
-    cd {{blddir}}/neovim && make CMAKE_INSTALL_PREFIX={{prefix}}/nvim install
+    cd {{blddir}}/neovim \
+    && make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
+    && make install
     {{justrun}} link-pack nvim
 
 # Pretty GUI for neovim written in rust

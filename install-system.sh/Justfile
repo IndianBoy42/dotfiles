@@ -461,19 +461,19 @@ vscode:
     sudo ln -s /usr/share/code/bin/code /usr/local/bin
 
 # Install portable version of vscode
-code-portable: (_tmpdir "code-portable")
+code-portable: (_tmpdir "code-portable") (mkpackdir "code-portable")
     #!/usr/bin/env -S bash -euxo pipefail
     cd /tmp/code-portable
     wget "https://code.visualstudio.com/sha/download?build=stable&os=linux-x64" -O portable.tar.gz
     tar -xzf portable.tar.gz
-    mkdir -p {{prefix}}/vscode-portable 
-    cp -r VSCode-linux-x64 {{prefix}}/vscode-portable
-    ln -s {{prefix}}/vscode-portable/bin/code {{bindir}}/bin/code-portable
+    cp -r VSCode-linux-x64 {{prefix}}/code-portable
+    mkdir -p {{prefix}}/code-portable/data
+    ln -s {{prefix}}/code-portable/code {{bindir}}/code-portable
 
 # Install portable version of vscode
 # code-appimage: (bingh "code-oss" "zilti/code-oss.AppImage" "*AppImage")
-    # mkdir -p {{prefix}}/code-oss/bin/code-oss.home
-    # mkdir -p {{prefix}}/code-oss/bin/code-oss.config
+# mkdir -p {{prefix}}/code-oss/bin/code-oss.home
+# mkdir -p {{prefix}}/code-oss/bin/code-oss.config
 
 # TODO: add doom to yadm submodule
 # EMACS, a great OS and a mediocre editor

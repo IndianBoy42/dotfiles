@@ -470,6 +470,11 @@ code-portable: (_tmpdir "code-portable")
     cp -r VSCode-linux-x64 {{prefix}}/vscode-portable
     ln -s {{prefix}}/vscode-portable/bin/code {{bindir}}/bin/code-portable
 
+# Install portable version of vscode
+# code-appimage: (bingh "code-oss" "zilti/code-oss.AppImage" "*AppImage")
+    # mkdir -p {{prefix}}/code-oss/bin/code-oss.home
+    # mkdir -p {{prefix}}/code-oss/bin/code-oss.config
+
 # TODO: add doom to yadm submodule
 # EMACS, a great OS and a mediocre editor
 emacs: (gitclone "https://github.com/emacs-mirror/emacs.git" "emacs")

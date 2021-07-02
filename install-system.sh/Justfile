@@ -644,8 +644,10 @@ sccache-gh: (bingh "sccache" "mozilla/sccache" "sccache-*-x86_64-unknown-linux-m
     echo "Installed"
 
 # Cargo install tools (sccache, quickinstall, cargo-update)
-cargo-install: cargo-quickinstall cargo-update sccache
-    echo "Cargo install tools installed"
+cargo-install: 
+    type -q cargo-quickinstall || {{justrun}} cargo-quickinstall
+    type -q cargo-update || {{justrun}} cargo-update
+    type -q sccache || {{justrun}} sccache
 
 # Blazing fast regex searcher
 ripgrep:
@@ -1062,8 +1064,12 @@ mtr: (gitclone "https://github.com/traviscross/mtr.git" "mtr")
 platformio: 
     {{justrun}} pipx-install platformio
 
+lua:
+    {{apt-install}} liblua5.4-dev lua5.4 luajit
+
 luarocks: (gitclone "git://github.com/luarocks/luarocks.git" "luarocks")
     #!/usr/bin/env fish
+    type -q lua || {{justrun}} lua
     cd {{blddir}}/luarocks
     ./configure --prefix="{{prefix}}/luarocks"
     and make
@@ -1071,6 +1077,7 @@ luarocks: (gitclone "git://github.com/luarocks/luarocks.git" "luarocks")
     and {{justrun}} link-pack luarocks
 
 lua-format: 
+    type -q luarocks || {{justrun}} luarocks
     luarocks install --server=https://luarocks.org/dev luaformatter
     and {{justrun}} link-pack luarocks
     

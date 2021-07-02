@@ -73,9 +73,9 @@ edit:
     cd {{inst-script-dir}} && nvim {{justfile()}}
 
 
-##############################################333
+#################################################
 # mkrepo for offlline apt installs
-##############################################333
+#################################################
 
 # Install getpkg, mkrepo for creating offline repositories
 getpkg-mkrepo: (mkpackdir "mkrepo")
@@ -491,19 +491,16 @@ emacs: (gitclone "https://github.com/emacs-mirror/emacs.git" "emacs")
 # Git Credential Manager Core
 gcm: (debgh "gcmcore" "microsoft/Git-Credential-Manager-Core" "*amd64*.deb")
     git-credential-manager-core configure
-    # git config --global credential.credentialStore secretservice # requires GUI (ok?)
+# git config --global credential.credentialStore secretservice # requires GUI (ok?)
 
 # Quantum Mechanical Keyboard firmware
 qmk: (gitclone "https://github.com/IndianBoy42/qmk_firmware.git" "qmk_firmware")
     cd ~/qmk_firmware
     git remote add upstream "https://github.com/qmk/qmk_firmware.git" && \
     sudo cp ~/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
-    # nix-shell
     pipx install --user qmk
-    # TODO: not sure about these steps:
     qmk setup
     qmk doctor
-    #~/qmk_firmware/util/qmk_install.sh
 
 # CMake (not a) build system
 cmake: (insgh "cmake" "Kitware/CMake" "*linux-x86_64.tar.gz")
@@ -512,11 +509,6 @@ cmake: (insgh "cmake" "Kitware/CMake" "*linux-x86_64.tar.gz")
 # Fuzzy finder
 fzf: (targh "fzf" "junegunn/fzf" "*linux_amd64.tar.gz") (ins-bin "fzf" "/tmp")
     echo "Installed fzf"
-
-# Interative JSON Query
-ijq: (gitclone "https://github.com/gpanders/ijq.git" "ijq") (mkpackdir "ijq")
-    cd {{blddir}}/ijq && make prefix={{prefix}}/ijq install
-    {{justrun}} link-pack "ijq"
 
 # Fast realtime compression/decompression
 zstd: (srcgh "zstd" "facebook/zstd" "*.tar.gz") (mkpackdir "zstd")
@@ -531,9 +523,6 @@ kmonad: (bingh "kmonad" "kmonad/kmonad" "*linux")
     sudo usermod -aG input $USER
     sudo modprobe uinput
     sudo cp {{inst-script-dir}}/uinput.rules /etc/udev/rules.d/uinput.rules
-    # sudo touch /etc/udev/rules.d/uinput.rules
-    # echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/uinput.rules
-    # cp {{inst-script-dir}}/kmonad.service ~/.config/systemd/user/kmonad.service # synced by yadm
     systemctl --user enable kmonad.service
     systemctl --user start kmonad.service
     echo "The next output will help you find the device that your keyboard corresponds to"
@@ -600,7 +589,8 @@ ghcup:
 stack:
     #!/usr/bin/env fish
     if not type -q stack
-        curl -sSL https://get.haskellstack.org/ | sh
+        curl -sSL https://get.haskellstack.org/ | sh -s -- -d {{prefix}}/stack/bin
+        {{justrun}} link-pack stack
     else
         stack upgrade
     end
@@ -651,7 +641,7 @@ sccache-gh: (bingh "sccache" "mozilla/sccache" "sccache-*-x86_64-unknown-linux-m
 # Cargo install tools (sccache, quickinstall, cargo-update)
 cargo-install: 
     type -q cargo-quickinstall || {{justrun}} cargo-quickinstall
-    type -q cargo-update || {{justrun}} cargo-update
+    type -q cargo-install-update || {{justrun}} cargo-update
     type -q sccache || {{justrun}} sccache
 
 # Blazing fast regex searcher
@@ -777,6 +767,9 @@ cargo-all-musl: cargo-install serial-monitor bandwhich pueue indexa
     {{cargo-install}} tokei
     {{cargo-install}} gpg-tui 
 
+cargo +args: cargo-install
+    {{cargo-install}} {{args}}
+
 # Install 'all' the cargo binaries (that i like)
 cargo-all: cargo-essentials cargo-build-tools cargo-all-gnu cargo-all-musl
     {{justrun}} cargo-needs-update
@@ -829,13 +822,13 @@ pipenv: pipx
 
 # Poetry python dev environment manager
 poetry: 
-    #!/usr/bin/env fish
     {{justrun}} pipx-install poetry
-    #if type -q poetry
-    #    poetry self update
-    #else
-    #    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - --preview
-    #end
+#!/usr/bin/env fish
+#if type -q poetry
+#    poetry self update
+#else
+#    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - --preview
+#end
 
 # Temporary venvs for quick scripts
 pip-run:
@@ -846,9 +839,6 @@ pip-run:
 conda-env name:
     conda env create -f {{name}} || conda env update --prune -n (cat {{name}} | rg 'name: ([\S]+)' -C0 -r '$1')
     conda activate (cat {{name}} | rg 'name: ([\S]+)' -C0 -r '$1') && {{justrun}} py-essentials
-
-conda-optimal-control: (conda-env "conda-env-optimal-control.yml")
-    conda activate optimal-control
 
 # vulkan api sdk
 vulcan-sdk:
@@ -861,19 +851,17 @@ vulcan-sdk:
 @flatpak-list:
     flatpak list --app --columns=name:f | tail -n +1     
 
-# install flatpak and add flathub
-flatpak:
+# Install flatpak and some packages (optionally)
+flatpak +name:
     #!/usr/bin/env fish
     if not type -q flatpak
         {{apt-install}} flatpak
         flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
         flatpak remote-modify --collection-id=org.flathub.Stable flathub
     end
+    test +n "{{name}}" && {{flatpak-install}} {{name}}
 
-pak-install +name:
-    {{flatpak-install}} {{name}}
-
-kicad: flatpak
+kicad:
     {{flatpak-install}} org.kicad.KiCad \
         org.kicad.KiCad.Library.Templates   \
         org.kicad.KiCad.Library.Symbols     \
@@ -909,18 +897,10 @@ blender:
 megasync:
     {{flatpak-install}} nz.mega.MEGAsync
 
-# Simulate another flatpak install but just download to local-flatpak-repo
+# Flatpak install and download to a local repo
 flatpak-dl +command:
     {{justrun}} flatpak-install="{{flatpak-install-remote}}" {{command}} # Install first 
     {{justrun}} flatpak-install="{{flatpak-download}}" {{command}} # Then pack into the repo
-
-# Update apt sources
-@apt: 
-    sudo apt update > /tmp/aptupdate.log || echo "Not connected to the internet, hope you have a cache"
-
-# Some apt sources
-apt-srcs:
-    {{inst-script-dir}}/install-apt-srcs.fish
 
 # Install docker and enable permissions
 docker:
@@ -934,22 +914,31 @@ docker:
     sudo usermod -aG docker $USER
     newgrp docker 
 
+# Update apt sources
+@apt: 
+    sudo apt update > /tmp/aptupdate.log || echo "Not connected to the internet, hope you have a cache"
+
+# Some apt sources
+apt-srcs:
+    {{inst-script-dir}}/install-apt-srcs.fish
+
 # Install all apt packages from a file in install-system.sh
 @apt-all file: apt
     {{apt-install}} (cat {{inst-script-dir}}/{{file}}.apt)
 
 # Install apt libraries
 @apt-libs: apt
-    just apt-all libs
+    {{justrun}} apt-all libs
     {{apt-install}} linux-tools-(uname -r)
 # Install apt applications
 @apt-apps: apt
-    just apt-all apps
+    {{justrun}} apt-all apps
 
 # Download all apt packages from a file in install-system.sh
 @_apt-repo name:
     echo "The getpkg.sh script throws a lot of errors about missing dependencies, and returns error even when successfull"
-    xargs -P(math (nproc) "* 8") -i sh -c "just getpkg {} || true" < {{inst-script-dir}}/{{name}}.apt
+    xargs -P(math (nproc) "* 8") -i sh -c "just getpkg {} \
+    || true" < {{inst-script-dir}}/{{name}}.apt
 
 # Download all my apt packages into a repo
 @apt-repo:
@@ -995,7 +984,8 @@ neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
             libfreetype6-dev libasound2-dev libexpat1-dev libxcb-composite0-dev \
             libbz2-dev libsndio-dev freeglut3-dev libxmu-dev libxi-dev libsdl2-dev
     end
-    cd {{blddir}}/neovide && {{cargo-install}} --path .
+    cd {{blddir}}/neovide
+    CARGO_BUILD_TARGET={{cargo-build-gnu}} {{cargo-install}} --path .
 
 # Selection first modal editor
 kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune") (mkpackdir "kakoune")
@@ -1009,7 +999,6 @@ kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune") (mkpackdir 
 pack-repos:
     #tar --zstd -cf {{inst-script-dir}}/repos.tar.zst
     tar --zstd -cvf /dev/null \
-        --exclude='.local/share' \
         {{local-apt-repo}}  \
         {{local-flatpak-repo}}  \
         {{local-tar-repo}}  \
@@ -1040,6 +1029,12 @@ stow:
 # JSON query CLI
 jq: (bingh "jq" "stedolan/jq" "jq-linux64")
     echo "Installed jq"
+
+# Interative JSON Query CLI
+ijq: (gitclone "https://github.com/gpanders/ijq.git" "ijq") (mkpackdir "ijq")
+    {{apt-install}} scdoc
+    cd {{blddir}}/ijq && make prefix={{prefix}}/ijq install
+    {{justrun}} link-pack "ijq"
 
 # https://medium.com/@ankurloriya/install-gnome-extension-using-command-line-736199be1cda
 # Install extension from the command line

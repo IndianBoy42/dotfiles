@@ -1,4 +1,3 @@
-# Defined in /tmp/fish.cBZmNN/extract.fish @ line 2
 function extract --description 'Expand or extract bundled & compressed files'
   set --local ext (echo $argv[1] | awk -F. '{print $NF}')
   test -n "$argv[2]";
@@ -7,6 +6,12 @@ function extract --description 'Expand or extract bundled & compressed files'
   switch $ext
     case tar  # non-compressed, just bundled
       tar -xvf $argv[1] $tar_to
+    case xz
+      if test (echo $argv[1] | awk -F. '{print $(NF-1)}') = tar  # tar bundle compressed with gzip
+        tar -axvf $argv[1] $tar_to
+      else  # single gzip
+        xz -d $argv[1] $tar_to
+      end
     case gz
       if test (echo $argv[1] | awk -F. '{print $(NF-1)}') = tar  # tar bundle compressed with gzip
         tar -zxvf $argv[1] $tar_to

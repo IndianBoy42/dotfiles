@@ -969,8 +969,9 @@ nvim:
 
 # Compile neovim from source
 nvim-src: (gitclone "https://github.com/neovim/neovim.git" "neovim")
-    cd {{blddir}} && make CMAKE_BUILD_TYPE=Release 
-    cd {{blddir}} && make CMAKE_INSTALL_PREFIX={{prefix}}/nvim install
+    cd {{blddir}}/neovim && make CMAKE_BUILD_TYPE=Release 
+    cd {{blddir}}/neovim && make CMAKE_INSTALL_PREFIX={{prefix}}/nvim install
+    {{justrun}} link-pack nvim
 
 # Pretty GUI for neovim written in rust
 neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
@@ -1054,3 +1055,16 @@ mtr: (gitclone "https://github.com/traviscross/mtr.git" "mtr")
 
 platformio: 
     {{justrun}} pipx-install platformio
+
+luarocks: (gitclone "git://github.com/luarocks/luarocks.git" "luarocks")
+    #!/usr/bin/env fish
+    cd {{blddir}}/luarocks
+    ./configure --prefix="{{prefix}}/luarocks"
+    and make
+    and make install 
+    and {{justrun}} link-pack luarocks
+
+lua-format: 
+    luarocks install --server=https://luarocks.org/dev luaformatter
+    and {{justrun}} link-pack luarocks
+    

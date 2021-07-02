@@ -92,7 +92,8 @@ getpkg-mkrepo: (mkpackdir "mkrepo")
 
 # Add a local repo (created using mkrepo, give the directory containing the Packages.gz)
 add-local-repo dir=local-apt-repo:
-    echo "deb [trusted=yes] file:{{dir}} ./" | sudo tee -a /etc/apt/sources.list
+    touch /etc/apt/sources.list.d/local-apt-repo.list
+    echo "deb [trusted=yes] file:{{dir}} ./" | sudo tee -a /etc/apt/sources.list.d/local-apt-repo.list
 
 getpkg name: 
     getpkg.sh {{name}} {{local-apt-repo}}

@@ -507,6 +507,11 @@ cmake: (insgh "cmake" "Kitware/CMake" "*linux-x86_64.tar.gz")
 fzf: (targh "fzf" "junegunn/fzf" "*linux_amd64.tar.gz") (ins-bin "fzf" "/tmp")
     echo "Installed fzf"
 
+# Interative JSON Query
+ijq: (gitclone "https://github.com/gpanders/ijq.git" "ijq") (mkpackdir "ijq")
+    cd {{blddir}}/ijq && make prefix={{prefix}}/ijq install
+    {{justrun}} link-pack "ijq"
+
 # Fast realtime compression/decompression
 zstd: (srcgh "zstd" "facebook/zstd" "*.tar.gz") (mkpackdir "zstd")
     cd {{blddir}}/zstd && make

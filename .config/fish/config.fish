@@ -228,10 +228,16 @@ abbr echov 'set --show'
 # 	mv $argv $CP_TO
 # end
 
-set -gx EDITOR nvim #kak
+# set -gx EDITOR nvim #kak
+set -gx EDITOR ~/.local/bin/nvim-wrapper
 set -gx VISUAL $EDITOR
 #set -gx PAGER nvim
-if type -q nvim
+if test -n "$NVIM_LISTEN_ADDRESS"
+    alias nvim "nvr --remote-tab-wait"
+    abbr -g vim nvr
+    abbr -g vi nvr
+    abbr -g nvim nvr
+else if type -q nvim
     abbr -g vim nvim
     abbr -g vi nvim
 end

@@ -115,3 +115,9 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+if [ -n "$NVIM_LISTEN_ADDRESS" ] ; then
+    alias nvim="nvr --remote-tab-wait"
+fi
+
+EDITOR='nvim-wrapper'

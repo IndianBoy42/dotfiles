@@ -57,7 +57,7 @@
 
     status_stage_all: ( code: Char('a'), modifiers: ( bits: 0,),),
     status_update_all: ( code: Char('A'), modifiers: ( bits: 1,),),
-    status_reset_item: ( code: Char('u'), modifiers: ( bits: 0,),),
+    status_reset_item: ( code: Char('U'), modifiers: ( bits: 1,),),
     undo_commit: ( code: Char('U'), modifiers: ( bits: 1,),),
     status_ignore_file: ( code: Char('i'), modifiers: ( bits: 0,),),
 
@@ -75,6 +75,7 @@
     cmd_bar_toggle: ( code: Char('.'), modifiers: ( bits: 0,),),
     log_tag_commit: ( code: Char('t'), modifiers: ( bits: 0,),),
     commit_amend: ( code: Char('a'), modifiers: ( bits: 2,),),
+    commit: ( code: Char('s'), modifiers: ( bits: 2,),),
     copy: ( code: Char('y'), modifiers: ( bits: 0,),),
     create_branch: ( code: Char('c'), modifiers: ( bits: 0,),),
     rename_branch: ( code: Char('r'), modifiers: ( bits: 0,),),

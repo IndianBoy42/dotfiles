@@ -170,6 +170,7 @@ and abbr -g cd kn
 
 # apt abbreviations
 abbr apti "sudo apt install"
+abbr apty "sudo apt install -y"
 abbr apts "apt search"
 abbr aptr "sudo apt remove"
 abbr aptu "sudo apt update"
@@ -340,4 +341,3 @@ abbr ssyctl 'sudo systemctl'
 for file in $FISH_CONFIG_PATH.d/*.fish
     source $file
 end
-

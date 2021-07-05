@@ -655,6 +655,7 @@ ripgrep_all: ripgrep (gitclone "https://github.com/phiresky/ripgrep-all.git" "ri
 # Easy to use TUI for git
 gitui: cargo-install (gitclone "https://github.com/IndianBoy42/gitui.git" "gitui")
     {{cargo-install}} --path {{blddir}}/gitui
+    cp {{blddir}}/gitui/vim_style_key_config.ron ~/.config/gitui/key_config.ron
 
 # Minimal serial terminal/monitor
 serial-monitor: cargo-install (gitclone "https://github.com/IndianBoy42/serial-monitor.git" "serial-monitor")
@@ -1076,6 +1077,11 @@ luarocks: (gitclone "git://github.com/luarocks/luarocks.git" "luarocks")
     and make
     and make install 
     and {{justrun}} link-pack luarocks
+
+rock +args:
+    type -q luarocks || {{justrun}} luarocks
+    luarocks install {{args}}
+    {{justrun}} link-pack luarocks
 
 lua-format: 
     type -q luarocks || {{justrun}} luarocks

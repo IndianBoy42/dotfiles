@@ -9,10 +9,10 @@ set -gx TERMINAL $TERM
 ##################################
 
 if type -q ~/anaconda3/bin/conda
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-status is-interactive && eval /home/amedhi/anaconda3/bin/conda "shell.fish" "hook" $argv | source
-# <<< conda initialize <<<
+    # >>> conda initialize >>>
+    # !! Contents within this block are managed by 'conda init' !!
+    status is-interactive && eval /home/amedhi/anaconda3/bin/conda "shell.fish" hook $argv | source
+    # <<< conda initialize <<<
 end
 
 # linuxbrew add to env
@@ -22,9 +22,9 @@ end
 #   fish_add_path --append --move --path "~/../linuxbrew/.linuxbrew/bin"
 # end
 
-add_to_path "/usr/lib/x86_64-linux-gnu/pkgconfig/" PKG_CONFIG_PATH
-add_to_path "/usr/local/lib/pkgconfig" PKG_CONFIG_PATH
-add_to_path "/usr/lib/pkgconfig" PKG_CONFIG_PATH
+add_to_path /usr/lib/x86_64-linux-gnu/pkgconfig/ PKG_CONFIG_PATH
+add_to_path /usr/local/lib/pkgconfig PKG_CONFIG_PATH
+add_to_path /usr/lib/pkgconfig PKG_CONFIG_PATH
 add_to_path "$HOME/.local/lib" LD_LIBRARY_PATH
 add_to_path "$HOME/.local/libexec" LD_LIBRARY_PATH
 fish_add_path ~/bin
@@ -38,7 +38,7 @@ if test -e ~/git-builds/git-subrepo/.fish.rc
     fish_add_path $GIT_SUBREPO_ROOT/lib
 end
 
-if not set -q IN_NIX_SHELL 
+if not set -q IN_NIX_SHELL
     and not set -q FISH_NIX_ACTIVATED
     ## Inside a Nix Environment
 
@@ -51,7 +51,7 @@ if not set -q IN_NIX_SHELL
     # Activate the profile
     if test -n "$FISH_ACTIVATE_NIX_PROFILE"
         # TODO: https://github.com/lilyball/nix-env.fish
-        if bass source $FISH_ACTIVATE_NIX_PROFILE/etc/profile.d/nix.sh 
+        if bass source $FISH_ACTIVATE_NIX_PROFILE/etc/profile.d/nix.sh
             any-nix-shell fish --info-right | source
 
             # Guard repeated activations
@@ -63,7 +63,7 @@ else
     ## Inside a Nix Shell
 
     # Move nix paths to the top of the PATH variable
-    fish_add_path --move --global (echo $PATH | tr ' ' '\n' | grep 'nix/')        
+    fish_add_path --move --global (echo $PATH | tr ' ' '\n' | grep 'nix/')
 end
 
 ##################################
@@ -77,7 +77,7 @@ abbr reload_profile "source $FISH_CONFIG_PATH"
 
 set -gx PIPENV_VENV_IN_PROJECT 1
 set -gx CUDACXX /usr/lib/cuda/bin/nvcc
-set -gx VIRTUAL_ENV_DIR .venv 
+set -gx VIRTUAL_ENV_DIR .venv
 
 abbr del 'rm -vi'
 abbr lc 'wc -l'
@@ -116,7 +116,7 @@ test -f /home/amedhi/.ghcup/env
 and fish_add_path ~/.cabal/bin ~/.ghcup/bin
 
 # super short cargo abbreviations
-abbr cg "cargo"
+abbr cg cargo
 abbr cgcl "cargo clean"
 abbr cgr "cargo r"
 abbr cgrr "cargo r --release"
@@ -143,7 +143,7 @@ abbr ziinit "zig init-exe"
 # TODO: cmake super short abbr
 abbr ninja-targets "ninja -t targets"
 
-abbr py "python"
+abbr py python
 
 # lsd abbreviations
 if type -q lsd
@@ -195,13 +195,13 @@ abbr cmake-clang "cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
 abbr cmake-gcc "cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++"
 abbr cmake-zig "cmake -DCMAKE_C_COMPILER=zig\ cc -DCMAKE_CXX_COMPILER=zig\ c++"
 abbr cmake-zap "cmake -DCMAKE_C_COMPILER=zapcc -DCMAKE_CXX_COMPILER=zapcc"
-set -gx CMAKE_GENERATOR "Ninja"
-set -gx CMAKE_BUILD_TYPE "Release"
+set -gx CMAKE_GENERATOR Ninja
+set -gx CMAKE_BUILD_TYPE Release
 set -gx CMAKE_EXE_LINKER_FLAGS "-fuse-ld=gold"
-set -gx CMAKE_EXPORT_COMPILE_COMMANDS "ON"
+set -gx CMAKE_EXPORT_COMPILE_COMMANDS ON
 set -gx MAKEFLAGS -j (nproc)
 set -gx JULIA_NUM_THREADS (nproc)
-set -gx ZST_NBTHREADS 0 
+set -gx ZST_NBTHREADS 0
 set -gx ZST_CLEVEL 1
 function FASTFLAGS
     set -gx CFLAGS "-O3 -march=native -mtune=native"
@@ -246,11 +246,11 @@ end
 # so many spotify-tui abbreviations
 set -gx SPT_FORMAT '%f %s %p : %t - %a (%b) - %v% - playing on %d'
 abbr sptnext " spt playback --next -f '$SPT_FORMAT'"
-abbr sptn  " spt playback --next -f '$SPT_FORMAT'"
+abbr sptn " spt playback --next -f '$SPT_FORMAT'"
 abbr sptprev " spt playback --previous -f '$SPT_FORMAT'"
 abbr sptpb " spt playback -f '$SPT_FORMAT'"
 abbr sptplay " spt playback --toggle -f '$SPT_FORMAT'"
-abbr sptp  " spt playback --toggle -f '$SPT_FORMAT'"
+abbr sptp " spt playback --toggle -f '$SPT_FORMAT'"
 abbr sptvol " spt playback -f '$SPT_FORMAT' --volume"
 abbr sptlike " spt playback --like -f '$SPT_FORMAT'"
 abbr sptf " spt search"
@@ -265,15 +265,15 @@ abbr sptpt " spt play -f '$SPT_FORMAT' --track --name"
 
 if type -q bass
     and type -q gvm
-	gvm use latest &> /dev/null
+    gvm use latest &>/dev/null
 end
 if type -q nvm
-	nvm use lts &> /dev/null
+    nvm use lts &>/dev/null
 end
 
 # Reindex (indexa) if is-interactive
 if test -x ix
-	status --is-interactive; and ix -u &> /dev/null &
+    status --is-interactive; and ix -u &>/dev/null &
 end
 set -g fish_key_bindings fish_vi_key_bindings
 

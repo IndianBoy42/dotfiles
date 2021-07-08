@@ -244,15 +244,15 @@ else if type -q nvim
         # If a nvim server for this dir/repo has already been launched then  
         function nvim --wraps='vim' -d "Wrapper around nvim-remote to use servername according to the dir/repo you're in"
             set addr $NVIM_NEW_LISTEN_ADDRESS
-            test -n "$argv[1]"; and set addr "$argv[1]"
-            command nvr -s --servername $NVIM_NEW_LISTEN_ADDRESS $argv
-            # command nvr -s --nostart --servername $NVIM_NEW_LISTEN_ADDRESS $argv
-            # or command nvim --listen $NVIM_NEW_LISTEN_ADDRESS $argv
-            # if test -e $NVIM_NEW_LISTEN_ADDRESS
-            #     command nvr -s --servername $NVIM_NEW_LISTEN_ADDRESS $argv
+            # test -n "$argv[1]"; and set addr "$argv[1]"
+            # command nvr -s --servername $addr $argv
+            command nvr -s --nostart --servername $addr $argv
+            or command nvim --listen $addr $argv
+            # if test -e $addr
+            #     command nvr -s --servername $addr $argv
             # else
-            #     mkdir -p (dirname $NVIM_NEW_LISTEN_ADDRESS)
-            #     command nvim --listen $NVIM_NEW_LISTEN_ADDRESS $argv
+            #     mkdir -p (dirname $addr)
+            #     command nvim --listen $addr $argv
             # end
         end
     end

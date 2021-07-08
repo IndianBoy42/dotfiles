@@ -66,6 +66,9 @@
     pre-pull = diff @ @{upstream}
     any-changes = diff --no-ext-diff --quiet --exit-code
     tracked = ls-tree -r HEAD --name-only 
+	partial-clone = clone --filter=blob:none
+	shallow-clone = clone --filter=tree:0
+	unshallow = fetch --unshallow
 	
 [credential "https://dev.azure.com"]
 	useHttpPath = true

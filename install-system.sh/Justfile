@@ -970,6 +970,8 @@ nvim:
     test -d ~/.config/nvim || https://github.com/IndianBoy42/LunarVim.git ~/.config/nvim
     cd ~/.config/nvim && just install
 
+nvim-app: (bingh "neovim" "neovim/neovim" "*.appimage")
+
 # Compile neovim from source
 nvim-src: (gitclone "https://github.com/neovim/neovim.git" "neovim")
     cd {{blddir}}/neovim \

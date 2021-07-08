@@ -234,13 +234,38 @@ set -gx EDITOR ~/.local/bin/nvim-wrapper
 set -gx VISUAL $EDITOR
 #set -gx PAGER nvim
 if test -n "$NVIM_LISTEN_ADDRESS"
+    and type -q nvr
     alias nvim "nvr --remote-tab-wait"
     abbr -g vim nvr
     abbr -g vi nvr
     abbr -g nvim nvr
 else if type -q nvim
+    if type -q nvr
+        # If a nvim server for this dir/repo has already been launched then  
+        function nvim --wraps='vim' -d "Wrapper around nvim-remote to use servername according to the dir/repo you're in"
+            set addr $NVIM_NEW_LISTEN_ADDRESS
+            test -n "$argv[1]"; and set addr "$argv[1]"
+            command nvr -s --servername $NVIM_NEW_LISTEN_ADDRESS $argv
+            # command nvr -s --nostart --servername $NVIM_NEW_LISTEN_ADDRESS $argv
+            # or command nvim --listen $NVIM_NEW_LISTEN_ADDRESS $argv
+            # if test -e $NVIM_NEW_LISTEN_ADDRESS
+            #     command nvr -s --servername $NVIM_NEW_LISTEN_ADDRESS $argv
+            # else
+            #     mkdir -p (dirname $NVIM_NEW_LISTEN_ADDRESS)
+            #     command nvim --listen $NVIM_NEW_LISTEN_ADDRESS $argv
+            # end
+        end
+    end
     abbr -g vim nvim
     abbr -g vi nvim
+    # Launch without any listening
+    abbr -g vimn command nvim
+    abbr -g nvimn command nvim
+    abbr -g vin command nvim
+end
+set -gx NVIM_NEW_LISTEN_ADDRESS "/tmp/nvimsockets"(realpath .)"/socketfile"
+function nvim_new_listen_address --on-variable CURR_GIT_ROOT
+    set -gx NVIM_NEW_LISTEN_ADDRESS "/tmp/nvimsockets$CURR_GIT_ROOT/socketfile"
 end
 
 # so many spotify-tui abbreviations

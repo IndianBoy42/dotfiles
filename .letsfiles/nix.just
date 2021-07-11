@@ -16,6 +16,8 @@ nix-shell := if pure != "0" { "nix-shell --pure" } else { "nix-shell" }
 
 nix-gc-roots-dir := "~/.nix-gc-roots"
 
+with := ""
+
 # https://ianthehenry.com/posts/how-to-learn-nix/declarative-user-environment/
 
 # Enter a nix environment determined by the `profile variable` (or run commands)
@@ -28,7 +30,7 @@ nix-gc-roots-dir := "~/.nix-gc-roots"
 
 # Enter a nix-shell (or run commands)
 @sh *command="":
-    {{nix-shell}} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
+    {{nix-shell}} {{ if with == "" { "" } else { "-p " + with } }} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
 
 # Can use "nix run"
 # Enter a nix-shell with certain packages installed

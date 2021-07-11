@@ -3,8 +3,8 @@
 --smart-case
 
 # Don't let ripgrep vomit really long lines to my terminal, and show a preview.
---max-columns=150
---max-columns-preview
+# --max-columns=150
+# --max-columns-preview
 
 # --pretty -- Pretty output even when piping
 --color=always

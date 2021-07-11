@@ -140,9 +140,6 @@ abbr zcc "zig cc"
 abbr zc++ "zig c++"
 abbr ziinit "zig init-exe"
 
-# TODO: cmake super short abbr
-abbr ninja-targets "ninja -t targets"
-
 abbr py python
 
 # lsd abbreviations
@@ -212,6 +209,10 @@ function FASTFLAGS
     set -gx CMAKE_C_FLAGS_RELEASE $CFLAGS
     set -gx CMAKE_CXX_FLAGS_RELEASE $CPPFLAGS
 end
+# TODO: cmake super short abbr
+abbr ninja-targets "ninja -t targets"
+abbr cmconf "cmake -S . -B build"
+abbr cmbuild "cmake --build build"
 
 abbr edex ed_n_source
 abbr cedex code_n_source

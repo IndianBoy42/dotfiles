@@ -243,18 +243,15 @@ if test -n "$NVIM_LISTEN_ADDRESS"
 else if type -q nvim
     if type -q nvr
         # If a nvim server for this dir/repo has already been launched then  
-        function nvim --wraps='vim' -d "Wrapper around nvim-remote to use servername according to the dir/repo you're in"
-            set addr $NVIM_NEW_LISTEN_ADDRESS
-            # test -n "$argv[1]"; and set addr "$argv[1]"
-            # command nvr -s --servername $addr $argv
-            command nvr -s --nostart --servername $addr $argv
-            or command nvim --listen $addr $argv
-            # if test -e $addr
-            #     command nvr -s --servername $addr $argv
-            # else
-            #     mkdir -p (dirname $addr)
-            #     command nvim --listen $addr $argv
-            # end
+        function nvim --wraps=vim --description Wrapper\ around\ nvim-remote\ to\ use\ servername\ according\ to\ the\ dir/repo\ you\'re\ in
+            set addr "/tmp/nvimsockets"(realpath .)"/socketfile"
+            test -n "$CURR_GIT_ROOT"; and set addr "/tmp/nvimsockets$CURR_GIT_ROOT/socketfile"
+            # test -n "$argv[1]"; and set addr "$argv[1]" # TODO argparse servername/listen for the address
+            # echo $addr
+            mkdir -p (dirname $addr)
+
+            command nvr -s --nostart --servername "$addr" $argv
+            or command nvim --listen "$addr" $argv
         end
     end
     abbr -g vim nvim
@@ -263,10 +260,6 @@ else if type -q nvim
     abbr -g vimn command nvim
     abbr -g nvimn command nvim
     abbr -g vin command nvim
-end
-set -gx NVIM_NEW_LISTEN_ADDRESS "/tmp/nvimsockets"(realpath .)"/socketfile"
-function nvim_new_listen_address --on-variable CURR_GIT_ROOT
-    set -gx NVIM_NEW_LISTEN_ADDRESS "/tmp/nvimsockets$CURR_GIT_ROOT/socketfile"
 end
 
 # so many spotify-tui abbreviations

@@ -188,13 +188,16 @@ abbr justl "just --list"
 abbr rcd 'ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
 
 # define some variables for CMAKE
-abbr cmake-clang "cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++"
-abbr cmake-gcc "cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++"
-abbr cmake-zig "cmake -DCMAKE_C_COMPILER=zig\ cc -DCMAKE_CXX_COMPILER=zig\ c++"
-abbr cmake-zap "cmake -DCMAKE_C_COMPILER=zapcc -DCMAKE_CXX_COMPILER=zapcc"
+abbr cmake-clang "cmake -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -S . -B build"
+abbr cmake-clang-12 "cmake -DCMAKE_C_COMPILER=clang-12 -DCMAKE_CXX_COMPILER=clang++-12 -S . -B build"
+abbr cmake-gcc "cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -S . -B build"
+abbr cmake-gcc-11 "cmake -DCMAKE_C_COMPILER=gcc-11 -DCMAKE_CXX_COMPILER=g++-11 -S . -B build"
+abbr cmake-zig "cmake -DCMAKE_C_COMPILER=zig\ cc -DCMAKE_CXX_COMPILER=zig\ c++ -S . -B build"
+abbr cmake-zap "cmake -DCMAKE_C_COMPILER=zapcc -DCMAKE_CXX_COMPILER=zapcc -S . -B build"
 set -gx CMAKE_GENERATOR Ninja
 set -gx CMAKE_BUILD_TYPE Release
-set -gx CMAKE_EXE_LINKER_FLAGS "-fuse-ld=gold"
+set -gx CMAKE_EXE_LINKER_FLAGS "-fuse-ld=lld"
+set -gx LDFLAGS "-fuse-ld=lld"
 set -gx CMAKE_EXPORT_COMPILE_COMMANDS ON
 set -gx MAKEFLAGS -j (nproc)
 set -gx JULIA_NUM_THREADS (nproc)
@@ -360,3 +363,4 @@ abbr ssyctl 'sudo systemctl'
 for file in $FISH_CONFIG_PATH.d/*.fish
     source $file
 end
+

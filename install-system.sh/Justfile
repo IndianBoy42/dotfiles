@@ -1009,22 +1009,27 @@ smerge:
     {{apt-install}} sublime-merge
 
 # TODO: install in an isolated virutal environment? (use pipx)
-# Install neovim from unstable ppa (also install my lunarvim)
-nvim:
-    sudo add-apt-repository -y ppa:neovim-ppa/unstable
-    apt update
-    {{apt-install}} neovim
+nvim-cfg:
     test -d ~/.config/nvim || https://github.com/IndianBoy42/LunarVim.git ~/.config/nvim
     cd ~/.config/nvim && just install
 
+# Install neovim from unstable ppa (also install my lunarvim)
+nvim-apt:
+    sudo add-apt-repository -y ppa:neovim-ppa/unstable
+    apt update
+    {{apt-install}} neovim
+    {{justrun}} nvim-cfg
+
 nvim-app: (bingh "neovim" "neovim/neovim" "*.appimage")
+    {{justrun}} nvim-cfg
 
 # Compile neovim from source
-nvim-src: (gitclone "https://github.com/neovim/neovim.git" "neovim")
+nvim: (gitclone "https://github.com/neovim/neovim.git" "neovim")
     cd {{blddir}}/neovim \
     && make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
     && make install
     {{justrun}} link-pack nvim
+    {{justrun}} nvim-cfg
 
 # Pretty GUI for neovim written in rust
 neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")

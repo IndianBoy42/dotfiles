@@ -1161,3 +1161,18 @@ alternative name alt="" prio="0":
     sudo update-alternatives --list {{name}}
 altconfig name:
     sudo update-alternatives --config {{name}}
+
+jemalloc: (gitclone "https://github.com/jemalloc/jemalloc.git" "jemalloc")
+    #!/usr/bin/env fish
+    cd {{blddir}}/jemalloc
+    ./autogen.sh
+    and ./configure --prefix="{{prefix}}/jemalloc"
+    and make
+    and make install
+    and {{justrun}} link-pack jemalloc
+
+mimalloc: (gitclone "https://github.com/microsoft/mimalloc.git" "mimalloc")
+    #!/usr/bin/env fish
+    cd {{blddir}}/mimalloc
+    {{justrun}} cmake-install mimalloc
+    and {{justrun}} link-pack mimalloc

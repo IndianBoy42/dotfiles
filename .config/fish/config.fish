@@ -218,6 +218,9 @@ abbr ninja-targets "ninja -t targets"
 abbr cmconf "cmake -S . -B build"
 abbr cmbuild "cmake --build build"
 
+abbr mimalloc "LD_PRELOAD=~/.local/lib/libmimalloc.so"
+abbr jemalloc "LD_PRELOAD=(jemalloc-config --libdir)/libjemalloc.so.(jemalloc-config --revision)"
+
 abbr edex ed_n_source
 abbr cedex code_n_source
 abbr coda code -a

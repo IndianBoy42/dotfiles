@@ -30,6 +30,7 @@ add_to_path "$HOME/.local/libexec" LD_LIBRARY_PATH
 fish_add_path ~/bin
 fish_add_path ~/.cargo/bin
 fish_add_path ~/.local/bin
+set -gx LUA_PATH "$HOME/.local/packages/luarocks/share/lua/5.4/?.lua;$HOME/.local/packages/luarocks/lib/lua/5.4/?.lua;;"
 # fish_add_path ~/anaconda3/bin
 
 # git-subrepo

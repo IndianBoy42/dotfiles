@@ -48,7 +48,9 @@ flex
 bison
 libpoppler-dev
 libpoppler-qt5-dev
-libstdc++-11-dev
+libstdc++-dev
+libc++-12-dev
+libc++abi-12-dev
 libc++-11-dev
 libc++abi-11-dev
 zlib1g-dev

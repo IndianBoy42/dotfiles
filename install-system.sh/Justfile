@@ -201,7 +201,7 @@ _tmpdir name:
 
 # Install a program directory structure using stow
 ins-copy name from: (mkpackdir name)
-    cp -r {{from}}/{{name}}/*/ {{prefix}}/{{name}}/
+    cp -r {{from}}/{{name}}/*/* {{prefix}}/{{name}}/
     #rm -rf /tmp/{{name}} # TODO: should delete?
     chmod +x {{prefix}}/{{name}}/bin/*
     {{justrun}} link-pack {{name}}
@@ -278,7 +278,9 @@ autotoolsgit name repo pattern: (gitclone name repo)
 
 # CMake build and install a project
 cmake-build from in *options:
-    cmake -DCMAKE_INSTALL_PREFIX="{{prefix}}/"(basename (realpath {{from}})) {{options}} -S {{from}} -B {{in}} ..
+    cmake -DCMAKE_INSTALL_PREFIX="{{prefix}}/"(basename (realpath {{from}})) \
+        -DCMAKE_BUILD_TYPE={{CMAKE_BUILD_TYPE}} \
+        {{options}} -S {{from}} -B {{in}} ..
     cmake --build {{in}}
 
 cmake-install name *options: 
@@ -406,12 +408,14 @@ keynav: (gitclone "https://github.com/jordansissel/keynav.git" "keynav") (mkpack
 
 # zig compiler
 zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
-    #!/usr/bin/env -S bash -euxo pipefail
+    #!/usr/bin/env fish
     {{apt-install}} libllvm12 libclang-12-dev liblld-12-dev
     cmake -DCMAKE_INSTALL_PREFIX="{{prefix}}/zig/" \
+        -DCMAKE_BUILD_TYPE={{CMAKE_BUILD_TYPE}} \
         -DCMAKE_C_COMPILER=clang-12 -DCMAKE_CXX_COMPILER=clang++-12 \
         -S {{blddir}}/zig -B {{blddir}}/zig/build
-    cmake --install {{blddir}}/zig/build
+    and cmake --build {{blddir}}/zig/build
+    and cmake --install {{blddir}}/zig/build
     {{justrun}} link-pack "zig"
 
 # godbolt
@@ -423,6 +427,7 @@ zapcc: (gitclone "https://github.com/yrnkrn/zapcc.git" "zapcc")
     read --prompt "Are you sure you wanna build zapcc?"
     cmake -DLLVM_ENABLE_WARNINGS -DLLVM_USE_LINKER={{LD}} \
         -DCMAKE_INSTALL_PREFIX="{{prefix}}/zapcc/" \
+        -DCMAKE_BUILD_TYPE={{CMAKE_BUILD_TYPE}} \
         -S {{blddir}}/zapcc -B {{blddir}}/zapcc/build
     cmake --install {{blddir}}/zapcc/build
     {{justrun}} link-pack "zapcc"
@@ -431,6 +436,7 @@ zapcc: (gitclone "https://github.com/yrnkrn/zapcc.git" "zapcc")
 googbench: (gitclone "https://github.com/google/benchmark.git" "googbench")
     cmake -DBENCHMARK_DOWNLOAD_DEPENDENCIES=ON -DBENCHMARK_ENABLE_GTEST_TESTS=OFF \
         -DCMAKE_INSTALL_PREFIX={{prefix}}/googbench \
+        -DCMAKE_BUILD_TYPE={{CMAKE_BUILD_TYPE}} \
         -S {{blddir}}/googbench -B {{blddir}}/googbench/build
     cmake --install {{blddir}}/googbench/build
     {{justrun}} link-pack "googbench"
@@ -1135,7 +1141,6 @@ lua-format:
 mold-stable: (gitclone "https://github.com/rui314/mold.git" "mold" "v0.9.1") (gitclone "https://github.com/oneapi-src/oneTBB.git" "mold/oneTBB" "v2020.3") (mkpackdir "mold")
     cd {{blddir}}/mold/oneTBB && make extra_inc=big_iron.inc
     tbb_bindir=(ls -d {{blddir}}/mold/oneTBB/build/linux_intel64_*_release) \
-    CMAKE_GENERATOR="Unix Makefiles" \
     cd {{blddir}}/mold && make \
         PREFIX={{prefix}}/mold \
         CC=clang-12 CXX=clang++-12 LTO=1 \
@@ -1146,11 +1151,10 @@ mold-stable: (gitclone "https://github.com/rui314/mold.git" "mold" "v0.9.1") (gi
 
 # Build a static executable of the mold linker (fast boi)
 mold: (gitclone "https://github.com/rui314/mold.git" "mold" "main") (mkpackdir "mold")
-    CMAKE_GENERATOR="Unix Makefiles" \
     cd {{blddir}}/mold && make \
         PREFIX={{prefix}}/mold \
         CC=clang-12 CXX=clang++-12 LTO=1 \
-        EXTRA_LDFLAGS="-fuse-ld=lld -static" install
+        EXTRA_LDFLAGS="-fuse-ld=lld-12 -static" install
     {{justrun}} link-pack mold
 
 # Use update-alternatives

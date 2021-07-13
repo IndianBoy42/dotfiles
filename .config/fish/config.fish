@@ -195,15 +195,14 @@ abbr cmake-gcc "cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -S . -B bu
 abbr cmake-gcc-11 "cmake -DCMAKE_C_COMPILER=gcc-11 -DCMAKE_CXX_COMPILER=g++-11 -S . -B build"
 abbr cmake-zig "cmake -DCMAKE_C_COMPILER=zig\ cc -DCMAKE_CXX_COMPILER=zig\ c++ -S . -B build"
 abbr cmake-zap "cmake -DCMAKE_C_COMPILER=zapcc -DCMAKE_CXX_COMPILER=zapcc -S . -B build"
-set -gx CMAKE_GENERATOR Ninja
-set -gx CMAKE_BUILD_TYPE Release
-set -gx CMAKE_EXE_LINKER_FLAGS "-fuse-ld=lld"
-set -gx LDFLAGS "-fuse-ld=lld"
-set -gx CMAKE_EXPORT_COMPILE_COMMANDS ON
-set -gx MAKEFLAGS -j (nproc)
-set -gx JULIA_NUM_THREADS (nproc)
-set -gx ZST_NBTHREADS 0
-set -gx ZST_CLEVEL 1
+set CMAKE_GENERATOR; or set -gx CMAKE_GENERATOR Ninja
+set CMAKE_BUILD_TYPE; or set -gx CMAKE_BUILD_TYPE Release
+set CMAKE_EXPORT_COMPILE_COMMANDS; or set -gx CMAKE_EXPORT_COMPILE_COMMANDS ON
+set LDFLAGS; or set -gx LDFLAGS "-fuse-ld=lld"
+set MAKEFLAGS; or set -gx MAKEFLAGS -j (nproc)
+set JULIA_NUM_THREADS; or set -gx JULIA_NUM_THREADS (nproc)
+set ZST_NBTHREADS; or set -gx ZST_NBTHREADS 0
+set ZST_CLEVEL; or set -gx ZST_CLEVEL 1
 function FASTFLAGS
     set -gx CFLAGS "-O3 -march=native -mtune=native"
     set -gx CXXFLAGS "-O3 -march=native -mtune=native"

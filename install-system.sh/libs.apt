@@ -46,6 +46,10 @@ libacl1-dev
 libreadline-dev
 flex
 bison
-qt5-default
 libpoppler-dev
 libpoppler-qt5-dev
+libstdc++-11-dev
+libc++-11-dev
+libc++abi-11-dev
+zlib1g-dev
+libxxhash-dev

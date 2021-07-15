@@ -335,9 +335,13 @@ wezterm: (bingh "wezterm" "wez/wezterm" "*.AppImage")
     sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which wezterm) 90
 
 # kitty terminal -- pretty graphics in terminal
-kitty: (mkpackdir "kitty")
-    curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest={{prefix}}/kitty
-    {{justrun}} link-pack "kitty"
+kitty: (mkpackdir "kitty.app")
+    curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest={{prefix}}
+    {{justrun}} link-pack "kitty.app"
+
+kitty-src: (gitclone "https://github.com/kovidgoyal/kitty" "kitty") (mkpackdir "kitty")
+    {{apt-install}} libdbus-1-dev libxcursor-dev libxrandr-dev libxi-dev libxinerama-dev libgl1-mesa-dev libxkbcommon-x11-dev libfontconfig-dev libx11-xcb-dev liblcms2-dev libpython3-dev
+    cd {{blddir}}/kitty && make
 
 # Zenith -- better top
 zenith: (debgh "zenith" "bvaisvil/zenith" "*amd64.deb")

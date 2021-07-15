@@ -1042,8 +1042,10 @@ nvim-app: (bingh "neovim" "neovim/neovim" "*.appimage")
 # Compile neovim from source
 nvim: (gitclone "https://github.com/neovim/neovim.git" "neovim")
     cd {{blddir}}/neovim \
-    && make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
-    && make install
+    && make \
+        CMAKE_BUILD_TYPE=Release \
+        CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
+        install
     {{justrun}} link-pack nvim
     {{justrun}} nvim-cfg
 

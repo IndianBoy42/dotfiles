@@ -1195,3 +1195,9 @@ mimalloc: (gitclone "https://github.com/microsoft/mimalloc.git" "mimalloc")
     cd {{blddir}}/mimalloc
     {{justrun}} cmake-install mimalloc
     and {{justrun}} link-pack mimalloc
+
+emscripten: (gitclone "https://github.com/emscripten-core/emsdk.git" "emsdk")
+    chmod +x {{blddir}}/emsdk/emsdk
+    {{blddir}}/emsdk/emsdk install latest
+    {{blddir}}/emsdk/emsdk activate latest
+    source {{blddir}}/emsdk/emsdk_env.fish

@@ -1,0 +1,3 @@
+function dobg
+    $argv &
+end

@@ -34,16 +34,14 @@
         "body": "$1 $2",
         "mode": "maths",
         "priority": -1,
-        "description": "whitespace before operators",
-        "triggerWhenComplete": false
+        "description": "whitespace before operators"
     },
     {
         "prefix": "([\\+\\-=<>])([^ &\\\\\\+\\-=<>\\|!~])$",
         "body": "$1 $2",
         "mode": "maths",
         "priority": -1,
-        "description": "whitespace after operators",
-        "triggerWhenComplete": false
+        "description": "whitespace after operators"
     },
     {
         "prefix": "\\.\\.\\.$",
@@ -75,7 +73,7 @@
     },
     {
         "prefix": "(([\\d\\.]+)|([\\d\\.]*)(\\\\)?([A-Za-z]+)((\\^|_)(\\{\\d+\\}|\\d|[A-Za-z]|\\\\\\w+))*!?)\\/$",
-        "body": "\\frac{$1}{$$0}",
+        "body": "\\frac{$1}{$$0}$$0",
         "mode": "maths",
         "description": "fraction (from regex)",
         "triggerWhenComplete": true
@@ -232,7 +230,7 @@
         "triggerWhenComplete": true
     },
     {
-        "prefix": "(^|[^\\\\])(?<!arg)(sin|cos|tan|cot|csc|sec|min|max|log|exp)$",
+        "prefix": "(^|[^\\\\])(sin|cos|tan|cot|csc|sec|min|max|log|exp)$",
         "body": "$1\\$2 ",
         "mode": "maths",
         "description": "un-backslashed operator",
@@ -340,10 +338,11 @@
         "prefix": "\\bpart$",
         "body": "\\frac{\\partial $${1:V}}{\\partial $${2:x}} ",
         "mode": "maths",
-        "description": "partial derivative"
+        "description": "partial derivative",
+        "triggerWhenComplete": true
     },
     {
-        "prefix": "\\bsqrt$",
+        "prefix": "\\bsq$",
         "body": "\\sqrt{$$1}",
         "mode": "maths",
         "description": "√",
@@ -404,14 +403,16 @@
         "body": "$1\\, ",
         "mode": "maths",
         "description": "add maths whitespace \\,",
-        "priority": -1
+        "priority": -1,
+        "triggerWhenComplete": true
     },
     {
         "prefix": "([^ \\\\])\\\\, {2,4}$",
         "body": "$1\\: ",
         "mode": "maths",
         "description": "add maths whitespace \\:",
-        "priority": 0.1
+        "priority": 0.1,
+        "triggerWhenComplete": true
     },
     {
         "prefix": "([^ \\\\])\\\\: {2,4}$",

@@ -8,7 +8,7 @@ br = "build --release"
 wc = "watch -x check --clear"
 
 [build]
-rustflags = ["-Z", "share-generics=y", "-C", "link-arg=-fuse-ld=lld"]
+rustflags = [ "-C", "link-arg=-fuse-ld=lld"]
 
 [profile.dev]
 #opt-level = 1
@@ -32,14 +32,14 @@ opt-level = 3
 [target.x86_64-unknown-linux-gnu]
 rustflags = [
     "-C", "link-arg=-fuse-ld=lld",
-    "-C", "target-cpu=native", "-Z", "share-generics=y",
+    "-C", "target-cpu=native",
 ]
 
 [target.x86_64-unknown-linux-musl]
 rustflags = [
     "-C", "link-arg=-fuse-ld=lld", 
     "-C", "target-feature=+crt-static", "-C", "link-self-contained=yes",
-    "-C", "target-cpu=native", "-Z", "share-generics=y"
+    "-C", "target-cpu=native",
 ]
 #linker = "rust-lld"
 

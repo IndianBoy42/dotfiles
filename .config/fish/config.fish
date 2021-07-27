@@ -39,6 +39,7 @@ if test -e ~/git-builds/git-subrepo/.fish.rc
     fish_add_path $GIT_SUBREPO_ROOT/lib
 end
 
+set -gx FISH_ACTIVATE_NIX 1
 if not set -q IN_NIX_SHELL
     and not set -q FISH_NIX_ACTIVATED
     ## Inside a Nix Environment

@@ -1,24 +1,38 @@
-justrun := "just -d " + wd + " -f " + justfile()
-pure := "0"
-#profile := `realpath ~/.nix-profile` # DONT USE THIS: it derefs too many times
-profile := '' # DONT MAKE THIS ~/.nix-profile, it should be the pointee of that symlink
-user-nix := '~/install-system.sh/user.nix'
-
-export FISH_ACTIVATE_NIX := if profile == "" { "1" } else { "" }
-export FISH_ACTIVATE_NIX_PROFILE := if profile != "" { profile } else { "" }
-
 set shell := ["fish", "-c"]
 
 wd := invocation_directory()
+justrun := "just -d " + wd + " -f " + justfile()
 
-nix-env := 'nix-env' + if profile == "" { "" } else { " -p " + profile }
-nix-shell := if pure != "0" { "nix-shell --pure" } else { "nix-shell" }
+# Remove all system paths (pure functional dev environment)
+pure := "0"
 
-nix-gc-roots-dir := "~/.nix-gc-roots"
+# Profile for nix-env
+profile := '' # DONT MAKE THIS ~/.nix-profile, it should be the pointee of that symlink
+#profile := `realpath ~/.nix-profile` # DONT USE THIS: it derefs too many times
 
+# Some additional packages for nix-shell
 with := ""
 
+#####################################################################################
+# Configuration above, recipes and derived variables below
+#####################################################################################
+
 # https://ianthehenry.com/posts/how-to-learn-nix/declarative-user-environment/
+# File to store user enviroment 
+user-nix := '~/install-system.sh/user.nix'
+
+# Export variables to make fish activate nix correctly
+export FISH_ACTIVATE_NIX := if profile == "" { "1" } else { "" }
+export FISH_ACTIVATE_NIX_PROFILE := if profile != "" { profile } else { "" }
+
+# Add profile to nix-env automatically
+nix-env := 'nix-env' + if profile == "" { "" } else { " -p " + profile }
+
+# Add `with`
+nix-shell := if pure != "0" { "nix-shell --pure" } else { "nix-shell" } + {{ if with == "" { "" } else { " -p " + with } }} 
+
+# Location to store gc-roots
+nix-gc-roots-dir := "~/.nix-gc-roots"
 
 # Enter a nix environment determined by the `profile variable` (or run commands)
 @do *commands:
@@ -30,7 +44,7 @@ with := ""
 
 # Enter a nix-shell (or run commands)
 @sh *command="":
-    {{nix-shell}} {{ if with == "" { "" } else { "-p " + with } }} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
+    {{nix-shell}} {{ if command != "" { "--command \"" +command + "\"" } else { "" } }}
 
 # Can use "nix run"
 # Enter a nix-shell with certain packages installed

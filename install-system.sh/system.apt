@@ -7,3 +7,4 @@ gnupg
 ca-certificates
 lsb-release
 texinfo
+stow

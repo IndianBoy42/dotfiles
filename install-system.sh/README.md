@@ -12,23 +12,21 @@ curl -L bootstrap.yadm.io | bash -s -- https://github.com/IndianBoy42/dotfiles.g
 # Install all the alternatives
 yadm config local.class {Laptop|Desktop} && yadm alt
 
-# On Pop-os, fake distro-info (idk why)
-sudo cp /usr/share/distro-info/ubuntu.csv /usr/share/distro-info/pop.csv
-
-# Start installing all programs 
+# Start installing all programs
 cd ~/install-system.sh/
 ./install-system.sh
-#./install-fish.sh
+
 ## REBOOT
+
 # just add-local-repo # if have
 ./install-apt-srcs.fish
 ./install-apt.fish
 just stow
 just cmake fzf zstd kmonad git-subrepo
-just go 
-just node 
-just conda 
-just nvim 
+just go
+just node
+just conda
+just nvim
 just firacode
 just rustc
 just cargo-install
@@ -42,3 +40,7 @@ You shouldn't do `install-misc.fish` all at once to properly monitor what comman
 I wish Fish could be made to print the commands before they run, probably a wrapper function could work
 
 I also wish I could install `neovim` earlier because I inevitably have to edit configs and scripts before I get to that stage
+
+# TODO:
+
+I should use nix for more tools, instead of apt

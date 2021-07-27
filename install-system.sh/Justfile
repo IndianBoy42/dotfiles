@@ -101,6 +101,9 @@ apt-install := "sudo apt-get install"
 
 stow := if to-root != "0" { "sudo stow" } else { "stow" }
 
+only-needed-blobs := --filter=blob:none
+only-needed-trees := --filter=tree:0 # Least download size (may not be significant), will requires downloads to see old commits changes
+
 #################################################
 # Recipes below here
 #################################################
@@ -200,13 +203,13 @@ gitclone url name branch="":
         git pull && git submodule update --init --recursive \
         || git checkout {{branch}} # Assume that arguments
     else
-        git clone --filter=blob:none {{ if branch == "" { "" } else { "-b " + branch } }} {{url}} {{blddir}}/{{name}} # --filter=tree:0
+        git clone {{only-needed-blobs}} {{ if branch == "" { "" } else { "-b " + branch } }} {{url}} {{blddir}}/{{name}} # Or use --filter=tree:0
     end
 
 _tmpdir name:
     mkdir -p /tmp/{{name}}
 
-@install-gh:
+gh:
     curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
     echo "deb [arch="(dpkg --print-architecture)" signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
     sudo apt update
@@ -1029,8 +1032,9 @@ smerge:
     {{apt-install}} sublime-merge
 
 # TODO: install in an isolated virutal environment? (use pipx)
+# Install my LunarVim based config
 nvim-cfg:
-    test -d ~/.config/nvim || https://github.com/IndianBoy42/LunarVim.git ~/.config/nvim
+    test -d ~/.config/nvim || git clone {{only-needed-blobs}} https://github.com/IndianBoy42/LunarVim.git ~/.config/nvim
     cd ~/.config/nvim && just install
 
 # Install neovim from unstable ppa (also install my lunarvim)

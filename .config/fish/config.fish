@@ -128,6 +128,7 @@ abbr cgb "cargo build"
 abbr cgbr "cargo build --release"
 abbr cgbe "cargo bench"
 abbr cgwc "cargo watch -x check --clear"
+abbr BT "RUST_BACKTRACE=1"
 # set -gx CARGO_BUILD_TARGET x86_64-unknown-linux-musl
 
 abbr watchbuild "watchexec -cw . -i build --"

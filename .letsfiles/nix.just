@@ -29,7 +29,8 @@ export FISH_ACTIVATE_NIX_PROFILE := if profile != "" { profile } else { "" }
 nix-env := 'nix-env' + if profile == "" { "" } else { " -p " + profile }
 
 # Add `with`
-nix-shell := if pure != "0" { "nix-shell --pure" } else { "nix-shell" } + {{ if with == "" { "" } else { " -p " + with } }} 
+add-with :=  if with == "" { "" } else { " -p " + with } 
+nix-shell := if pure != "0" { "nix-shell --pure" + add-with } else { "nix-shell" + add-with }
 
 # Location to store gc-roots
 nix-gc-roots-dir := "~/.nix-gc-roots"

@@ -22,8 +22,10 @@ wd := invocation_directory()
     set chosen (yadm tracked ~ | fzf --preview='bat {}')
     test -n chosen && nvim $chosen
 
-@qmk +command:
-    #!/usr/bin/env fish
-    test -n "{{command}}"
-    and lets nix do "cd ~/qmk_firmware && nix-shell "qmk {{command}}""}
-    or lets nix do "cd ~/qmk_firmware && nix-shell" 
+@qmk +commands:
+    cd ~/qmk_firmware/ && just {{commands}}
+
+@kbdis:
+    xinput float (xinput list | rg --no-config KMonad | cut -f2 | cut -d'=' -f 2)
+@kben:
+    xinput reattach (xinput list | rg --no-config KMonad | cut -f2 | cut -d'=' -f 2) (xinput list | rg --no-config 'Virtual core keyboard' | cut -f2 | cut -d'=' -f 2)

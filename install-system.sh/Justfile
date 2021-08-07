@@ -101,8 +101,8 @@ apt-install := "sudo apt-get install"
 
 stow := if to-root != "0" { "sudo stow" } else { "stow" }
 
-only-needed-blobs := --filter=blob:none
-only-needed-trees := --filter=tree:0 # Least download size (may not be significant), will requires downloads to see old commits changes
+only-needed-blobs := "--filter=blob:none"
+only-needed-trees := "--filter=tree:0" # Least download size (may not be significant), will requires downloads to see old commits changes
 
 #################################################
 # Recipes below here
@@ -209,7 +209,7 @@ gitclone url name branch="":
 _tmpdir name:
     mkdir -p /tmp/{{name}}
 
-gh:
+getgh:
     curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
     echo "deb [arch="(dpkg --print-architecture)" signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
     sudo apt update
@@ -615,7 +615,7 @@ julia: jill
     jill.sh -y
 
 # Install a Nerdfont by name
-nerdfont name: install-gh
+nerdfont name:
     #!/usr/bin/env fish
     echo "[-] Download font ({{name}}) [-]"
     mkdir -p ~/Downloads/fonts
@@ -752,6 +752,9 @@ bandwhich: cargo-install
     type -q bandwhich && touch /tmp/bandwhich-installed
     {{cargo-install}} $argv[1]
     test -e /tmp/bandwhich-installed || sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
+
+clippy:
+    rustup component add clippy-preview
 
 # High performance GPU accelerated Terminal
 alacritty: cargo-install

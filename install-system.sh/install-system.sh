@@ -48,7 +48,7 @@ if ! command -v just
     curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /tmp/bin
 end
 /tmp/bin/just just
-/tmp/bin/just gh
+/tmp/bin/just getgh
 /tmp/bin/just nix
 
 read -n 1 -p 'Reboot now? (you should):'

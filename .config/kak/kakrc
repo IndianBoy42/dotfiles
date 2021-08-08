@@ -6,8 +6,18 @@ source "%val{config}/move-line.kak"
 require-module auto-pairs
 require-module move-line
 
+# Set the colour scheme
+colorscheme kaleidoscope-dark
+# Width of a tab
+set-option global tabstop 4
+# Indent with 4 spaces
+set-option global indentwidth 4
+
+set-option global ui_options ncurses_status_on_top=true
+
 add-highlighter global/number-lines number-lines -relative -hlcursor
 add-highlighter global/show-matching show-matching
+add-highlighter global/ regex \h+$ 0:Error
 # add-highlighter global/show-whitespaces show-whitespaces
 
 set-option global scrolloff 5,1
@@ -17,7 +27,7 @@ set-option global autoreload yes
 # Fix LiveReload
 set-option global writemethod replace
 
-set-option global grepcmd 'rgrep --column'
+set-option global grepcmd 'rg --no-config --column'
 
 set-option -add global matching_pairs ‹ › « » “ ” ‘ ’
 
@@ -39,14 +49,19 @@ map global user <tab> '<a-:>'
 map global normal 0 '<a-h>hl' -docstring 'Go to beginning of line'
 
 # clipboard interaction
-map global user p -docstring 'paste from clipboard' '!xsel -bo<ret>uU'
-map global user y -docstring 'copy to clipboard' '<a-|>xsel -bi<ret>'
-map global user d -docstring 'cut to clipboard' '|xsel -bi<ret>'
+# Clipboard management mappings
+map -docstring "yank the selection into the clipboard" global user y "<a-|> xsel -i<ret>"
+map -docstring "paste the clipboard" global user p "<a-!> xsel<ret>"
+# map global user p -docstring 'paste from clipboard' '!xsel -bo<ret>uU'
+# map global user y -docstring 'copy to clipboard' '<a-|>xsel -bi<ret>'
+# map global user d -docstring 'cut to clipboard' '|xsel -bi<ret>'
 
 # vim old habits
 map global normal D '<a-l>d' -docstring 'delete to end of line'
 map global normal Y '<a-l>y' -docstring 'yank to end of line'
 map global normal <a-h> Gi
+
+map global normal ';' ':' -docstring 'yank to end of line'
 
 source "%val{config}/user-mode.kak"
 
@@ -57,3 +72,6 @@ define-command -docstring 'Open kakrc' edit-kakoune 'edit ~/.config/kak/kakrc'
 
 hook global InsertCompletionShow .* %{ map window insert <tab> <c-n>; map window insert <s-tab> <c-p> }
 hook global InsertCompletionHide .* %{ unmap window insert <tab> <c-n>; unmap window insert <s-tab> <c-p> }
+
+# Shortcut to quickly exit the editor
+define-command -docstring "save and quit" qa "write-all; quit"

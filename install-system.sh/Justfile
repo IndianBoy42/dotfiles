@@ -1047,6 +1047,7 @@ nvim-apt:
     {{apt-install}} neovim
     {{justrun}} nvim-cfg
 
+# Install neovim AppImage from github releases
 nvim-app: (bingh "neovim" "neovim/neovim" "*.appimage")
     {{justrun}} nvim-cfg
 

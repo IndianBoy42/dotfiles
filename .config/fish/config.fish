@@ -261,6 +261,8 @@ else if type -q nvim
     abbr -g nvimn command nvim
     abbr -g vin command nvim
 end
+set -gx NeovideMultiGrid "1"
+set -gx NEOVIDE_FRAMELESS "1"
 
 # so many spotify-tui abbreviations
 set -gx SPT_FORMAT '%f %s %p : %t - %a (%b) - %v% - playing on %d'

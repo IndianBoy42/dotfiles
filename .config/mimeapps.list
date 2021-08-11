@@ -15,14 +15,17 @@ text/mathml=nvim.desktop
 text/x-python=nvim.desktop
 text/x-sql=nvim.desktop
 text/xml=nvim.desktop
+video/mp4=org.videolan.VLC.desktop
+video/x-matroska=org.videolan.VLC.desktop
 
 [Added Associations]
 application/octet-stream=code.desktop;org.blender.Blender.desktop;
 model/stl=org.blender.Blender.desktop;
 image/jpeg=org.gimp.GIMP.desktop;display-im6.q16.desktop;
 text/x-c++src=code.desktop;
-video/x-matroska=vlc_vlc.desktop;
+video/x-matroska=vlc_vlc.desktop;org.videolan.VLC.desktop;
 application/json=code.desktop;
 application/pdf=org.pwmt.zathura-pdf-poppler.desktop;
 text/x-tex=code.desktop;
 application/x-perl=nvim.desktop
+video/mp4=org.videolan.VLC.desktop;

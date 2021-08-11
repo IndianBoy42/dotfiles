@@ -7,7 +7,7 @@ __choose:
     {{justrun}} --choose
 
 fish:
-	$EDITOR $FISH_CONFIG_PATH
+    cd $FISH_CONFIG_DIR && $EDITOR $FISH_CONFIG_PATH
 	source $FISH_CONFIG_PATH
 
 nvim: 
@@ -17,10 +17,10 @@ git:
 	$EDITOR ~/.gitconfig
 
 install:
-	$EDITOR ~/install-system.sh/Justfile
+	cd ~/install-system.sh/ && $EDITOR Justfile
 
 nix:
-	$EDITOR ~/.letsfiles/nix.just
+	cd ~/.letsfiles/ && $EDITOR nix.just
 	
 qmk:
-    $EDITOR ~/qmk_firmware/indianboy42/keymap_common.h
+    cd ~/qmk_firmware/ && $EDITOR indianboy42/keymap_common.h

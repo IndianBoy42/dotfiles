@@ -20,7 +20,8 @@ mkdir -p ~/.local/include
 mkdir -p ~/.local/libexec
 mkdir -p ~/.local/packages
 mkdir -p ~/.local/share/info
-chmod o+w ~/.local/share/info
+sudo chmod a+w ~/.local/share/info
+sudo chmod a+rw ~/.local/share/hicolor/*
 
 # Edit some configs for nix
 echo "Change the following:"

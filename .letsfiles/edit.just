@@ -8,19 +8,19 @@ __choose:
 
 fish:
     cd $FISH_CONFIG_DIR && $EDITOR $FISH_CONFIG_PATH
-	source $FISH_CONFIG_PATH
+    source $FISH_CONFIG_PATH
 
 nvim: 
-	cd ~/.config/nvim && $EDITOR
+    cd ~/.config/nvim && $EDITOR
 	
 git: 
-	$EDITOR ~/.gitconfig
+    $EDITOR ~/.gitconfig
 
 install:
-	cd ~/install-system.sh/ && $EDITOR Justfile
+    cd ~/install-system.sh/ && $EDITOR Justfile
 
 nix:
-	cd ~/.letsfiles/ && $EDITOR nix.just
+    cd ~/.letsfiles/ && $EDITOR nix.just
 	
 qmk:
     cd ~/qmk_firmware/ && $EDITOR indianboy42/keymap_common.h

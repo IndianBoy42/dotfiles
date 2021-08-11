@@ -59,14 +59,15 @@
 	rao = remote add origin
 	clean-merged = !git branch --merged | grep -v \"\\*\" | xargs -n 1 git branch -d
 	adds = "!f() { git diff $1; git add $1; }; f"
-	untracked = ls-files . --exclude-standard --others
 	sm = submodule
 	info = !"onefetch"
 	root = rev-parse --show-toplevel
     ui = !gitui
     pre-pull = diff @ @{upstream}
     any-changes = diff --no-ext-diff --quiet --exit-code
+	untracked = ls-files . --exclude-standard --others
     tracked = ls-tree -r HEAD --name-only 
+    staged = diff --staged
 	partial-clone = clone --filter=blob:none
 	shallow-clone = clone --filter=tree:0
 	unshallow = fetch --unshallow

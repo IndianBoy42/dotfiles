@@ -55,6 +55,7 @@
 	unstage = restore --staged
 	branches = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
 	list-aliases = "!git config -l | grep alias | cut -c 7-"
+	ra = remote add
 	rao = remote add origin
 	clean-merged = !git branch --merged | grep -v \"\\*\" | xargs -n 1 git branch -d
 	adds = "!f() { git diff $1; git add $1; }; f"

@@ -174,6 +174,8 @@ pipx-install name: pipx
 # Link from a directory inside {{prefix}}
 link-pack name:
     {{justrun}} dostow -R {{name}}
+unlink-pack name:
+    {{justrun}} dostow -D {{name}}
 # chmod +x {{prefix}}/{{name}}/bin/*
 # ln -s {{prefix}}/{{name}}/bin/* {{bindir}}
 # ln -s {{prefix}}/{{name}}/lib/* {{libdir}}
@@ -200,7 +202,7 @@ gitclone url name branch="":
     mkdir -p {{blddir}} && cd {{blddir}}
     if test -d {{blddir}}/{{name}}
         cd {{blddir}}/{{name}} 
-        git pull && git submodule update --init --recursive \
+        git pull --rebase && git submodule update --init --recursive \
         || git checkout {{branch}} # Assume that arguments
     else
         git clone {{only-needed-blobs}} {{ if branch == "" { "" } else { "-b " + branch } }} {{url}} {{blddir}}/{{name}} # Or use --filter=tree:0
@@ -341,9 +343,12 @@ wezterm: (bingh "wezterm" "wez/wezterm" "*.AppImage")
 kitty: (mkpackdir "kitty.app")
     curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest={{prefix}}
     sudo chmod a+r "{{prefix}}/kitty.app"
+    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which kitty) 90
     {{justrun}} link-pack "kitty.app"
+    {{justrun}} gitclone "https://github.com/trygveaa/kitty-kitten-search" "~/.config/kitty/kitty_search"
+    {{justrun}} gitclone "https://github.com/yurikhan/kitty_grab.git" "~/.config/kitty/kitty_grab"
 
-kitty-src: (gitclone "https://github.com/kovidgoyal/kitty" "kitty") (mkpackdir "kitty")
+kitty-src: (gitclone "git://github.com/kovidgoyal/kitty" "kitty") (mkpackdir "kitty")
     {{apt-install}} libdbus-1-dev libxcursor-dev libxrandr-dev libxi-dev libxinerama-dev libgl1-mesa-dev libxkbcommon-x11-dev libfontconfig-dev libx11-xcb-dev liblcms2-dev libpython3-dev
     cd {{blddir}}/kitty && make
 
@@ -352,7 +357,7 @@ zenith: (debgh "zenith" "bvaisvil/zenith" "*amd64.deb")
     echo "Installed zenith"
 
 # PathPicker -- terminal path picker
-pathpicker: (gitclone "https://github.com/facebook/PathPicker" "pathpicker")
+pathpicker: (gitclone "git://github.com/facebook/PathPicker" "pathpicker")
     #!/usr/bin/env -S bash -euxo pipefail
     cd {{blddir}}/pathpicker/debian 
     sh ./package.sh
@@ -409,7 +414,7 @@ nnn:
     {{justrun}} getpkg nnn
 
 # tinycc compiler
-tinycc: (gitclone "https://github.com/TinyCC/tinycc.git" "tinycc")
+tinycc: (gitclone "git://github.com/TinyCC/tinycc.git" "tinycc")
     #!/usr/bin/env -S bash -euxo pipefail
     cd {{blddir}}/tinycc
     ./configure --prefix={{prefix}}/tinycc \
@@ -421,7 +426,7 @@ tinycc: (gitclone "https://github.com/TinyCC/tinycc.git" "tinycc")
     {{justrun}} link-pack "tinycc"
 
 # keynav
-keynav: (gitclone "https://github.com/jordansissel/keynav.git" "keynav") (mkpackdir "keynav")
+keynav: (gitclone "git://github.com/jordansissel/keynav.git" "keynav") (mkpackdir "keynav")
     #!/usr/bin/env -S bash -euxo pipefail
     cd {{blddir}}/keynav
     make 
@@ -429,7 +434,7 @@ keynav: (gitclone "https://github.com/jordansissel/keynav.git" "keynav") (mkpack
     {{justrun}} link-pack "keynav"
 
 # zig compiler
-zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
+zig: (gitclone "git://github.com/ziglang/zig.git" "zig")
     #!/usr/bin/env fish
     {{apt-install}} libllvm12 libclang-12-dev liblld-12-dev
     cmake -DCMAKE_INSTALL_PREFIX="{{prefix}}/zig/" \
@@ -441,11 +446,11 @@ zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
     {{justrun}} link-pack "zig"
 
 # godbolt
-godbolt: (gitclone "https://github.com/compiler-explorer/compiler-explorer.git" "compiler-explorer")
+godbolt: (gitclone "git://github.com/compiler-explorer/compiler-explorer.git" "compiler-explorer")
     cargo install rustfilt
 
 # Caching C/C++ compiler for higher compile speed (not updated?)
-zapcc: (gitclone "https://github.com/yrnkrn/zapcc.git" "zapcc")
+zapcc: (gitclone "git://github.com/yrnkrn/zapcc.git" "zapcc")
     read --prompt "Are you sure you wanna build zapcc?"
     cmake -DLLVM_ENABLE_WARNINGS -DLLVM_USE_LINKER={{LD}} \
         -DCMAKE_INSTALL_PREFIX="{{prefix}}/zapcc/" \
@@ -455,7 +460,7 @@ zapcc: (gitclone "https://github.com/yrnkrn/zapcc.git" "zapcc")
     {{justrun}} link-pack "zapcc"
 
 # google benchmark
-googbench: (gitclone "https://github.com/google/benchmark.git" "googbench")
+googbench: (gitclone "git://github.com/google/benchmark.git" "googbench")
     cmake -DBENCHMARK_DOWNLOAD_DEPENDENCIES=ON -DBENCHMARK_ENABLE_GTEST_TESTS=OFF \
         -DCMAKE_INSTALL_PREFIX={{prefix}}/googbench \
         -DCMAKE_BUILD_TYPE={{CMAKE_BUILD_TYPE}} \
@@ -465,7 +470,7 @@ googbench: (gitclone "https://github.com/google/benchmark.git" "googbench")
 
 # drake
 # cd ~/git-builds
-# git clone https://github.com/RobotLocomotion/drake.git
+# git clone git://github.com/RobotLocomotion/drake.git
 # cd drake
 # git remote add upstream git@github.com:RobotLocomotion/drake.git
 # git remote set-url --push upstream no_push
@@ -477,11 +482,11 @@ googbench: (gitclone "https://github.com/google/benchmark.git" "googbench")
 # docker build -t robotlocomation/drake:focal
 
 # todoist cli
-todoist-cli: (gitclone "https://github.com/sachaos/todoist.git" "todoist")
+todoist-cli: (gitclone "git://github.com/sachaos/todoist.git" "todoist")
     go install 
 
 # tikzit
-tikzit: (gitclone "https://github.com/tikzit/tikzit.git" "tikzit")
+tikzit: (gitclone "git://github.com/tikzit/tikzit.git" "tikzit")
     {{apt-install}} flex bison qt5-default libpoppler-dev libpoppler-qt5-dev
     qmake -r
     make
@@ -498,7 +503,7 @@ mpv:
 
 # mps-youtube -- cli youtube client
 mps-youtube: mpv
-    {{justrun}} pipx-install git+https://github.com/mps-youtube/mps-youtube.git
+    {{justrun}} pipx-install git+git://github.com/mps-youtube/mps-youtube.git
     pipx inject mps-youtube youtube-dl 
     pipx inject mps-youtube pyperclip
 
@@ -511,7 +516,7 @@ xxh:
     {{justrun}} pipx-install xxh-xxh
 
 # Futhark
-futhark: (gitclone "https://github.com/diku-dk/futhark.git" "futhark")
+futhark: (gitclone "git://github.com/diku-dk/futhark.git" "futhark")
     stack setup
     stack build
     stack install
@@ -545,7 +550,7 @@ code-portable: (_tmpdir "code-portable") (mkpackdir "code-portable")
 
 # TODO: add doom to yadm submodule
 # EMACS, a great OS and a mediocre editor
-emacs: (gitclone "https://github.com/emacs-mirror/emacs.git" "emacs")
+emacs: (gitclone "git://github.com/emacs-mirror/emacs.git" "emacs")
     #!/usr/bin/env -S bash -euxo pipefail
     cd {{blddir}}/emacs
     {{apt-install}} libxaw7-dev libgnutls30 xaw3dg xutils-dev libgnutls28-dev libgccjit-10-dev
@@ -562,9 +567,9 @@ gcm: (debgh "gcmcore" "microsoft/Git-Credential-Manager-Core" "*amd64*.deb")
 # git config --global credential.credentialStore secretservice # requires GUI (ok?)
 
 # Quantum Mechanical Keyboard firmware
-qmk: (gitclone "https://github.com/IndianBoy42/qmk_firmware.git" "qmk_firmware")
+qmk: (gitclone "git://github.com/IndianBoy42/qmk_firmware.git" "qmk_firmware")
     cd ~/qmk_firmware
-    git remote add upstream "https://github.com/qmk/qmk_firmware.git" && \
+    git remote add upstream "git://github.com/qmk/qmk_firmware.git" && \
     sudo cp ~/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
     pipx install --user qmk
     qmk setup
@@ -580,7 +585,7 @@ fzf: (targh "fzf" "junegunn/fzf" "*linux_amd64.tar.gz") (ins-bin "fzf" "/tmp")
 
 # Fast realtime compression/decompression
 # zstd: (srcgh "zstd" "facebook/zstd" "*.tar.gz") (mkpackdir "zstd")
-zstd: (gitclone "https://github.com/facebook/zstd.git" "zstd") (mkpackdir "zstd")
+zstd: (gitclone "git://github.com/facebook/zstd.git" "zstd") (mkpackdir "zstd")
     cd {{blddir}}/zstd && make
     ln -s {{blddir}}/zstd/zstd {{prefix}}/zstd/bin
     {{justrun}} link-pack "zstd"
@@ -599,6 +604,7 @@ kmonad: (bingh "kmonad" "kmonad/kmonad" "*linux")
 
 # Alternative to submodules
 git-subrepo: (gitclone "ingydotnet/git-subrepo" "git-subrepo") (mkpackdir "git-subrepo")
+    test -d {{prefix}}/git-subrepo/bin; and rm -rf "{{prefix}}/git-subrepo/bin/*"
     ln -s {{blddir}}/git-subrepo/lib/* {{prefix}}/git-subrepo/bin
     {{justrun}} link-pack "git-subrepo"
 
@@ -720,20 +726,20 @@ ripgrep:
     {{cargo-install}} $argv[1]
 
 # Use ripgrep to search inside all kinds of files
-ripgrep_all: ripgrep (gitclone "https://github.com/phiresky/ripgrep-all.git" "ripgrep_all")
+ripgrep_all: ripgrep (gitclone "git://github.com/phiresky/ripgrep-all.git" "ripgrep_all")
     {{cargo-install}} --path {{blddir}}/ripgrep_all
 
 # Easy to use TUI for git
-gitui: cargo-install (gitclone "https://github.com/IndianBoy42/gitui.git" "gitui")
+gitui: cargo-install (gitclone "git://github.com/IndianBoy42/gitui.git" "gitui")
     {{cargo-install}} --path {{blddir}}/gitui
     cp {{blddir}}/gitui/vim_style_key_config.ron ~/.config/gitui/key_config.ron
 
 # Minimal serial terminal/monitor
-serial-monitor: cargo-install (gitclone "https://github.com/IndianBoy42/serial-monitor.git" "serial-monitor")
+serial-monitor: cargo-install (gitclone "git://github.com/IndianBoy42/serial-monitor.git" "serial-monitor")
     {{cargo-install}} --path {{blddir}}/serial-monitor
 
 # Index and search all local files
-indexa: cargo-install (gitclone "https://github.com/mosmeh/indexa.git" "indexa")
+indexa: cargo-install (gitclone "git://github.com/mosmeh/indexa.git" "indexa")
     {{cargo-install}} --path {{blddir}}/indexa
 
 # Fast implementation of the tldr standard
@@ -774,7 +780,7 @@ alacritty: cargo-install
 broot: cargo-install
     mkdir -p ~/.local/share/fonts
     test -f ~/.local/share/fonts/vscode.ttf; \
-    or wget https://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
+    or wget git://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
     {{cargo-install}} broot
 
 cargo-build-tools:
@@ -856,7 +862,7 @@ cargo-needs-update:
 # Install rust-analyzer from github
 rust-analyzer: (bingh "rust-analyzer" "rust-analyzer/rust-analyzer" "*-linux")
     echo "Installed rust-analyzer"
-# rust-analyzer: (curlbin "https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux" "rust-analyzer")
+# rust-analyzer: (curlbin "git://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux" "rust-analyzer")
 #   {{justrun}} link-pack "rust-analyzer"
 
 # Install just prebuilt
@@ -1023,10 +1029,25 @@ apt-srcs:
     {{justrun}} mkrepo
 
 # Install newer git
-git:
+git: git-fc
+
+# Install git from ppa
+git-ppa:
     sudo add-apt-repository -y ppa:git-core/ppa
     apt update
     {{apt-install}} git
+
+# Install git (felipec's fork)
+git-fc: (gitclone "git://github.com/felipec/git.git" "git-fc")
+    #!/usr/bin/env fish
+    cd git-fc
+    make configure
+    ./configure --prefix="{{prefix}}/git-fc"
+    # make all doc
+    # make install install-doc install-html prefix="{{prefix}}/git-fc"
+    make all
+    make install 
+    {{justrun}} link-pack "git-fc"
 
 # Sublime merge
 sublime-merge: 
@@ -1045,7 +1066,7 @@ sublime-text:
 # TODO: install in an isolated virutal environment? (use pipx)
 # Install my LunarVim based config
 nvim-cfg:
-    test -d ~/.config/nvim || git clone {{only-needed-blobs}} https://github.com/IndianBoy42/LunarVim.git ~/.config/nvim
+    test -d ~/.config/nvim || git clone {{only-needed-blobs}} git://github.com/IndianBoy42/LunarVim.git ~/.config/nvim
     cd ~/.config/nvim && just install
 
 # Install neovim from unstable ppa (also install my lunarvim)
@@ -1056,11 +1077,11 @@ nvim-apt:
     {{justrun}} nvim-cfg
 
 # Install neovim AppImage from github releases
-nvim-app: (bingh "neovim" "neovim/neovim" "*.appimage")
+nvim-img: (bingh "nvim-img" "neovim/neovim" "*.appimage")
     {{justrun}} nvim-cfg
 
 # Compile neovim from source
-nvim: (gitclone "https://github.com/neovim/neovim.git" "neovim")
+nvim: (gitclone "git://github.com/neovim/neovim.git" "neovim")
     cd {{blddir}}/neovim \
     && make \
         CMAKE_BUILD_TYPE=Release \
@@ -1070,7 +1091,7 @@ nvim: (gitclone "https://github.com/neovim/neovim.git" "neovim")
     {{justrun}} nvim-cfg
 
 # Pretty GUI for neovim written in rust
-neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
+neovide: (gitclone "git://github.com/Kethku/neovide" "neovide")
     #!/usr/bin/env fish
     if not type -q neovide
         {{apt-install}} curl \
@@ -1082,7 +1103,7 @@ neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
     CARGO_BUILD_TARGET={{gnu-target}} {{cargo-install}} --path .
 
 # Selection first modal editor
-kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune") (mkpackdir "kakoune")
+kakoune: (gitclone "git://github.com/mawww/kakoune.git" "kakoune") (mkpackdir "kakoune")
     sudo apt install libncursesw5-dev pkg-config
     cd {{blddir}}/kakoune/src\
     && make CXX={{CXX}} \
@@ -1090,7 +1111,7 @@ kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune") (mkpackdir 
     {{justrun}} link-pack "kakoune"
 
 # GNU Stow symlink farm manager -- build stow from source 
-stow-src: (gitclone "https://github.com/aspiers/stow.git" "stow") (mkpackdir "stow")
+stow-src: (gitclone "git://github.com/aspiers/stow.git" "stow") (mkpackdir "stow")
     #!/usr/bin/env fish
     cd {{blddir}}/stow
     autoreconf -iv
@@ -1113,7 +1134,7 @@ jq: (bingh "jq" "stedolan/jq" "jq-linux64")
     echo "Installed jq"
 
 # Interative JSON Query CLI
-ijq: (gitclone "https://github.com/gpanders/ijq.git" "ijq") (mkpackdir "ijq")
+ijq: (gitclone "git://github.com/gpanders/ijq.git" "ijq") (mkpackdir "ijq")
     {{apt-install}} scdoc
     cd {{blddir}}/ijq && make prefix={{prefix}}/ijq install
     {{justrun}} link-pack "ijq"
@@ -1139,7 +1160,7 @@ nix:
     echo "bass source .nix-profile/etc/profile.d/nix.sh"
 
 # Traceroute + ping gtk/curses
-mtr: (gitclone "https://github.com/traviscross/mtr.git" "mtr")
+mtr: (gitclone "git://github.com/traviscross/mtr.git" "mtr")
     cd {{blddir}}/mtr && ./bootstrap.sh
     {{justrun}} autotool-install mtr
 
@@ -1169,7 +1190,7 @@ lua-format:
     and {{justrun}} link-pack luarocks
 
 # Build a static executable of the mold linker (fast boi)
-mold-stable: (gitclone "https://github.com/rui314/mold.git" "mold" "v0.9.1") (gitclone "https://github.com/oneapi-src/oneTBB.git" "mold/oneTBB" "v2020.3") (mkpackdir "mold")
+mold-stable: (gitclone "git://github.com/rui314/mold.git" "mold" "v0.9.1") (gitclone "git://github.com/oneapi-src/oneTBB.git" "mold/oneTBB" "v2020.3") (mkpackdir "mold")
     cd {{blddir}}/mold/oneTBB && make extra_inc=big_iron.inc
     tbb_bindir=(ls -d {{blddir}}/mold/oneTBB/build/linux_intel64_*_release) \
     cd {{blddir}}/mold && make \
@@ -1181,7 +1202,7 @@ mold-stable: (gitclone "https://github.com/rui314/mold.git" "mold" "v0.9.1") (gi
     {{justrun}} link-pack mold
 
 # Build a static executable of the mold linker (fast boi)
-mold: (gitclone "https://github.com/rui314/mold.git" "mold" "main") (mkpackdir "mold")
+mold: (gitclone "git://github.com/rui314/mold.git" "mold" "main") (mkpackdir "mold")
     cd {{blddir}}/mold && make \
         PREFIX={{prefix}}/mold \
         CC=clang-12 CXX=clang++-12 LTO=1 \
@@ -1197,7 +1218,7 @@ alternative name alt="" prio="0":
 altconfig name:
     sudo update-alternatives --config {{name}}
 
-jemalloc: (gitclone "https://github.com/jemalloc/jemalloc.git" "jemalloc")
+jemalloc: (gitclone "git://github.com/jemalloc/jemalloc.git" "jemalloc")
     #!/usr/bin/env fish
     cd {{blddir}}/jemalloc
     ./autogen.sh
@@ -1206,13 +1227,13 @@ jemalloc: (gitclone "https://github.com/jemalloc/jemalloc.git" "jemalloc")
     and make install
     and {{justrun}} link-pack jemalloc
 
-mimalloc: (gitclone "https://github.com/microsoft/mimalloc.git" "mimalloc")
+mimalloc: (gitclone "git://github.com/microsoft/mimalloc.git" "mimalloc")
     #!/usr/bin/env fish
     cd {{blddir}}/mimalloc
     {{justrun}} cmake-install mimalloc
     and {{justrun}} link-pack mimalloc
 
-emscripten: (gitclone "https://github.com/emscripten-core/emsdk.git" "emsdk")
+emscripten: (gitclone "git://github.com/emscripten-core/emsdk.git" "emsdk")
     chmod +x {{blddir}}/emsdk/emsdk
     {{blddir}}/emsdk/emsdk install latest
     {{blddir}}/emsdk/emsdk activate latest

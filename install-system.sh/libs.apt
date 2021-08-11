@@ -56,3 +56,4 @@ libc++abi-11-dev
 zlib1g-dev
 libxxhash-dev
 libelf-dev
+openssl

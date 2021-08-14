@@ -176,12 +176,15 @@ link-pack name:
     {{justrun}} dostow -R {{name}}
 unlink-pack name:
     {{justrun}} dostow -D {{name}}
-# chmod +x {{prefix}}/{{name}}/bin/*
-# ln -s {{prefix}}/{{name}}/bin/* {{bindir}}
-# ln -s {{prefix}}/{{name}}/lib/* {{libdir}}
-# ln -s {{prefix}}/{{name}}/libexec/* {{libexecdir}}
-# ln -s {{prefix}}/{{name}}/include/* {{incdir}}
-# ln -s {{prefix}}/{{name}}/share/* {{sharedir}}
+
+# TODO: make all bingh use wrap-bin
+wrap-bin-shebang := "#!/usr/bin/env sh"
+wrap-bin package bin name:
+    mkdir -p {{prefix}}/{{package}}/wrappers/
+    echo "{{wrap-bin-shebang}}" > {{prefix}}/{{package}}/wrappers/{{name}}.sh
+    echo '{{prefix}}/{{package}}/{{bin}} $@' >> {{prefix}}/{{package}}/wrappers/{{name}}.sh
+    chmod +x {{prefix}}/{{package}}/wrappers/{{name}}.sh
+    cp {{prefix}}/{{package}}/wrappers/{{name}}.sh {{bindir}}/{{name}}
 
 sustow arg name:
     sudo {{stow}} -d /usr/local/packages/ -t /usr/local {{arg}} {{name}}
@@ -197,16 +200,18 @@ mkblddir name:
     mkdir -p {{blddir}}/{{name}}/build
 
 # Clone or update a git repo (into blddir)
-gitclone url name branch="":
+gitclone url name branch="" gitcloneprefix=blddir:
     #!/usr/bin/env fish
-    mkdir -p {{blddir}} && cd {{blddir}}
-    if test -d {{blddir}}/{{name}}
-        cd {{blddir}}/{{name}} 
+    test -n "{{gitcloneprefix}}" && mkdir -p {{gitcloneprefix}} && cd {{gitcloneprefix}}
+    if test -d {{gitcloneprefix}}/{{name}}
+        cd {{gitcloneprefix}}/{{name}} 
         git pull --rebase && git submodule update --init --recursive \
         || git checkout {{branch}} # Assume that arguments
     else
-        git clone {{only-needed-blobs}} {{ if branch == "" { "" } else { "-b " + branch } }} {{url}} {{blddir}}/{{name}} # Or use --filter=tree:0
+        git clone {{only-needed-blobs}} {{ if branch == "" { "" } else { "-b " + branch } }} {{url}} {{gitcloneprefix}}/{{name}} # Or use --filter=tree:0
     end
+
+gitcloneto url name branch="": (gitclone url name branch "")
 
 _tmpdir name:
     mkdir -p /tmp/{{name}}
@@ -230,6 +235,11 @@ ins-bin name from: (mkpackdir name)
     cp {{from}}/{{name}}/{{name}} {{prefix}}/{{name}}/bin
     chmod +x {{prefix}}/{{name}}/bin/*
     {{justrun}} link-pack {{name}}
+
+# Copy one or more binaries to package directory
+copy-bin name from: (mkpackdir name)
+    cp {{from}}/{{name}}/{{name}} {{prefix}}/{{name}}/bin
+    chmod +x {{prefix}}/{{name}}/bin/*
 
 # Download an asset from Github releases (to /tmp/name)
 gh name repo pattern: (_tmpdir name) 
@@ -263,6 +273,10 @@ debgh name repo pattern: (gh name repo pattern)
 
 # Download a binary from Github releases and move it to bindir
 bingh name repo pattern: (gh name repo pattern) (ins-bin name "/tmp")
+    echo "Installed Binary from GH"
+
+# Download a binary from Github releases and move it to bindir (dont link)
+cpbingh name repo pattern: (gh name repo pattern) (copy-bin name "/tmp")
     echo "Installed Binary from GH"
 
 # Download a program tarball from Github releases, extract the source to {{prefix}}/, and link the binary folder
@@ -345,11 +359,14 @@ kitty: (mkpackdir "kitty.app")
     sudo chmod a+r "{{prefix}}/kitty.app"
     sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which kitty) 90
     {{justrun}} link-pack "kitty.app"
-    {{justrun}} gitclone "https://github.com/trygveaa/kitty-kitten-search" "~/.config/kitty/kitty_search"
-    {{justrun}} gitclone "https://github.com/yurikhan/kitty_grab.git" "~/.config/kitty/kitty_grab"
+    {{justrun}} gitcloneto "https://github.com/trygveaa/kitty-kitten-search" "~/.config/kitty/kitty_search"
+    {{justrun}} gitcloneto "https://github.com/yurikhan/kitty_grab.git" "~/.config/kitty/kitty_grab"
 
 kitty-src: (gitclone "git://github.com/kovidgoyal/kitty" "kitty") (mkpackdir "kitty")
-    {{apt-install}} libdbus-1-dev libxcursor-dev libxrandr-dev libxi-dev libxinerama-dev libgl1-mesa-dev libxkbcommon-x11-dev libfontconfig-dev libx11-xcb-dev liblcms2-dev libpython3-dev
+    #!/usr/bin/env fish
+    if not type -q kitty
+        {{apt-install}} libdbus-1-dev libxcursor-dev libxrandr-dev libxi-dev libxinerama-dev libgl1-mesa-dev libxkbcommon-x11-dev libfontconfig-dev libx11-xcb-dev liblcms2-dev libpython3-dev
+    end
     cd {{blddir}}/kitty && make
 
 # Zenith -- better top
@@ -487,13 +504,18 @@ todoist-cli: (gitclone "git://github.com/sachaos/todoist.git" "todoist")
 
 # tikzit
 tikzit: (gitclone "git://github.com/tikzit/tikzit.git" "tikzit")
-    {{apt-install}} flex bison qt5-default libpoppler-dev libpoppler-qt5-dev
-    qmake -r
-    make
+    #!/usr/bin/env fish
+    if not type -q tikzit
+        {{apt-install}} flex bison qt5-default libpoppler-dev libpoppler-qt5-dev
+    end
+    qmake -r && make
 
 # clifm
 clifm: (debgh "clifm" "leo-arch/clifm" "*deb")
-    {{apt-install}} libcap-dev libacl1-dev libreadline-dev
+    #!/usr/bin/env fish
+    if not type -q clifm
+        {{apt-install}} libcap-dev libacl1-dev libreadline-dev
+    end
 
 # mpv video player
 mpv:
@@ -553,7 +575,9 @@ code-portable: (_tmpdir "code-portable") (mkpackdir "code-portable")
 emacs: (gitclone "git://github.com/emacs-mirror/emacs.git" "emacs")
     #!/usr/bin/env -S bash -euxo pipefail
     cd {{blddir}}/emacs
-    {{apt-install}} libxaw7-dev libgnutls30 xaw3dg xutils-dev libgnutls28-dev libgccjit-10-dev
+    if not type -q emacs
+            {{apt-install}} libxaw7-dev libgnutls30 xaw3dg xutils-dev libgnutls28-dev libgccjit-10-dev
+    end
     ./autogen.sh
     ./configure --with-native-compilation --with-modules=on --prefix="{{prefix}}/emacs"
     make -C lisp autoloads-force
@@ -567,7 +591,7 @@ gcm: (debgh "gcmcore" "microsoft/Git-Credential-Manager-Core" "*amd64*.deb")
 # git config --global credential.credentialStore secretservice # requires GUI (ok?)
 
 # Quantum Mechanical Keyboard firmware
-qmk: (gitclone "git://github.com/IndianBoy42/qmk_firmware.git" "qmk_firmware")
+qmk: (gitcloneto "git://github.com/IndianBoy42/qmk_firmware.git" "~/qmk_firmware")
     cd ~/qmk_firmware
     git remote add upstream "git://github.com/qmk/qmk_firmware.git" && \
     sudo cp ~/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
@@ -783,6 +807,11 @@ broot: cargo-install
     or wget git://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
     {{cargo-install}} broot
 
+xplr: cargo-install 
+    {{cargo-install}} xplr
+    wget https://raw.githubusercontent.com/sayanarijit/xplr/main/src/init.lua -O ~/.config/xplr/init.lua.new
+    xplr --version
+
 cargo-build-tools:
     #!/usr/bin/env fish
     set -x CARGO_BUILD_TARGET {{gnu-target}}
@@ -827,7 +856,7 @@ cargo-all-musl: cargo-install serial-monitor bandwhich pueue indexa
     {{cargo-install}} macchina
     {{cargo-install}} onefetch
     {{cargo-install}} drone
-    {{cargo-install}} dua
+    {{cargo-install}} dua-cli
     {{cargo-install}} eva
     {{cargo-install}} exa 
     {{cargo-install}} fd-find
@@ -848,6 +877,7 @@ cargo-all-musl: cargo-install serial-monitor bandwhich pueue indexa
     {{cargo-install}} xsv
     {{cargo-install}} tokei
     {{cargo-install}} gpg-tui 
+    {{cargo-install}} git-branchless
 
 cargo +args: cargo-install
     {{cargo-install}} {{args}}
@@ -1065,20 +1095,24 @@ sublime-text:
 
 # TODO: install in an isolated virutal environment? (use pipx)
 # Install my LunarVim based config
-nvim-cfg:
-    test -d ~/.config/nvim || git clone {{only-needed-blobs}} git://github.com/IndianBoy42/LunarVim.git ~/.config/nvim
-    cd ~/.config/nvim && just install
+lunarvim home='$HOME' nvim='nvim':
+    {{justrun}} gitcloneto "https://github.com/IndianBoy42/LunarVim.git" "{{home}}/.config/nvim" 
+    # test -d {{home}}/.config/nvim || git clone {{only-needed-blobs}} git://github.com/IndianBoy42/LunarVim.git {{home}}/.config/nvim
+    cd {{home}}/.config/nvim && just nvim={{nvim}} install
 
 # Install neovim from unstable ppa 
 nvim-apt:
     sudo add-apt-repository -y ppa:neovim-ppa/unstable
     apt update
     {{apt-install}} neovim
-    {{justrun}} nvim-cfg
+    {{justrun}} lunarvim
 
 # Install neovim AppImage from github releases
-nvim-img: (bingh "nvim.appimage" "neovim/neovim" "*.appimage")
-    {{justrun}} nvim-cfg
+nvim-img: 
+    {{justrun}} cpbingh "nvim.appimage" "neovim/neovim" "*.appimage"
+    {{justrun}} wrap-bin "nvim.appimage" "bin/nvim.appimage" "nvim.appimage"
+    mkdir -p {{prefix}}/nvim.appimage/bin/nvim.appimage.home
+    {{justrun}} lunarvim '{{prefix}}/nvim.appimage/bin/nvim.appimage.home' 'nvim.appimage'
 
 # Compile neovim from source
 nvim: (gitclone "git://github.com/neovim/neovim.git" "neovim")
@@ -1088,7 +1122,7 @@ nvim: (gitclone "git://github.com/neovim/neovim.git" "neovim")
         CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
         install
     {{justrun}} link-pack nvim
-    {{justrun}} nvim-cfg
+    {{justrun}} lunarvim
 
 # Pretty GUI for neovim written in rust
 neovide: (gitclone "git://github.com/Kethku/neovide" "neovide")
@@ -1123,10 +1157,10 @@ stow-src: (gitclone "git://github.com/aspiers/stow.git" "stow") (mkpackdir "stow
 # GNU Stow symlink farm manager -- Choose apt or src
 stow: 
     #!/usr/bin/env fish
-    if confirm "Install from source? [y/N]"
-        {{justrun}} stow-src
-    else
+    if confirm "Install from source? [Y/n]"
         {{apt-install}} stow
+    else
+        {{justrun}} stow-src
     end
 
 # JSON query CLI

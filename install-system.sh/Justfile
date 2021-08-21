@@ -243,19 +243,19 @@ copy-bin name from: (mkpackdir name)
     chmod +x {{prefix}}/{{name}}/bin/*
 
 # Download an asset from Github releases (to /tmp/name)
-gh name repo pattern: (_tmpdir name) 
+gh name repo pattern tag="": (_tmpdir name) 
     #!/usr/bin/env fish
     if not test -e "/tmp/{{name}}/{{pattern}}"
-        cd /tmp/{{name}} && gh release -R {{repo}} download -p '{{pattern}}'
+        cd /tmp/{{name}} && gh release -R {{repo}} download -p '{{pattern}}' '{{tag}}'
     end
     test '/tmp/{{name}}/{{name}}' != '/tmp/{{name}}/{{pattern}}'
     and test -e /tmp/{{name}}/{{pattern}}
     and echo "Renaming" '/tmp/{{name}}/{{name}}' != '/tmp/{{name}}/{{pattern}}'
     and cp -v /tmp/{{name}}/{{pattern}} '/tmp/{{name}}/{{name}}'
     or echo "not renamed"
-    {{justrun}} gh-check-update {{name}} {{repo}}
+    {{justrun}} gh-update-checker {{name}} {{repo}}
 
-gh-check-update name repo:
+gh-update-checker name repo:
     #!/usr/bin/env fish
     echo "#!/usr/bin/env fish" > {{blddir}}/{{name}}.sh
     set CURR (gh release -R {{repo}} list | head -1 | cut -f1)
@@ -263,30 +263,31 @@ gh-check-update name repo:
     chmod +x {{blddir}}/{{name}}.sh
 
 # Download a tarball from Github releases and extract it
-targh name repo pattern: (gh name repo pattern)
+targh name repo pattern tag="": (gh name repo pattern tag)
     cd /tmp/{{name}} && tar xavf {{name}}
     cp /tmp/{{name}}/{{name}} {{local-tar-repo}}
 
 # Download a debian from Github releases and install it with dpkg
-debgh name repo pattern: (gh name repo pattern)
+debgh name repo pattern tag="": (gh name repo pattern tag)
     cd /tmp/{{name}} && sudo dpkg -i ./{{name}}
     cp /tmp/{{name}}/{{name}} {{local-apt-repo}}
 
+# TODO: These code use `eget`
 # Download a binary from Github releases and move it to bindir
-bingh name repo pattern: (gh name repo pattern) (ins-bin name "/tmp")
+bingh name repo pattern tag="": (gh name repo pattern tag) (ins-bin name "/tmp")
     echo "Installed Binary from GH"
 
 # Download a binary from Github releases and move it to bindir (dont link)
-cpbingh name repo pattern: (gh name repo pattern) (copy-bin name "/tmp")
-    echo "Installed Binary from GH"
+cpbingh name repo pattern tag="": (gh name repo pattern tag) (copy-bin name "/tmp")
+    echo "Copied Binary from GH"
 
 # Download a program tarball from Github releases, extract the source to {{prefix}}/, and link the binary folder
-insgh name repo pattern: (targh name repo pattern) (ins-copy name "/tmp")
+insgh name repo pattern tag="": (targh name repo pattern tag) (ins-copy name "/tmp")
     echo "GH Installed"
     # TODO: Link libraries and stuff also? this works for now
 
 # Download a source tarball from Github releases and extract the source to blddir
-srcgh name repo pattern: (targh name repo pattern) (mkblddir name)
+srcgh name repo pattern tag="": (targh name repo pattern tag) (mkblddir name)
     cp -r /tmp/{{name}}/*/* {{blddir}}/{{name}}
     rm -rf /tmp/{{name}}
 
@@ -299,7 +300,7 @@ autotool-install name options="":
     and make install prefix="{{prefix}}/{{name}}"
 
 # Install autotools project from github releases
-autotoolsgh name repo pattern: (srcgh name repo pattern)
+autotoolsgh name repo pattern tag="": (srcgh name repo pattern tag)
     {{justrun}} autotool-install "{{name}}"
 
 # Install autotools project from a tarball link
@@ -323,7 +324,7 @@ cmake-install name *options:
 #   ninja
 #   ninja install
 
-cmakegh name repo pattern: (srcgh name repo pattern)
+cmakegh name repo pattern tag="": (srcgh name repo pattern tag)
     {{justrun}} cmake-install "{{name}}"
 
 curlbin url name: (mkpackdir name)
@@ -1109,14 +1110,14 @@ nvim-apt:
     sudo add-apt-repository -y ppa:neovim-ppa/unstable
     apt update
     {{apt-install}} neovim
-    {{justrun}} lunarvim
+    # {{justrun}} lunarvim
 
 # Install neovim AppImage from github releases
 nvim-img: 
-    {{justrun}} cpbingh "nvim.appimage" "neovim/neovim" "*.appimage"
+    {{justrun}} cpbingh "nvim.appimage" "neovim/neovim" "*.appimage" "nightly"
     {{justrun}} wrap-bin "nvim.appimage" "bin/nvim.appimage" "nvim.appimage"
     mkdir -p {{prefix}}/nvim.appimage/bin/nvim.appimage.home
-    {{justrun}} lunarvim '{{prefix}}/nvim.appimage/bin/nvim.appimage.home' 'nvim.appimage'
+    # {{justrun}} lunarvim '{{prefix}}/nvim.appimage/bin/nvim.appimage.home' 'nvim.appimage'
 
 # Compile neovim from source
 nvim: (gitclone "git://github.com/neovim/neovim.git" "neovim")
@@ -1127,7 +1128,15 @@ nvim: (gitclone "git://github.com/neovim/neovim.git" "neovim")
         CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
         install
     {{justrun}} link-pack nvim
-    {{justrun}} lunarvim
+    # {{justrun}} lunarvim
+
+# Compile neovim static
+nvim-static: (gitclone "git://github.com/neovim/neovim.git" "neovim")
+    cd {{blddir}}/neovim \
+    && make \
+        CMAKE_BUILD_TYPE=Release \
+        CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
+        install
 
 # Pretty GUI for neovim written in rust
 neovide: (gitclone "git://github.com/Kethku/neovide" "neovide")

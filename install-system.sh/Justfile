@@ -793,17 +793,19 @@ clippy:
 
 # High performance GPU accelerated Terminal
 alacritty: cargo-install
+    #!/usr/bin/env fish
     {{cargo-install}} alacritty
-    not type -q alacritty
-    {{justrun}} pipx-install alacritty-colorscheme
-    wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/logo/alacritty-term.svg -O /tmp/alacritty-term.svg
-    sudo cp /tmp/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
-    wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info -O /tmp/alacritty.info
-    sudo tic -xe alacritty,alacritty-direct /tmp/alacritty.info
-    wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/linux/Alacritty.desktop -O /tmp/Alacritty.desktop
-    sudo desktop-file-install /tmp/Alacritty.desktop
-    sudo update-desktop-database
-    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which alacritty) 99
+    if not type -q alacritty
+        {{justrun}} pipx-install alacritty-colorscheme
+        wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/logo/alacritty-term.svg -O /tmp/alacritty-term.svg
+        sudo cp /tmp/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
+        wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info -O /tmp/alacritty.info
+        sudo tic -xe alacritty,alacritty-direct /tmp/alacritty.info
+        wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/linux/Alacritty.desktop -O /tmp/Alacritty.desktop
+        sudo desktop-file-install /tmp/Alacritty.desktop
+        sudo update-desktop-database
+        sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which alacritty) 99
+    end
 
 broot: cargo-install
     mkdir -p ~/.local/share/fonts

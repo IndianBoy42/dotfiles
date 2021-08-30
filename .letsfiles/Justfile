@@ -29,3 +29,7 @@ wd := invocation_directory()
     xinput float (xinput list | rg --no-config KMonad | cut -f2 | cut -d'=' -f 2)
 @kben:
     xinput reattach (xinput list | rg --no-config KMonad | cut -f2 | cut -d'=' -f 2) (xinput list | rg --no-config 'Virtual core keyboard' | cut -f2 | cut -d'=' -f 2)
+
+@rock name *arguments:
+    set base (dirname (realpath (which luarocks)))"/{{name}}"; \
+    and $base {{arguments}}

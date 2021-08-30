@@ -113,7 +113,7 @@ only-needed-trees := "--filter=tree:0" # Least download size (may not be signifi
     {{justrun}} --choose --chooser 'fzf --preview="just --show {}"' # --list
 
 edit:
-    cd {{inst-script-dir}} && nvim {{justfile()}}
+    cd {{inst-script-dir}} && $EDITOR {{justfile()}}
 
 # Open a shell with the environment variables defined above
 sh *args:

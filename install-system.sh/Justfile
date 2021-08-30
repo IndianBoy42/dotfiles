@@ -1152,6 +1152,16 @@ neovide: (gitclone "git://github.com/Kethku/neovide" "neovide")
     cd {{blddir}}/neovide
     CARGO_BUILD_TARGET={{gnu-target}} {{cargo-install}} --path .
 
+nvui: (gitclone "git://github.com/rohit-px2/nvui.git" "nvui")
+    #!/usr/bin/env fish
+    cmake -S {{blddir}}/nvui \
+        -B {{blddir}}/nvui/build \
+        -DCMAKE_TOOLCHAIN_FILE={{blddir}}/nvui/vcpkg/scripts/buildsystems/vcpkg.cmake \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX="{{prefix}}/nvui" \
+    cmake --build {{blddir}}/nvui/build --target nvui --config Release
+    cmake --install {{blddir}}/nvui/build --target nvui --config Release
+
 # Selection first modal editor
 kakoune: (gitclone "git://github.com/mawww/kakoune.git" "kakoune") (mkpackdir "kakoune")
     sudo apt install libncursesw5-dev pkg-config

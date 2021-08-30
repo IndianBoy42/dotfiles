@@ -784,9 +784,8 @@ pueue: cargo-install
 
 # Network and port usage monitor
 bandwhich: cargo-install
-    type -q bandwhich && touch /tmp/bandwhich-installed || true
     {{cargo-install}} $argv[1]
-    test -e /tmp/bandwhich-installed || sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
+    sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
 
 clippy:
     rustup component add clippy-preview

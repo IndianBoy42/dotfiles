@@ -1272,3 +1272,8 @@ emscripten: (gitclone "git://github.com/emscripten-core/emsdk.git" "emsdk")
     {{blddir}}/emsdk/emsdk install latest
     {{blddir}}/emsdk/emsdk activate latest
     source {{blddir}}/emsdk/emsdk_env.fish
+
+howdy:
+    sudo add-apt-repository ppa:boltgolt/howdy
+    sudo apt update
+    sudo apt install howdy

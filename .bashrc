@@ -121,3 +121,4 @@ if [ -n "$NVIM_LISTEN_ADDRESS" ] ; then
 fi
 
 EDITOR='nvim-wrapper'
+[[ -s "/home/amedhi/.gvm/scripts/gvm" ]] && source "/home/amedhi/.gvm/scripts/gvm"

@@ -20,26 +20,22 @@ cd ~/install-system.sh/
 
 # just add-local-repo # if have
 ./install-apt-srcs.fish
-./install-apt.fish
+lets nix install-user
+just apt-libs
+just apt-apps
+just firacode
 just stow
 just cmake fzf zstd kmonad git-subrepo
 just go
 just node
-just conda
+just pydev # conda
 just nvim
-just firacode
 just rustc
-just cargo-install
+just cargo-all
 just julia
 ```
 
-The other install scripts can be done in mostly any order. I don't even know if these scripts are in the correct order
-
-You shouldn't do `install-misc.fish` all at once to properly monitor what commands are running
-
-I wish Fish could be made to print the commands before they run, probably a wrapper function could work
-
-I also wish I could install `neovim` earlier because I inevitably have to edit configs and scripts before I get to that stage
+I wish I could install `neovim` earlier because I inevitably have to edit configs and scripts before I get to that stage
 
 # TODO:
 

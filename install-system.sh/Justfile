@@ -2,7 +2,7 @@
 set shell := ["fish", "-c"]
 set positional-arguments
 
-export justrun := "just -d " + inst-script-dir + " -f " + justfile()
+export justrun := just_executable() + " -d " + inst-script-dir + " -f " + justfile() 
 
 ########################################################
 ## Most config variables below here
@@ -79,7 +79,7 @@ export CMAKE_CXX_FLAGS_RELEASE := CXXFLAGS
 # export CMAKE_SHARED_LINKER_FLAGS := CMAKE_EXE_LINKER_FLAGS
 
 rust_static_flags := if static != "0" { " -C target-feature=+crt-static -C link-self-contained=yes" } else { "" }
-export RUSTFLAGS := "-C link-arg=-fuse-ld=" + LD + " -C target-cpu=native -Z share-generics=y" + rust_static_flags
+export RUSTFLAGS := "-C link-arg=-fuse-ld=" + LD + " -C target-cpu=native" + rust_static_flags
 export RUSTC_WRAPPER := if use-sccache != "0" { "sccache" } else { "" }
 
 gnu-target := "x86_64-unknown-linux-gnu"
@@ -357,8 +357,8 @@ wezterm: (bingh "wezterm" "wez/wezterm" "*.AppImage")
 kitty: (mkpackdir "kitty.app")
     curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest={{prefix}}
     sudo chmod a+r "{{prefix}}/kitty.app"
-    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which kitty) 90
     {{justrun}} link-pack "kitty.app"
+    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which kitty) 90
     {{justrun}} gitcloneto "https://github.com/trygveaa/kitty-kitten-search" "~/.config/kitty/kitty_search"
     {{justrun}} gitcloneto "https://github.com/yurikhan/kitty_grab.git" "~/.config/kitty/kitty_grab"
 
@@ -385,7 +385,7 @@ gvm:
     if not test -e ~/.gvm/scripts/gvm
         curl -sSL https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer | bash
     end
-    if functions -q gvm
+    if not functions -q gvm
         function gvm
           bass source ~/.gvm/scripts/gvm ';' gvm $argv
         end
@@ -393,8 +393,8 @@ gvm:
     end
 
 go: gvm
-    gvm install --binary go1.16
-    gvm use go.1.16 --default
+    gvm install go1.16 --binary 
+    gvm use go1.16 --default
     gvm alias create latest go1.16
 
 nvm:
@@ -627,7 +627,7 @@ kmonad: (bingh "kmonad" "kmonad/kmonad" "*linux")
     cat /proc/bus/input/devices | rg -C5 keyboard
 
 # Alternative to submodules
-git-subrepo: (gitclone "ingydotnet/git-subrepo" "git-subrepo") (mkpackdir "git-subrepo")
+git-subrepo: (gitclone "git://github.com/ingydotnet/git-subrepo" "git-subrepo") (mkpackdir "git-subrepo")
     test -d {{prefix}}/git-subrepo/bin; and rm -rf "{{prefix}}/git-subrepo/bin/*"
     ln -s {{blddir}}/git-subrepo/lib/* {{prefix}}/git-subrepo/bin
     {{justrun}} link-pack "git-subrepo"
@@ -730,20 +730,21 @@ cargo-update:
 # Shared cache for C/C++/Rust
 sccache:
     echo "Installing sccache"
-    @type -q sccache && cargo install-update sccache
-    @type -q sccache || {{cargo-install}} sccache
+    type -q sccache && cargo install-update sccache
+    type -q sccache || {{cargo-install}} sccache
 
 # Download sccache from github releases
-sccache-gh: (bingh "sccache" "mozilla/sccache" "sccache-*-x86_64-unknown-linux-musl.tar.gz")
+sccache-gh: (bingh "sccache" "mozilla/sccache" "sccache-v*-x86_64-unknown-linux-musl.tar.gz")
+    echo "sccache-gh broken" && false
     echo "Installed"
 
 # Cargo install tools (sccache, quickinstall, cargo-update)
 install-only-ne-cargo-install := "true"
 cargo-install: 
     type -q rustc && {{install-only-ne-cargo-install}} || {{justrun}} rustc
-    type -q cargo-quickinstall && {{install-only-ne-cargo-install}} || {{justrun}} cargo-quickinstall
-    type -q cargo-install-update && {{install-only-ne-cargo-install}} || {{justrun}} cargo-update
     type -q sccache && {{install-only-ne-cargo-install}} || {{justrun}} sccache
+    type -q cargo-install-update && {{install-only-ne-cargo-install}} || {{justrun}} cargo-update
+    type -q cargo-quickinstall && {{install-only-ne-cargo-install}} || {{justrun}} cargo-quickinstall
 
 # Blazing fast regex searcher
 ripgrep:
@@ -780,7 +781,7 @@ pueue: cargo-install
 
 # Network and port usage monitor
 bandwhich: cargo-install
-    type -q bandwhich && touch /tmp/bandwhich-installed
+    type -q bandwhich && touch /tmp/bandwhich-installed || true
     {{cargo-install}} $argv[1]
     test -e /tmp/bandwhich-installed || sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
 
@@ -804,7 +805,7 @@ alacritty: cargo-install
 broot: cargo-install
     mkdir -p ~/.local/share/fonts
     test -f ~/.local/share/fonts/vscode.ttf; \
-    or wget git://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
+    or wget https://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
     {{cargo-install}} broot
 
 xplr: cargo-install 
@@ -914,8 +915,9 @@ conda:
     conda update -n base -c defaults --all
 
 # Python dev tools
-pydev: conda pipx pipenv poetry
-    {{justrun}} pipx-install black mypy
+pydev: pipx pipenv poetry
+    {{justrun}} pipx-install black 
+    {{justrun}} pipx-install mypy 
 
 # 'Essential' python packages
 py-essentials:
@@ -1116,6 +1118,7 @@ nvim-img:
 
 # Compile neovim from source
 nvim: (gitclone "git://github.com/neovim/neovim.git" "neovim")
+    sudo apt-get install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl
     cd {{blddir}}/neovim \
     && make \
         CMAKE_BUILD_TYPE=Release \

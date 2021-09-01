@@ -1,6 +1,8 @@
 with import <nixpkgs> {}; [
-any-nix-shell
+any
 cachix
+direnv
+ninja
 niv
 nix
 ]

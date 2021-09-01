@@ -53,11 +53,13 @@ if not set -q IN_NIX_SHELL
     # Activate the profile
     if test -n "$FISH_ACTIVATE_NIX_PROFILE"
         # TODO: https://github.com/lilyball/nix-env.fish
-        if bass source $FISH_ACTIVATE_NIX_PROFILE/etc/profile.d/nix.sh
-            any-nix-shell fish --info-right | source
+        if test -e $FISH_ACTIVATE_NIX_PROFILE/etc/profile.d/nix.sh
+            if bass source $FISH_ACTIVATE_NIX_PROFILE/etc/profile.d/nix.sh
+                any-nix-shell fish --info-right | source
 
-            # Guard repeated activations
-            set -g FISH_NIX_ACTIVATED 1
+                # Guard repeated activations
+                set -g FISH_NIX_ACTIVATED 1
+            end
         end
     end
 
@@ -261,8 +263,8 @@ else if type -q nvim
     abbr -g nvimn command nvim
     abbr -g vin command nvim
 end
-set -gx NeovideMultiGrid "1"
-set -gx NEOVIDE_FRAMELESS "1"
+set -gx NeovideMultiGrid 1
+set -gx NEOVIDE_FRAMELESS 1
 
 # so many spotify-tui abbreviations
 set -gx SPT_FORMAT '%f %s %p : %t - %a (%b) - %v% - playing on %d'

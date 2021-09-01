@@ -12,6 +12,7 @@ to-root := "0"
 export stow-package-dir := "packages"
 export sysinstalldir := "/usr/local"
 export blddir := "~/git-builds"
+bldprefix := blddir + "/"
 export inst-script-dir := "~/install-system.sh"
 export installdir := if to-root != "0" { sysinstalldir } else {  "$HOME/.local" }
 
@@ -200,7 +201,7 @@ mkblddir name:
     mkdir -p {{blddir}}/{{name}}/build
 
 # Clone or update a git repo (into blddir)
-gitclone url name branch="" gitcloneprefix=blddir:
+gitclone url name branch="" gitcloneprefix=bldprefix:
     #!/usr/bin/env fish
     test -n "{{gitcloneprefix}}" && mkdir -p {{gitcloneprefix}} && cd {{gitcloneprefix}}
     if test -d {{gitcloneprefix}}/{{name}}
@@ -208,7 +209,7 @@ gitclone url name branch="" gitcloneprefix=blddir:
         git pull --rebase && git submodule update --init --recursive \
         || git checkout {{branch}} # Assume that arguments
     else
-        git clone {{only-needed-blobs}} {{ if branch == "" { "" } else { "-b " + branch } }} {{url}} {{gitcloneprefix}}/{{name}} # Or use --filter=tree:0
+        git clone {{only-needed-blobs}} {{ if branch == "" { "" } else { "-b " + branch } }} {{url}} {{gitcloneprefix}}{{name}} # Or use --filter=tree:0
     end
 
 gitcloneto url name branch="": (gitclone url name branch "")
@@ -359,8 +360,8 @@ kitty: (mkpackdir "kitty.app")
     sudo chmod a+r "{{prefix}}/kitty.app"
     {{justrun}} link-pack "kitty.app"
     sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which kitty) 90
-    {{justrun}} gitcloneto "https://github.com/trygveaa/kitty-kitten-search" "~/.config/kitty/kitty_search"
-    {{justrun}} gitcloneto "https://github.com/yurikhan/kitty_grab.git" "~/.config/kitty/kitty_grab"
+    {{justrun}} gitcloneto "https://github.com/trygveaa/kitty-kitten-search" "$HOME/config/kitty/kitty_search"
+    {{justrun}} gitcloneto "https://github.com/yurikhan/kitty_grab.git" "$HOME/config/kitty/kitty_grab"
 
 kitty-src: (gitclone "git://github.com/kovidgoyal/kitty" "kitty") (mkpackdir "kitty")
     #!/usr/bin/env fish
@@ -591,11 +592,12 @@ gcm: (debgh "gcmcore" "microsoft/Git-Credential-Manager-Core" "*amd64*.deb")
 # git config --global credential.credentialStore secretservice # requires GUI (ok?)
 
 # Quantum Mechanical Keyboard firmware
-qmk: (gitcloneto "git://github.com/IndianBoy42/qmk_firmware.git" "~/qmk_firmware")
+qmk: (gitcloneto "git://github.com/IndianBoy42/qmk_firmware.git" "$HOME/qmk_firmware")
+    #!/usr/bin/env fish
     cd ~/qmk_firmware
     git remote add upstream "git://github.com/qmk/qmk_firmware.git" && \
     sudo cp ~/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
-    pipx install --user qmk
+    pipx install qmk
     qmk setup
     qmk doctor
 

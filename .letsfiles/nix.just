@@ -66,6 +66,10 @@ nix-gc-roots-dir := "~/.nix-gc-roots"
 installed:
     {{nix-env}} -q 
 
+# Install into nix environment
+install +arguments:
+    {{nix-env}} -iA {{arguments}}
+
 ############################
 #  Manage nix environment  #
 ############################

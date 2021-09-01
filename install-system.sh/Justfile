@@ -592,7 +592,7 @@ gcm: (debgh "gcmcore" "microsoft/Git-Credential-Manager-Core" "*amd64*.deb")
 # git config --global credential.credentialStore secretservice # requires GUI (ok?)
 
 # Quantum Mechanical Keyboard firmware
-qmk: (gitcloneto "git://github.com/IndianBoy42/qmk_firmware.git" "$HOME/qmk_firmware")
+qmk: (gitcloneto "https://github.com/IndianBoy42/qmk_firmware.git" "$HOME/qmk_firmware")
     #!/usr/bin/env fish
     cd ~/qmk_firmware
     git remote add upstream "git://github.com/qmk/qmk_firmware.git" && \

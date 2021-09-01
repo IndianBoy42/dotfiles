@@ -87,7 +87,7 @@ edit-user:
     {{nix-env}} -q  | cut -d '-' -f 1 >> {{user-nix}}.new
     echo "]" >> {{user-nix}}.new
     cat {{user-nix}}.new
-    diff {{user-nix}}.new {{user-nix}}.old || true
+    diff {{user-nix}}.old {{user-nix}}.new || true
     echo "replace {{user-nix}}? [y/N]" && confirm && cp {{user-nix}}.new {{user-nix}}
 
 # What would change in my enviroment if I install from the user.nix file

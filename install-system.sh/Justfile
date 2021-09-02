@@ -1151,6 +1151,9 @@ neovide: (gitclone "git://github.com/Kethku/neovide" "neovide")
     cd {{blddir}}/neovide
     CARGO_BUILD_TARGET={{gnu-target}} {{cargo-install}} --path .
 
+vcpkg: (gitclone "git://github.com/microsoft/vcpkg.git" "vcpkg")
+    ./bootstrap-vcpkg.sh
+
 nvui: (gitclone "git://github.com/rohit-px2/nvui.git" "nvui")
     #!/usr/bin/env fish
     cmake -S {{blddir}}/nvui \

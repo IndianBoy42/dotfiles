@@ -1305,3 +1305,8 @@ howdy:
     sudo add-apt-repository ppa:boltgolt/howdy
     sudo apt update
     sudo apt install howdy
+# TODO: the rest of this
+
+latexindent: (gitcloneto "https://github.com/cmhughes/latexindent.pl.git", "latexindent.pl")
+    sudo perl {{blddir}}"/helper-scripts/latexindent-module-installer.pl"
+    ln -s (realpath {{blddir}}"/latexindent.pl" {{bindir}}/latexindent)

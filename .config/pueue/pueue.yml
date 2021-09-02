@@ -15,7 +15,7 @@ daemon:
   callback: ~
   callback_log_lines: 10
   groups:
-    default: 16
+    default: 4
 shared:
   pueue_directory: /home/amedhi/.local/share/pueue
   use_unix_socket: true

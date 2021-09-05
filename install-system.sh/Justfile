@@ -1310,3 +1310,6 @@ howdy:
 latexindent: (gitcloneto "https://github.com/cmhughes/latexindent.pl.git" "latexindent.pl")
     sudo perl {{blddir}}"/helper-scripts/latexindent-module-installer.pl"
     ln -s (realpath {{blddir}}"/latexindent.pl" {{bindir}}/latexindent)
+
+logiops:
+    sudo apt install cmake libevdev-dev libudev-dev libconfig++-dev

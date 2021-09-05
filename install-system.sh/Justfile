@@ -1154,13 +1154,21 @@ vcpkg: (gitclone "git://github.com/microsoft/vcpkg.git" "vcpkg")
 
 nvui: (gitclone "git://github.com/rohit-px2/nvui.git" "nvui")
     #!/usr/bin/env fish
+    which nvui 
+    or sudo apt-get install gperf autoconf build-essential libtool libgl1-mesa-dev libxi-dev libx11-dev libxext-dev libxkbcommon-x11-dev libglu1-mesa-dev libx11-xcb-dev '^libxcb.*-dev' libxrender-dev ninja-build curl zip unzip tar autopoint python
     cmake -S {{blddir}}/nvui \
         -B {{blddir}}/nvui/build \
         -DCMAKE_TOOLCHAIN_FILE={{blddir}}/nvui/vcpkg/scripts/buildsystems/vcpkg.cmake \
         -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_INSTALL_PREFIX="{{prefix}}/nvui" \
+        -DCMAKE_INSTALL_PREFIX="{{prefix}}/nvui"
     cmake --build {{blddir}}/nvui/build --target nvui --config Release
-    cmake --install {{blddir}}/nvui/build --target nvui --config Release
+    cmake --install {{blddir}}/nvui/build --config Release
+
+nvui-dl: 
+    rm -rf {{prefix}}/nvui
+    gh run -R rohit-px2/nvui download -n nvui-linux-x64 -D {{prefix}}/nvui
+    chmod +x {{prefix}}/nvui/bin/nvui
+    {{justrun}} link-pack nvui
 
 # Selection first modal editor
 kakoune: (gitclone "git://github.com/mawww/kakoune.git" "kakoune") (mkpackdir "kakoune")

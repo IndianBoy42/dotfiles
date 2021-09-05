@@ -315,7 +315,7 @@ autotoolsgit name repo pattern: (gitclone name repo)
 cmake-build from in *options:
     cmake -DCMAKE_INSTALL_PREFIX="{{prefix}}/"(basename (realpath {{from}})) \
         -DCMAKE_BUILD_TYPE={{CMAKE_BUILD_TYPE}} \
-        {{options}} -S {{from}} -B {{in}} ..
+        {{options}} -S {{from}} -B {{in}}
     cmake --build {{in}}
 
 cmake-install name *options: 
@@ -624,8 +624,7 @@ kmonad: (bingh "kmonad" "kmonad/kmonad" "*linux")
     sudo usermod -aG input $USER
     sudo modprobe uinput
     sudo cp {{inst-script-dir}}/uinput.rules /etc/udev/rules.d/uinput.rules
-    systemctl --user enable kmonad.service
-    systemctl --user start kmonad.service
+    systemctl --user enable --now kmonad.service
     echo "The next output will help you find the device that your keyboard corresponds to"
     cat /proc/bus/input/devices | rg -C5 keyboard
 
@@ -778,8 +777,7 @@ tealdeer: cargo-install
 # Manager for long running background shell commands/processes
 pueue: cargo-install
     {{cargo-install}} $argv[1]
-    systemctl --user enable pueued.service
-    and systemctl --user start pueued.service
+    systemctl --user enable --now pueued.service
     pueue parallel (nproc)
 
 # Network and port usage monitor
@@ -1311,5 +1309,12 @@ latexindent: (gitcloneto "https://github.com/cmhughes/latexindent.pl.git" "latex
     sudo perl {{blddir}}"/helper-scripts/latexindent-module-installer.pl"
     ln -s (realpath {{blddir}}"/latexindent.pl" {{bindir}}/latexindent)
 
-logiops:
+logiops: (gitclone "https://github.com/PixlOne/logiops.git" "logiops")
     sudo apt install cmake libevdev-dev libudev-dev libconfig++-dev
+    cmake -S {{blddir}}/logiops -B {{blddir}}/logiops/build \
+    -DCMAKE_INSTALL_PREFIX="{{prefix}}/logiops" \
+    -DCMAKE_BUILD_TYPE={{CMAKE_BUILD_TYPE}}
+    cmake --build {{blddir}}/logiops/build
+    sudo cmake --install {{blddir}}/logiops/build
+    sudo systemctl enable --now logid
+    sudo ln -s ~/.config/logiops/logid.cfg /etc/logid.cfg

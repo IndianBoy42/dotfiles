@@ -1112,9 +1112,7 @@ nvim-apt:
     # {{justrun}} lunarvim
 
 # Install neovim AppImage from github releases
-nvim-img: 
-    {{justrun}} cpbingh "nvim.appimage" "neovim/neovim" "*.appimage" "nightly"
-    {{justrun}} wrap-bin "nvim.appimage" "bin/nvim.appimage" "nvim.appimage"
+nvim-img: (cpbingh "nvim.appimage" "neovim/neovim" "*.appimage" "nightly") (wrap-bin "nvim.appimage" "bin/nvim.appimage" "nvim.appimage") 
     mkdir -p {{prefix}}/nvim.appimage/bin/nvim.appimage.home
     # {{justrun}} lunarvim '{{prefix}}/nvim.appimage/bin/nvim.appimage.home' 'nvim.appimage'
 
@@ -1169,6 +1167,10 @@ nvui-dl:
     gh run -R rohit-px2/nvui download -n nvui-linux-x64 -D {{prefix}}/nvui
     chmod +x {{prefix}}/nvui/bin/nvui
     {{justrun}} link-pack nvui
+
+goneovim: (targh "goneovim" "akiyosi/goneovim" "*linux.tar.bz2") (mkpackdir "goneovim")
+    cp -r /tmp/goneovim/Goneovim-v*-linux/* {{prefix}}/goneovim/
+    {{justrun}} wrap-bin "goneovim" "goneovim" "goneovim"
 
 # Selection first modal editor
 kakoune: (gitclone "git://github.com/mawww/kakoune.git" "kakoune") (mkpackdir "kakoune")

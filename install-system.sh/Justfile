@@ -339,6 +339,19 @@ curlsrc url name: (mkblddir name)
 # Programs
 ##############################################333
 
+yadm:
+    #!/usr/bin/env fish
+    if not test -d ~/.yadm-project
+        yadm submodule add https://github.com/TheLocehiliosan/yadm.git ~/.yadm-project
+        yadm submodule update --init --recursive ~/.yadm-project
+        ln -s ~/.yadm-project/yadm {{bindir}}/yadm
+    else
+        cd ~/.yadm-project
+        git checkout origin/master
+        yadm add ~/.yadm-project
+        yadm commit -m "Update yadm submodule"
+    end
+
 # arm embedded gcc - newer than apt
 gcc-arm-none-eabi: (insgh "arm-none-eabi-gcc" "xpack-dev-tools/arm-none-eabi-gcc-xpack" "*linux-x64.tar.gz")
     echo "Installed $argv"

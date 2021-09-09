@@ -7,6 +7,8 @@
   && chmod +x /tmp/yadm \
   && /tmp/yadm clone https://github.com/IndianBoy42/dotfiles.git
 # Use official bootstrap script
+source <(curl -L bootstrap.yadm.io)
+yadm clone https://github.com/IndianBoy42/dotfiles.git
 curl -L bootstrap.yadm.io | bash -s -- https://github.com/IndianBoy42/dotfiles.git
 
 # Install all the alternatives

@@ -11,12 +11,6 @@ wd := invocation_directory()
     cp {{justfile_directory()}}/template {{justfile_directory()}}/{{name}}.just
     nvim {{justfile_directory()}}/{{name}}.just
 
-@config-nvim:
-    cd ~/.config/nvim && $EDITOR init.lua
-
-@config-fish:
-    cd ~/.config/fish && $EDITOR config.fish
-
 @config-edit:
     #!/usr/bin/env fish
     set chosen (yadm tracked ~ | fzf --preview='bat {}')

@@ -24,3 +24,6 @@ nix:
 	
 qmk:
     cd ~/qmk_firmware/ && $EDITOR indianboy42/keymap_common.h
+
+kmonad:
+    cd ~/.config/kmonad/ && $EDITOR capslockmod.kbd

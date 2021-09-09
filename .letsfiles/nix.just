@@ -88,7 +88,7 @@ edit-user:
     echo "Exporting to {{user-nix}}.new"
     cp {{user-nix}} {{user-nix}}.old || true
     echo "with import <nixpkgs> {}; [" > {{user-nix}}.new
-    {{nix-env}} -q  | cut -d '-' -f 1 >> {{user-nix}}.new
+    {{nix-env}} -q  | sed -r 's/^(.*)-.*$/\1/' >> {{user-nix}}.new
     echo "]" >> {{user-nix}}.new
     cat {{user-nix}}.new
     diff {{user-nix}}.old {{user-nix}}.new || true
@@ -107,7 +107,7 @@ edit-user:
     || echo "Changes are above"
 
 # Fetch updates from nix-channel
-fetch:
+update:
     nix-channel --update
 
 # Delete old generations and GC the rest

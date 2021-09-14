@@ -1,0 +1,11 @@
+[Unit]
+Description=kmonad keyboard config
+
+[Service]
+Restart=always
+RestartSec=5
+ExecStart=/usr/bin/env kmonad /home/amedhi/.config/kmonad/amedhi.kbd
+Nice=-20
+
+[Install]
+WantedBy=default.target

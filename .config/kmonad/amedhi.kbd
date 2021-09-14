@@ -26,6 +26,7 @@
   allow-cmd true
 )
 
+
 ;; The source keymap, the shape and order and whitespace don't matter
 ;; I could also specify the minimum keycodes required for my remapping
 (defsrc
@@ -46,26 +47,42 @@
 
 (defalias 
 	nav (layer-toggle capslockmods)
-	syms (tap-hold-next-release 500 spc (layer-toggle symlayer))
-	ma (tap-hold-next-release 500 a lmet)
-	as (tap-hold-next-release 500 s lalt)
-	cd (tap-hold-next-release 500 d lctl)
-	sf (tap-hold-next-release 500 f lsft)
-	ml (tap-hold-next-release 500 l lmet)
-	ak (tap-hold-next-release 500 k lalt)
-	cj (tap-hold-next-release 500 j lctl)
-	sh (tap-hold-next-release 500 h lsft)
-	m2 (tap-hold-next-release 500 2 lmet)
-	a3 (tap-hold-next-release 500 3 lalt)
-	c4 (tap-hold-next-release 500 4 lctl)
-	s5 (tap-hold-next-release 500 5 lsft)
-	m0 (tap-hold-next-release 500 0 lmet)
-	a9 (tap-hold-next-release 500 9 lalt)
-	c8 (tap-hold-next-release 500 8 lctl)
-	s7 (tap-hold-next-release 500 7 lsft)
+	tnv (tap-hold 200 tab (layer-toggle capslockmods))
+	syms (tap-hold-next-release 200 spc (layer-toggle symlayer))
+	ma (tap-hold-next-release 200 a lmet)
+	as (tap-hold-next-release 200 s lalt)
+	cd (tap-hold-next-release 200 d lctl)
+	sf (tap-hold-next-release 200 f lsft)
+	ml (tap-hold-next-release 200 l lmet)
+	ak (tap-hold-next-release 200 k lalt)
+	cj (tap-hold-next-release 200 j lctl)
+	sh (tap-hold-next-release 200 h lsft)
+	m2 (tap-hold-next-release 200 2 lmet)
+	a3 (tap-hold-next-release 200 3 lalt)
+	c4 (tap-hold-next-release 200 4 lctl)
+	s5 (tap-hold-next-release 200 5 lsft)
+	m0 (tap-hold-next-release 200 0 lmet)
+	a9 (tap-hold-next-release 200 9 lalt)
+	c8 (tap-hold-next-release 200 8 lctl)
+	s7 (tap-hold-next-release 200 7 lsft)
 )
 
 ;; Default qwerty layer
+(deflayer base-homerow
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  esc  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  @tnv @ma  @as  @cd  @sf  g    @sh  @cj  @ak  @ml   ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  ;; lctl lmet lalt           @syms          ralt rmet cmp  rctl
+  XX   XX   lalt            @syms          ralt rmet cmp  rctl
+)
+(deflayer qwerty40
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  esc  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  @tnv a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet cmp  rctl
+)
 (deflayer qwerty
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
@@ -73,27 +90,20 @@
   lsft z    x    c    v    b    n    m    ,    .    /    rsft
   lctl lmet lalt           spc            ralt rmet cmp  rctl
 )
-(deflayer base-homerow
-  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
-  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
-  @nav @ma  @as  @cd  @sf  g    @sh  @cj  @ak  @ml   ;    '    ret
-  lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           @syms          ralt rmet cmp  rctl
-)
 
 (defalias csp C-S-p)
 (deflayer capslockmods
-  _    _    _    _    _    _    _    _    _    _    _    _    _    _
-  _    f17  f18  f19  f20  _    f13  f14  f15  f16  _    _    _    _
-  _    lmet lalt lctl lsft _    left down up   rght _    _    @csp
-  _    f21  f22  f23  f24  _    home pgdn pgup end  _    _
+  _    f13  f14  f15  f16  f17  f18  f19  f20  f21  f22  f23  f24    _
+  _    _    _    _    _    _    _    _    _    _    _    _  _    _
+  _    lmet lalt lctl lsft caps left down up   rght _    _    @csp
+  _    _    _    _    _    _    home pgdn pgup end  _    _
   _    _    _              lctl           _    _    _    _
 )
 
-(deflayer symlayer
+(deflayer symlayer ;; TODO port new symlayer
    _    _    _    _    _    _    _    _    _    _    _    _    _    _
-   _    _    _    _    _    _    _    _    _    _    _    _    _    _
-   0    1    2    3    4    5    6    7    8    9    -    =    _
-   _    _    _    _    _    '    /    [    ]    \    _    _
+   grv  _    [    ^    @    }    "    !    ?    %    _    _    _    _
+   0    \(   *    $    |    \)   '   \_    =    \    -    =    _
+   _    [    :    #    &    '    /    -    +    _    _    _
    _    _    _              _              _    _    _    _
 )

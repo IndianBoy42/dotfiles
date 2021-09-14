@@ -1,11 +1,1 @@
-[Unit]
-Description=kmonad keyboard config
-
-[Service]
-Restart=always
-RestartSec=5
-ExecStart=/usr/bin/env kmonad /home/amedhi/.config/kmonad/capslockmod.kbd
-Nice=-20
-
-[Install]
-WantedBy=default.target
+/home/amedhi/.config/kmonad/kmonad.service

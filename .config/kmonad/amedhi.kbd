@@ -49,6 +49,7 @@
 	nav (layer-toggle capslockmods)
 	tnv (tap-hold 200 tab (layer-toggle capslockmods))
 	syms (tap-hold-next-release 200 spc (layer-toggle symlayer))
+
 	ma (tap-hold-next-release 200 a lmet)
 	as (tap-hold-next-release 200 s lalt)
 	cd (tap-hold-next-release 200 d lctl)
@@ -57,21 +58,48 @@
 	ak (tap-hold-next-release 200 k lalt)
 	cj (tap-hold-next-release 200 j lctl)
 	sh (tap-hold-next-release 200 h lsft)
-	m2 (tap-hold-next-release 200 2 lmet)
-	a3 (tap-hold-next-release 200 3 lalt)
-	c4 (tap-hold-next-release 200 4 lctl)
-	s5 (tap-hold-next-release 200 5 lsft)
-	m0 (tap-hold-next-release 200 0 lmet)
-	a9 (tap-hold-next-release 200 9 lalt)
-	c8 (tap-hold-next-release 200 8 lctl)
-	s7 (tap-hold-next-release 200 7 lsft)
+
+	mz (tap-hold-next-release 200 z lmet)
+	ax (tap-hold-next-release 200 x lalt)
+	cc (tap-hold-next-release 200 c lctl)
+	sv (tap-hold-next-release 200 v lsft)
+	mdt (tap-hold-next-release 200 . lmet)
+	acm (tap-hold-next-release 200 , lalt)
+	cm (tap-hold-next-release 200 m lctl)
+	sn (tap-hold-next-release 200 n lsft)
+
+;; 	ma (tap-hold-next-release 200 a (around lmet (layer-toggle rhand)))
+;; 	as (tap-hold-next-release 200 s (around lalt (layer-toggle rhand)))
+;; 	cd (tap-hold-next-release 200 d (around lctl (layer-toggle rhand)))
+;; 	sf (tap-hold-next-release 200 f (around lsft (layer-toggle rhand)))
+;; 	ml (tap-hold-next-release 200 l (around lmet (layer-toggle lhand)))
+;; 	ak (tap-hold-next-release 200 k (around lalt (layer-toggle lhand)))
+;; 	cj (tap-hold-next-release 200 j (around lctl (layer-toggle lhand)))
+;; 	sh (tap-hold-next-release 200 h (around lsft (layer-toggle lhand)))
+;; 
+;; 	mz  (tap-hold-next-release 200 z (around lmet (layer-toggle lhand)))
+;; 	ax  (tap-hold-next-release 200 x (around lalt (layer-toggle lhand)))
+;; 	cc  (tap-hold-next-release 200 c (around lctl (layer-toggle lhand)))
+;; 	sv  (tap-hold-next-release 200 v (around lsft (layer-toggle lhand)))
+;; 	mdt (tap-hold-next-release 200 . (around lmet (layer-toggle rhand)))
+;; 	acm (tap-hold-next-release 200 , (around lalt (layer-toggle rhand)))
+;; 	cm  (tap-hold-next-release 200 m (around lctl (layer-toggle rhand)))
+;; 	sn  (tap-hold-next-release 200 n (around lsft (layer-toggle rhand)))
 )
 
 ;; Default qwerty layer
+(deflayer base-btmrow
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  esc  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  @tnv a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft @mz  @ax  @cc  @sv  b    @sn  @cm  @acm @mdt /    rsft
+  ;; lctl lmet lalt           @syms          ralt rmet cmp  rctl
+  XX   XX   lalt            @syms          ralt rmet cmp  rctl
+)
 (deflayer base-homerow
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   esc  q    w    e    r    t    y    u    i    o    p    [    ]    \
-  @tnv @ma  @as  @cd  @sf  g    @sh  @cj  @ak  @ml   ;    '    ret
+  @tnv @ma  @as  @cd  @sf  g    @sh  @cj  @ak  @ml  ;    '    ret
   lsft z    x    c    v    b    n    m    ,    .    /    rsft
   ;; lctl lmet lalt           @syms          ralt rmet cmp  rctl
   XX   XX   lalt            @syms          ralt rmet cmp  rctl
@@ -81,7 +109,14 @@
   esc  q    w    e    r    t    y    u    i    o    p    [    ]    \
   @tnv a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           spc            ralt rmet cmp  rctl
+  lctl lmet lalt           @syms          ralt rmet cmp  rctl
+)
+(deflayer rhand
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  esc  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  @tnv a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           @syms          ralt rmet cmp  rctl
 )
 (deflayer qwerty
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc

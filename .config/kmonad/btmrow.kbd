@@ -1,0 +1,144 @@
+;; Mandatory platform-specific configuration
+;; The linux device is probably super specific to eah computer
+;; TODO: can kmonad take arguments to specify the device?
+(defcfg
+  ;; For Linux
+  input  (device-file "/dev/input/event3") ;; TODO: use by-id?
+;;  input  (device-file "/dev/input/by-id/usb-MythosMann_TG4x-event-kbd")
+  output (uinput-sink "kmonad_output"
+    ;; To understand the importance of the following line, see the section on
+    ;; Compose-key sequences at the near-bottom of this file.
+    "/run/current-system/sw/bin/sleep 1 && /run/current-system/sw/bin/setxkbmap -option compose:ralt")
+  cmp-seq ralt  ;; Set the compose key to `RightAlt'
+
+  ;; For Windows
+  ;; input  (low-level-hook)
+  ;; output (send-event-sink)
+
+  ;; For MacOS
+  ;; input  (iokit-name "my-keyboard-product-string")
+  ;; output (kext)
+
+  ;; Comment this is you want unhandled events not to be emitted
+  fallthrough true
+
+  ;; Set this to false to disable any command-execution in KMonad
+  allow-cmd true
+)
+
+
+;; The source keymap, the shape and order and whitespace don't matter
+;; I could also specify the minimum keycodes required for my remapping
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet cmp  rctl
+)
+
+;; (deflayer transparent
+;;   _    _    _    _    _    _    _    _    _    _    _    _    _    _
+;;   _    _    _    _    _    _    _    _    _    _    _    _    _    _
+;;   _    _    _    _    _    _    _    _    _    _    _    _    _
+;;   _    _    _    _    _    _    _    _    _    _    _    _
+;;   _    _    _              _              _    _    _    _
+;; )
+
+(defalias 
+	nav (layer-toggle capslockmods)
+	tnv (tap-hold 200 tab (layer-toggle capslockmods))
+	syms (tap-hold-next-release 200 spc (layer-toggle symlayer))
+
+	ma (tap-hold-next-release 200 a lmet)
+	as (tap-hold-next-release 200 s lalt)
+	cd (tap-hold-next-release 200 d lctl)
+	sf (tap-hold-next-release 200 f lsft)
+	ml (tap-hold-next-release 200 l lmet)
+	ak (tap-hold-next-release 200 k lalt)
+	cj (tap-hold-next-release 200 j lctl)
+	sh (tap-hold-next-release 200 h lsft)
+
+	mz (tap-hold-next-release 200 z lmet)
+	ax (tap-hold-next-release 200 x lalt)
+	cc (tap-hold-next-release 200 c lctl)
+	sv (tap-hold-next-release 200 v lsft)
+	mdt (tap-hold-next-release 200 . lmet)
+	acm (tap-hold-next-release 200 , lalt)
+	cm (tap-hold-next-release 200 m lctl)
+	sn (tap-hold-next-release 200 n lsft)
+
+;; 	ma (tap-hold-next-release 200 a (around lmet (layer-toggle rhand)))
+;; 	as (tap-hold-next-release 200 s (around lalt (layer-toggle rhand)))
+;; 	cd (tap-hold-next-release 200 d (around lctl (layer-toggle rhand)))
+;; 	sf (tap-hold-next-release 200 f (around lsft (layer-toggle rhand)))
+;; 	ml (tap-hold-next-release 200 l (around lmet (layer-toggle lhand)))
+;; 	ak (tap-hold-next-release 200 k (around lalt (layer-toggle lhand)))
+;; 	cj (tap-hold-next-release 200 j (around lctl (layer-toggle lhand)))
+;; 	sh (tap-hold-next-release 200 h (around lsft (layer-toggle lhand)))
+;; 
+;; 	mz  (tap-hold-next-release 200 z (around lmet (layer-toggle lhand)))
+;; 	ax  (tap-hold-next-release 200 x (around lalt (layer-toggle lhand)))
+;; 	cc  (tap-hold-next-release 200 c (around lctl (layer-toggle lhand)))
+;; 	sv  (tap-hold-next-release 200 v (around lsft (layer-toggle lhand)))
+;; 	mdt (tap-hold-next-release 200 . (around lmet (layer-toggle rhand)))
+;; 	acm (tap-hold-next-release 200 , (around lalt (layer-toggle rhand)))
+;; 	cm  (tap-hold-next-release 200 m (around lctl (layer-toggle rhand)))
+;; 	sn  (tap-hold-next-release 200 n (around lsft (layer-toggle rhand)))
+)
+
+;; Default qwerty layer
+(deflayer base-btmrow
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  esc  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  @tnv a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft @mz  @ax  @cc  @sv  b    @sn  @cm  @acm @mdt /    rsft
+  ;; lctl lmet lalt           @syms          ralt rmet cmp  rctl
+  XX   XX   lalt            @syms          ralt rmet cmp  rctl
+)
+(deflayer base-homerow
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  esc  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  @tnv @ma  @as  @cd  @sf  g    @sh  @cj  @ak  @ml  ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  ;; lctl lmet lalt           @syms          ralt rmet cmp  rctl
+  XX   XX   lalt            @syms          ralt rmet cmp  rctl
+)
+(deflayer qwerty40
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  esc  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  @tnv a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           @syms          ralt rmet cmp  rctl
+)
+(deflayer rhand
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  esc  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  @tnv a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           @syms          ralt rmet cmp  rctl
+)
+(deflayer qwerty
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  @nav a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet cmp  rctl
+)
+
+(defalias csp C-S-p)
+(deflayer capslockmods
+  _    f13  f14  f15  f16  f17  f18  f19  f20  f21  f22  f23  f24    _
+  _    _    _    _    _    _    _    _    _    _    _    _  _    _
+  _    lmet lalt lctl lsft caps left down up   rght _    _    @csp
+  _    _    _    _    _    _    home pgdn pgup end  _    _
+  _    _    _              lctl           _    _    _    _
+)
+
+(deflayer symlayer ;; TODO port new symlayer
+   _    _    _    _    _    _    _    _    _    _    _    _    _    _
+   grv  _    [    ^    @    }    "    !    ?    %    _    _    _    _
+   0    \(   *    $    |    \)   '   \_    =    \    -    =    _
+   _    [    :    #    &    '    /    -    +    _    _    _
+   _    _    _              _              _    _    _    _
+)

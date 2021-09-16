@@ -72,6 +72,7 @@
 	shallow-clone = clone --filter=tree:0
 	unshallow = fetch --unshallow
 	fork-point = git merge-base --fork-point origin/master
+    difftastic = !"GIT_EXTERNAL_DIFF=difftastic git"
 	
 [credential "https://dev.azure.com"]
 	useHttpPath = true

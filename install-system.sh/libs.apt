@@ -55,3 +55,4 @@ zlib1g-dev
 libxxhash-dev
 libelf-dev
 openssl
+libspeechd-dev

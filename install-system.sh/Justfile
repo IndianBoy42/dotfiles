@@ -934,6 +934,10 @@ pydev: pipx pipenv poetry
     {{justrun}} pipx-install black 
     {{justrun}} pipx-install mypy 
 
+ipykernel python='python':
+    {{python}} -m pip install ipykernel
+    {{python}} -m ipykernel install --user
+
 # 'Essential' python packages
 py-essentials:
     pip3 install --user click argcomplete rich ptpython ipython bpython
@@ -1341,3 +1345,6 @@ logiops: (gitclone "https://github.com/PixlOne/logiops.git" "logiops")
     sudo cmake --install {{blddir}}/logiops/build
     sudo systemctl enable --now logid
     sudo ln -s ~/.config/logiops/logid.cfg /etc/logid.cfg
+
+prettierd: 
+    npm install -g @fsouza/prettierd

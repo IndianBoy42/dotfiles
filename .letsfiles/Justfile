@@ -11,13 +11,11 @@ wd := invocation_directory()
     cp {{justfile_directory()}}/template {{justfile_directory()}}/{{name}}.just
     nvim {{justfile_directory()}}/{{name}}.just
 
-@config-edit:
-    #!/usr/bin/env fish
-    set chosen (yadm tracked ~ | fzf --preview='bat {}')
-    test -n chosen && nvim $chosen
-
-@qmk +commands:
+@qmk *commands:
     cd ~/qmk_firmware/ && just {{commands}}
+
+@nvim *commands:
+    cd ~/.config/nvim/ && just {{commands}}
 
 @kbdis:
     xinput float (xinput list | rg --no-config KMonad | cut -f2 | cut -d'=' -f 2)
@@ -27,3 +25,6 @@ wd := invocation_directory()
 @rock name *arguments:
     set base (dirname (realpath (which luarocks)))"/{{name}}"; \
     and $base {{arguments}}
+
+@scratch:
+    cd ~/Documents/scratchpad/ && $EDITOR "scratch_"(date +"%d-%m-%y_%s").md -c "MarkdownPreview"

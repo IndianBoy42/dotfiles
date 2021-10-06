@@ -3,8 +3,8 @@ set shell := ["fish", "-c"]
 wd := invocation_directory()
 justrun := "just -d " + wd + " -f " + justfile()
 
-__choose:
-    {{justrun}} --choose
+lets:
+    cd ~/.letsfiles/ && $EDITOR
 
 fish:
     cd $FISH_CONFIG_DIR && $EDITOR $FISH_CONFIG_PATH
@@ -27,3 +27,9 @@ kmonad:
 	
 qmk:
     cd ~/qmk_firmware/ && $EDITOR indianboy42/keymap_common.h
+
+@config:
+    #!/usr/bin/env fish
+    set chosen (yadm tracked ~ | fzf --preview='bat {}')
+    test -n chosen && nvim $chosen
+

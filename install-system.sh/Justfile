@@ -769,8 +769,9 @@ ripgrep:
 ripgrep_all: ripgrep (gitclone "git://github.com/phiresky/ripgrep-all.git" "ripgrep_all")
     {{cargo-install}} --path {{blddir}}/ripgrep_all
 
+# gitui: cargo-install (gitclone "git://github.com/IndianBoy42/gitui.git" "gitui")
 # Easy to use TUI for git
-gitui: cargo-install (gitclone "git://github.com/IndianBoy42/gitui.git" "gitui")
+gitui: cargo-install (gitclone "git://github.com/extrawurst/gitui.git" "gitui")
     {{cargo-install}} --path {{blddir}}/gitui
     cp {{blddir}}/gitui/vim_style_key_config.ron ~/.config/gitui/key_config.ron
 
@@ -1137,6 +1138,7 @@ nvim-img: (cpbingh "nvim.appimage" "neovim/neovim" "*.appimage" "nightly") (wrap
 nvim: (gitclone "git://github.com/neovim/neovim.git" "neovim")
     sudo apt-get install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl
     cd {{blddir}}/neovim \
+    && rm -r build \
     && make \
         CMAKE_BUILD_TYPE=Release \
         CMAKE_INSTALL_PREFIX={{prefix}}/nvim \

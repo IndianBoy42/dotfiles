@@ -30,3 +30,5 @@ application/pdf=org.pwmt.zathura-pdf-poppler.desktop;
 text/x-tex=code.desktop;
 application/x-perl=nvim.desktop
 video/mp4=org.videolan.VLC.desktop;
+text/csv=libreoffice-calc.desktop;
+image/png=org.gimp.GIMP.desktop;

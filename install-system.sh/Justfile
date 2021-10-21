@@ -1339,10 +1339,13 @@ howdy:
     sudo apt install howdy
 # TODO: the rest of this
 
-latexindent: (gitclone "https://github.com/cmhughes/latexindent.pl.git" "latexindent.pl")
+cpanm:
+    {{apt-install}} cpanminus 
+
+latexindent: (gitclone "https://github.com/cmhughes/latexindent.pl.git" "latexindent.pl") (cpanm)
     sudo perl {{blddir}}"/latexindent.pl/helper-scripts/latexindent-module-installer.pl"
     test -e {{bindir}}/latexindent;\
-    or ln -s (realpath {{blddir}}"/latexindent.pl") {{bindir}}/latexindent
+    or ln -s (realpath {{blddir}}"/latexindent.pl/latexindent.pl") {{bindir}}/latexindent
 
 logiops: (gitclone "https://github.com/PixlOne/logiops.git" "logiops")
     sudo apt install cmake libevdev-dev libudev-dev libconfig++-dev

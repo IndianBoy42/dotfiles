@@ -27,6 +27,8 @@
 	#
 	default_flags: gih
 
+    quit_on_last_cancel: true,
+
 	###############################################################
 	# Date/Time format
 	# If you want to change the format for date/time, uncomment the
@@ -165,7 +167,8 @@
 			invocation: edit-new-win
 			key: ctrl-shift-e
 			shortcut: en
-			execution: "alacritty -e $EDITOR +{line} {file}"
+			/* execution: "alacritty -e fish - c \"$EDITOR +{line} {file}\"" */
+			execution: "$GUI_EDITOR +{line} {file}"
 			leave_broot: false
 		}
 		{

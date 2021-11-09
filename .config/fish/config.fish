@@ -234,6 +234,7 @@ abbr echov 'set --show'
 
 # set -gx EDITOR nvim #kak
 set -gx EDITOR ~/.local/bin/nvim-wrapper
+set -gx GUI_EDITOR (which neovide)
 set -gx VISUAL $EDITOR
 #set -gx PAGER nvim
 if test -n "$NVIM_LISTEN_ADDRESS"

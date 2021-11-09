@@ -6,4 +6,5 @@ ninja
 niv
 nix
 perf-tools
+nixfmt
 ]

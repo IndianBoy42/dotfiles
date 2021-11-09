@@ -368,6 +368,18 @@ ultimate-plumber: (bingh "up" "akavel/up" "up")
 wezterm: (bingh "wezterm" "wez/wezterm" "*.AppImage")
     sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which wezterm) 90
 
+vale-linter: (targh "vale" "errata-ai/vale" "*Linux_64-bit.tar.gz") (ins-bin "vale" "/tmp")
+
+cppcheck: (gitclone "git://github.com/danmar/cppcheck" "cppcheck") 
+    cmake -DCMAKE_INSTALL_PREFIX="{{prefix}}/cppcheck/" \
+        -DCMAKE_BUILD_TYPE={{CMAKE_BUILD_TYPE}} \
+        -DUSE_MATCHCOMPILER=ON -DHAVE_RULES=ON \
+        -S {{blddir}}/cppcheck -B {{blddir}}/cppcheck/build
+    cmake --build {{blddir}}/cppcheck/build
+    cmake --install {{blddir}}/cppcheck/build
+    {{justrun}} link-pack "cppcheck"
+    
+
 # kitty terminal -- pretty graphics in terminal
 kitty: (mkpackdir "kitty.app")
     curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest={{prefix}}
@@ -943,6 +955,11 @@ pydev: pipx pipenv poetry
 ipykernel python='python':
     {{python}} -m pip install ipykernel
     {{python}} -m ipykernel install --user
+jupyter_ascending python='python':
+    {{python}} -m pip install jupyter_ascending 
+    jupyter nbextension    install jupyter_ascending --sys-prefix --py 
+    jupyter nbextension     enable jupyter_ascending --sys-prefix --py
+    jupyter serverextension enable jupyter_ascending --sys-prefix --py
 
 # 'Essential' python packages
 py-essentials:
@@ -1159,6 +1176,9 @@ nvim-static: (gitclone "git://github.com/neovim/neovim.git" "neovim")
         CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
         install
 
+vcpkg: (gitclone "git://github.com/microsoft/vcpkg.git" "vcpkg")
+    ~/git-builds/vcpkg/bootstrap-vcpkg.sh
+
 # Pretty GUI for neovim written in rust
 neovide: (gitclone "git://github.com/Kethku/neovide" "neovide")
     #!/usr/bin/env fish
@@ -1170,9 +1190,6 @@ neovide: (gitclone "git://github.com/Kethku/neovide" "neovide")
     end
     cd {{blddir}}/neovide
     CARGO_BUILD_TARGET={{gnu-target}} {{cargo-install}} --path .
-
-vcpkg: (gitclone "git://github.com/microsoft/vcpkg.git" "vcpkg")
-    ./bootstrap-vcpkg.sh
 
 nvui: (gitclone "git://github.com/rohit-px2/nvui.git" "nvui")
     #!/usr/bin/env fish
@@ -1359,3 +1376,9 @@ logiops: (gitclone "https://github.com/PixlOne/logiops.git" "logiops")
 
 prettierd: 
     npm install -g @fsouza/prettierd
+
+# pipx install yt-dlp
+youtube-dl:
+    sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o {{bindir}}/yt-dlp
+    sudo chmod a+rx {{bindir}}/yt-dlp
+

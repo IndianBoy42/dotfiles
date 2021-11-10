@@ -6,6 +6,11 @@ justrun := "just -d " + wd + " -f " + justfile()
 lets:
     cd ~/.letsfiles/ && $EDITOR
 
+@config:
+    #!/usr/bin/env fish
+    set chosen (yadm tracked ~ | fzf --preview='bat {}')
+    test -n chosen && nvim $chosen
+
 fish:
     cd $FISH_CONFIG_DIR && $EDITOR $FISH_CONFIG_PATH
     source $FISH_CONFIG_PATH
@@ -22,14 +27,17 @@ install:
 nix:
     cd ~/.letsfiles/ && $EDITOR nix.just
 	
-kmonad:
-    cd ~/.config/kmonad && $EDITOR amedhi.kbd
-	
 qmk:
     cd ~/qmk_firmware/ && $EDITOR indianboy42/keymap_common.h
 
-@config:
-    #!/usr/bin/env fish
-    set chosen (yadm tracked ~ | fzf --preview='bat {}')
-    test -n chosen && nvim $chosen
+kitty:
+    cd ~/.config/ && $EDITOR kitty/kitty.conf
 
+alacritty:
+    cd ~/.config/ && $EDITOR alacritty/alacritty.yml
+
+kmonad:
+    cd ~/.config/ && $EDITOR kmonad/amedhi.kbd
+
+broot:
+    cd ~/.config/ && $EDITOR broot/conf.hjson

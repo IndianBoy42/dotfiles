@@ -7,7 +7,7 @@ if type -q zoxide
 end
 
 if type -q _kn
-	_kn init fish | source
+	_kn init --shell fish | source
 end
 
 if type -q direnv

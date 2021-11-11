@@ -48,7 +48,7 @@
 (defalias 
 	nav (layer-toggle capslockmods)
 	tnv (tap-hold 200 tab (layer-toggle capslockmods))
-	syms (tap-hold-next-release 150 spc (layer-toggle symlayer))
+	syms (tap-hold-next-release 200 spc (layer-toggle symlayer))
     
     csc (tap-hold 200 esc lctl)
 

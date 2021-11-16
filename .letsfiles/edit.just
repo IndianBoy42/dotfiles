@@ -6,6 +6,9 @@ justrun := "just -d " + wd + " -f " + justfile()
 lets:
     cd ~/.letsfiles/ && $EDITOR
 
+editor:
+    echo $EDITOR
+
 @config:
     #!/usr/bin/env fish
     set chosen (yadm tracked ~ | fzf --preview='bat {}')

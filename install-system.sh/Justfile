@@ -605,6 +605,11 @@ gcm: (debgh "gcmcore" "microsoft/Git-Credential-Manager-Core" "*amd64*.deb")
     git-credential-manager-core configure
 # git config --global credential.credentialStore secretservice # requires GUI (ok?)
 
+git-libsecret: (mkblddir "libsecret")
+    cp -r /usr/share/doc/git/contrib/credential/libsecret/* {{blddir}}/libsecret/
+    cd {{blddir}}/libsecret && make
+    git config --global credential.helper {{blddir}}/libsecret/git-credential-libsecret
+
 # Quantum Mechanical Keyboard firmware
 qmk: (gitcloneto "https://github.com/IndianBoy42/qmk_firmware.git" "$HOME/qmk_firmware")
     #!/usr/bin/env fish

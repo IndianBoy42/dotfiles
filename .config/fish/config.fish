@@ -28,8 +28,8 @@ add_to_path /usr/lib/pkgconfig PKG_CONFIG_PATH
 add_to_path "$HOME/.local/lib" LD_LIBRARY_PATH
 add_to_path "$HOME/.local/libexec" LD_LIBRARY_PATH
 fish_add_path ~/bin
-fish_add_path ~/.cargo/bin
 fish_add_path ~/.local/bin
+fish_add_path ~/.cargo/bin
 set -gx LUA_PATH "$HOME/.local/packages/luarocks/share/lua/5.4/?.lua;$HOME/.local/packages/luarocks/lib/lua/5.4/?.lua;;"
 # fish_add_path ~/anaconda3/bin
 
@@ -357,6 +357,12 @@ abbr tarz 'tar --zstd'
 
 abbr syctl 'systemctl --user'
 abbr ssyctl 'sudo systemctl'
+
+if test "$TERM" = alacritty
+    abbr itty alacritty &>/dev/null &
+else if test "$TERM" = xterm-kitty
+    abbr itty kitty &>/dev/null &
+end
 
 ##################################
 # Run other configs

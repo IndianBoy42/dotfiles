@@ -789,8 +789,12 @@ ripgrep_all: ripgrep (gitclone "git://github.com/phiresky/ripgrep-all.git" "ripg
 # gitui: cargo-install (gitclone "git://github.com/IndianBoy42/gitui.git" "gitui")
 # Easy to use TUI for git
 gitui: cargo-install (gitclone "git://github.com/extrawurst/gitui.git" "gitui")
+    cd {{blddir}}/gitui && git merge upstream/master && git push
     {{cargo-install}} --path {{blddir}}/gitui
-    cp {{blddir}}/gitui/vim_style_key_config.ron ~/.config/gitui/key_config.ron
+    cp {{blddir}}/gitui/vim_style_key_config.ron ~/.config/gitui/key_bindings.ron
+
+lazygit: (gitclone "https://github.com/jesseduffield/lazygit.git" "lazygit")
+    cd {{blddir}}/lazygit && go install
 
 # Minimal serial terminal/monitor
 serial-monitor: cargo-install (gitclone "git://github.com/IndianBoy42/serial-monitor.git" "serial-monitor")
@@ -953,9 +957,10 @@ pydev: pipx pipenv poetry
     {{justrun}} pipx-install black 
     {{justrun}} pipx-install mypy 
 
-ipykernel python='python':
+ipykernel name='python' python='python':
     {{python}} -m pip install ipykernel
-    {{python}} -m ipykernel install --user
+    {{python}} -m ipykernel install --user --display-name '{{name}}' --name '{{name}}'
+
 jupyter_ascending python='python':
     {{python}} -m pip install jupyter_ascending 
     jupyter nbextension    install jupyter_ascending --sys-prefix --py 
@@ -965,7 +970,7 @@ jupyter_ascending python='python':
 # 'Essential' python packages
 py-essentials:
     pip3 install --user click argcomplete rich ptpython ipython bpython
-    conda install jupyter
+    pipx install jupyter --include-deps
 
 # Isolated pip installs for applications
 pipx:
@@ -1368,8 +1373,8 @@ latexindent: (gitclone "https://github.com/cmhughes/latexindent.pl.git" "latexin
 logiops: (gitclone "https://github.com/PixlOne/logiops.git" "logiops")
     sudo apt install cmake libevdev-dev libudev-dev libconfig++-dev
     cmake -S {{blddir}}/logiops -B {{blddir}}/logiops/build \
-    -DCMAKE_INSTALL_PREFIX="{{prefix}}/logiops" \
-    -DCMAKE_BUILD_TYPE={{CMAKE_BUILD_TYPE}}
+        -DCMAKE_INSTALL_PREFIX="{{prefix}}/logiops" \
+        -DCMAKE_BUILD_TYPE={{CMAKE_BUILD_TYPE}}
     cmake --build {{blddir}}/logiops/build
     sudo cmake --install {{blddir}}/logiops/build
     sudo systemctl enable --now logid
@@ -1405,3 +1410,14 @@ pipewire:
     systemctl --user --now enable pipewire pipewire-pulse
     # Enable Pipewire media session
     systemctl --user --now enable pipewire-media-session.service
+
+conan: 
+    pipx install conan
+
+gccdiag: (gitclone "https://gitlab.com/andrejr/gccdiag.git" "gccdiag")
+    cmake -S {{blddir}}/gccdiag -B {{blddir}}/gccdiag/build \
+        -DCMAKE_INSTALL_PREFIX="{{prefix}}/gccdiag" \
+        -DCMAKE_BUILD_TYPE={{CMAKE_BUILD_TYPE}}
+    cmake --build {{blddir}}/gccdiag/build
+    cmake --install {{blddir}}/gccdiag/build
+    {{justrun}} link-pack "gccdiag"

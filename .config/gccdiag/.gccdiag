@@ -1,0 +1,10 @@
+{
+    "additional_args": [
+        "-Wall",
+        "-Wextra",
+        "-pedantic"
+    ],
+    "args_to_ignore": [
+        "-fdiagnostics-color"
+    ]
+}

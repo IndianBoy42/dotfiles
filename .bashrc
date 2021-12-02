@@ -122,3 +122,8 @@ fi
 
 EDITOR='nvim-wrapper'
 [[ -s "/home/amedhi/.gvm/scripts/gvm" ]] && source "/home/amedhi/.gvm/scripts/gvm"
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+ eval "$(pyenv init --path)"
+fi

@@ -1,3 +1,4 @@
 function tldr
-command tldr --list --color always | fzf --queryy "$argv" --preview="tldr --color always {}"
+    set name (command tldr --list --color always | fzf --query "$argv" --preview="command tldr --color always {}")
+    and command tldr $name
 end

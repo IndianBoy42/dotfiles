@@ -6,4 +6,5 @@
 	"always_show_command_status": false,
 	"auto_diff_style_min_chars": 140,
 	"image_diff_style": "side-by-side",
+	"theme": "Merge.sublime-theme",
 }

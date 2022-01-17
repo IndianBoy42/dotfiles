@@ -44,3 +44,6 @@ kmonad:
 
 broot:
     cd ~/.config/ && $EDITOR broot/conf.hjson
+
+cargo:
+    cd ~/.cargo/ && $EDITOR config.toml

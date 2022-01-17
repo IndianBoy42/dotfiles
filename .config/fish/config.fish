@@ -364,6 +364,17 @@ else if test "$TERM" = xterm-kitty
     abbr itty kitty &>/dev/null &
 end
 
+abbr . source
+abbr :q exit
+abbr :qa exit
+abbr :wq exit
+abbr ZZ exit
+
+abbr letsid lets install --dry-run
+abbr letsi lets install
+abbr flathub flatpak install --or-update flathub
+abbr remake 'make clean && make'
+
 ##################################
 # Run other configs
 ##################################

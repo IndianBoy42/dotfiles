@@ -6,5 +6,6 @@
     ],
     "args_to_ignore": [
         "-fdiagnostics-color"
-    ]
+    ],
+    "subdirectory": "build"
 }

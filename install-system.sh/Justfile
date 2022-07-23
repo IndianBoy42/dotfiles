@@ -1434,3 +1434,12 @@ scala:
     curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz | gzip -d > /tmp/coursier-setup
     chmod +x /tmp/coursier-setup
     /tmp/coursier-setup setup
+
+x2x: (gitclone "https://github.com/dottedmag/x2x.git" "x2x")
+    #!/usr/bin/env fish
+    cd {{blddir}}/x2x
+    git checkout debian
+    dpkg-checkbuilddeps
+    fakeroot debian/rules binary
+    sudo dkpg --install ../
+

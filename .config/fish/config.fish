@@ -30,6 +30,7 @@ add_to_path "$HOME/.local/libexec" LD_LIBRARY_PATH
 fish_add_path ~/bin
 fish_add_path ~/.local/bin
 fish_add_path ~/.cargo/bin
+fish_add_path ~/.local/share/coursier/bin
 set -gx LUA_PATH "$HOME/.local/packages/luarocks/share/lua/5.4/?.lua;$HOME/.local/packages/luarocks/lib/lua/5.4/?.lua;;"
 # fish_add_path ~/anaconda3/bin
 
@@ -96,8 +97,8 @@ abbr pscpu10 'ps auxf | sort -nr -k 3 | head -10'
 set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/config
 abbr rgrep 'rg --no-config'
 abbr rgl 'rg -C0'
-abbr rga 'rg -uu'
-abbr fda 'fd -uu'
+abbr rge 'rg -uu'
+abbr fde 'fd -uu'
 
 # pueue is really cool
 abbr pu pueue

@@ -785,6 +785,12 @@ kitty_mod ctrl+shift
 map kitty_mod+/      launch --allow-remote-control kitty +kitten kitty_search/search.py @active-kitty-window-id
 map kitty_mod+space kitten kitty_grab/grab.py
 
+# For neovim
+map  ctrl+enter      send_text normal,application \x1b[13;5u
+map  shift+enter     send_text normal,application \x1b[13;2u
+map  ctrl+tab        send_text normal,application \x1b[9;5u
+map  ctrl+shift+tab  send_text normal,application \x1b[9;6u
+
 #: The value of kitty_mod is used as the modifier for all default
 #: shortcuts, you can change it in your kitty.conf to change the
 #: modifiers for all the default shortcuts.

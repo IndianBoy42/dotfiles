@@ -1,4 +1,3 @@
-# Defined in /tmp/fish.NWA88B/v.fish @ line 2
 function v
     test (count $argv) -lt 1 && lsd -A && return
     for arg in $argv
@@ -18,6 +17,10 @@ function v
         if test -d $arg
             echo "DIR LS: "
             lsd -A $arg
+        end
+        if test -L $arg
+            echo "LINK: "
+            lsd -al $arg
         end
     end
 end

@@ -1,7 +1,6 @@
 [credential]
 	helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
-	helper = 
-	helper = /usr/local/bin/git-credential-manager-core
+	; helper = /usr/local/bin/git-credential-manager-core
 	credentialStore = secretservice
 [user]
 	name = Anshuman

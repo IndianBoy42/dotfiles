@@ -28,3 +28,7 @@ wd := invocation_directory()
 
 @scratch:
     cd ~/Documents/scratchpad/ && $EDITOR "scratch_"(date +"%d-%m-%y_%s").md -c "MarkdownPreview"
+
+btrestart:
+    sudo rmmod btusb
+    sudo modprobe btusb

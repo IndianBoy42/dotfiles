@@ -85,7 +85,10 @@
 	verbose = true
 
 [credential "https://github.com"]
-	helper =
-	helper = /usr/bin/gh auth git-credential
+	helper = 
+	helper = !/home/amedhi/.local/packages/gh/bin/gh auth git-credential
 [github]
 	user = IndianBoy42
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/home/amedhi/.local/packages/gh/bin/gh auth git-credential

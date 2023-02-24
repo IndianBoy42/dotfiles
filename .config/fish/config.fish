@@ -172,16 +172,22 @@ type -q _kn
 and abbr -g cd kn
 
 # apt abbreviations
-abbr apti "sudo apt install"
-abbr apty "sudo apt install -y"
-abbr apts "apt search"
-abbr aptr "sudo apt remove"
-abbr aptu "sudo apt update"
-abbr aptug "sudo apt upgrade"
-abbr aptou "sudo apt update && sudo apt --only-upgrade install "
-abbr aptar "sudo apt autoremove"
-abbr aptli "apt list --installed"
-abbr aptsi "apt list --installed | fzf"
+if type -q nala
+    abbr apt nala
+    set apt_prefix nala
+else
+    set apt_prefix apt
+end
+abbr apti "sudo $apt_prefix install"
+abbr apty "sudo $apt_prefix install -y"
+abbr apts "$apt_prefix search"
+abbr aptr "sudo $apt_prefix remove"
+abbr aptu "sudo $apt_prefix update"
+abbr aptug "sudo $apt_prefix upgrade"
+abbr aptou "sudo $apt_prefix update && sudo $apt_prefix --only-upgrade install "
+abbr aptar "sudo $apt_prefix autoremove"
+abbr aptli "$apt_prefix list --installed"
+abbr aptsi "$apt_prefix list --installed | fzf"
 
 # mkdir helpers
 # make all directories and create the file
@@ -297,7 +303,7 @@ if type -q nvm
 end
 
 # Reindex (indexa) if is-interactive
-if test -x ix
+if type -q ix
     status --is-interactive; and ix -u &>/dev/null &
 end
 set -g fish_key_bindings fish_vi_key_bindings

@@ -98,7 +98,8 @@ flatpak-install-local := flatpak-exe + " install --or-update --sideload-repo " +
 flatpak-install-remote := flatpak-exe + " install --or-update flathub"
 flatpak-install := flatpak-install-local
 
-apt-install := "sudo apt-get install"
+apt := "nala" # apt
+apt-install := "sudo " + apt + " install"
 
 stow := if to-root != "0" { "sudo stow" } else { "stow" }
 
@@ -547,7 +548,7 @@ clifm: (debgh "clifm" "leo-arch/clifm" "*deb")
 # mpv video player
 mpv:
     sudo add-apt-repository -y ppa:mc3man/mpv-tests
-    sudo apt-get update
+    sudo {{apt}} update
     {{apt-install}} mpv
 
 # mps-youtube -- cli youtube client
@@ -691,8 +692,8 @@ nerdfont name:
 # For patching nerdfonts yourself
 fontforge: 
     sudo add-apt-repository ppa:fontforge/fontforge
-    sudo apt-get update
-    sudo apt-get install fontforge
+    sudo {{apt}} update
+    {{apt-install}} fontforge
 
 # Nerdfont patching utility
 font-patcher: fontforge (mkpackdir "nerd-font-patcher")
@@ -1069,7 +1070,7 @@ docker:
     sudo rm /usr/share/keyrings/docker-archive-keyring.gpg
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
     sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $distro stable"
-    apt update
+    sudo {{apt}} update
     {{apt-install}} docker-ce docker-ce-cli containerd.io
     getent group docker || sudo groupadd docker
     sudo usermod -aG docker $USER
@@ -1077,7 +1078,7 @@ docker:
 
 # Update apt sources
 @apt: 
-    sudo apt-get update > /tmp/aptupdate.log || echo "Not connected to the internet, hope you have a cache"
+    sudo {{apt}} update > /tmp/aptupdate.log || echo "Not connected to the internet, hope you have a cache"
 
 # Some apt sources
 apt-srcs:
@@ -1114,7 +1115,7 @@ git: git-fc
 # Install git from ppa
 git-ppa:
     sudo add-apt-repository -y ppa:git-core/ppa
-    apt update
+    sudo {{apt}} update
     {{apt-install}} git
 
 # Install git (felipec's fork)
@@ -1133,14 +1134,14 @@ git-fc: (gitclone "https://github.com/felipec/git.git" "git-fc")
 sublime-merge: 
     wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add - 
     echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
-    apt update
+    sudo {{apt}} update
     {{apt-install}} sublime-merge
 
 # Sublime edit
 sublime-text: 
     wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add - 
     echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
-    apt update
+    sudo {{apt}} update
     {{apt-install}} sublime-text
 
 # TODO: install in an isolated virutal environment? (use pipx)
@@ -1153,7 +1154,7 @@ lunarvim home='$HOME' nvim='nvim':
 # Install neovim from unstable ppa 
 nvim-apt:
     sudo add-apt-repository -y ppa:neovim-ppa/unstable
-    apt update
+    sudo {{apt}} update
     {{apt-install}} neovim
     # {{justrun}} lunarvim
 
@@ -1164,9 +1165,12 @@ nvim-img: (cpbingh "nvim.appimage" "neovim/neovim" "*.appimage" "nightly") (wrap
 
 # Compile neovim from source
 nvim: (gitclone "https://github.com/neovim/neovim.git" "neovim")
-    sudo apt-get install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl
+    {{apt-install}} ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl
+    # cd {{blddir}}/neovim \
+    # && rm -r build
+    # cd {{blddir}}/neovim \
+    # && rm -r .deps 
     cd {{blddir}}/neovim \
-    && rm -r build \
     && make \
         CMAKE_BUILD_TYPE=Release \
         CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
@@ -1186,7 +1190,7 @@ vcpkg: (gitclone "https://github.com/microsoft/vcpkg.git" "vcpkg")
     ~/git-builds/vcpkg/bootstrap-vcpkg.sh
 
 # Pretty GUI for neovim written in rust
-neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
+neovide: (gitclone "https://github.com/neovide/neovide" "neovide")
     #!/usr/bin/env fish
     if not type -q neovide
         {{apt-install}} curl \
@@ -1200,7 +1204,7 @@ neovide: (gitclone "https://github.com/Kethku/neovide" "neovide")
 nvui: (gitclone "https://github.com/rohit-px2/nvui.git" "nvui")
     #!/usr/bin/env fish
     which nvui 
-    or sudo apt-get install gperf autoconf build-essential libtool libgl1-mesa-dev libxi-dev libx11-dev libxext-dev libxkbcommon-x11-dev libglu1-mesa-dev libx11-xcb-dev '^libxcb.*-dev' libxrender-dev ninja-build curl zip unzip tar autopoint python
+    or {{apt-install}} gperf autoconf build-essential libtool libgl1-mesa-dev libxi-dev libx11-dev libxext-dev libxkbcommon-x11-dev libglu1-mesa-dev libx11-xcb-dev '^libxcb.*-dev' libxrender-dev ninja-build curl zip unzip tar autopoint python
     cmake -S {{blddir}}/nvui \
         -B {{blddir}}/nvui/build \
         -DCMAKE_TOOLCHAIN_FILE={{blddir}}/nvui/vcpkg/scripts/buildsystems/vcpkg.cmake \
@@ -1221,7 +1225,7 @@ goneovim: (targh "goneovim" "akiyosi/goneovim" "*linux.tar.bz2") (mkpackdir "gon
 
 # Selection first modal editor
 kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune") (mkpackdir "kakoune")
-    sudo apt install libncursesw5-dev pkg-config
+    {{apt-install}} libncursesw5-dev pkg-config
     cd {{blddir}}/kakoune/src\
     && make CXX={{CXX}} \
     && PREFIX={{prefix}}/kakoune make install
@@ -1359,8 +1363,8 @@ emscripten: (gitclone "https://github.com/emscripten-core/emsdk.git" "emsdk")
 
 howdy:
     sudo add-apt-repository ppa:boltgolt/howdy
-    sudo apt update
-    sudo apt install howdy
+    sudo {{apt}} update
+    {{apt-install}} howdy
 # TODO: the rest of this
 
 cpanm:
@@ -1372,7 +1376,7 @@ latexindent: (gitclone "https://github.com/cmhughes/latexindent.pl.git" "latexin
     or ln -s (realpath {{blddir}}"/latexindent.pl/latexindent.pl") {{bindir}}/latexindent
 
 logiops: (gitclone "https://github.com/PixlOne/logiops.git" "logiops")
-    sudo apt install cmake libevdev-dev libudev-dev libconfig++-dev
+    {{apt-install}} cmake libevdev-dev libudev-dev libconfig++-dev
     cmake -S {{blddir}}/logiops -B {{blddir}}/logiops/build \
         -DCMAKE_INSTALL_PREFIX="{{prefix}}/logiops" \
         -DCMAKE_BUILD_TYPE={{CMAKE_BUILD_TYPE}}
@@ -1389,29 +1393,29 @@ youtube-dl:
     sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o {{bindir}}/yt-dlp
     sudo chmod a+rx {{bindir}}/yt-dlp
 
-pipewire:
-    #!/usr/bin/env bash
-    # Add ppa for latest build
-    sudo add-apt-repository ppa:pipewire-debian/pipewire-upstream
-    # Update
-    sudo apt update
-    # Install components
-    sudo apt install gstreamer1.0-pipewire pipewire-media-session libspa-0.2-bluetooth libspa-0.2-jack pipewire pipewire-audio-client-libraries
-    # If you get unmet dependencies, you can run:
-    # sudo apt --fix-broken install
-    # Then re-run
-    sudo apt install gstreamer1.0-pipewire pipewire-media-session libspa-0.2-bluetooth libspa-0.2-jack pipewire pipewire-audio-client-libraries
-    # Reload new services
-    systemctl --user daemon-reload
-    # Disable PulseAudio service
-    systemctl --user --now disable pulseaudio.service pulseaudio.socket
-    # If you update from previous version of PopOS
-    systemctl --user mask pulseaudio
-    # Enable Pipewire services
-    systemctl --user --now enable pipewire pipewire-pulse
-    # Enable Pipewire media session
-    systemctl --user --now enable pipewire-media-session.service
-
+# pipewire:
+#     #!/usr/bin/env bash
+#     # Add ppa for latest build
+#     sudo add-apt-repository ppa:pipewire-debian/pipewire-upstream
+#     # Update
+#     sudo {{apt}} update
+#     # Install components
+#     {{apt-install}}0-pipewire pipewire-media-session libspa-0.2-bluetooth libspa-0.2-jack pipewire pipewire-audio-client-libraries
+#     # If you get unmet dependencies, you can run:
+#     # sudo apt --fix-broken install
+#     # Then re-run
+#     {{apt-install}}0-pipewire pipewire-media-session libspa-0.2-bluetooth libspa-0.2-jack pipewire pipewire-audio-client-libraries
+#     # Reload new services
+#     systemctl --user daemon-reload
+#     # Disable PulseAudio service
+#     systemctl --user --now disable pulseaudio.service pulseaudio.socket
+#     # If you update from previous version of PopOS
+#     systemctl --user mask pulseaudio
+#     # Enable Pipewire services
+#     systemctl --user --now enable pipewire pipewire-pulse
+#     # Enable Pipewire media session
+#     systemctl --user --now enable pipewire-media-session.service
+#
 conan: 
     pipx install conan
 
@@ -1424,7 +1428,7 @@ gccdiag: (gitclone "https://gitlab.com/andrejr/gccdiag.git" "gccdiag")
     {{justrun}} link-pack "gccdiag"
 
 scrcpy: (gitclone "https://github.com/Genymobile/scrcpy.git" "scrcpy")
-    sudo apt install ffmpeg libsdl2-2.0-0 adb wget \
+    {{apt-install}} ffmpeg libsdl2-2.0-0 adb wget \
          gcc git pkg-config meson ninja-build libsdl2-dev \
          libavcodec-dev libavdevice-dev libavformat-dev libavutil-dev \
          libusb-1.0-0 libusb-1.0-0-dev
@@ -1434,3 +1438,11 @@ scala:
     curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz | gzip -d > /tmp/coursier-setup
     chmod +x /tmp/coursier-setup
     /tmp/coursier-setup setup
+
+llvm: 
+    #!/usr/bin/env bash
+    sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+    set name clang; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-15 100
+    set name clang++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-15 100
+    set name clangd; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-15 100
+    set name lld++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-15 100

@@ -790,6 +790,14 @@ map  ctrl+enter      send_text normal,application \x1b[13;5u
 map  shift+enter     send_text normal,application \x1b[13;2u
 map  ctrl+tab        send_text normal,application \x1b[9;5u
 map  ctrl+shift+tab  send_text normal,application \x1b[9;6u
+map  ctrl+i          send_text all                \x1b[105;5u
+map  ctrl+.          send_text all                \x1b[46;5u
+map  ctrl+,          send_text all                \x1b[44;5u
+map  ctrl+;          send_text all                \x1b[59;5u
+map  ctrl+shift+h    send_text all                \x1b[72;6u
+map  ctrl+shift+j    send_text all                \x1b[74;6u
+map  ctrl+shift+k    send_text all                \x1b[75;6u
+map  ctrl+shift+l    send_text all                \x1b[76;6u
 
 #: The value of kitty_mod is used as the modifier for all default
 #: shortcuts, you can change it in your kitty.conf to change the
@@ -1078,3 +1086,7 @@ map kitty_mod+h         show_scrollback
 #: }}}
 
 # }}}
+
+modify_font underline_position +3
+modify_font underline_thickness 150%
+modify_font strikethrough_position 2px

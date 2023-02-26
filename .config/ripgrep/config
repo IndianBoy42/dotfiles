@@ -7,6 +7,6 @@
 # --max-columns-preview
 
 # --pretty -- Pretty output even when piping
---color=always
+# --color=always
 --heading
 --line-number

@@ -1,7 +1,7 @@
 #!/bin/sh
 
-if [ -n "$NVIM_LISTEN_ADDRESS" ] ; then
-  /usr/bin/env nvr --remote-tab-wait "$@"
-else
-  exec /usr/bin/env nvim "$@"
-fi
+/usr/bin/env nvr --remote-wait-silent "$@"
+# if [ -n "$NVIM_LISTEN_ADDRESS" ] ; then
+# else
+#   exec /usr/bin/env nvim "$@"
+# fi

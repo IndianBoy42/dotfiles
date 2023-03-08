@@ -87,6 +87,7 @@ set -gx VIRTUAL_ENV_DIR .venv
 abbr del 'rm -vi'
 abbr lc 'wc -l'
 
+abbr ps procs
 abbr pst procs --tree
 abbr psmem 'ps auxf | sort -nr -k 4 | less'
 abbr pscpu 'ps auxf | sort -nr -k 3 | less'
@@ -240,36 +241,36 @@ abbr echov 'set --show'
 # end
 
 # set -gx EDITOR nvim #kak
-set -gx EDITOR ~/.local/bin/nvim-wrapper
+set -gx EDITOR nvim
 set -gx GUI_EDITOR (which neovide)
 set -gx VISUAL $EDITOR
 #set -gx PAGER nvim
-if test -n "$NVIM_LISTEN_ADDRESS"
-    and type -q nvr
-    alias nvim "nvr --remote-tab-wait"
-    abbr -g vim nvr
-    abbr -g vi nvr
-    abbr -g nvim nvr
-else if type -q nvim
-    if type -q nvr
-        # If a nvim server for this dir/repo has already been launched then  
-        function nvim --wraps=vim --description Wrapper\ around\ nvim-remote\ to\ use\ servername\ according\ to\ the\ dir/repo\ you\'re\ in
-            set addr "/tmp/nvimsockets"(realpath .)"/socketfile"
-            test -n "$CURR_GIT_ROOT"; and set addr "/tmp/nvimsockets$CURR_GIT_ROOT/socketfile"
-            # test -n "$argv[1]"; and set addr "$argv[1]" # TODO argparse servername/listen for the address
-            # echo $addr
-            mkdir -p (dirname $addr)
-
-            command nvr -s --nostart --servername "$addr" $argv
-            or command nvim --listen "$addr" $argv
-        end
-    end
+set -gx NVIM_APPNAME lazynvim
+if type -q nvim
+    # if type -q nvr
+    #     if test -z "$nvr"
+    #         if test -n "$NVIM_LISTEN_ADDRESS"
+    #             and type -q nvr
+    #             set -g nvr "nvr --remote"
+    #             abbr -g nvim $nvr
+    #             abbr -g vim $nvr
+    #             abbr -g vi $nvr
+    #         else
+    #             set -gx NVIM_LISTEN_ADDRESS /tmp/nvimsocket.$fish_pid
+    #             set -g nvr "nvr --remote-wait-silent"
+    #             abbr -g nvim $nvr
+    #             abbr -g vim $nvr
+    #             abbr -g vi $nvr
+    #         end
+    #     end
+    #     # Launch without any listening
+    #     abbr -g neovim command nvim
+    # else
+    abbr -e nvim
     abbr -g vim nvim
+    abbr -g nvi nvim
     abbr -g vi nvim
-    # Launch without any listening
-    abbr -g vimn command nvim
-    abbr -g nvimn command nvim
-    abbr -g vin command nvim
+    # end
 end
 set -gx NeovideMultiGrid 1
 set -gx NEOVIDE_FRAMELESS 1

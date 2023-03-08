@@ -11,7 +11,6 @@ bison
 binutils
 zathura
 x11-xserver-utils
-python
 python3-pip
 python3-venv
 sshpass
@@ -35,3 +34,5 @@ gnome-shell-extensions
 exfat-fuse
 nfs-common
 gnome-tweaks
+sqlite3
+libsqlite3-dev

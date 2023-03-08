@@ -1145,23 +1145,21 @@ sublime-text:
     {{apt-install}} sublime-text
 
 # TODO: install in an isolated virutal environment? (use pipx)
-# Install my LunarVim based config
-lunarvim home='$HOME' nvim='nvim':
-    {{justrun}} gitcloneto "https://github.com/IndianBoy42/LunarVim.git" "{{home}}/.config/nvim" 
-    # test -d {{home}}/.config/nvim || git clone {{only-needed-blobs}} https://github.com/IndianBoy42/LunarVim.git {{home}}/.config/nvim
-    cd {{home}}/.config/nvim && just nvim={{nvim}} install
+# Install my neovim config
+nvim-config home='$HOME' nvim='nvim':
+    {{justrun}} gitcloneto "https://github.com/IndianBoy42/dot.nvim.git" "{{home}}/.config/$NVIM_APPNAME" 
+    cd {{home}}/.config/$NVIM_APPNAME && just nvim={{nvim}} install
 
 # Install neovim from unstable ppa 
 nvim-apt:
     sudo add-apt-repository -y ppa:neovim-ppa/unstable
     sudo {{apt}} update
     {{apt-install}} neovim
-    # {{justrun}} lunarvim
 
 # Install neovim AppImage from github releases
 nvim-img: (cpbingh "nvim.appimage" "neovim/neovim" "*.appimage" "nightly") (wrap-bin "nvim.appimage" "bin/nvim.appimage" "nvim.appimage") 
     mkdir -p {{prefix}}/nvim.appimage/bin/nvim.appimage.home
-    # {{justrun}} lunarvim '{{prefix}}/nvim.appimage/bin/nvim.appimage.home' 'nvim.appimage'
+    # {{justrun}} nvim-config '{{prefix}}/nvim.appimage/bin/nvim.appimage.home' 'nvim.appimage'
 
 # Compile neovim from source
 nvim: (gitclone "https://github.com/neovim/neovim.git" "neovim")
@@ -1176,7 +1174,6 @@ nvim: (gitclone "https://github.com/neovim/neovim.git" "neovim")
         CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
         install
     {{justrun}} link-pack nvim
-    # {{justrun}} lunarvim
 
 # Compile neovim static
 nvim-static: (gitclone "https://github.com/neovim/neovim.git" "neovim")

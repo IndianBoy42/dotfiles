@@ -48,7 +48,8 @@ let-env ENV_CONVERSIONS = {
 #
 # By default, <nushell-config-dir>/scripts is added
 let-env NU_LIB_DIRS = [
-    ($nu.config-path | path dirname | path join 'scripts')
+    ($nu.config-path | path dirname | path join 'scripts'),
+    ($nu.config-path | path dirname | path join 'nu_scripts/just')
 ]
 
 # Directories to search for plugin binaries when calling register
@@ -60,3 +61,6 @@ let-env NU_PLUGIN_DIRS = [
 
 # To add entries to PATH (on Windows you might use Path), you can use the following pattern:
 # let-env PATH = ($env.PATH | split row (char esep) | prepend '/some/path')
+
+mkdir ~/.cache/starship
+starship init nu | save -f ~/.cache/starship/init.nu

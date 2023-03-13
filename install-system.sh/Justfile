@@ -1443,3 +1443,11 @@ llvm:
     set name clang++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-15 100
     set name clangd; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-15 100
     set name lld++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-15 100
+
+forgit: 
+    fisher install wfxr/forgit
+    fish_add_path {{blddir}}/forgit/bin
+    
+nushell:
+    cargo install nushell
+    git clone https://github.com/nushell/nu_scripts.git ~/.config/nushell/nu_scripts

@@ -1451,3 +1451,11 @@ forgit:
 nushell:
     cargo install nushell
     git clone https://github.com/nushell/nu_scripts.git ~/.config/nushell/nu_scripts
+
+x2x: (gitclone "https://github.com/dottedmag/x2x.git" "x2x")
+    #!/usr/bin/env fish
+    cd {{blddir}}/x2x
+    git checkout debian
+    dpkg-checkbuilddeps
+    fakeroot debian/rules binary
+    sudo dkpg --install ../

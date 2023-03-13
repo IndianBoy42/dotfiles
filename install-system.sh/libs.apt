@@ -56,3 +56,4 @@ libxxhash-dev
 libelf-dev
 openssl
 libspeechd-dev
+xutils-dev

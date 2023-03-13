@@ -17,7 +17,7 @@ split-debuginfo = "unpacked"
 [profile.release]
 lto = true
 panic = 'abort'
-split-debuginfo = "unpacked"
+# split-debuginfo = "unpacked"
 
 [profile.test]
 opt-level = 1

@@ -305,7 +305,7 @@ scrollback_pager nvim -c "silent write! /tmp/kitty_scrollback_buffer | te cat /t
 #: suffix of "c" on the width/height values to have them interpreted
 #: as number of cells instead of pixels.
 
-# enabled_layouts *
+enabled_layouts tall,splits,stack,*
 
 #: The enabled window layouts. A comma separated list of layout names.
 #: The special value all means all layouts. The first listed layout
@@ -905,7 +905,7 @@ map kitty_mod+h         show_scrollback
 #: open a window with the current working directory.
 
 # map kitty_mod+w close_window
-# map kitty_mod+] next_window
+map kitty_mod+z next_window
 # map kitty_mod+[ previous_window
 # map kitty_mod+f move_window_forward
 # map kitty_mod+b move_window_backward
@@ -925,6 +925,7 @@ map kitty_mod+h         show_scrollback
 
 #: Tab management {{{
 
+map kitty_mod+tab next_tab
 # map kitty_mod+right next_tab
 # map kitty_mod+left  previous_tab
 # map kitty_mod+t     new_tab

@@ -108,7 +108,7 @@ abbr pusts pueue status
 
 # yadm helper abbreviations
 abbr yad yadm
-#abbr yadd 'yadm add'
+abbr yadd 'yadm add'
 #abbr yaddi 'yadm addi'
 abbr yads 'yadm status'
 abbr yadf 'yadm fetch'
@@ -116,6 +116,26 @@ abbr yadf 'yadm fetch'
 abbr yaddconfigs yadm add --update ~/.config/
 abbr yaddinstall yadm add ~/install-system.sh/
 abbr yaddupdate yadm add --update ~
+
+alias yalo 'yadm enter git forgit log'
+alias yadf 'yadm enter git forgit diff'
+alias yadd 'yadm enter git forgit add'
+alias yarh 'yadm enter git forgit reset_head'
+alias yai 'yadm enter git forgit ignore'
+alias yacf 'yadm enter git forgit checkout_file'
+alias yacb 'yadm enter git forgit checkout_branch'
+alias yabd 'yadm enter git forgit branch_delete'
+alias yact 'yadm enter git forgit checkout_tag'
+alias yaco 'yadm enter git forgit checkout_commit'
+alias yarc 'yadm enter git forgit revert_commit'
+alias yaclean 'yadm enter git forgit clean'
+alias yass 'yadm enter git forgit stash_show'
+alias yasp 'yadm enter git forgit stash_push'
+alias yacp 'yadm enter git forgit cherry_pick'
+alias yarb 'yadm enter git forgit rebase'
+alias yabl 'yadm enter git forgit blame'
+alias yafu 'yadm enter git forgit fixup'
+
 
 # ghcup-env
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME
@@ -408,25 +428,6 @@ set -x FORGIT_FZF_DEFAULT_OPTS "
 set -x FORGIT_GI_REPO_LOCAL ""
 set -x FORGIT_GI_REPO_REMOTE "https://github.com/dvcs/gitignore"
 set -x FORGIT_GI_TEMPLATES ""
-
-abbr yalo git forgit log
-abbr yad git forgit diff
-abbr yaa git forgit add
-abbr yarh git forgit reset_head
-abbr yai git forgit ignore
-abbr yacf git forgit checkout_file
-abbr yacb git forgit checkout_branch
-abbr yabd git forgit branch_delete
-abbr yact git forgit checkout_tag
-abbr yaco git forgit checkout_commit
-abbr yarc git forgit revert_commit
-abbr yaclean git forgit clean
-abbr yass git forgit stash_show
-abbr yasp git forgit stash_push
-abbr yacp git forgit cherry_pick
-abbr yarb git forgit rebase
-abbr yabl git forgit blame
-abbr yafu git forgit fixup
 
 ##################################
 # Run other configs

@@ -31,6 +31,7 @@ fish_add_path ~/bin
 fish_add_path ~/.local/bin
 fish_add_path ~/.cargo/bin
 fish_add_path ~/.local/share/coursier/bin
+fish_add_path $FISH_CONFIG_DIR/conf.d/bin/
 set -gx LUA_PATH "$HOME/.local/packages/luarocks/share/lua/5.4/?.lua;$HOME/.local/packages/luarocks/lib/lua/5.4/?.lua;;"
 # fish_add_path ~/anaconda3/bin
 
@@ -270,6 +271,10 @@ if type -q nvim
     abbr -g vim nvim
     abbr -g nvi nvim
     abbr -g vi nvim
+    abbr -g vr command nvr --remote
+    abbr -g vrt command nvr --remote-tab
+    abbr -g vrw command nvr --remote-wait
+    abbr -g vrtw command nvr --remote-tab-wait
     # end
 end
 set -gx NeovideMultiGrid 1
@@ -370,6 +375,9 @@ if test "$TERM" = alacritty
     abbr itty alacritty &>/dev/null &
 else if test "$TERM" = xterm-kitty
     abbr itty kitty &>/dev/null &
+    abbr klayout kitty @ goto-layout
+    abbr knew kitty @ launch
+    abbr kls 'kitty @ ls | jless'
 end
 
 abbr . source
@@ -382,6 +390,43 @@ abbr letsid lets install --dry-run
 abbr letsi lets install
 abbr flathub flatpak install --or-update flathub
 abbr remake 'make clean && make'
+
+set -x FORGIT_FZF_DEFAULT_OPTS "
+
+--ansi
+--height='80%'
+--bind='alt-k:preview-up,alt-p:preview-up'
+--bind='alt-j:preview-down,alt-n:preview-down'
+--bind='ctrl-r:toggle-all'
+--bind='ctrl-s:toggle-sort'
+--bind='?:toggle-preview'
+--bind='alt-w:toggle-preview-wrap'
+--preview-window='right:60%'
++1
+
+"
+set -x FORGIT_GI_REPO_LOCAL ""
+set -x FORGIT_GI_REPO_REMOTE "https://github.com/dvcs/gitignore"
+set -x FORGIT_GI_TEMPLATES ""
+
+abbr yalo git forgit log
+abbr yad git forgit diff
+abbr yaa git forgit add
+abbr yarh git forgit reset_head
+abbr yai git forgit ignore
+abbr yacf git forgit checkout_file
+abbr yacb git forgit checkout_branch
+abbr yabd git forgit branch_delete
+abbr yact git forgit checkout_tag
+abbr yaco git forgit checkout_commit
+abbr yarc git forgit revert_commit
+abbr yaclean git forgit clean
+abbr yass git forgit stash_show
+abbr yasp git forgit stash_push
+abbr yacp git forgit cherry_pick
+abbr yarb git forgit rebase
+abbr yabl git forgit blame
+abbr yafu git forgit fixup
 
 ##################################
 # Run other configs

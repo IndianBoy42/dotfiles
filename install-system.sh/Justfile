@@ -1322,10 +1322,14 @@ mold-stable: (gitclone "https://github.com/rui314/mold.git" "mold" "v0.9.1") (gi
 
 # Build a static executable of the mold linker (fast boi)
 mold: (gitclone "https://github.com/rui314/mold.git" "mold" "main") (mkpackdir "mold")
-    cd {{blddir}}/mold && make \
-        PREFIX={{prefix}}/mold \
-        CC=clang-12 CXX=clang++-12 LTO=1 \
-        LDFLAGS="-fuse-ld=lld-12 -static" install
+    #!/usr/bin/env fish
+    cd {{blddir}}/mold 
+    mkdir build
+    cd build
+    ../install-build-deps.sh
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="{{prefix}}/mold" ..
+    cmake --build . -j $(nproc)
+    sudo cmake --install .
     {{justrun}} link-pack mold
 
 # Use update-alternatives
@@ -1459,3 +1463,23 @@ x2x: (gitclone "https://github.com/dottedmag/x2x.git" "x2x")
     dpkg-checkbuilddeps
     fakeroot debian/rules binary
     sudo dkpg --install ../
+
+bun: 
+    curl -fsSL https://bun.sh/install | bash 
+
+latex-rubber: (gitclone "https://gitlab.com/latex-rubber/rubber.git" "rubber")
+    #!/usr/bin/env fish
+    cd {{blddir}}/rubber 
+    pipx install --spec {{blddir}}/rubber rubber 
+
+janet: (insgh "janet" "janet-lang/janet" "*-linux-x64.tar.gz") 
+
+tracy: (gitclone "https://github.com/wolfpld/tracy" "tracy")
+    {{apt-install}} libfreetype-dev libcapstone-dev libtbb-deb libglfw3-dev
+    cd {{blddir}}/tracy && make -C capture/build/unix release
+    cd {{blddir}}/tracy && make -C csvexport/build/unix release
+    cd {{blddir}}/tracy && make -C import-chrome/build/unix release
+    cd {{blddir}}/tracy && make -C library/unix release
+    cd {{blddir}}/tracy && make -C profiler/build/unix release LEGACY=1
+    cd {{blddir}}/tracy && make -C update/build/unix release
+

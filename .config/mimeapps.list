@@ -1,7 +1,7 @@
 [Default Applications]
-text/html=google-chrome.desktop
-x-scheme-handler/http=google-chrome.desktop
-x-scheme-handler/https=google-chrome.desktop
+text/html=com.google.Chrome.desktop
+x-scheme-handler/http=com.google.Chrome.desktop
+x-scheme-handler/https=com.google.Chrome.desktop
 x-scheme-handler/about=google-chrome.desktop
 x-scheme-handler/unknown=google-chrome.desktop
 application/pdf=org.pwmt.zathura-pdf-poppler.desktop
@@ -130,6 +130,7 @@ video/flv=org.videolan.VLC.desktop
 video/x-flc=org.videolan.VLC.desktop
 video/x-fli=org.videolan.VLC.desktop
 video/x-flv=org.videolan.VLC.desktop
+application/xhtml+xml=com.google.Chrome.desktop
 
 [Added Associations]
 application/octet-stream=code.desktop;org.blender.Blender.desktop;
@@ -254,3 +255,7 @@ video/flv=org.videolan.VLC.desktop;
 video/x-flc=org.videolan.VLC.desktop;
 video/x-fli=org.videolan.VLC.desktop;
 video/x-flv=org.videolan.VLC.desktop;
+x-scheme-handler/http=com.google.Chrome.desktop;
+application/xhtml+xml=com.google.Chrome.desktop;
+text/html=com.google.Chrome.desktop;
+x-scheme-handler/https=com.google.Chrome.desktop;

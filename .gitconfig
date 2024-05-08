@@ -91,3 +91,9 @@
 [credential "https://gist.github.com"]
 	helper = 
 	helper = !/home/amedhi/.local/packages/gh/bin/gh auth git-credential
+[sendemail]
+    smtpPass = yoolujiacxaumygt
+    smtpserver = smtp.gmail.com
+    smtpuser = rohanmed123@gmail.com
+    smtpencryption = tls
+    smtpserverport = 587

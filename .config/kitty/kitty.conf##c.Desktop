@@ -102,7 +102,7 @@ cursor_stop_blinking_after 2.0
 
 #: Scrollback {{{
 
-scrollback_lines 2000000
+scrollback_lines 20000
 
 #: Number of lines of history to keep in memory for scrolling back.
 #: Memory is allocated on demand. Negative numbers are (effectively)
@@ -784,6 +784,7 @@ env NVIM_APPNAME=lazynvim
 kitty_mod ctrl+shift+alt
 map kitty_mod+/      launch --allow-remote-control kitty +kitten kitty_search/search.py @active-kitty-window-id
 map kitty_mod+space kitten kitty_grab/grab.py
+map ctrl+; launch --cwd=current nvim
 
 # # For neovim
 # map  ctrl+enter      send_text normal,application \x1b[13;5u
@@ -905,8 +906,8 @@ map kitty_mod+;         show_scrollback
 #: open a window with the current working directory.
 
 # map kitty_mod+w close_window
-map kitty_mod+z next_window
-map kitty_mod+x previous_window
+map kitty_mod+j next_window
+map kitty_mod+k previous_window
 # map kitty_mod+f move_window_forward
 # map kitty_mod+b move_window_backward
 # map kitty_mod+` move_window_to_top

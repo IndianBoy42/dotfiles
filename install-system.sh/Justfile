@@ -1,4 +1,3 @@
-# TODO: should I switch back to dash?
 set shell := ["fish", "-c"]
 set positional-arguments
 
@@ -667,6 +666,7 @@ git-subrepo: (gitclone "https://github.com/ingydotnet/git-subrepo" "git-subrepo"
 
 # Modern Latex distribution
 tectonic: (targh "tectonic" "tectonic-typesetting/tectonic" "*x86_64-unknown-linux-gnu.tar.gz") (ins-bin "tectonic" "/tmp")
+    {{apt-install}} biber
     echo "Installed tectonic"
 
 # A Version manager for Julia
@@ -1193,7 +1193,7 @@ neovide: (gitclone "https://github.com/neovide/neovide" "neovide")
         {{apt-install}} curl \
             gcc-multilib g++-multilib \
             libfreetype6-dev libasound2-dev libexpat1-dev libxcb-composite0-dev \
-            libbz2-dev libsndio-dev freeglut3-dev libxmu-dev libxi-dev libsdl2-dev
+            libbz2-dev libsndio-dev freeglut3-dev libxmu-dev libxi-dev libsdl2-dev libstdc++-12-dev
     end
     cd {{blddir}}/neovide
     CARGO_BUILD_TARGET={{gnu-target}} {{cargo-install}} --path .
@@ -1440,13 +1440,14 @@ scala:
     chmod +x /tmp/coursier-setup
     /tmp/coursier-setup setup
 
+# TODO: get the newly installed version correctly
 llvm: 
     #!/usr/bin/env bash
     sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
-    set name clang; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-15 100
-    set name clang++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-15 100
-    set name clangd; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-15 100
-    set name lld++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-15 100
+    set name clang; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-17 100
+    set name clang++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-17 100
+    set name clangd; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-17 100
+    set name lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-17 100
 
 forgit: 
     fisher install wfxr/forgit
@@ -1474,7 +1475,7 @@ latex-rubber: (gitclone "https://gitlab.com/latex-rubber/rubber.git" "rubber")
 
 janet: (insgh "janet" "janet-lang/janet" "*-linux-x64.tar.gz") 
 
-tracy: (gitclone "https://github.com/wolfpld/tracy" "tracy")
+tracy: (gitclone "https://github.com/wolfpld/tracy.git" "tracy")
     {{apt-install}} libfreetype-dev libcapstone-dev libtbb-deb libglfw3-dev
     cd {{blddir}}/tracy && make -C capture/build/unix release
     cd {{blddir}}/tracy && make -C csvexport/build/unix release
@@ -1483,3 +1484,12 @@ tracy: (gitclone "https://github.com/wolfpld/tracy" "tracy")
     cd {{blddir}}/tracy && make -C profiler/build/unix release LEGACY=1
     cd {{blddir}}/tracy && make -C update/build/unix release
 
+adbfs: (gitclone "https://github.com/spion/adbfs-rootless.git" "adbfs")
+    sudo apt-get install libfuse-dev android-tools-adb
+    cd {{blddir}}/adbfs && make
+
+euporie: 
+    pipx install git+https://github.com/joouha/euporie.git@dev --force  
+    pipx inject euporie timg cairosvg mtable flatlatex ipython  
+
+quickshare: (bingh "rquickshare" "martichou/rquickshare" "*.AppImage") 

@@ -6,7 +6,7 @@ justrun := "just -d " + wd + " -f " + justfile()
 lets:
     cd ~/.letsfiles/ && $EDITOR
 
-editor:
+which-editor:
     echo $EDITOR
 
 @config:
@@ -19,7 +19,7 @@ fish:
     source $FISH_CONFIG_PATH
 
 nvim: 
-    cd ~/.config/nvim && $EDITOR
+    cd ~/.config/lazynvim && $EDITOR
 	
 git: 
     $EDITOR ~/.gitconfig
@@ -35,6 +35,10 @@ qmk:
 
 kitty:
     cd ~/.config/ && $EDITOR kitty/kitty.conf
+    kill -SIGUSR1 $KITTY_PID
+
+wezterm: 
+    cd ~/.config/ && $EDITOR wezterm/wezterm.lua
 
 alacritty:
     cd ~/.config/ && $EDITOR alacritty/alacritty.yml

@@ -352,9 +352,12 @@ flatpak +name:
 # Package managers
 ##############################################333
 
+# TODO: pacstall might be a good thing? 
+# TODO: or switch EVERYTHING to nix
+
 # Nix package manager
 nix:
-    curl -L https://nixos.org/nix/install | sh
+    curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
     echo "Run this:"
     echo "bass source .nix-profile/etc/profile.d/nix.sh"
     {{cargo-install}} crate2nix
@@ -374,7 +377,6 @@ nix:
 
 pacstall: axel
     sudo bash -c "$(curl -fsSL https://pacstall.dev/q/install || wget -q https://pacstall.dev/q/install -O -)"
-# TODO: pacstall might be a good thing? 
 
 # GNU Stow symlink farm manager -- build stow from source 
 stow-src: (gitclone "https://github.com/aspiers/stow.git" "stow") (mkpackdir "stow")
@@ -395,15 +397,20 @@ stow:
         {{justrun}} stow-src
     end
 
-getgh:
-    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
-    echo "deb [arch="(dpkg --print-architecture)" signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-    sudo apt update
-    {{apt-install}} gh
+# Github CLI
+gh-cli:
+    sudo mkdir -p -m 755 /etc/apt/keyrings \
+    && wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+    && sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && sudo apt update \
+    && sudo apt install gh -y
     gh auth login
 
 vcpkg: (gitclone "https://github.com/microsoft/vcpkg.git" "vcpkg")
     ~/git-builds/vcpkg/bootstrap-vcpkg.sh
+
+#TODO: homebrew?
 
 ##############################################333
 # Programs
@@ -616,7 +623,7 @@ clifm: (debgh "clifm" "leo-arch/clifm" "*deb")
 
 # mpv video player
 mpv:
-    sudo add-apt-repository -y ppa:mc3man/mpv-tests
+    sudo apt-manage --add -y ppa:mc3man/mpv-tests
     sudo {{apt}} update
     {{apt-install}} mpv
 
@@ -761,7 +768,7 @@ nerdfont name:
 
 # For patching nerdfonts yourself
 fontforge: 
-    sudo add-apt-repository ppa:fontforge/fontforge
+    sudo apt-manage --add ppa:fontforge/fontforge
     sudo {{apt}} update
     {{apt-install}} fontforge python3-fontforge
 
@@ -982,7 +989,7 @@ cargo-all-musl: cargo-install bandwhich indexa
     {{cargo-install}} onefetch
     {{cargo-install}} dua-cli
     {{cargo-install}} eva
-    {{cargo-install}} exa 
+    {{cargo-install}} eza 
     {{cargo-install}} gfold
     {{cargo-install}} gping
     {{cargo-install}} mdbook
@@ -1146,7 +1153,7 @@ docker:
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     sudo rm /usr/share/keyrings/docker-archive-keyring.gpg
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-    sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $distro stable"
+    sudo apt-manage --add -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $distro stable"
     sudo {{apt}} update
     {{apt-install}} docker-ce docker-ce-cli containerd.io
     getent group docker || sudo groupadd docker
@@ -1178,7 +1185,7 @@ git: git-ppa
 
 # Install git from ppa
 git-ppa:
-    sudo add-apt-repository -y ppa:git-core/ppa
+    sudo apt-manage --add -y ppa:git-core/ppa
     sudo {{apt}} update
     {{apt-install}} git
 
@@ -1373,7 +1380,7 @@ emscripten: (gitclone "https://github.com/emscripten-core/emsdk.git" "emsdk")
     source {{blddir}}/emsdk/emsdk_env.fish
 
 howdy:
-    sudo add-apt-repository ppa:boltgolt/howdy
+    sudo apt-manage --add ppa:boltgolt/howdy
     sudo {{apt}} update
     {{apt-install}} howdy
     xdg-open https://github.com/boltgolt/howdy

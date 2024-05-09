@@ -64,7 +64,7 @@ if ! command -v just
     /tmp/bin/just just
 end
 # Github cli
-just getgh
+just gh-cli
 just git
 # just nix
 just pacstall

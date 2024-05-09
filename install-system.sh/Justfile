@@ -623,7 +623,7 @@ clifm: (debgh "clifm" "leo-arch/clifm" "*deb")
 
 # mpv video player
 mpv:
-    sudo apt-manage --add -y ppa:mc3man/mpv-tests
+    sudo apt-manage add -y ppa:mc3man/mpv-tests
     sudo {{apt}} update
     {{apt-install}} mpv
 
@@ -725,7 +725,7 @@ zstd: (gitclone "https://github.com/facebook/zstd.git" "zstd") (mkpackdir "zstd"
     {{justrun}} link-pack "zstd"
 
 # Computer-side QMK mapping for builtin keyboards
-kmonad: (bingh "kmonad" "kmonad/kmonad" "*linux")
+kmonad: (bingh "kmonad" "kmonad/kmonad" "kmonad")
     getent group uinput || sudo groupadd uinput
     sudo usermod -aG uinput $USER
     sudo usermod -aG input $USER
@@ -768,7 +768,7 @@ nerdfont name:
 
 # For patching nerdfonts yourself
 fontforge: 
-    sudo apt-manage --add ppa:fontforge/fontforge
+    sudo apt-manage add ppa:fontforge/fontforge
     sudo {{apt}} update
     {{apt-install}} fontforge python3-fontforge
 
@@ -1153,7 +1153,7 @@ docker:
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     sudo rm /usr/share/keyrings/docker-archive-keyring.gpg
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-    sudo apt-manage --add -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $distro stable"
+    sudo apt-manage add -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $distro stable"
     sudo {{apt}} update
     {{apt-install}} docker-ce docker-ce-cli containerd.io
     getent group docker || sudo groupadd docker
@@ -1185,7 +1185,7 @@ git: git-ppa
 
 # Install git from ppa
 git-ppa:
-    sudo apt-manage --add -y ppa:git-core/ppa
+    sudo apt-manage add -y ppa:git-core/ppa
     sudo {{apt}} update
     {{apt-install}} git
 
@@ -1380,7 +1380,7 @@ emscripten: (gitclone "https://github.com/emscripten-core/emsdk.git" "emsdk")
     source {{blddir}}/emsdk/emsdk_env.fish
 
 howdy:
-    sudo apt-manage --add ppa:boltgolt/howdy
+    sudo apt-manage add ppa:boltgolt/howdy
     sudo {{apt}} update
     {{apt-install}} howdy
     xdg-open https://github.com/boltgolt/howdy
@@ -1440,10 +1440,10 @@ scala:
 llvm: 
     #!/usr/bin/env bash
     sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
-    set name clang; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-17 100
-    set name clang++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-17 100
-    set name clangd; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-17 100
-    set name lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-17 100
+    set name clang; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
+    set name clang++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
+    set name clangd; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
+    set name lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
 
 clang: llvm
 

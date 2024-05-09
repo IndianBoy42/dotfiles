@@ -9,7 +9,7 @@ wc = "watch -x check --clear"
 
 [build]
 # rustflags = [ "-C", "link-arg=-fuse-ld=lld"]
-rustflags = ["-C", "link-arg=--ld-path=/usr/bin/mold"]
+rustflags = ["-C", "link-arg=--fuse-ld=/home/amedhi/.local/bin/mold"]
 
 [profile.dev]
 #opt-level = 1
@@ -49,7 +49,7 @@ rustflags = [
 [target.x86_64-unknown-linux-musl]
 rustflags = [
     "-C",
-    "link-arg=-fuse-ld=lld",
+    "link-arg=-fuse-ld=/home/amedhi/.local/bin/mold",
     "-C",
     "target-feature=+crt-static",
     "-C",

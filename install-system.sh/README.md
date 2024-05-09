@@ -48,50 +48,47 @@ echo "  35   │ #RuntimeDirectoryInodes=1000k"
 read -n 1 -p 'Opening /etc/systemd/logind.conf now'
 sudo nano /etc/systemd/logind.conf
 
-# Setup some permissions for kmonad
-getent group uinput || sudo groupadd uinput
-sudo usermod -aG uinput $USER
-sudo usermod -aG input $USER
-sudo modprobe uinput
-sudo cp ./uinput.rules /etc/udev/rules.d/uinput.rules
-
-# Setup some permissions for docker
-getent group docker || sudo groupadd docker
-sudo usermod -aG docker $USER
-newgrp docker
+echo "Change the following:"
+echo "fs.inotify.max_user_watches=1048576"
+echo "fs.inotify.max_queued_events=1048576"
+echo "fs.inotify.max_user_instances=256"
+read -n 1 -p 'Opening /etc/sysctl.d/98-inotify-higher.conf now'
+sudo nano /etc/sysctl.d/98-inotify-higher.conf
 
 # Install some apps
-# Install Just command runner for installing the rest of the stuff
+# Fish of course
 ./install-fish.sh
+# Install Just command runner for installing the rest of the stuff
 if ! command -v just
     curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /tmp/bin
     /tmp/bin/just just
 end
+# Github cli
 just getgh
-just nix
+just git
+# just nix
+just pacstall
+just stow
 
 read -n 1 -p 'Reboot now? (you should):'
 echo ""
 sudo reboot now
 
-
-## REBOOT
+## AFTER REBOOT
 
 # just add-local-repo # if have
-./install-apt-srcs.fish
-lets nix install-user
+# lets nix install-user
 just apt-libs
 just apt-apps
-just firacode
-just stow
-just cmake fzf zstd kmonad git-subrepo
-just go
-just node
-just pydev # conda
+just sublime-merge
+just cmake fzf zstd git-subrepo
+just mold
 just nvim
 just rustc
 just cargo-all
-just julia
+just gitui
+just tectonic
+just kmonad # if a laptop
 ```
 
 I wish I could install `neovim` earlier because I inevitably have to edit configs and scripts before I get to that stage

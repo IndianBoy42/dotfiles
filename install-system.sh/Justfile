@@ -3,6 +3,8 @@ set positional-arguments
 
 export justrun := just_executable() + " -d " + inst-script-dir + " -f " + justfile() 
 
+# TODO: I should auto cargo clean and cmake clean in most of these
+
 ########################################################
 ## Most config variables below here
 ########################################################
@@ -16,15 +18,15 @@ export inst-script-dir := "~/install-system.sh"
 export installdir := if to-root != "0" { sysinstalldir } else {  "$HOME/.local" }
 
 # The best way to use mold is by prefixing `lets install ...` with `mold --run `
-export LD := "lld" # gold, mold, lld
-export CC :=  "gcc" # gcc-11, clang, clang-12, zig cc, tinycc, zapcc
+export LD := "mold" # gold, mold, lld
+export CC :=  "gcc-12" # gcc-11, clang, clang-12, zig cc, tinycc, zapcc
 # CXX := "g++" # g++-11, clang++, clang++-12, zig c++
 export CXX := replace(replace(replace(CC, "gcc", "g++"), "clang", "clang++"), "cc", "c++")
 
 static := "0" # TODO: every project needs a different flag for static
 native := "1"
 
-use-sccache := "1" # TODO: apply this to c/c++
+use-sccache := "0" # TODO: apply this to c/c++
 use-musl := "0" # Used only for cargo for now
 cargo-bg := "0"
 
@@ -36,6 +38,7 @@ export prefix := installdir + "/" + stow-package-dir
 
 export local-apt-repo := inst-script-dir + "/apt-repo"
 export local-tar-repo := inst-script-dir + "/tar-repo"
+export local-zip-repo := inst-script-dir + "/zip-repo"
 export local-flatpak-repo := inst-script-dir + "/flatpak-repo"
 
 export bindir := installdir + "/bin"
@@ -217,13 +220,6 @@ gitcloneto url name branch="": (gitclone url name branch "")
 _tmpdir name:
     mkdir -p /tmp/{{name}}
 
-getgh:
-    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
-    echo "deb [arch="(dpkg --print-architecture)" signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-    sudo apt update
-    {{apt-install}} gh
-    gh auth login
-
 # Install a program directory structure using stow
 ins-copy name from: (mkpackdir name)
     cp -r {{from}}/{{name}}/*/* {{prefix}}/{{name}}/
@@ -266,6 +262,11 @@ gh-update-checker name repo:
 targh name repo pattern tag="": (gh name repo pattern tag)
     cd /tmp/{{name}} && tar xavf {{name}}
     cp /tmp/{{name}}/{{name}} {{local-tar-repo}}
+
+# Download a zip from Github releases and extract it
+zipgh name repo pattern tag="": (gh name repo pattern tag)
+    cd /tmp/{{name}} && unzip {{name}}
+    cp /tmp/{{name}}/{{name}} {{local-zip-repo}}
 
 # Download a debian from Github releases and install it with dpkg
 debgh name repo pattern tag="": (gh name repo pattern tag)
@@ -334,6 +335,72 @@ curlbin url name: (mkpackdir name)
 curlsrc url name: (mkblddir name)
     curl -L {{url}} -o {{blddir}}/{{name}}/{{name}}
     cd {{blddir}}/{{name}} && tar -zavf {{name}}
+
+# Install flatpak and some packages (optionally)
+flatpak +name:
+    #!/usr/bin/env fish
+    if not type -q flatpak
+        {{apt-install}} flatpak
+        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+        flatpak remote-modify --collection-id=org.flathub.Stable flathub
+    end
+    test +n "{{name}}" && {{flatpak-install}} {{name}}
+
+
+##############################################333
+# Package managers
+##############################################333
+
+# Nix package manager
+nix:
+    curl -L https://nixos.org/nix/install | sh
+    echo "Run this:"
+    echo "bass source .nix-profile/etc/profile.d/nix.sh"
+    {{cargo-install}} crate2nix
+
+# Download all apt packages from a file in install-system.sh
+@_apt-repo name:
+    echo "The getpkg.sh script throws a lot of errors about missing dependencies, and returns error even when successfull"
+    xargs -P(math (nproc) "* 8") -i sh -c "just getpkg {} \
+    || true" < {{inst-script-dir}}/{{name}}.apt
+
+# Download all my apt packages into a repo
+@apt-repo:
+    {{justrun}} _apt-repo "system"
+    {{justrun}} _apt-repo "libs"
+    {{justrun}} _apt-repo "apps"
+    {{justrun}} mkrepo
+
+pacstall: axel
+    sudo bash -c "$(curl -fsSL https://pacstall.dev/q/install || wget -q https://pacstall.dev/q/install -O -)"
+# TODO: pacstall might be a good thing? 
+
+# GNU Stow symlink farm manager -- build stow from source 
+stow-src: (gitclone "https://github.com/aspiers/stow.git" "stow") (mkpackdir "stow")
+    #!/usr/bin/env fish
+    cd {{blddir}}/stow
+    autoreconf -iv
+    ./configure --prefix="{{installdir}}"
+    make
+    make install prefix="{{prefix}}/stow"
+    {{justrun}} stow="./bin/stow" link-pack "stow"
+
+# GNU Stow symlink farm manager -- Choose apt or src
+stow: 
+    #!/usr/bin/env fish
+    if confirm "Install from source? [Y/n]"
+        {{apt-install}} stow
+    else
+        {{justrun}} stow-src
+    end
+
+getgh:
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+    echo "deb [arch="(dpkg --print-architecture)" signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+    sudo apt update
+    {{apt-install}} gh
+    gh auth login
+
 
 ##############################################333
 # Programs
@@ -708,6 +775,21 @@ patch-font path:
 firacode: (nerdfont "FiraCode") (nerdfont "FiraMono")
     fc-cache -fv
 
+iosevka: (zipgh "iosevka" "be5invis/Iosevka" "super-ttc-*") 
+    cp /tmp/iosevka/* ~/.local/share/fonts/
+    fc-cache -fv
+    {{justrun}} codicons
+    {{justrun}} nerdfont-symbols
+
+codicons: 
+    echo "https://github.com/microsoft/vscode-codicons/actions/workflows/build.yml?query=is%3Asuccess+branch%3Amain"
+    echo "Download it and punt it to ~/.local/share/fonts"
+    echo "then fc-cache -fv"
+
+nerdfont-symbols: (targh "nerdfont-symbols" "ryanoasis/nerd-fonts" "NerdFontsSymbolsOnly.tar.xz")
+    cp /tmp/nerdfont-symbols/* ~/.local/share/fonts/
+    fc-cache -fv
+
 # Installer/Updater for GHC
 ghcup:
     #!/usr/bin/env fish
@@ -781,7 +863,7 @@ cargo-install:
 
 # Blazing fast regex searcher
 ripgrep:
-    {{cargo-install}} $argv[1]
+    {{cargo-install}} ripgrep
 
 # Use ripgrep to search inside all kinds of files
 ripgrep_all: ripgrep (gitclone "https://github.com/phiresky/ripgrep-all.git" "ripgrep_all")
@@ -859,12 +941,13 @@ cargo-build-tools:
     {{cargo-install}} cargo-outdated 
     {{cargo-install}} probe-run 
     {{cargo-install}} cargo-update
-    {{cargo-install}} cargo-binutils cargo-do 
+    {{cargo-install}} cargo-binutils 
+    {{cargo-install}} cargo-do 
     {{cargo-install}} cargo-watch
     {{cargo-install}} cargo-equip
-    {{cargo-install}} crate2nix
     {{cargo-install}} flamegraph  
     {{cargo-install}} bacon  
+    {{cargo-install}} cargo-sweep  
 
 cargo-essentials: cargo-install gitui ripgrep broot tealdeer
     {{cargo-install}} bat
@@ -878,6 +961,7 @@ cargo-essentials: cargo-install gitui ripgrep broot tealdeer
     {{cargo-install}} hyperfine  
     {{cargo-install}} pipe-rename 
     {{cargo-install}} du-dust
+    {{cargo-install}} fd-find
 
 cargo-all-gnu: cargo-install tealdeer
     #!/usr/bin/env fish
@@ -885,9 +969,7 @@ cargo-all-gnu: cargo-install tealdeer
     {{cargo-install}} cargo-edit 
     {{cargo-install}} cargo-generate 
     {{cargo-install}} cargo-outdated 
-    {{cargo-install}} probe-run 
     {{cargo-install}} cargo-update 
-    {{cargo-install}} spotify-tui 
     {{cargo-install}} so 
     {{cargo-install}} starship  
     {{cargo-install}} duma  
@@ -895,29 +977,31 @@ cargo-all-gnu: cargo-install tealdeer
 cargo-all-musl: cargo-install serial-monitor bandwhich pueue indexa
     {{cargo-install}} macchina
     {{cargo-install}} onefetch
-    {{cargo-install}} drone
     {{cargo-install}} dua-cli
     {{cargo-install}} eva
     {{cargo-install}} exa 
-    {{cargo-install}} fd-find
-    {{cargo-install}} flip-link 
     {{cargo-install}} gfold
     {{cargo-install}} gping
     {{cargo-install}} mdbook
     {{cargo-install}} mdcat
     {{cargo-install}} procs
     {{cargo-install}} ptail
-    {{cargo-install}} rustfilt  
-    {{cargo-install}} scriptisto
     {{cargo-install}} sd
     {{cargo-install}} shy
     {{cargo-install}} skim 
-    {{cargo-install}} verco 
     {{cargo-install}} watchexec-cli
     {{cargo-install}} xsv
     {{cargo-install}} tokei
     {{cargo-install}} gpg-tui 
     {{cargo-install}} git-branchless
+
+cargo-embedded:
+    {{cargo-install}} flip-link
+    {{cargo-install}} probe-run
+    {{cargo-install}} drone
+
+spotify-tui: spotify
+    {{cargo-install}} spotify-tui 
 
 cargo +args: cargo-install
     {{cargo-install}} {{args}}
@@ -1013,16 +1097,6 @@ vulcan-sdk:
 @flatpak-list:
     flatpak list --app --columns=name:f | tail -n +1     
 
-# Install flatpak and some packages (optionally)
-flatpak +name:
-    #!/usr/bin/env fish
-    if not type -q flatpak
-        {{apt-install}} flatpak
-        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-        flatpak remote-modify --collection-id=org.flathub.Stable flathub
-    end
-    test +n "{{name}}" && {{flatpak-install}} {{name}}
-
 kicad:
     {{flatpak-install}} org.kicad.KiCad \
         org.kicad.KiCad.Library.Templates   \
@@ -1096,21 +1170,8 @@ apt-srcs:
 @apt-apps: apt
     {{justrun}} apt-all apps
 
-# Download all apt packages from a file in install-system.sh
-@_apt-repo name:
-    echo "The getpkg.sh script throws a lot of errors about missing dependencies, and returns error even when successfull"
-    xargs -P(math (nproc) "* 8") -i sh -c "just getpkg {} \
-    || true" < {{inst-script-dir}}/{{name}}.apt
-
-# Download all my apt packages into a repo
-@apt-repo:
-    {{justrun}} _apt-repo "system"
-    {{justrun}} _apt-repo "libs"
-    {{justrun}} _apt-repo "apps"
-    {{justrun}} mkrepo
-
 # Install newer git
-git: git-fc
+git: git-ppa
 
 # Install git from ppa
 git-ppa:
@@ -1175,14 +1236,6 @@ nvim: (gitclone "https://github.com/neovim/neovim.git" "neovim")
         install
     {{justrun}} link-pack nvim
 
-# Compile neovim static
-nvim-static: (gitclone "https://github.com/neovim/neovim.git" "neovim")
-    cd {{blddir}}/neovim \
-    && make \
-        CMAKE_BUILD_TYPE=Release \
-        CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
-        install
-
 vcpkg: (gitclone "https://github.com/microsoft/vcpkg.git" "vcpkg")
     ~/git-builds/vcpkg/bootstrap-vcpkg.sh
 
@@ -1209,6 +1262,7 @@ nvui: (gitclone "https://github.com/rohit-px2/nvui.git" "nvui")
         -DCMAKE_INSTALL_PREFIX="{{prefix}}/nvui"
     cmake --build {{blddir}}/nvui/build --target nvui --config Release
     cmake --install {{blddir}}/nvui/build --config Release
+    rm -rf {{blddir}}/nvui/build {{blddir}}/nvui/vcpkg
 
 nvui-dl: 
     rm -rf {{prefix}}/nvui
@@ -1227,25 +1281,6 @@ kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune") (mkpackdir 
     && make CXX={{CXX}} \
     && PREFIX={{prefix}}/kakoune make install
     {{justrun}} link-pack "kakoune"
-
-# GNU Stow symlink farm manager -- build stow from source 
-stow-src: (gitclone "https://github.com/aspiers/stow.git" "stow") (mkpackdir "stow")
-    #!/usr/bin/env fish
-    cd {{blddir}}/stow
-    autoreconf -iv
-    ./configure --prefix="{{installdir}}"
-    make
-    make install prefix="{{prefix}}/stow"
-    {{justrun}} stow="./bin/stow" link-pack "stow"
-
-# GNU Stow symlink farm manager -- Choose apt or src
-stow: 
-    #!/usr/bin/env fish
-    if confirm "Install from source? [Y/n]"
-        {{apt-install}} stow
-    else
-        {{justrun}} stow-src
-    end
 
 # JSON query CLI
 jq: (bingh "jq" "stedolan/jq" "jq-linux64")
@@ -1271,11 +1306,6 @@ gnome-extension path:
     mkdir -p ~/.local/share/gnome-shell/extensions/
     cp -r $name $uuid
     gnome-shell-extension-tool enable $uuid
-
-# Nix package manager
-nix:
-    curl -L https://nixos.org/nix/install | sh
-    echo "bass source .nix-profile/etc/profile.d/nix.sh"
 
 # Traceroute + ping gtk/curses
 mtr: (gitclone "https://github.com/traviscross/mtr.git" "mtr")
@@ -1308,28 +1338,14 @@ lua-format:
     and {{justrun}} link-pack luarocks
 
 # Build a static executable of the mold linker (fast boi)
-mold-stable: (gitclone "https://github.com/rui314/mold.git" "mold" "v0.9.1") (gitclone "https://github.com/oneapi-src/oneTBB.git" "mold/oneTBB" "v2020.3") (mkpackdir "mold")
-    cd {{blddir}}/mold/oneTBB && make extra_inc=big_iron.inc
-    tbb_bindir=(ls -d {{blddir}}/mold/oneTBB/build/linux_intel64_*_release) \
-    # CC=clang-12 CXX=clang++-12 LTO=1 \
-    cd {{blddir}}/mold && make \
-        PREFIX={{prefix}}/mold \
-        LTO=1 \
-        EXTRA_CPPFLAGS=-IoneTBB/include \
-        EXTRA_LDFLAGS="-fuse-ld=lld -static -L"(ls -d {{blddir}}/mold/oneTBB/build/linux_intel64_*_release) \
-        install
-    {{justrun}} link-pack mold
-
-# Build a static executable of the mold linker (fast boi)
 mold: (gitclone "https://github.com/rui314/mold.git" "mold" "main") (mkpackdir "mold")
     #!/usr/bin/env fish
     cd {{blddir}}/mold 
     mkdir build
-    cd build
-    ../install-build-deps.sh
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="{{prefix}}/mold" ..
-    cmake --build . -j $(nproc)
-    sudo cmake --install .
+    ./install-build-deps.sh
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="{{prefix}}/mold" -B build
+    cmake --build build -j $(nproc)
+    cmake --build build --target install
     {{justrun}} link-pack mold
 
 # Use update-alternatives
@@ -1493,3 +1509,7 @@ euporie:
     pipx inject euporie timg cairosvg mtable flatlatex ipython  
 
 quickshare: (bingh "rquickshare" "martichou/rquickshare" "*.AppImage") 
+
+# CLI download accelerator
+axel:
+    {{apt-install}} axel

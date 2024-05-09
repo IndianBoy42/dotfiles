@@ -18,6 +18,7 @@ export inst-script-dir := "~/install-system.sh"
 export installdir := if to-root != "0" { sysinstalldir } else {  "$HOME/.local" }
 
 # The best way to use mold is by prefixing `lets install ...` with `mold --run `
+# TODO: can I detect mold and use lld if not?
 export LD := "mold" # gold, mold, lld
 export CC :=  "gcc-12" # gcc-11, clang, clang-12, zig cc, tinycc, zapcc
 # CXX := "g++" # g++-11, clang++, clang++-12, zig c++
@@ -401,6 +402,8 @@ getgh:
     {{apt-install}} gh
     gh auth login
 
+vcpkg: (gitclone "https://github.com/microsoft/vcpkg.git" "vcpkg")
+    ~/git-builds/vcpkg/bootstrap-vcpkg.sh
 
 ##############################################333
 # Programs
@@ -760,7 +763,7 @@ nerdfont name:
 fontforge: 
     sudo add-apt-repository ppa:fontforge/fontforge
     sudo {{apt}} update
-    {{apt-install}} fontforge
+    {{apt-install}} fontforge python3-fontforge
 
 # Nerdfont patching utility
 font-patcher: fontforge (mkpackdir "nerd-font-patcher")
@@ -933,7 +936,7 @@ xplr: cargo-install
     wget https://raw.githubusercontent.com/sayanarijit/xplr/main/src/init.lua -O ~/.config/xplr/init.lua.new
     xplr --version
 
-cargo-build-tools:
+cargo-build-tools: clippy
     #!/usr/bin/env fish
     set -x CARGO_BUILD_TARGET {{gnu-target}}
     {{cargo-install}} cargo-edit 
@@ -949,7 +952,7 @@ cargo-build-tools:
     {{cargo-install}} bacon  
     {{cargo-install}} cargo-sweep  
 
-cargo-essentials: cargo-install gitui ripgrep broot tealdeer
+cargo-essentials: cargo-install gitui ripgrep broot tealdeer pueue
     {{cargo-install}} bat
     {{cargo-install}} kn
     {{cargo-install}} zoxide
@@ -963,7 +966,7 @@ cargo-essentials: cargo-install gitui ripgrep broot tealdeer
     {{cargo-install}} du-dust
     {{cargo-install}} fd-find
 
-cargo-all-gnu: cargo-install tealdeer
+cargo-all-gnu: cargo-install
     #!/usr/bin/env fish
     set -x CARGO_BUILD_TARGET {{gnu-target}}
     {{cargo-install}} cargo-edit 
@@ -974,7 +977,7 @@ cargo-all-gnu: cargo-install tealdeer
     {{cargo-install}} starship  
     {{cargo-install}} duma  
 
-cargo-all-musl: cargo-install serial-monitor bandwhich pueue indexa
+cargo-all-musl: cargo-install bandwhich indexa
     {{cargo-install}} macchina
     {{cargo-install}} onefetch
     {{cargo-install}} dua-cli
@@ -995,7 +998,7 @@ cargo-all-musl: cargo-install serial-monitor bandwhich pueue indexa
     {{cargo-install}} gpg-tui 
     {{cargo-install}} git-branchless
 
-cargo-embedded:
+cargo-embedded: serial-monitor 
     {{cargo-install}} flip-link
     {{cargo-install}} probe-run
     {{cargo-install}} drone
@@ -1211,12 +1214,6 @@ nvim-config home='$HOME' nvim='nvim':
     {{justrun}} gitcloneto "https://github.com/IndianBoy42/dot.nvim.git" "{{home}}/.config/$NVIM_APPNAME" 
     cd {{home}}/.config/$NVIM_APPNAME && just nvim={{nvim}} install
 
-# Install neovim from unstable ppa 
-nvim-apt:
-    sudo add-apt-repository -y ppa:neovim-ppa/unstable
-    sudo {{apt}} update
-    {{apt-install}} neovim
-
 # Install neovim AppImage from github releases
 nvim-img: (cpbingh "nvim.appimage" "neovim/neovim" "*.appimage" "nightly") (wrap-bin "nvim.appimage" "bin/nvim.appimage" "nvim.appimage") 
     mkdir -p {{prefix}}/nvim.appimage/bin/nvim.appimage.home
@@ -1235,9 +1232,6 @@ nvim: (gitclone "https://github.com/neovim/neovim.git" "neovim")
         CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
         install
     {{justrun}} link-pack nvim
-
-vcpkg: (gitclone "https://github.com/microsoft/vcpkg.git" "vcpkg")
-    ~/git-builds/vcpkg/bootstrap-vcpkg.sh
 
 # Pretty GUI for neovim written in rust
 neovide: (gitclone "https://github.com/neovide/neovide" "neovide")
@@ -1382,6 +1376,8 @@ howdy:
     sudo add-apt-repository ppa:boltgolt/howdy
     sudo {{apt}} update
     {{apt-install}} howdy
+    xdg-open https://github.com/boltgolt/howdy
+    sudo howdy add
 # TODO: the rest of this
 
 cpanm:
@@ -1410,29 +1406,6 @@ youtube-dl:
     sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o {{bindir}}/yt-dlp
     sudo chmod a+rx {{bindir}}/yt-dlp
 
-# pipewire:
-#     #!/usr/bin/env bash
-#     # Add ppa for latest build
-#     sudo add-apt-repository ppa:pipewire-debian/pipewire-upstream
-#     # Update
-#     sudo {{apt}} update
-#     # Install components
-#     {{apt-install}}0-pipewire pipewire-media-session libspa-0.2-bluetooth libspa-0.2-jack pipewire pipewire-audio-client-libraries
-#     # If you get unmet dependencies, you can run:
-#     # sudo apt --fix-broken install
-#     # Then re-run
-#     {{apt-install}}0-pipewire pipewire-media-session libspa-0.2-bluetooth libspa-0.2-jack pipewire pipewire-audio-client-libraries
-#     # Reload new services
-#     systemctl --user daemon-reload
-#     # Disable PulseAudio service
-#     systemctl --user --now disable pulseaudio.service pulseaudio.socket
-#     # If you update from previous version of PopOS
-#     systemctl --user mask pulseaudio
-#     # Enable Pipewire services
-#     systemctl --user --now enable pipewire pipewire-pulse
-#     # Enable Pipewire media session
-#     systemctl --user --now enable pipewire-media-session.service
-#
 conan: 
     pipx install conan
 
@@ -1464,6 +1437,8 @@ llvm:
     set name clang++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-17 100
     set name clangd; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-17 100
     set name lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-17 100
+
+clang: llvm
 
 forgit: 
     fisher install wfxr/forgit

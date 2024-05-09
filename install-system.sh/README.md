@@ -86,9 +86,9 @@ just mold
 just nvim
 just rustc
 just cargo-all
-just gitui
 just tectonic
 just kmonad # if a laptop
+just howdy # if a laptop
 ```
 
 I wish I could install `neovim` earlier because I inevitably have to edit configs and scripts before I get to that stage

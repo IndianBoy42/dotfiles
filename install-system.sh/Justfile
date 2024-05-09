@@ -1438,7 +1438,7 @@ scala:
 
 # TODO: get the newly installed version correctly
 llvm: 
-    #!/usr/bin/env bash
+    #!/usr/bin/env fish
     sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
     set name clang; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
     set name clang++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100

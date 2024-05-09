@@ -205,11 +205,21 @@ abbr apty "sudo $apt_prefix install -y"
 abbr apts "$apt_prefix search"
 abbr aptr "sudo $apt_prefix remove"
 abbr aptu "sudo $apt_prefix update"
-abbr aptug "sudo $apt_prefix upgrade"
+abbr aptur "sudo $apt_prefix upgrade"
 abbr aptou "sudo $apt_prefix update && sudo $apt_prefix --only-upgrade install "
 abbr aptar "sudo $apt_prefix autoremove"
 abbr aptli "$apt_prefix list --installed"
 abbr aptsi "$apt_prefix list --installed | fzf"
+
+if type -q pacstall
+    abbr pac pacstall
+    abbr paci pacstall -I
+    abbr pacr pacstall -R
+    abbr pacs pacstall -S
+    abbr paca pacstall -A
+    abbr pacu pacstall -U
+    abbr pacur pacstall -Up
+end
 
 # mkdir helpers
 # make all directories and create the file

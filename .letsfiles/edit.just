@@ -19,7 +19,7 @@ fish:
     source $FISH_CONFIG_PATH
 
 nvim: 
-    cd ~/.config/lazynvim && $EDITOR
+    cd ~/.config/nvim && $EDITOR
 	
 git: 
     $EDITOR ~/.gitconfig

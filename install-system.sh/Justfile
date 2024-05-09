@@ -547,10 +547,10 @@ keynav: (gitclone "https://github.com/jordansissel/keynav.git" "keynav") (mkpack
 # zig compiler
 zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
     #!/usr/bin/env fish
-    {{apt-install}} libllvm12 libclang-12-dev liblld-12-dev
+    {{apt-install}} libllvm17 libclang-17-dev liblld-17-dev
     cmake -DCMAKE_INSTALL_PREFIX="{{prefix}}/zig/" \
         -DCMAKE_BUILD_TYPE={{CMAKE_BUILD_TYPE}} \
-        -DCMAKE_C_COMPILER=clang-12 -DCMAKE_CXX_COMPILER=clang++-12 \
+        -DCMAKE_C_COMPILER=clang-17 -DCMAKE_CXX_COMPILER=clang++-17 \
         -S {{blddir}}/zig -B {{blddir}}/zig/build
     and cmake --build {{blddir}}/zig/build
     and cmake --install {{blddir}}/zig/build

@@ -3,7 +3,7 @@
 ;; TODO: can kmonad take arguments to specify the device?
 (defcfg
   ;; For Linux
-  input  (device-file "/dev/input/event3") ;; TODO: use by-id?
+  input  (device-file "/dev/input/by-path/platform-i8042-serio-0-event-kbd") ;; TODO: use by-id?
 ;;  input  (device-file "/dev/input/by-id/usb-MythosMann_TG4x-event-kbd")
   output (uinput-sink "kmonad_output"
     ;; To understand the importance of the following line, see the section on
@@ -132,8 +132,8 @@
 
 (deflayer symlayer ;; TODO port new symlayer
    _    1    2    3    4    5    6    7    8    9    0    _    _    bspc
-   grv  _    {    ^    @    }    "    !    ?    %    _    _    _    _
-   0    \(   *    $    |    \)   '   \_    =    \    _    _    _
-   _    [    :    #    &    '    /    -    +    _    _    _
+   grv  grv  \(   ^    @    \)   "    !    ?    %    _    _    _    _
+   0    {    *    $    |    }    '   \_    =    \    _    _    _
+   _    ~    [    #    &    '    /    -    +    _    _    _
    _    _    _              _              _    _    _    _
 )

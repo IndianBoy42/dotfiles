@@ -90,7 +90,7 @@ gnu-target := "x86_64-unknown-linux-gnu"
 musl-target := "x86_64-unknown-linux-musl"
 export CARGO_BUILD_TARGET := if use-musl != "0" { musl-target } else { gnu-target }
 
-cargo-install := if cargo-bg != "0" { "pueue add -- cargo install" } else { "cargo install" }# TODO: can use quickinstall
+cargo-install := if cargo-bg != "0" { "pueue add -- cargo install --locked" } else { "cargo install --locked" }# TODO: can use quickinstall
 # "dobg alacritty --hold -e cargo install"
 # cargo-install := "pueue add -- cargo install --force --jobs 1" # TODO: background compile
 
@@ -855,7 +855,6 @@ cargo-update:
 # Shared cache for C/C++/Rust
 sccache:
     echo "Installing sccache"
-    type -q sccache && cargo install-update sccache
     type -q sccache || {{cargo-install}} sccache
 
 # Download sccache from github releases
@@ -882,7 +881,7 @@ ripgrep_all: ripgrep (gitclone "https://github.com/phiresky/ripgrep-all.git" "ri
 # gitui: cargo-install (gitclone "https://github.com/IndianBoy42/gitui.git" "gitui")
 # Easy to use TUI for git
 gitui: cargo-install (gitclone "https://github.com/extrawurst/gitui.git" "gitui")
-    cd {{blddir}}/gitui && git merge upstream/master && git push
+    cd {{blddir}}/gitui && git fetch --all && git merge upstream/master && git push
     {{cargo-install}} --path {{blddir}}/gitui
     cp {{blddir}}/gitui/vim_style_key_config.ron ~/.config/gitui/key_bindings.ron
 
@@ -1343,7 +1342,7 @@ mold: (gitclone "https://github.com/rui314/mold.git" "mold" "main") (mkpackdir "
     #!/usr/bin/env fish
     cd {{blddir}}/mold 
     mkdir build
-    ./install-build-deps.sh
+    sudo ./install-build-deps.sh
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="{{prefix}}/mold" -B build
     cmake --build build -j $(nproc)
     cmake --build build --target install
@@ -1384,6 +1383,7 @@ howdy:
     sudo {{apt}} update
     {{apt-install}} howdy
     xdg-open https://github.com/boltgolt/howdy
+    sudo cp ~/.config/howdy/config.ini /usr/lib/security/howdy/config.ini
     sudo howdy add
 # TODO: the rest of this
 
@@ -1442,8 +1442,9 @@ llvm:
     sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
     set name clang; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
     set name clang++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
-    set name clangd; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
     set name lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
+    set name ld.lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
+    set name clangd; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
 
 clang: llvm
 

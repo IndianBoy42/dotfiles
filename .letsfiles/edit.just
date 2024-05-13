@@ -31,7 +31,7 @@ nix:
     cd ~/.letsfiles/ && $EDITOR nix.just
 	
 qmk:
-    cd ~/qmk_firmware/ && $EDITOR indianboy42/
+    cd ~/qmk_firmware/ && $EDITOR 
 
 kitty:
     cd ~/.config/ && $EDITOR kitty/kitty.conf

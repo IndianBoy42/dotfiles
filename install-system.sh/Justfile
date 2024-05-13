@@ -102,7 +102,7 @@ flatpak-exe := if to-root != "0" { "flatpak" } else { "flatpak" }
 flatpak-download := flatpak-exe + " create-usb " + local-flatpak-repo
 flatpak-install-local := flatpak-exe + " install --or-update --sideload-repo " + local-flatpak-repo + "/.ostree/repo flathub"
 flatpak-install-remote := flatpak-exe + " install --or-update flathub"
-flatpak-install := flatpak-install-local
+flatpak-installer := flatpak-install-local
 
 apt := "nala" # apt
 apt-install := "sudo " + apt + " install"
@@ -348,7 +348,7 @@ flatpak +name:
         flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
         flatpak remote-modify --collection-id=org.flathub.Stable flathub
     end
-    test +n "{{name}}" && {{flatpak-install}} {{name}}
+    test -n "{{name}}" && {{flatpak-installer}} {{name}}
 
 cargo-sweep path="{{blddir}}":
     cargo sweep --recursive -t0 {{path}}
@@ -1118,46 +1118,80 @@ vulcan-sdk:
 @flatpak-list:
     flatpak list --app --columns=name:f | tail -n +1     
 
+flatpak-install name short="":
+    {{flatpak-installer}} {{name}}
+    {{justrun}} flatpak-shortcut {{name}} {{short}}
+
+flatpak-shortcut name short="":
+    #!/usr/bin/env fish
+    if test -n "{{short}}"
+        set short {{short}}
+    else
+        set short (path change-extension '' "{{name}}" | path extension | string sub -s 2)
+    end
+    mkdir -p "/tmp/$short" && touch "/tmp/$short/$short"
+    echo "#!/usr/bin/env sh" > "/tmp/$short/$short"
+    echo "nohup flatpak run {{name}} </dev/null >/dev/null 2>&1 &" >> "/tmp/$short/$short"
+    {{justrun}} ins-bin "$short" "/tmp"
+
 kicad:
-    {{flatpak-install}} org.kicad.KiCad \
+    {{justrun}} flatpak-install org.kicad.KiCad \
         org.kicad.KiCad.Library.Templates   \
         org.kicad.KiCad.Library.Symbols     \
         org.kicad.KiCad.Library.Packages3D  \
         org.kicad.KiCad.Library.Packages3D  \
         org.kicad.KiCad.Library.Footprints 
-spotify: 
-    {{flatpak-install}} com.spotify.Client 
-anydesk: 
-    {{flatpak-install}} com.anydesk.Anydesk 
-gimp: 
-    {{flatpak-install}} org.gimp.GIMP 
-inkscape: 
-    {{flatpak-install}} org.inkscape.Inkscape 
+
+spotify: (flatpak-install "com.spotify.Client")
+    echo "done"
+    
+anydesk: (flatpak-install "com.anydesk.Anydesk")
+    echo "done"
+    
+gimp: (flatpak-install "org.gimp.GIMP")
+    echo "done"
+    
+inkscape: (flatpak-install "org.inkscape.Inkscape")
+    echo "done"
+    
 whatsapp: 
-    {{flatpak-install}} io.bit3.WhatsAppQT 
-kdenlive: 
-    {{flatpak-install}} org.kde.kdenlive 
-telegram: 
-    {{flatpak-install}} org.telegram.desktop
-discord: 
-    {{flatpak-install}} com.discordapp.Discord 
-signal: 
-    {{flatpak-install}} org.signal.Signal 
-vlc: 
-    {{flatpak-install}} org.videolan.VLC 
-slack: 
-    {{flatpak-install}} com.slack.Slack 
-todoist: 
-    {{flatpak-install}} com.todoist.Todoist 
-blender: 
-    {{flatpak-install}} org.blender.Blender
-megasync:
-    {{flatpak-install}} nz.mega.MEGAsync
+    echo "deprecated io.bit3.WhatsAppQT"
+    
+kdenlive: (flatpak-install "org.kde.kdenlive")
+    echo "done"
+    
+telegram: (flatpak-install "org.telegram.desktop")
+    echo "done"
+    
+discord: (flatpak-install "com.discordapp.Discord")
+    echo "done"
+    
+signal: (flatpak-install "org.signal.Signal")
+    echo "done"
+    
+vlc: (flatpak-install "org.videolan.VLC")
+    echo "done"
+    
+slack: (flatpak-install "com.slack.Slack")
+    echo "done"
+    
+zulip: (flatpak-install "org.zulip.Zulip")
+    echo "done"
+    
+todoist: (flatpak-install "com.todoist.Todoist")
+    echo "done"
+    
+blender: (flatpak-install "org.blender.Blender")
+    echo "done"
+    
+megasync:(flatpak-install "nz.mega.MEGAsync")
+    echo "done"
+    
 
 # Flatpak install and download to a local repo
 flatpak-dl +command:
-    {{justrun}} flatpak-install="{{flatpak-install-remote}}" {{command}} # Install first 
-    {{justrun}} flatpak-install="{{flatpak-download}}" {{command}} # Then pack into the repo
+    {{justrun}} flatpak-installer="{{flatpak-install-remote}}" {{command}} # Install first 
+    {{justrun}} flatpak-installer="{{flatpak-download}}" {{command}} # Then pack into the repo
 
 # Install docker and enable permissions
 docker:

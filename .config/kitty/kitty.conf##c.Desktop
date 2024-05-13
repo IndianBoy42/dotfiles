@@ -601,7 +601,7 @@ listen_on unix:/tmp/kitty
 #: that environment variables are expanded recursively, so if you
 #: use::
 
-env NVIM_APPNAME=lazynvim
+# env NVIM_APPNAME=lazynvim
 
 #:     env MYVAR1=a
 #:     env MYVAR2=${MYVAR1}/${HOME}/b

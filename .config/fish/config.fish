@@ -241,7 +241,11 @@ abbr cmake-zap "cmake -DCMAKE_C_COMPILER=zapcc -DCMAKE_CXX_COMPILER=zapcc -S . -
 set -q CMAKE_GENERATOR; or set -gx CMAKE_GENERATOR Ninja
 set -q CMAKE_BUILD_TYPE; or set -gx CMAKE_BUILD_TYPE Release
 set -q CMAKE_EXPORT_COMPILE_COMMANDS; or set -gx CMAKE_EXPORT_COMPILE_COMMANDS ON
-set -q LDFLAGS; or set -gx LDFLAGS "-fuse-ld=lld"
+if type -q mold
+    set -q LDFLAGS; or set -gx LDFLAGS "-fuse-ld=mold"
+else
+    set -q LDFLAGS; or set -gx LDFLAGS "-fuse-ld=lld"
+end
 set -q MAKEFLAGS; or set -gx MAKEFLAGS -j (nproc)
 set -q JULIA_NUM_THREADS; or set -gx JULIA_NUM_THREADS (nproc)
 set -q ZST_NBTHREADS; or set -gx ZST_NBTHREADS 0
@@ -276,7 +280,7 @@ set -gx EDITOR nvim
 set -gx GUI_EDITOR (which neovide)
 set -gx VISUAL $EDITOR
 #set -gx PAGER nvim
-set -gx NVIM_APPNAME lazynvim
+# set -gx NVIM_APPNAME lazynvim
 if type -q nvim
     # if type -q nvr
     #     if test -z "$nvr"

@@ -3,7 +3,7 @@
 ;; TODO: can kmonad take arguments to specify the device?
 (defcfg
   ;; For Linux
-  input  (device-file "/dev/input/event3") ;; TODO: use by-id?
+  input  (device-file "/dev/input/by-path/platform-i8042-serio-0-event-kbd") ;; TODO: use by-id?
 ;;  input  (device-file "/dev/input/by-id/usb-MythosMann_TG4x-event-kbd")
   output (uinput-sink "kmonad_output"
     ;; To understand the importance of the following line, see the section on
@@ -34,7 +34,7 @@
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
   caps a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           spc            ralt rmet cmp  rctl
+  lctl lmet lalt           spc            ralt rctl cmp  rmet
 )
 
 ;; (deflayer transparent
@@ -51,6 +51,7 @@
 	syms (tap-hold-next-release 200 spc (layer-toggle symlayer))
     
     csc (tap-hold 200 esc lctl)
+    csa (around lctl (around lalt lsft))
 
 	ma (tap-hold-next-release 200 a lmet)
 	as (tap-hold-next-release 200 s lalt)
@@ -95,30 +96,30 @@
   @csc q    w    e    r    t    y    u    i    o    p    [    ]    \
   @tnv a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           @syms          ralt rmet cmp  rctl
+    lalt lmet lctl           @syms          ralt @csa cmp  rctl
 )
 (deflayer base-btmrow
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   @csc q    w    e    r    t    y    u    i    o    p    [    ]    \
   @tnv a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft @mz  @ax  @cc  @sv  b    @sn  @cm  @acm @mdt /    rsft
-  ;; lctl lmet lalt           @syms          ralt rmet cmp  rctl
-  XX   XX   lalt            @syms          ralt rmet cmp  rctl
+  ;; lctl lmet lctl           @syms          ralt @csa cmp  rctl
+  XX   XX   lctl            @syms          ralt @csa cmp  rctl
 )
 (deflayer base-homerow
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   @csc q    w    e    r    t    y    u    i    o    p    [    ]    \
   @tnv @ma  @as  @cd  @sf  g    @sh  @cj  @ak  @ml  ;    '    ret
   lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  ;; lctl lmet lalt           @syms          ralt rmet cmp  rctl
-  XX   XX   lalt            @syms          ralt rmet cmp  rctl
+  ;; lctl lmet lctl           @syms          ralt @csa cmp  rctl
+  XX   XX   lctl            @syms          ralt @csa cmp  rctl
 )
 (deflayer qwerty
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
   @nav a    s    d    f    g    h    j    k    l    ;    '    ret
   lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet lalt           spc            ralt rmet cmp  rctl
+  lctl lmet lctl           spc            ralt @csa cmp  rctl
 )
 
 (defalias csp C-S-p)
@@ -132,8 +133,8 @@
 
 (deflayer symlayer ;; TODO port new symlayer
    _    1    2    3    4    5    6    7    8    9    0    _    _    bspc
-   grv  _    {    ^    @    }    "    !    ?    %    _    _    _    _
-   0    \(   *    $    |    \)   '   \_    =    \    _    _    _
-   _    [    :    #    &    '    /    -    +    _    _    _
+   grv  grv  \(   ^    @    \)   "    !    ?    %    _    _    _    _
+   0    {    *    $    |    }    '   \_    =    \    _    _    _
+   _    ~    [    #    &    '    /    -    +    _    _    _
    _    _    _              _              _    _    _    _
 )

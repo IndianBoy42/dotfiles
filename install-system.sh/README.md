@@ -55,6 +55,9 @@ echo "fs.inotify.max_user_instances=256"
 read -n 1 -p 'Opening /etc/sysctl.d/98-inotify-higher.conf now'
 sudo nano /etc/sysctl.d/98-inotify-higher.conf
 
+echo "SystemAccount = false"
+sudo nano /var/lib/AccountsService/user/amedhi
+
 # Install some apps
 # Fish of course
 ./install-fish.sh
@@ -69,6 +72,7 @@ just git
 # just nix
 just pacstall
 just stow
+just llvm
 
 read -n 1 -p 'Reboot now? (you should):'
 echo ""

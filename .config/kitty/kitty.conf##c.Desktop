@@ -786,6 +786,10 @@ map kitty_mod+/      launch --allow-remote-control kitty +kitten kitty_search/se
 map kitty_mod+space kitten kitty_grab/grab.py
 map ctrl+; launch --cwd=current nvim
 
+#:      \x1b[   = CSI
+#:      74      = Decimal value of 74
+#:      5       = Sum of bits for Ctrl and Shift Modifiers. (Shift = 1, Alt = 2, Ctrl = 4)
+#:      u       = Unicode
 # # For neovim
 # map  ctrl+enter      send_text normal,application \x1b[13;5u
 # map  shift+enter     send_text normal,application \x1b[13;2u

@@ -39,3 +39,6 @@ export NVM_DIR="$HOME/.nvm"
 # >>> coursier install directory >>>
 export PATH="$PATH:/home/amedhi/.local/share/coursier/bin"
 # <<< coursier install directory <<<
+
+# repeating keys go brrrr
+xset r rate 220 25

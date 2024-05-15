@@ -6,10 +6,6 @@
 #: individual font faces and even specify special fonts for particular
 #: characters.
 
-font_family      FiraCode Nerd Font Mono 
-# bold_font        auto
-# italic_font      auto
-# bold_italic_font auto
 
 #: You can specify different fonts for the bold/italic/bold-italic
 #: variants. To get a full list of supported fonts use the `kitty
@@ -18,17 +14,18 @@ font_family      FiraCode Nerd Font Mono
 #: families that have many weight variants like Book, Medium, Thick,
 #: etc. For example::
 
-#:     font_family      Operator Mono Book
-#:     bold_font        Operator Mono Medium
-#:     italic_font      Operator Mono Book Italic
-#:     bold_italic_font Operator Mono Medium Italic
+# font_family      FiraCode Nerd Font Mono 
+font_family      Iosevka Term SS05 Medium Extended
+bold_font        Iosevka Term SS05 Bold Extended
+italic_font      Iosevka Term SS05 Medium Extended Italic
+bold_italic_font Iosevka Term SS05 Bold Extended Italic
 
-font_size 10.5
+font_size 10.0
 
 #: Font size (in pts)
 
 # adjust_line_height  0
-# adjust_column_width 0
+# adjust_column_width 1
 
 #: Change the size of each character cell kitty renders. You can use
 #: either numbers, which are interpreted as pixels or percentages
@@ -36,8 +33,6 @@ font_size 10.5
 #: unmodified values. You can use negative pixels or percentages less
 #: than 100% to reduce sizes (but this might cause rendering
 #: artifacts).
-
-# symbol_map U+E0A0-U+E0A2,U+E0B0-U+E0B3 PowerlineSymbols
 
 #: Map the specified unicode codepoints to a particular font. Useful
 #: if you need special rendering for some symbols, such as for
@@ -48,6 +43,9 @@ font_size 10.5
 #: times. Syntax is::
 
 #:     symbol_map codepoints Font Family Name
+# symbol_map U+E0A0-U+E0A2,U+E0B0-U+E0B3 PowerlineSymbols
+symbol_map U+EA60-U+EBBC codicon
+symbol_map U+23FB-U+23FE,U+2665,U+26A1,U+2B58,U+E000-U+E00A,U+E0A0-U+E0A3,U+E0B0-U+E0C8,U+E0CA,U+E0CC-U+E0D2,U+E0D4,U+E200-U+E2A9,U+E300-U+E3E3,U+E5FA-U+E634,U+E700-U+E7C5,U+EA60-U+EBEB,U+F000-U+F2E0,U+F300-U+F32F,U+F400-U+F4A9,U+F500-U+F8FF Symbols Nerd Font Mono
 
 disable_ligatures never
 
@@ -95,7 +93,7 @@ disable_ligatures never
 #: that numbers smaller than repaint_delay will be limited to
 #: repaint_delay.
 
-# cursor_stop_blinking_after 15.0
+cursor_stop_blinking_after 2.0
 
 #: Stop blinking cursor after the specified number of seconds of
 #: keyboard inactivity.  Set to zero to never stop blinking.
@@ -104,7 +102,7 @@ disable_ligatures never
 
 #: Scrollback {{{
 
-# scrollback_lines 2000
+scrollback_lines 20000
 
 #: Number of lines of history to keep in memory for scrolling back.
 #: Memory is allocated on demand. Negative numbers are (effectively)
@@ -112,9 +110,19 @@ disable_ligatures never
 #: recommended as it can slow down resizing of the terminal and also
 #: use large amounts of RAM.
 
-scrollback_pager nvim -u NONE -c "set laststatus=0 clipboard=unnamedplus" -c "autocmd TermOpen * normal G" -c "map q :qa!<CR>" -c "silent write! /tmp/kitty_scrollback_buffer | te echo -n \"(sed -e 's/\\]8;;file:[^\\\\]*\\\\//g' /tmp/kitty_scrollback_buffer)\"; rm -f /tmp/kitty_scrollback_buffer; sleep 1000"
-# scrollback_pager nvim -c 'set ft=man'
+#  --noplugin -u ~/.config/kitty/scrollback-pager/nvim/init.vim 
+# scrollback_pager nvim --cmd "let g:kitty_scrollback=1" -c "set ft=kitty_scrollback" -c "silent write! /tmp/kitty_scrollback_buffer | te cat /tmp/kitty_scrollback_buffer - " 
 # scrollback_pager less --chop-long-lines --RAW-CONTROL-CHARS +INPUT_LINE_NUMBER
+
+# kitty-scrollback.nvim Kitten alias
+action_alias kitty_scrollback_nvim kitten /home/amedhi/.local/share/nvim/lazy/kitty-scrollback.nvim/python/kitty_scrollback_nvim.py
+
+# Browse scrollback buffer in nvim
+map kitty_mod+; kitty_scrollback_nvim
+# Browse output of the last shell command in nvim
+map kitty_mod+' kitty_scrollback_nvim --config ksb_builtin_last_cmd_output
+# Show clicked command output in nvim
+mouse_map ctrl+shift+right press ungrabbed combine : mouse_select_command_output : kitty_scrollback_nvim --config ksb_builtin_last_visited_cmd_output
 
 #: Program with which to view scrollback in a new window. The
 #: scrollback buffer is passed as STDIN to this program. If you change
@@ -305,7 +313,7 @@ scrollback_pager nvim -u NONE -c "set laststatus=0 clipboard=unnamedplus" -c "au
 #: suffix of "c" on the width/height values to have them interpreted
 #: as number of cells instead of pixels.
 
-# enabled_layouts *
+enabled_layouts tall,splits,stack,*
 
 #: The enabled window layouts. A comma separated list of layout names.
 #: The special value all means all layouts. The first listed layout
@@ -558,6 +566,7 @@ hide_window_decorations yes
 #: Advanced {{{
 
 # shell .
+shell_integration enabled
 
 #: The shell program to execute. The default value of . means to use
 #: whatever shell is set as the default shell for the current user.
@@ -602,6 +611,8 @@ listen_on unix:/tmp/kitty
 #: Specify environment variables to set in all child processes. Note
 #: that environment variables are expanded recursively, so if you
 #: use::
+
+# env NVIM_APPNAME=lazynvim
 
 #:     env MYVAR1=a
 #:     env MYVAR2=${MYVAR1}/${HOME}/b
@@ -781,9 +792,28 @@ listen_on unix:/tmp/kitty
 
 #:     map ctrl+f>2 set_font_size 20
 
-# kitty_mod ctrl+shift
+kitty_mod ctrl+shift+alt
 map kitty_mod+/      launch --allow-remote-control kitty +kitten kitty_search/search.py @active-kitty-window-id
 map kitty_mod+space kitten kitty_grab/grab.py
+# map ctrl+; launch --type=background --cwd=current nvim
+
+#:      \x1b[   = CSI
+#:      74      = Decimal value of 74
+#:      5       = Sum of bits for Ctrl and Shift Modifiers. (Shift = 1, Alt = 2, Ctrl = 4)
+#:      u       = Unicode
+# # For neovim
+# map  ctrl+enter      send_text normal,application \x1b[13;5u
+# map  shift+enter     send_text normal,application \x1b[13;2u
+# map  ctrl+tab        send_text normal,application \x1b[9;5u
+# map  ctrl+shift+tab  send_text normal,application \x1b[9;6u
+# map  ctrl+i          send_text all                \x1b[105;5u
+# map  ctrl+.          send_text all                \x1b[46;5u
+# map  ctrl+,          send_text all                \x1b[44;5u
+# map  ctrl+;          send_text all                \x1b[59;5u
+# map  ctrl+shift+h    send_text all                \x1b[72;6u
+# map  ctrl+shift+j    send_text all                \x1b[74;6u
+# map  ctrl+shift+k    send_text all                \x1b[75;6u
+# map  ctrl+shift+l    send_text all                \x1b[76;6u
 
 #: The value of kitty_mod is used as the modifier for all default
 #: shortcuts, you can change it in your kitty.conf to change the
@@ -833,15 +863,14 @@ map kitty_mod+space kitten kitty_grab/grab.py
 
 #: Scrolling {{{
 
-# map kitty_mod+up        scroll_line_up
-# map kitty_mod+k         scroll_line_up
-# map kitty_mod+down      scroll_line_down
-# map kitty_mod+j         scroll_line_down
-# map kitty_mod+page_up   scroll_page_up
-# map kitty_mod+page_down scroll_page_down
-# map kitty_mod+home      scroll_home
-# map kitty_mod+end       scroll_end
-# map kitty_mod+h         show_scrollback
+map kitty_mod+up        scroll_line_up
+map kitty_mod+k         scroll_line_up
+map kitty_mod+down      scroll_line_down
+map kitty_mod+j         scroll_line_down
+map kitty_mod+page_up   scroll_page_up
+map kitty_mod+page_down scroll_page_down
+map kitty_mod+home      scroll_home
+map kitty_mod+end       scroll_end
 
 #: You can pipe the contents of the current screen + history buffer as
 #: STDIN to an arbitrary program using the ``launch`` function. For
@@ -891,8 +920,8 @@ map kitty_mod+space kitten kitty_grab/grab.py
 #: open a window with the current working directory.
 
 # map kitty_mod+w close_window
-# map kitty_mod+] next_window
-# map kitty_mod+[ previous_window
+map kitty_mod+j next_window
+map kitty_mod+k previous_window
 # map kitty_mod+f move_window_forward
 # map kitty_mod+b move_window_backward
 # map kitty_mod+` move_window_to_top
@@ -911,13 +940,13 @@ map kitty_mod+space kitten kitty_grab/grab.py
 
 #: Tab management {{{
 
-# map kitty_mod+right next_tab
-# map kitty_mod+left  previous_tab
-# map kitty_mod+t     new_tab
+map kitty_mod+h previous_tab
+map kitty_mod+l next_tab
+map kitty_mod+t     new_tab
 # map kitty_mod+q     close_tab
 # map kitty_mod+.     move_tab_forward
 # map kitty_mod+,     move_tab_backward
-# map kitty_mod+alt+t set_tab_title
+map kitty_mod+i set_tab_title
 
 #: You can also create shortcuts to go to specific tabs, with 1 being
 #: the first tab, 2 the second tab and -1 being the previously active
@@ -936,7 +965,7 @@ map kitty_mod+space kitten kitty_grab/grab.py
 
 #: Layout management {{{
 
-# map kitty_mod+l next_layout
+map kitty_mod+y next_layout
 
 #: You can also create shortcuts to switch to specific layouts::
 
@@ -979,6 +1008,8 @@ map kitty_mod+space kitten kitty_grab/grab.py
 #: to open the URL is specified in open_url_with.
 
 # map kitty_mod+p>f kitten hints --type path --program -
+map kitty_mod+u kitten hints --type path --program -
+map kitty_mod+g kitten hints --type=linenum --linenum-action=tab nvim +{line} {path}
 
 #: Select a path/filename and insert it into the terminal. Useful, for
 #: instance to run git commands on a filename output from a previous
@@ -1072,3 +1103,7 @@ map kitty_mod+space kitten kitty_grab/grab.py
 #: }}}
 
 # }}}
+
+modify_font underline_position +3
+modify_font underline_thickness 150%
+modify_font strikethrough_position 2px

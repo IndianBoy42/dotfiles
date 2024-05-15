@@ -2,7 +2,6 @@ jorgebucaran/fisher
 edc/bass
 IlanCosman/tide
 jorgebucaran/autopair.fish
-mattgreen/park.fish
 oh-my-fish/plugin-await
 oh-my-fish/plugin-bang-bang
 oh-my-fish/plugin-bak
@@ -10,3 +9,4 @@ IndianBoy42/fish-auto-source
 jorgebucaran/nvm.fish
 PatrickF1/fzf.fish
 wfxr/forgit
+indianboy42/park.fish

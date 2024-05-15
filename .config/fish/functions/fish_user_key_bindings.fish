@@ -4,4 +4,6 @@ function fish_user_key_bindings
     bind -M insert \cz 'fg 2>/dev/null; commandline -f repaint'
     bind -M insert \ez zi
     bind -M default cd kn
+    bind -M insert ctrl-\; nvim
+    bind -M default ctrl-\; nvim
 end

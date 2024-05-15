@@ -1279,6 +1279,7 @@ nvim: (gitclone "https://github.com/neovim/neovim.git" "neovim")
     # cd {{blddir}}/neovim \
     # && rm -r .deps 
     cd {{blddir}}/neovim \
+    # CMAKE_EXTRA_FLAGS=-DENABLE_WASMTIME=ON DEPS_CMAKE_FLAGS=-DENABLE_WASMTIME=ON 
     && make \
         CMAKE_BUILD_TYPE=Release \
         CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
@@ -1542,3 +1543,15 @@ quickshare: (bingh "rquickshare" "martichou/rquickshare" "*.AppImage")
 # CLI download accelerator
 axel:
     {{apt-install}} axel
+
+# TODO: need to pass rust arguments?cd /home/amedhi/.config/fishcd /home/amedhi/.config/fishcd /home/amedhi/.config/fishcd /home/amedhi/.config/fishcd /home/amedhi/.config/fishcd /home/amedhi/.config/fishcd /home/amedhi/.config/fishcd /home/amedhi/.config/fish
+# Install fish from source
+fish-src: (gitclone "https://github.com/fish-shell/fish-shell.git" "fish")
+    cmake -S {{blddir}}/fish -B {{blddir}}/fish/build \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX="{{prefix}}/fish"
+    cmake --build {{blddir}}/fish/build
+    cmake --install {{blddir}}/fish/build
+    {{justrun}} link-pack "fish"
+    command -v fish | sudo tee -a /etc/shells
+    chsh -s (command -v fish) "$USER"

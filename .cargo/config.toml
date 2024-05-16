@@ -6,6 +6,9 @@ r = "run"
 rr = "run --release"
 br = "build --release"
 wc = "watch -x check --clear"
+a = "add"
+u = "update"
+i = "install"
 
 [build]
 # rustflags = [ "-C", "link-arg=-fuse-ld=lld"]

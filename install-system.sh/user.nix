@@ -7,4 +7,7 @@ niv
 nix
 perf-tools
 nixfmt
+gh
+git
+just
 ]

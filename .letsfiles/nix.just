@@ -1,5 +1,10 @@
 set shell := ["fish", "-c"]
 
+# TODO: DONT USE nix-env ???
+# https://www.youtube.com/watch?v=CwfKlX3rA6E
+# https://tech.aufomm.com/my-nix-journey-use-nix-with-ubuntu/
+# https://www.youtube.com/watch?v=a67Sv4Mbxmc
+
 wd := invocation_directory()
 justrun := "just -d " + wd + " -f " + justfile()
 

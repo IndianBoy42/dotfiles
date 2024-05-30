@@ -6,10 +6,14 @@ r = "run"
 rr = "run --release"
 br = "build --release"
 wc = "watch -x check --clear"
+a = "add"
+u = "update"
+i = "install"
 
 [build]
 # rustflags = [ "-C", "link-arg=-fuse-ld=lld"]
 rustflags = ["-C", "link-arg=--fuse-ld=/home/amedhi/.local/bin/mold"]
+# rustc-wrapper = "~/.cargo/bin/sccache"
 
 [profile.dev]
 #opt-level = 1

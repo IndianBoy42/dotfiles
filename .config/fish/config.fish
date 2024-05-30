@@ -11,7 +11,6 @@ set -gx TERMINAL $TERM
 if type -q ~/anaconda3/bin/conda
     # >>> conda initialize >>>
     # !! Contents within this block are managed by 'conda init' !!
-    status is-interactive && eval /home/amedhi/anaconda3/bin/conda "shell.fish" hook $argv | source
     # <<< conda initialize <<<
 end
 
@@ -135,7 +134,6 @@ alias yacp 'yadm enter git forgit cherry_pick'
 alias yarb 'yadm enter git forgit rebase'
 alias yabl 'yadm enter git forgit blame'
 alias yafu 'yadm enter git forgit fixup'
-
 
 # ghcup-env
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME
@@ -394,6 +392,10 @@ abbr yta-vorbis "youtube-dl --extract-audio --audio-format vorbis "
 abbr yta-wav "youtube-dl --extract-audio --audio-format wav "
 abbr ytv-best "youtube-dl -f bestvideo+bestaudio "
 
+if type -q direnv
+    direnv hook fish | source
+end
+
 # nnn file manager settings
 set -gx NNN_PLUG 'z:autojump;f:finder;p:preview-tui-ext;P:preview-tabbed;o:nuke'
 set -gx NNN_OPENER "$HOME/.config/nnn/plugins/nuke"
@@ -443,6 +445,12 @@ set -x FORGIT_GI_REPO_LOCAL ""
 set -x FORGIT_GI_REPO_REMOTE "https://github.com/dvcs/gitignore"
 set -x FORGIT_GI_TEMPLATES ""
 
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
+
+ulimit -Sn (ulimit -Hn)
+
 ##################################
 # Run other configs
 ##################################
@@ -450,7 +458,3 @@ set -x FORGIT_GI_TEMPLATES ""
 for file in $FISH_CONFIG_PATH.d/*.fish
     source $file
 end
-
-# bun
-set --export BUN_INSTALL "$HOME/.bun"
-set --export PATH $BUN_INSTALL/bin $PATH

@@ -52,6 +52,8 @@ export CMAKE_BUILD_TYPE := "Release"
 export CMAKE_EXPORT_COMPILE_COMMANDS := "OFF"
 export CMAKE_C_COMPILER := CC
 export CMAKE_CXX_COMPILER := CXX
+export CMAKE_C_COMPILER_LAUNCHER := if use-sccache != "0" { "sccache" } else { "" }
+export CMAKE_CXX_COMPILER_LAUNCHER := if use-sccache != "0" { "sccache" } else { "" }
 
 export nprocs := `nproc`
 
@@ -227,7 +229,6 @@ _tmpdir name:
 # Install a program directory structure using stow
 ins-copy name from: (mkpackdir name)
     cp -r {{from}}/{{name}}/*/* {{prefix}}/{{name}}/
-    #rm -rf /tmp/{{name}} # TODO: should delete?
     chmod +x {{prefix}}/{{name}}/bin/*
     {{justrun}} link-pack {{name}}
 
@@ -286,9 +287,9 @@ bingh name repo pattern tag="": (gh name repo pattern tag) (ins-bin name "/tmp")
 cpbingh name repo pattern tag="": (gh name repo pattern tag) (copy-bin name "/tmp")
     echo "Copied Binary from GH"
 
-# Download a program tarball from Github releases, extract the source to {{prefix}}/, and link the binary folder
+# Download a program tarball from Github releases, extract the source to {{prefix}}/, and link using stow
 insgh name repo pattern tag="": (targh name repo pattern tag) (ins-copy name "/tmp")
-    echo "GH Installed"
+    echo "Linked Binary from GH"
     # TODO: Link libraries and stuff also? this works for now
 
 # Download a source tarball from Github releases and extract the source to blddir
@@ -455,7 +456,10 @@ ultimate-plumber: (bingh "up" "akavel/up" "up")
 
 # Wezterm -- cool terminal?
 wezterm: (bingh "wezterm" "wez/wezterm" "*.AppImage")
-    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which wezterm) 90
+    #!/usr/bin/env fish
+    if test "$(realpath /usr/bin/x-terminal-emulator)" != "$(realpath (which wezterm))"
+        sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which wezterm) 90
+    end
 
 vale-linter: (targh "vale" "errata-ai/vale" "*Linux_64-bit.tar.gz") (ins-bin "vale" "/tmp")
 
@@ -471,12 +475,24 @@ cppcheck: (gitclone "https://github.com/danmar/cppcheck" "cppcheck")
 
 # kitty terminal -- pretty graphics in terminal
 kitty: (mkpackdir "kitty.app")
-    curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest={{prefix}}
-    sudo chmod a+r "{{prefix}}/kitty.app"
+    #!/usr/bin/env fish
+    curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest={{prefix}} launch=n
     {{justrun}} link-pack "kitty.app"
-    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which kitty) 90
     {{justrun}} gitcloneto "https://github.com/trygveaa/kitty-kitten-search" "$HOME/config/kitty/kitty_search"
-    {{justrun}} gitcloneto "https://github.com/yurikhan/kitty_grab.git" "$HOME/config/kitty/kitty_grab"
+    if test "$(realpath /usr/bin/x-terminal-emulator)" != "$(realpath (which kitty))"
+        sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which kitty) 90
+    end
+    # {{justrun}} gitcloneto "https://github.com/yurikhan/kitty_grab.git" "$HOME/config/kitty/kitty_grab"
+
+kitty-nightly: (mkpackdir "kitty.app-nightly")
+    #!/usr/bin/env fish
+    curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin dest={{prefix}} installer=nightly launch=n
+    {{justrun}} link-pack "kitty.app"
+    {{justrun}} gitcloneto "https://github.com/trygveaa/kitty-kitten-search" "$HOME/config/kitty/kitty_search"
+    if test "$(realpath /usr/bin/x-terminal-emulator)" != "$(realpath (which kitty))"
+        sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which kitty) 90
+    end
+    # {{justrun}} gitcloneto "https://github.com/yurikhan/kitty_grab.git" "$HOME/config/kitty/kitty_grab"
 
 kitty-src: (gitclone "https://github.com/kovidgoyal/kitty" "kitty") (mkpackdir "kitty")
     #!/usr/bin/env fish
@@ -753,6 +769,14 @@ git-subrepo: (gitclone "https://github.com/ingydotnet/git-subrepo" "git-subrepo"
     ln -s {{blddir}}/git-subrepo/lib/* {{prefix}}/git-subrepo/bin
     {{justrun}} link-pack "git-subrepo"
 
+# Smart git fixup
+git-absorb: (insgh "git-absorb" "tummychow/git-absorb" "git-absorb-*-x86_64-unknown-linux-musl.tar.gz")
+    echo "done git-absorb"
+    # {{apt-install}} git-absorb
+
+git-tools: git-subrepo git-absorb
+    echo "done git-subrepo"
+
 # Modern Latex distribution
 tectonic: (targh "tectonic" "tectonic-typesetting/tectonic" "*x86_64-unknown-linux-gnu.tar.gz") (ins-bin "tectonic" "/tmp")
     {{apt-install}} biber
@@ -940,7 +964,9 @@ alacritty: cargo-install
         wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/linux/Alacritty.desktop -O /tmp/Alacritty.desktop
         sudo desktop-file-install /tmp/Alacritty.desktop
         sudo update-desktop-database
-        sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which alacritty) 99
+        if test "$(realpath /usr/bin/x-terminal-emulator)" != "$(realpath (which alacritty))"
+            sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which alacritty) 90
+        end
     end
 
 broot: cargo-install
@@ -959,6 +985,7 @@ cargo-build-tools: clippy
     set -x CARGO_BUILD_TARGET {{gnu-target}}
     {{cargo-install}} cargo-edit 
     {{cargo-install}} cargo-generate 
+    {{cargo-install}} cargo-cache
     {{cargo-install}} cargo-outdated 
     {{cargo-install}} probe-run 
     {{cargo-install}} cargo-update
@@ -1144,6 +1171,9 @@ kicad:
 
 spotify: (flatpak-install "com.spotify.Client")
     echo "done"
+
+droidcam: (flatpak-install "com.obsproject.Studio.Plugin.DroidCam")
+    echo "done"
     
 anydesk: (flatpak-install "com.anydesk.Anydesk")
     echo "done"
@@ -1186,6 +1216,10 @@ blender: (flatpak-install "org.blender.Blender")
     
 megasync:(flatpak-install "nz.mega.MEGAsync")
     echo "done"
+
+chrome: (flatpak-install "com.google.Chrome")
+    flatpak override --user --filesystem=home com.google.Chrome
+    echo "done
     
 
 # Flatpak install and download to a local repo
@@ -1278,9 +1312,8 @@ nvim: (gitclone "https://github.com/neovim/neovim.git" "neovim")
     # && rm -r build
     # cd {{blddir}}/neovim \
     # && rm -r .deps 
-    cd {{blddir}}/neovim \
     # CMAKE_EXTRA_FLAGS=-DENABLE_WASMTIME=ON DEPS_CMAKE_FLAGS=-DENABLE_WASMTIME=ON 
-    && make \
+    cd {{blddir}}/neovim && make \
         CMAKE_BUILD_TYPE=Release \
         CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
         install
@@ -1396,9 +1429,11 @@ mold: (gitclone "https://github.com/rui314/mold.git" "mold" "main") (mkpackdir "
     {{justrun}} link-pack mold
 
 # Use update-alternatives
-alternative name alt="" prio="0": 
-    test -n "{{alt}}" && \
-    sudo update-alternatives --install (which {{name}}) {{name}} (realpath (which {{alt}})) {{prio}} \
+alternatives name alt="" prio="0": 
+    #!/usr/bin/env fish
+    if test -n alt; and test "$(which {{name}})" "$(realpath (which {{alt}}))"
+        sudo update-alternatives --install (which {{name}}) {{name}} (realpath (which {{alt}})) {{prio}}
+    end
     || true
     sudo update-alternatives --list {{name}}
 altconfig name:
@@ -1455,10 +1490,10 @@ logiops: (gitclone "https://github.com/PixlOne/logiops.git" "logiops")
 prettierd: 
     npm install -g @fsouza/prettierd
 
-# pipx install yt-dlp
 youtube-dl:
-    sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o {{bindir}}/yt-dlp
-    sudo chmod a+rx {{bindir}}/yt-dlp
+    pipx install yt-dlp
+    # sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o {{bindir}}/yt-dlp
+    # sudo chmod a+rx {{bindir}}/yt-dlp
 
 conan: 
     pipx install conan
@@ -1486,7 +1521,13 @@ scala:
 # TODO: get the newly installed version correctly
 llvm: 
     #!/usr/bin/env fish
-    sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+    wget -O /tmp/llvm.sh https://apt.llvm.org/llvm.sh
+    sed -i 's/apt-get/nala/g' /tmp/llvm.sh
+    sed -i 's/add-apt-repository/add-apt-repository -n/g' /tmp/llvm.sh
+    sudo chmod +x /tmp/llvm.sh
+    sudo bash -c https://apt.llvm.org/llvm.sh all
+    set v clang-18
+    for i in (seq 18 20); type -q clang-$v && set v clang-$v; end
     set name clang; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
     set name clang++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
     set name lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
@@ -1531,7 +1572,7 @@ tracy: (gitclone "https://github.com/wolfpld/tracy.git" "tracy")
     cd {{blddir}}/tracy && make -C update/build/unix release
 
 adbfs: (gitclone "https://github.com/spion/adbfs-rootless.git" "adbfs")
-    sudo apt-get install libfuse-dev android-tools-adb
+    {{apt-install}} libfuse-dev android-tools-adb
     cd {{blddir}}/adbfs && make
 
 euporie: 
@@ -1555,3 +1596,14 @@ fish-src: (gitclone "https://github.com/fish-shell/fish-shell.git" "fish")
     {{justrun}} link-pack "fish"
     command -v fish | sudo tee -a /etc/shells
     chsh -s (command -v fish) "$USER"
+
+coz: 
+    {{apt-install}} coz-profiler
+
+coz-src:
+    echo "https://github.com/plasma-umass/coz/?tab=readme-ov-file#building-coz-from-source"
+
+direnv:
+    {{apt-install}} direnv
+    echo "direnv hook fish | source"
+

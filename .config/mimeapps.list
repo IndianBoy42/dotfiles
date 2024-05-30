@@ -259,3 +259,4 @@ x-scheme-handler/http=com.google.Chrome.desktop;
 application/xhtml+xml=com.google.Chrome.desktop;
 text/html=com.google.Chrome.desktop;
 x-scheme-handler/https=com.google.Chrome.desktop;
+text/plain=nvim.desktop;

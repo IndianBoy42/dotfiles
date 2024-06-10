@@ -1162,12 +1162,13 @@ flatpak-shortcut name short="":
     {{justrun}} ins-bin "$short" "/tmp"
 
 kicad:
-    {{justrun}} flatpak-install org.kicad.KiCad \
+    {{flatpak-installer}} org.kicad.KiCad \
         org.kicad.KiCad.Library.Templates   \
         org.kicad.KiCad.Library.Symbols     \
         org.kicad.KiCad.Library.Packages3D  \
         org.kicad.KiCad.Library.Packages3D  \
         org.kicad.KiCad.Library.Footprints 
+    {{justrun}} flatpak-shortcut org.kicad.KiCad kicad
 
 spotify: (flatpak-install "com.spotify.Client")
     echo "done"
@@ -1313,11 +1314,13 @@ nvim: (gitclone "https://github.com/neovim/neovim.git" "neovim")
     # cd {{blddir}}/neovim \
     # && rm -r .deps 
     # CMAKE_EXTRA_FLAGS=-DENABLE_WASMTIME=ON DEPS_CMAKE_FLAGS=-DENABLE_WASMTIME=ON 
+    git checkout  (cat ~/.config/$NVIM_APPNAME/neovim-commit)
     cd {{blddir}}/neovim && make \
         CMAKE_BUILD_TYPE=Release \
         CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
         install
     {{justrun}} link-pack nvim
+    echo (git rev-parse HEAD) > ~/.config/$NVIM_APPNAME/neovim-commit
 
 # Pretty GUI for neovim written in rust
 neovide: (gitclone "https://github.com/neovide/neovide" "neovide")

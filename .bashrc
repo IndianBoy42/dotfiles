@@ -127,3 +127,5 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
  eval "$(pyenv init --path)"
 fi
+
+export STM32_PRG_PATH=/home/amedhi/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin

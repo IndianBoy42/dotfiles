@@ -6,9 +6,13 @@
 	name = Anshuman
 	email = amedhi@connect.ust.hk
 
+[diff]
+    tool = difftastic
 [core]
     pager = delta
 
+[difftool]
+    prompt = false
 [interactive]
     diffFilter = delta --color-only
 
@@ -20,6 +24,10 @@
     commit-decoration-style = bold yellow box ul
     file-style = bold yellow ul
     file-decoration-style = none
+
+[difftool "difftastic"]
+    cmd = difft "$LOCAL" "$REMOTE"
+
 [init]
 	defaultBranch = main
 [pull]
@@ -30,6 +38,8 @@
 	lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
 	lg = !"git lg1"
 	diff1 = diff HEAD~1 HEAD
+    dft = difftool
+	dft1 = difftool HEAD~1 HEAD
 	dp = diff @{1} HEAD
 	s = status
 	c = commit
@@ -76,9 +86,6 @@
 	
 [credential "https://dev.azure.com"]
 	useHttpPath = true
-[diff]
-	tool = smerge
-	submodule = log
 [merge]
 	tool = smerge
 [commit]

@@ -994,6 +994,8 @@ cargo-build-tools: clippy
     {{cargo-install}} cargo-watch
     {{cargo-install}} cargo-equip
     {{cargo-install}} flamegraph  
+    {{cargo-install}} samply
+    {{cargo-install}} cargo-samply  
     {{cargo-install}} bacon  
     {{cargo-install}} cargo-sweep  
 
@@ -1298,8 +1300,8 @@ sublime-text:
 # TODO: install in an isolated virutal environment? (use pipx)
 # Install my neovim config
 nvim-config home='$HOME' nvim='nvim':
-    {{justrun}} gitcloneto "https://github.com/IndianBoy42/dot.nvim.git" "{{home}}/.config/$NVIM_APPNAME" 
-    cd {{home}}/.config/$NVIM_APPNAME && just nvim={{nvim}} install
+    {{justrun}} gitcloneto "https://github.com/IndianBoy42/dot.nvim.git" "{{home}}/.config/nvim" 
+    cd {{home}}/.config/nvim && just nvim={{nvim}} install
 
 # Install neovim AppImage from github releases
 nvim-img: (cpbingh "nvim.appimage" "neovim/neovim" "*.appimage" "nightly") (wrap-bin "nvim.appimage" "bin/nvim.appimage" "nvim.appimage") 
@@ -1308,19 +1310,32 @@ nvim-img: (cpbingh "nvim.appimage" "neovim/neovim" "*.appimage" "nightly") (wrap
 
 # Compile neovim from source
 nvim: (gitclone "https://github.com/neovim/neovim.git" "neovim")
-    {{apt-install}} ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl
+    {{apt-install}} ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl inotify-tools
     # cd {{blddir}}/neovim \
     # && rm -r build
     # cd {{blddir}}/neovim \
     # && rm -r .deps 
     # CMAKE_EXTRA_FLAGS=-DENABLE_WASMTIME=ON DEPS_CMAKE_FLAGS=-DENABLE_WASMTIME=ON 
-    git checkout  (cat ~/.config/$NVIM_APPNAME/neovim-commit)
+    test -e ~/.config/nvim/neovim-commit;\
+        and git checkout  (cat ~/.config/nvim/neovim-commit)
     cd {{blddir}}/neovim && make \
         CMAKE_BUILD_TYPE=Release \
         CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
         install
     {{justrun}} link-pack nvim
-    echo (git rev-parse HEAD) > ~/.config/$NVIM_APPNAME/neovim-commit
+nvim-upgrade: (gitclone "https://github.com/neovim/neovim.git" "neovim")
+    {{apt-install}} ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl inotify-tools
+    # cd {{blddir}}/neovim \
+    # && rm -r build
+    # cd {{blddir}}/neovim \
+    # && rm -r .deps 
+    # CMAKE_EXTRA_FLAGS=-DENABLE_WASMTIME=ON DEPS_CMAKE_FLAGS=-DENABLE_WASMTIME=ON 
+    cd {{blddir}}/neovim && make \
+        CMAKE_BUILD_TYPE=Release \
+        CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
+        install
+    {{justrun}} link-pack nvim
+    echo (git rev-parse HEAD) > ~/.config/nvim/neovim-commit
 
 # Pretty GUI for neovim written in rust
 neovide: (gitclone "https://github.com/neovide/neovide" "neovide")

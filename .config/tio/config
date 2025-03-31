@@ -1,0 +1,32 @@
+[default]
+log-directory=.tio
+map=INLCRNL,OCRNL
+log=true
+local-echo=true
+input-mode=line
+timestamp=true
+timestamp-format=24hour-start
+
+[fastN]
+pattern = ^fast([0-9]*)
+device = /dev/ttyACM%m1
+baudrate=460800
+
+[acmN]
+pattern = ^acm([0-9]*)
+device = /dev/ttyACM%m1
+
+[usbN]
+pattern = ^usb([0-9]*)
+device = /dev/ttyUSB%m1
+
+[fast]
+baudrate=460800
+auto-connect=latest
+
+[latest]
+auto-connect=latest
+
+[gps]
+auto-connect=latest
+map=

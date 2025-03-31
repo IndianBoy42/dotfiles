@@ -1,0 +1,28 @@
+api-key:
+ - openrouter=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
+
+dark-mode: true
+
+# https://aider.chat/docs/leaderboards/
+# model: openrouter/deepseek/deepseek-r1
+# model: openrouter/openai/o3-mini
+model: openrouter/anthropic/claude-3.7-sonnet
+# architect: true
+# editor-model: openrouter/anthropic/claude-3.5-sonnet
+# editor-model: openrouter/google/gemini-2.0-flash-001
+editor-model: openrouter/anthropic/claude-3.7-sonnet
+
+vim: true
+
+watch-files: true
+
+lint-cmd:
+ # - "cpp: just check"
+ # - "c: just check"
+auto-lint: false
+
+# verbose: true
+notifications: true
+
+# install-tree-sitter-language-pack: true
+

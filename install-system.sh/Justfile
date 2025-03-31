@@ -418,6 +418,12 @@ vcpkg: (gitclone "https://github.com/microsoft/vcpkg.git" "vcpkg")
 
 #TODO: homebrew?
 
+appimg-launcher:
+    sudo apt install software-properties-common
+    sudo add-apt-repository ppa:appimagelauncher-team/stable
+    sudo apt update
+    sudo apt install appimagelauncher
+
 ##############################################333
 # Programs
 ##############################################333
@@ -444,11 +450,15 @@ gh-exts:
 
 # arm embedded gcc - newer than apt
 gcc-arm-none-eabi: (insgh "arm-none-eabi-gcc" "xpack-dev-tools/arm-none-eabi-gcc-xpack" "*linux-x64.tar.gz")
-    echo "Installed $argv"
+    echo "Installed gcc-arm-none-eabi"
+
+# arm embedded gcc - newer than apt
+openocd: (insgh "openocd" "xpack-dev-tools/openocd-xpack" "*linux-x64.tar.gz")
+    echo "Installed openocd"
 
 # riscv embedded gcc - from xpack
 gcc-riscv-none-embed: (insgh "riscv-none-embed-gcc" "xpack-dev-tools/riscv-none-embed-gcc-xpack" "*linux-x64.tar.gz")
-    echo "Installed $argv"
+    echo "Installed gcc-riscv-none-embed"
 
 # Ultimate Plumber, live shell pipelines 
 ultimate-plumber: (bingh "up" "akavel/up" "up")
@@ -821,16 +831,15 @@ patch-font path:
 firacode: (nerdfont "FiraCode") (nerdfont "FiraMono")
     fc-cache -fv
 
-iosevka: (zipgh "iosevka" "be5invis/Iosevka" "super-ttc-*") 
+iosevka: (zipgh "iosevka" "be5invis/Iosevka" "SuperTTC-SGr-IosevkaTermSS05*") 
     cp /tmp/iosevka/* ~/.local/share/fonts/
-    fc-cache -fv
-    {{justrun}} codicons
+    # fc-cache -fv
     {{justrun}} nerdfont-symbols
+    {{justrun}} codicons
 
-codicons: 
-    echo "https://github.com/microsoft/vscode-codicons/actions/workflows/build.yml?query=is%3Asuccess+branch%3Amain"
-    echo "Download it and punt it to ~/.local/share/fonts"
-    echo "then fc-cache -fv"
+codicons: (gh "codicon" "microsoft/vscode-codicons" "codicon.ttf")
+    cp "/tmp/codicon/codicon.ttf" ~/.local/share/fonts/
+    fc-cache -fv
 
 nerdfont-symbols: (targh "nerdfont-symbols" "ryanoasis/nerd-fonts" "NerdFontsSymbolsOnly.tar.xz")
     cp /tmp/nerdfont-symbols/* ~/.local/share/fonts/
@@ -934,18 +943,18 @@ indexa: cargo-install (gitclone "https://github.com/mosmeh/indexa.git" "indexa")
 
 # Fast implementation of the tldr standard
 tealdeer: cargo-install
-    CARGO_BUILD_TARGET={{gnu-target}} {{cargo-install}} $argv[1]
+    CARGO_BUILD_TARGET={{gnu-target}} {{cargo-install}} tealdeer
     tldr --update
 
 # Manager for long running background shell commands/processes
 pueue: cargo-install
-    {{cargo-install}} $argv[1]
+    {{cargo-install}} pueue
     systemctl --user enable --now pueued.service
     pueue parallel (nproc)
 
 # Network and port usage monitor
 bandwhich: cargo-install
-    {{cargo-install}} $argv[1]
+    {{cargo-install}} bandwhich
     sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
 
 clippy:
@@ -1162,12 +1171,15 @@ flatpak-shortcut name short="":
     {{justrun}} ins-bin "$short" "/tmp"
 
 kicad:
-    {{justrun}} flatpak-install org.kicad.KiCad \
+    {{flatpak-installer}} org.kicad.KiCad \
         org.kicad.KiCad.Library.Templates   \
         org.kicad.KiCad.Library.Symbols     \
         org.kicad.KiCad.Library.Packages3D  \
         org.kicad.KiCad.Library.Packages3D  \
         org.kicad.KiCad.Library.Footprints 
+    {{justrun}} flatpak-shortcut org.kicad.KiCad "kicad"
+    flatpak run --command="python -m ensurepip --upgrade" org.kicad.KiCad
+    flatpak run --command="pip3 install requests" org.kicad.KiCad
 
 spotify: (flatpak-install "com.spotify.Client")
     echo "done"
@@ -1579,7 +1591,7 @@ euporie:
     pipx install git+https://github.com/joouha/euporie.git@dev --force  
     pipx inject euporie timg cairosvg mtable flatlatex ipython  
 
-quickshare: (bingh "rquickshare" "martichou/rquickshare" "*.AppImage") 
+quickshare: (bingh "rquickshare" "martichou/rquickshare" "*glibc-2.31*.AppImage") 
 
 # CLI download accelerator
 axel:
@@ -1607,3 +1619,9 @@ direnv:
     {{apt-install}} direnv
     echo "direnv hook fish | source"
 
+tio: (gitclone "https://github.com/tio/tio" "tio") (mkpackdir "tio")
+    meson setup {{blddir}}/tio/build {{blddir}}/tio
+    meson compile -C {{blddir}}/tio/build
+    meson install -C {{blddir}}/tio/build --destdir {{blddir}}/tio/install
+    cp -r {{blddir}}/tio/install/usr/local/* {{prefix}}/tio/
+    {{justrun}} link-pack "tio"

@@ -20,7 +20,7 @@ bold_font        Iosevka Term SS05 Bold Extended
 italic_font      Iosevka Term SS05 Medium Extended Italic
 bold_italic_font Iosevka Term SS05 Bold Extended Italic
 
-font_size 10.0
+font_size 12.0
 
 #: Font size (in pts)
 
@@ -793,8 +793,9 @@ listen_on unix:/tmp/kitty
 #:     map ctrl+f>2 set_font_size 20
 
 kitty_mod ctrl+shift+alt
-map kitty_mod+/      launch --allow-remote-control kitty +kitten kitty_search/search.py @active-kitty-window-id
-map kitty_mod+space kitten kitty_grab/grab.py
+
+# map kitty_mod+/      launch --allow-remote-control kitty +kitten kitty_search/search.py @active-kitty-window-id
+# map kitty_mod+space kitten kitty_grab/grab.py
 # map ctrl+; launch --type=background --cwd=current nvim
 
 #:      \x1b[   = CSI
@@ -913,7 +914,8 @@ map kitty_mod+end       scroll_end
 
 #: For more details, see launch.
 
-# map kitty_mod+n new_os_window
+map kitty_mod+t     new_os_window
+map kitty_mod+q combine : close_other_os_windows : close_os_window
 
 #: Works like new_window above, except that it opens a top level OS
 #: kitty window. In particular you can use new_os_window_with_cwd to
@@ -942,11 +944,12 @@ map kitty_mod+k previous_window
 
 map kitty_mod+h previous_tab
 map kitty_mod+l next_tab
-map kitty_mod+t     new_tab
-# map kitty_mod+q     close_tab
+map kitty_mod+n new_tab
+map kitty_mod+x     close_tab
 # map kitty_mod+.     move_tab_forward
 # map kitty_mod+,     move_tab_backward
 map kitty_mod+i set_tab_title
+map kitty_mod+tab toggle_tab
 
 #: You can also create shortcuts to go to specific tabs, with 1 being
 #: the first tab, 2 the second tab and -1 being the previously active
@@ -965,7 +968,7 @@ map kitty_mod+i set_tab_title
 
 #: Layout management {{{
 
-map kitty_mod+y next_layout
+map kitty_mod+space next_layout
 
 #: You can also create shortcuts to switch to specific layouts::
 
@@ -1010,6 +1013,27 @@ map kitty_mod+y next_layout
 # map kitty_mod+p>f kitten hints --type path --program -
 map kitty_mod+u kitten hints --type path --program -
 map kitty_mod+g kitten hints --type=linenum --linenum-action=tab nvim +{line} {path}
+
+map kitty_mod+p>u kitten hints --type url --program -
+map kitty_mod+p>f kitten hints --type path --program -
+map kitty_mod+p>g kitten hints  --type=linenum --linenum-action=self --program -
+
+map kitty_mod+y>u kitten hints --type url --program @
+map kitty_mod+y>f kitten hints --type path --program @
+map kitty_mod+y>l kitten hints --type line --program @
+map kitty_mod+y>w kitten hints --type word --program @
+map kitty_mod+y>g kitten hints  --type=linenum --linenum-action=self --program @
+
+map kitty_mod+g>u kitten hints --type url 
+map kitty_mod+g>f kitten hints --type path 
+map kitty_mod+g>o kitten hints --type path --program "launch --type=self nvim"
+map kitty_mod+g>kitty_mod+o kitten hints --type path --program "launch --type=self nvim"
+map kitty_mod+g>g kitten hints --type=linenum --linenum-action=self nvim +{line} {path}
+map kitty_mod+g>kitty_mod+g kitten hints --type=linenum --linenum-action=self nvim +{line} {path}
+map kitty_mod+g>shift+f kitten hints --type path --program "launch --type=tab nvim"
+map kitty_mod+g>shift+g kitten hints --type=linenum --linenum-action=tab nvim +{line} {path}
+map kitty_mod+g>ctrl+f kitten hints --type path --program "launch --type=window nvim"
+map kitty_mod+g>ctrl+g kitten hints --type=linenum --linenum-action=window nvim +{line} {path}
 
 #: Select a path/filename and insert it into the terminal. Useful, for
 #: instance to run git commands on a filename output from a previous

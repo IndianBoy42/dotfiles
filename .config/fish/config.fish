@@ -239,11 +239,11 @@ abbr cmake-zap "cmake -DCMAKE_C_COMPILER=zapcc -DCMAKE_CXX_COMPILER=zapcc -S . -
 set -q CMAKE_GENERATOR; or set -gx CMAKE_GENERATOR Ninja
 set -q CMAKE_BUILD_TYPE; or set -gx CMAKE_BUILD_TYPE Release
 set -q CMAKE_EXPORT_COMPILE_COMMANDS; or set -gx CMAKE_EXPORT_COMPILE_COMMANDS ON
-if type -q mold
-    set -q LDFLAGS; or set -gx LDFLAGS "-fuse-ld=mold"
-else
-    set -q LDFLAGS; or set -gx LDFLAGS "-fuse-ld=lld"
-end
+# if type -q mold
+#     set -q LDFLAGS; or set -gx LDFLAGS "-fuse-ld=mold"
+# else
+#     set -q LDFLAGS; or set -gx LDFLAGS "-fuse-ld=lld"
+# end
 set -q MAKEFLAGS; or set -gx MAKEFLAGS -j (nproc)
 set -q JULIA_NUM_THREADS; or set -gx JULIA_NUM_THREADS (nproc)
 set -q ZST_NBTHREADS; or set -gx ZST_NBTHREADS 0
@@ -309,8 +309,8 @@ if type -q nvim
     abbr -g vrtw command nvr --remote-tab-wait
     # end
 end
-set -gx NeovideMultiGrid 1
-set -gx NEOVIDE_FRAMELESS 1
+set -gx NEOVIDE_FORK 1
+set -gx NEOVIDE_FRAME none
 
 # so many spotify-tui abbreviations
 set -gx SPT_FORMAT '%f %s %p : %t - %a (%b) - %v% - playing on %d'

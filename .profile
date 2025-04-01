@@ -10,20 +10,20 @@
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
-    fi
+	# include .bashrc if it exists
+	if [ -f "$HOME/.bashrc" ]; then
+		. "$HOME/.bashrc"
+	fi
 fi
 
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
+if [ -d "$HOME/bin" ]; then
+	PATH="$HOME/bin:$PATH"
 fi
 
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
+if [ -d "$HOME/.local/bin" ]; then
+	PATH="$HOME/.local/bin:$PATH"
 fi
 source "$HOME/.cargo/env"
 
@@ -32,9 +32,8 @@ if [ -e /home/amedhi/.nix-profile/etc/profile.d/nix.sh ]; then . /home/amedhi/.n
 [[ -s "/home/amedhi/.gvm/scripts/gvm" ]] && source "/home/amedhi/.gvm/scripts/gvm"
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
 # >>> coursier install directory >>>
 export PATH="$PATH:/home/amedhi/.local/share/coursier/bin"
@@ -42,6 +41,5 @@ export PATH="$PATH:/home/amedhi/.local/share/coursier/bin"
 
 # repeating keys go brrrr
 xset r rate 220 25
-
 
 export STM32CubeMX_PATH=/home/amedhi/STM32CubeMX

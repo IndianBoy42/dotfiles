@@ -19,8 +19,8 @@ export installdir := if to-root != "0" { sysinstalldir } else {  "$HOME/.local" 
 # The best way to use mold is by prefixing `lets install ...` with `mold --run `
 # TODO: can I detect mold and use lld if not?
 export LD := "mold" # gold, mold, lld
-export CC :=  "gcc-12" # gcc-11, clang, clang-12, zig cc, tinycc, zapcc
-# CXX := "g++" # g++-11, clang++, clang++-12, zig c++
+export CC :=  "gcc-14" # gcc-11, clang, clang-12, zig cc, tinycc, zapcc
+# CXX := "g++-14" # g++-11, clang++, clang++-12, zig c++
 export CXX := replace(replace(replace(CC, "gcc", "g++"), "clang", "clang++"), "cc", "c++")
 
 static := "0" # TODO: every project needs a different flag for static
@@ -94,7 +94,7 @@ export CARGO_BUILD_TARGET := if use-musl != "0" { musl-target } else { gnu-targe
 export CARGO_TARGET_DIR := "/tmp/lets-install/cargo/"
 export CMAKE_BUILD_DIR := "/tmp/lets-install/cmake/" # "build"
 
-cargo-install := if cargo-bg != "0" { "pueue add -- cargo install --locked" } else { "cargo install --locked" }# TODO: can use quickinstall
+cargo-install := if cargo-bg != "0" { "pueue add -- cargo install --locked" } else { "cargo install" }# TODO: can use quickinstall
 
 # "dobg alacritty --hold -e cargo install"
 # cargo-install := "pueue add -- cargo install --force --jobs 1" # TODO: background compile
@@ -933,10 +933,6 @@ gitui: cargo-install (gitclone "https://github.com/extrawurst/gitui.git" "gitui"
 lazygit: (gitclone "https://github.com/jesseduffield/lazygit.git" "lazygit")
     cd {{blddir}}/lazygit && go install
 
-# Minimal serial terminal/monitor
-serial-monitor: cargo-install (gitclone "https://github.com/IndianBoy42/serial-monitor.git" "serial-monitor")
-    {{cargo-install}} --path {{blddir}}/serial-monitor
-
 # Index and search all local files
 indexa: cargo-install (gitclone "https://github.com/mosmeh/indexa.git" "indexa")
     {{cargo-install}} --path {{blddir}}/indexa
@@ -944,12 +940,13 @@ indexa: cargo-install (gitclone "https://github.com/mosmeh/indexa.git" "indexa")
 # Fast implementation of the tldr standard
 tealdeer: cargo-install
     CARGO_BUILD_TARGET={{gnu-target}} {{cargo-install}} tealdeer
-    tldr --update
+    command tldr --update
 
 # Manager for long running background shell commands/processes
 pueue: cargo-install
     {{cargo-install}} pueue
     systemctl --user enable --now pueued.service
+    systemctl --user start pueued
     pueue parallel (nproc)
 
 # Network and port usage monitor
@@ -1008,7 +1005,7 @@ cargo-build-tools: clippy
     {{cargo-install}} bacon  
     {{cargo-install}} cargo-sweep  
 
-cargo-essentials: cargo-install gitui ripgrep broot tealdeer pueue
+cargo-essentials: cargo-install ripgrep broot tealdeer pueue
     {{cargo-install}} bat
     {{cargo-install}} kn
     {{cargo-install}} zoxide
@@ -1054,11 +1051,10 @@ cargo-all-musl: cargo-install bandwhich indexa
     {{cargo-install}} gpg-tui 
     {{cargo-install}} git-branchless
 
-cargo-embedded: serial-monitor 
+cargo-embedded:
     {{cargo-install}} flip-link
     {{cargo-install}} probe-run
-    {{cargo-install}} drone
-
+    
 spotify-tui: spotify
     {{cargo-install}} spotify-tui 
 
@@ -1118,7 +1114,7 @@ py-essentials:
 
 # Isolated pip installs for applications
 pipx:
-    pip3 install --user pipx
+    {{apt-install}} pipx
     pipx ensurepath
 
 # Pipenv venv manager
@@ -1321,14 +1317,12 @@ nvim-img: (cpbingh "nvim.appimage" "neovim/neovim" "*.appimage" "nightly") (wrap
 
 # Compile neovim from source
 nvim: (gitclone "https://github.com/neovim/neovim.git" "neovim")
-    {{apt-install}} ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl inotify-tools
+    {{apt-install}} gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl inotify-tools
     # cd {{blddir}}/neovim \
     # && rm -r build
     # cd {{blddir}}/neovim \
     # && rm -r .deps 
     # CMAKE_EXTRA_FLAGS=-DENABLE_WASMTIME=ON DEPS_CMAKE_FLAGS=-DENABLE_WASMTIME=ON 
-    test -e ~/.config/nvim/neovim-commit;\
-        and git checkout  (cat ~/.config/nvim/neovim-commit)
     cd {{blddir}}/neovim && make \
         CMAKE_BUILD_TYPE=Release \
         CMAKE_INSTALL_PREFIX={{prefix}}/nvim \
@@ -1451,7 +1445,6 @@ mold: (gitclone "https://github.com/rui314/mold.git" "mold" "main") (mkpackdir "
     #!/usr/bin/env fish
     cd {{blddir}}/mold 
     mkdir build
-    sudo ./install-build-deps.sh
     cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="{{prefix}}/mold" -B build
     cmake --build build -j $(nproc)
     cmake --build build --target install
@@ -1551,17 +1544,18 @@ scala:
 llvm: 
     #!/usr/bin/env fish
     wget -O /tmp/llvm.sh https://apt.llvm.org/llvm.sh
+    {{apt-install}} lsb-release wget software-properties-common gnupg
     sed -i 's/apt-get/nala/g' /tmp/llvm.sh
-    sed -i 's/add-apt-repository/add-apt-repository -n/g' /tmp/llvm.sh
+    #sed -i 's/sudo add-apt-repository/sudo add-apt-repository -n/g' /tmp/llvm.sh
     sudo chmod +x /tmp/llvm.sh
-    sudo bash -c https://apt.llvm.org/llvm.sh all
-    set v clang-18
-    for i in (seq 18 20); type -q clang-$v && set v clang-$v; end
-    set name clang; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
-    set name clang++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
-    set name lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
-    set name ld.lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
-    set name clangd; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-18 100
+    sudo bash -c /tmp/llvm.sh all
+    set v 18
+    for i in (seq 18 20); type -q clang-$i && set v $i; end
+    set name clang; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v 100
+    set name clang++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v 100
+    set name lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v 100
+    set name ld.lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v 100
+    set name clangd; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v 100
 
 clang: llvm
 
@@ -1642,3 +1636,7 @@ tio: (gitclone "https://github.com/tio/tio" "tio") (mkpackdir "tio")
     meson install -C {{blddir}}/tio/build --destdir {{blddir}}/tio/install
     cp -r {{blddir}}/tio/install/usr/local/* {{prefix}}/tio/
     {{justrun}} link-pack "tio"
+
+hints:
+    {{apt-install}} git libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-4.0 pipx && \
+    pipx install git+https://github.com/AlfredoSequeida/hints.git

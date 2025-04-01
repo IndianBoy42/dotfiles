@@ -1,1 +1,1 @@
-/home/amedhi/install-system.sh/Justfile
+../install-system.sh/Justfile

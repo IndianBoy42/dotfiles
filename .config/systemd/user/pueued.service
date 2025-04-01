@@ -8,8 +8,8 @@ Description=Pueue Daemon - CLI process scheduler and manager
 [Service]
 Restart=no
 Environment=ASYNC_STD_THREAD_COUNT=4
-ExecStart=/home/amedhi/.cargo/bin/pueued
-ExecReload=/home/amedhi/.cargo/bin/pueued
+ExecStart=%h/.cargo/bin/pueued
+ExecReload=%h/.cargo/bin/pueued
 
 [Install]
 WantedBy=default.target

@@ -1,1 +1,1 @@
-/home/amedhi/.letsfiles/lets.fish
+../../../.letsfiles/lets.fish

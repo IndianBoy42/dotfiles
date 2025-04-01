@@ -25,19 +25,14 @@ sudo nala fetch
 sudo nala update
 # sudo nala dist-upgrade
 
-# Essential Basics
+# Essential(?) Basics
 sudo nala install `cat system.apt`
 
 # Create home local dir structure
 mkdir -p ~/bin
-mkdir -p ~/.local/bin
-mkdir -p ~/.local/lib
-mkdir -p ~/.local/include
-mkdir -p ~/.local/libexec
-mkdir -p ~/.local/packages
 mkdir -p ~/.local/share/info
 mkdir -p ~/.git-builds/
-mkdir -p /dev/
+mkdir -p ~/dev/
 sudo chmod a+w ~/.local/share/info
 # sudo chmod a+rw ~/.local/share/hicolor/*
 
@@ -73,6 +68,9 @@ just git
 just pacstall
 just stow
 just llvm
+just pipx
+sudo nala install cmake ninja-build g++-14
+just mold
 
 read -n 1 -p 'Reboot now? (you should):'
 echo ""

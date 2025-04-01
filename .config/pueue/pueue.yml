@@ -16,11 +16,11 @@ daemon:
   callback_log_lines: 10
   groups: {}
 shared:
-  pueue_directory: /home/amedhi/.local/share/pueue
+  pueue_directory: ~/.local/share/pueue
   use_unix_socket: true
-  unix_socket_path: /home/amedhi/.local/share/pueue/pueue_amedhi.socket
+  unix_socket_path: ~/.local/share/pueue/pueue_amedhi.socket
   host: 127.0.0.1
   port: "6924"
-  daemon_cert: /home/amedhi/.local/share/pueue/certs/daemon.cert
-  daemon_key: /home/amedhi/.local/share/pueue/certs/daemon.key
-  shared_secret_path: /home/amedhi/.local/share/pueue/shared_secret
+  daemon_cert: ~/.local/share/pueue/certs/daemon.cert
+  daemon_key: ~/.local/share/pueue/certs/daemon.key
+  shared_secret_path: ~/.local/share/pueue/shared_secret

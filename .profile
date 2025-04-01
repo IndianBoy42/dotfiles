@@ -42,3 +42,6 @@ export PATH="$PATH:/home/amedhi/.local/share/coursier/bin"
 
 # repeating keys go brrrr
 xset r rate 220 25
+
+
+export STM32CubeMX_PATH=/home/amedhi/STM32CubeMX

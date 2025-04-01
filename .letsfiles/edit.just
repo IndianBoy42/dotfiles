@@ -51,3 +51,9 @@ broot:
 
 cargo:
     cd ~/.cargo/ && $EDITOR config.toml
+
+aider:
+    cd ~/.config && $EDITOR ~/.aider.conf.yml
+
+tio:
+    cd ~/.config && $EDITOR tio/config

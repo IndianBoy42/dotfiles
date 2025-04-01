@@ -131,7 +131,7 @@
 
 (deflayer symlayer ;; TODO port new symlayer
    _    1    2    3    4    5    6    7    8    9    0    _    _    bspc
-   grv  grv  \(   ^    @    \)   "    !    ?    %    _    _    _    _
+   grv  grv  \(   !    @    \)   "    ^    ?    %    _    _    _    _
    0    {    *    $    |    }    '   \_    =    \    _    _    _
    _    ~    [    #    &    '    /    -    +    _    _    _
    _    _    _              _              _    _    _    _

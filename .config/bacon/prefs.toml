@@ -115,6 +115,7 @@ base_volume = "100%" # global volume multiplier
 command = [
     "cargo",
     "clippy",
+    "--target-dir=target/analyzer",
     "--workspace",
     "--tests",
     "--all-targets",

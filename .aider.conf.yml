@@ -1,28 +1,44 @@
-api-key:
- - openrouter=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
-
 dark-mode: true
 
 # https://aider.chat/docs/leaderboards/
 # model: openrouter/deepseek/deepseek-r1
 # model: openrouter/openai/o3-mini
-model: openrouter/anthropic/claude-3.7-sonnet
+model: sonnet
 # architect: true
 # editor-model: openrouter/anthropic/claude-3.5-sonnet
 # editor-model: openrouter/google/gemini-2.0-flash-001
 editor-model: openrouter/anthropic/claude-3.7-sonnet
+
+# weak-model: openrouter/google/gemma-3-4b-it
+weak-model: flashf
 
 vim: true
 
 watch-files: true
 
 lint-cmd:
- # - "cpp: just check"
- # - "c: just check"
-auto-lint: false
+  - "cpp: gccdiag"
+  - "c: gccdiag"
+auto-lint: true
 
 # verbose: true
 notifications: true
 
 # install-tree-sitter-language-pack: true
-
+alias:
+  - "ds:openrouter/deepseek/deepseek-chat-v3-0324"
+  - "deepseek:openrouter/deepseek/deepseek-chat-v3-0324"
+  - "flash:openrouter/google/gemini-2.0-flash-exp"
+  - "flasht:openrouter/google/gemini-2.0-flash-thinking-exp"
+  - "gem:openrouter/google/gemini-2.5-pro-preview-03-25"
+  - "gemini:openrouter/google/gemini-2.5-pro-preview-03-25"
+  - "quasar:openrouter/openrouter/quasar-alpha"
+  - "r1:openrouter/deepseek/deepseek-reasoner"
+  - "claude:openrouter/anthropic/claude-3.7-sonnet"
+  - "sonnet:openrouter/anthropic/claude-3.7-sonnet"
+  - "dsf:openrouter/deepseek/deepseek-chat-v3-0324:free"
+  - "flashf:openrouter/google/gemini-2.0-flash-exp:free"
+  - "gemf:openrouter/google/gemini-2.5-pro-preview-03-25:free"
+  - "quasarf:openrouter/openrouter/quasar-alpha:free"
+  - "r1f:openrouter/deepseek/deepseek-reasoner"
+  - "sonnetf:openrouter/anthropic/claude-3.7-sonnet-20250219:free"

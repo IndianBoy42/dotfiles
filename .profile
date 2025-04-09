@@ -28,19 +28,19 @@ fi
 
 source "$HOME/.cargo/env"
 
-if [ -e /home/amedhi/.nix-profile/etc/profile.d/nix.sh ]; then . /home/amedhi/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
-[[ -s "/home/amedhi/.gvm/scripts/gvm" ]] && source "/home/amedhi/.gvm/scripts/gvm"
+[[ -s "~/.gvm/scripts/gvm" ]] && source "~/.gvm/scripts/gvm"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
 # >>> coursier install directory >>>
-export PATH="$PATH:/home/amedhi/.local/share/coursier/bin"
+export PATH="$PATH:~/.local/share/coursier/bin"
 # <<< coursier install directory <<<
 
 # repeating keys go brrrr
 xset r rate 220 25
 
-export STM32CubeMX_PATH=/home/amedhi/STM32CubeMX
+export STM32CubeMX_PATH=~/STM32CubeMX

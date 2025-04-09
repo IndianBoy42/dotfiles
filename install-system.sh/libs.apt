@@ -50,3 +50,4 @@ libelf-dev
 openssl
 libspeechd-dev
 xutils-dev
+libboost-all-dev

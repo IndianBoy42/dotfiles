@@ -384,6 +384,10 @@ nix:
 pacstall: axel
     sudo bash -c "$(curl -fsSL https://pacstall.dev/q/install || wget -q https://pacstall.dev/q/install -O -)"
 
+packhub +name: 
+    wget -qO- https://packhub.dev/sh/ubuntu/github/{{name}} | sh
+    {{apt-install}} {{name}}
+
 # GNU Stow symlink farm manager -- build stow from source 
 stow-src: (gitclone "https://github.com/aspiers/stow.git" "stow") (mkpackdir "stow")
     #!/usr/bin/env fish
@@ -419,10 +423,7 @@ vcpkg: (gitclone "https://github.com/microsoft/vcpkg.git" "vcpkg")
 #TODO: homebrew?
 
 appimg-launcher:
-    sudo apt install software-properties-common
-    sudo add-apt-repository ppa:appimagelauncher-team/stable
-    sudo apt update
-    sudo apt install appimagelauncher
+    {{flatpak-installer}} it.mijorus.gearlever
 
 ##############################################333
 # Programs
@@ -452,9 +453,11 @@ gh-exts:
 gcc-arm-none-eabi: (insgh "arm-none-eabi-gcc" "xpack-dev-tools/arm-none-eabi-gcc-xpack" "*linux-x64.tar.gz")
     echo "Installed gcc-arm-none-eabi"
 
-# arm embedded gcc - newer than apt
+# openocd - newer than apt
 openocd: (insgh "openocd" "xpack-dev-tools/openocd-xpack" "*linux-x64.tar.gz")
     echo "Installed openocd"
+
+pyocd: (gitclone "https://github.com/pyocd/pyocd" "pyocd")
 
 # riscv embedded gcc - from xpack
 gcc-riscv-none-embed: (insgh "riscv-none-embed-gcc" "xpack-dev-tools/riscv-none-embed-gcc-xpack" "*linux-x64.tar.gz")
@@ -470,6 +473,9 @@ wezterm: (bingh "wezterm" "wez/wezterm" "*.AppImage")
     if test "$(realpath /usr/bin/x-terminal-emulator)" != "$(realpath (which wezterm))"
         sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which wezterm) 90
     end
+
+# interactive systemd
+isd: (bingh "isd" "isd-project/isd" "isd.x86_64-linux.AppImage")
 
 vale-linter: (targh "vale" "errata-ai/vale" "*Linux_64-bit.tar.gz") (ins-bin "vale" "/tmp")
 
@@ -606,7 +612,7 @@ zig: (gitclone "https://github.com/ziglang/zig.git" "zig")
 
 # godbolt
 godbolt: (gitclone "https://github.com/compiler-explorer/compiler-explorer.git" "compiler-explorer")
-    cargo install rustfilt
+    {{cargo-install}} rustfilt
 
 # Caching C/C++ compiler for higher compile speed (not updated?)
 zapcc: (gitclone "https://github.com/yrnkrn/zapcc.git" "zapcc")
@@ -738,13 +744,11 @@ git-libsecret: (mkblddir "libsecret")
     git config --global credential.helper {{blddir}}/libsecret/git-credential-libsecret
 
 # Quantum Mechanical Keyboard firmware
-qmk: (gitcloneto "https://github.com/IndianBoy42/qmk_firmware.git" "$HOME/qmk_firmware")
+qmk: (gitcloneto "https://github.com/IndianBoy42/qmk_userspace.git" "$HOME/qmk_userspace")
     #!/usr/bin/env fish
-    cd ~/qmk_firmware
-    git remote add upstream "https://github.com/qmk/qmk_firmware.git" && \
-    sudo cp ~/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
     pipx install qmk
     qmk setup
+    sudo cp ~/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
     qmk doctor
 
 # CMake (not a) build system
@@ -769,6 +773,7 @@ kmonad: (bingh "kmonad" "kmonad/kmonad" "kmonad")
     sudo usermod -aG input $USER
     sudo modprobe uinput
     sudo cp {{inst-script-dir}}/uinput.rules /etc/udev/rules.d/uinput.rules
+    ln -s ~/.config/kmonad/kmonad.service ~/.config/systemd/user/kmonad.service
     systemctl --user enable --now kmonad.service
     echo "The next output will help you find the device that your keyboard corresponds to"
     cat /proc/bus/input/devices | rg -C5 keyboard
@@ -980,6 +985,7 @@ broot: cargo-install
     test -f ~/.local/share/fonts/vscode.ttf; \
     or wget https://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
     {{cargo-install}} broot
+    ln -s ~/.local/share/broot/launcher/fish/br.fish ~/.config/fish/functions/br.fish
 
 xplr: cargo-install 
     {{cargo-install}} xplr
@@ -1050,6 +1056,8 @@ cargo-all-musl: cargo-install bandwhich indexa
     {{cargo-install}} tokei
     {{cargo-install}} gpg-tui 
     {{cargo-install}} git-branchless
+    {{cargo-install}} git-graph
+    {{cargo-install}} impala
 
 cargo-embedded:
     {{cargo-install}} flip-link
@@ -1114,7 +1122,7 @@ py-essentials:
 
 # Isolated pip installs for applications
 pipx:
-    {{apt-install}} pipx
+    {{apt-install}} python3-full pipx
     pipx ensurepath
 
 # Pipenv venv manager
@@ -1416,7 +1424,7 @@ mtr: (gitclone "https://github.com/traviscross/mtr.git" "mtr")
     {{justrun}} autotool-install mtr
 
 platformio: 
-    {{justrun}} pipx-install platformio
+    {{justrun}} platformio
 
 lua:
     {{apt-install}} liblua5.4-dev lua5.4 luajit
@@ -1519,6 +1527,7 @@ youtube-dl:
 
 conan: 
     pipx install conan
+    conan profile detect
 
 gccdiag: (gitclone "https://gitlab.com/andrejr/gccdiag.git" "gccdiag")
     cmake -S {{blddir}}/gccdiag -B {{blddir}}/gccdiag/build \
@@ -1564,7 +1573,7 @@ forgit:
     fish_add_path {{blddir}}/forgit/bin
     
 nushell:
-    cargo install nushell
+    {{cargo-install}} nushell
     git clone https://github.com/nushell/nu_scripts.git ~/.config/nushell/nu_scripts
 
 x2x: (gitclone "https://github.com/dottedmag/x2x.git" "x2x")
@@ -1638,5 +1647,20 @@ tio: (gitclone "https://github.com/tio/tio" "tio") (mkpackdir "tio")
     {{justrun}} link-pack "tio"
 
 hints:
-    {{apt-install}} git libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-4.0 pipx && \
+    {{apt-install}} git libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-4.0 girepository2.0
     pipx install git+https://github.com/AlfredoSequeida/hints.git
+    sudo usermod -a -G input $USER
+    echo 'KERNEL=="uinput", GROUP="input", MODE:="0660"' | sudo tee -a /etc/udev/rules.d/80-hints.rules
+
+
+tio: (gitclone "https://github.com/tio/tio" "tio") (mkpackdir "tio")
+    {{apt-install}} lua5.4 liblua5.4-dev
+    meson setup {{blddir}}/tio/build {{blddir}}/tio
+    meson compile -C {{blddir}}/tio/build
+    meson install -C {{blddir}}/tio/build --destdir {{blddir}}/tio/install
+    cp -r {{blddir}}/tio/install/usr/local/* {{prefix}}/tio/
+    {{justrun}} link-pack "tio"
+
+nordvpn: 
+    #!/usr/bin/env bash
+    sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)

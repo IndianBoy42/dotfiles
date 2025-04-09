@@ -137,7 +137,7 @@ alias yafu 'yadm enter git forgit fixup'
 
 # ghcup-env
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME
-test -f /home/amedhi/.ghcup/env
+test -f ~/.ghcup/env
 and fish_add_path ~/.cabal/bin ~/.ghcup/bin
 
 # super short cargo abbreviations
@@ -309,8 +309,6 @@ if type -q nvim
     abbr -g vrtw command nvr --remote-tab-wait
     # end
 end
-set -gx NEOVIDE_FORK 1
-set -gx NEOVIDE_FRAME none
 
 # so many spotify-tui abbreviations
 set -gx SPT_FORMAT '%f %s %p : %t - %a (%b) - %v% - playing on %d'
@@ -341,9 +339,9 @@ if type -q nvm
 end
 
 # Reindex (indexa) if is-interactive
-if type -q ix
-    status --is-interactive; and ix -u &>/dev/null &
-end
+# if type -q ix
+#     status --is-interactive; and ix -u &>/dev/null &
+# end
 set -g fish_key_bindings fish_vi_key_bindings
 
 # pueue is really cool

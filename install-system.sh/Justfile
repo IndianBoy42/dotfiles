@@ -541,9 +541,12 @@ gvm:
     end
 
 go: gvm
-    gvm install go1.16 --binary 
-    gvm use go1.16 --default
-    gvm alias create latest go1.16
+    #!/usr/bin/env fish
+    set LATEST (gvm listall | grep -E '^   go[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -1 | awk '{print $1}')
+    echo $LATEST
+    gvm alias create latest $LATEST
+    gvm install $LATEST --binary 
+    gvm use $LATEST --default
 
 nvm:
     #!/usr/bin/env fish
@@ -1638,13 +1641,6 @@ coz-src:
 direnv:
     {{apt-install}} direnv
     echo "direnv hook fish | source"
-
-tio: (gitclone "https://github.com/tio/tio" "tio") (mkpackdir "tio")
-    meson setup {{blddir}}/tio/build {{blddir}}/tio
-    meson compile -C {{blddir}}/tio/build
-    meson install -C {{blddir}}/tio/build --destdir {{blddir}}/tio/install
-    cp -r {{blddir}}/tio/install/usr/local/* {{prefix}}/tio/
-    {{justrun}} link-pack "tio"
 
 hints:
     {{apt-install}} git libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-4.0 girepository2.0

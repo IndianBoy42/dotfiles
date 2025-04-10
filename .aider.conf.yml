@@ -10,7 +10,7 @@ model: sonnet
 editor-model: openrouter/anthropic/claude-3.7-sonnet
 
 # weak-model: openrouter/google/gemma-3-4b-it
-weak-model: flashf
+weak-model: flash
 
 vim: true
 
@@ -28,8 +28,7 @@ notifications: true
 alias:
   - "ds:openrouter/deepseek/deepseek-chat-v3-0324"
   - "deepseek:openrouter/deepseek/deepseek-chat-v3-0324"
-  - "flash:openrouter/google/gemini-2.0-flash-exp"
-  - "flasht:openrouter/google/gemini-2.0-flash-thinking-exp"
+  - "flash:openrouter/google/gemini-2.0-flash-001"
   - "gem:openrouter/google/gemini-2.5-pro-preview-03-25"
   - "gemini:openrouter/google/gemini-2.5-pro-preview-03-25"
   - "quasar:openrouter/openrouter/quasar-alpha"
@@ -37,8 +36,10 @@ alias:
   - "claude:openrouter/anthropic/claude-3.7-sonnet"
   - "sonnet:openrouter/anthropic/claude-3.7-sonnet"
   - "dsf:openrouter/deepseek/deepseek-chat-v3-0324:free"
-  - "flashf:openrouter/google/gemini-2.0-flash-exp:free"
+  - "flashlite:openrouter/google/gemini-2.0-flash-lite-001"
   - "gemf:openrouter/google/gemini-2.5-pro-preview-03-25:free"
   - "quasarf:openrouter/openrouter/quasar-alpha:free"
   - "r1f:openrouter/deepseek/deepseek-reasoner"
   - "sonnetf:openrouter/anthropic/claude-3.7-sonnet-20250219:free"
+  - "deepcoder:lmstudio/agentica-org_deepcoder-14b-preview@q6_k_l"
+  - "qwen:lmstudio/qwen2.5-coder-32b-instruct"

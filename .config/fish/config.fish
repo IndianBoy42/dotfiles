@@ -4,6 +4,10 @@
 
 set -gx TERMINAL $TERM
 
+if status is-login
+    system76-power profile performance
+end
+
 ##################################
 # PATH setup
 ##################################

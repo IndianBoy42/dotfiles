@@ -1648,6 +1648,8 @@ hints:
     sudo usermod -a -G input $USER
     echo 'KERNEL=="uinput", GROUP="input", MODE:="0660"' | sudo tee -a /etc/udev/rules.d/80-hints.rules
 
+autocpufreq: (gitclone "https://github.com/AdnanHodzic/auto-cpufreq" "auto-cpufreq")
+    cd {{blddir}}/auto-cpufreq && sudo ./auto-cpufreq-installer
 
 tio: (gitclone "https://github.com/tio/tio" "tio") (mkpackdir "tio")
     {{apt-install}} lua5.4 liblua5.4-dev

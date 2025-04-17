@@ -887,7 +887,7 @@ map kitty_mod+end       scroll_end
 
 #: Window management {{{
 
-# map kitty_mod+enter new_window
+map kitty_mod+enter new_window_with_cwd
 
 #: You can open a new window running an arbitrary program, for
 #: example::
@@ -914,7 +914,7 @@ map kitty_mod+end       scroll_end
 
 #: For more details, see launch.
 
-map kitty_mod+t     new_os_window
+map kitty_mod+t     new_os_window_with_cwd
 map kitty_mod+q combine : close_other_os_windows : close_os_window
 
 #: Works like new_window above, except that it opens a top level OS
@@ -944,7 +944,7 @@ map kitty_mod+k previous_window
 
 map kitty_mod+h previous_tab
 map kitty_mod+l next_tab
-map kitty_mod+n new_tab
+map kitty_mod+n new_tab_with_cwd
 map kitty_mod+x     close_tab
 # map kitty_mod+.     move_tab_forward
 # map kitty_mod+,     move_tab_backward

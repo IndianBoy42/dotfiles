@@ -3,11 +3,12 @@ dark-mode: true
 # https://aider.chat/docs/leaderboards/
 # model: openrouter/deepseek/deepseek-r1
 # model: openrouter/openai/o3-mini
-model: sonnet
+model: gemini
 # architect: true
 # editor-model: openrouter/anthropic/claude-3.5-sonnet
 # editor-model: openrouter/google/gemini-2.0-flash-001
-editor-model: openrouter/anthropic/claude-3.7-sonnet
+# editor-model: optimus
+editor-model: gemini
 
 # weak-model: openrouter/google/gemma-3-4b-it
 weak-model: flash
@@ -26,20 +27,17 @@ notifications: true
 
 # install-tree-sitter-language-pack: true
 alias:
-  - "ds:openrouter/deepseek/deepseek-chat-v3-0324"
   - "deepseek:openrouter/deepseek/deepseek-chat-v3-0324"
   - "flash:openrouter/google/gemini-2.0-flash-001"
   - "gem:openrouter/google/gemini-2.5-pro-preview-03-25"
   - "gemini:openrouter/google/gemini-2.5-pro-preview-03-25"
-  - "quasar:openrouter/openrouter/quasar-alpha"
   - "r1:openrouter/deepseek/deepseek-reasoner"
   - "claude:openrouter/anthropic/claude-3.7-sonnet"
   - "sonnet:openrouter/anthropic/claude-3.7-sonnet"
-  - "dsf:openrouter/deepseek/deepseek-chat-v3-0324:free"
+  - "freeseek:openrouter/deepseek/deepseek-chat-v3-0324:free"
   - "flashlite:openrouter/google/gemini-2.0-flash-lite-001"
-  - "gemf:openrouter/google/gemini-2.5-pro-preview-03-25:free"
-  - "quasarf:openrouter/openrouter/quasar-alpha:free"
-  - "r1f:openrouter/deepseek/deepseek-reasoner"
-  - "sonnetf:openrouter/anthropic/claude-3.7-sonnet-20250219:free"
+  - "freegem:openrouter/google/gemini-2.5-pro-preview-03-25:free"
+  - "r1f:openrouter/deepseek/deepseek-r1:free,openrouter/deepseek/deepseek-r1"
+  - "optimus:openrouter/openrouter/optimus-alpha"
   - "deepcoder:lmstudio/agentica-org_deepcoder-14b-preview@q6_k_l"
   - "qwen:lmstudio/qwen2.5-coder-32b-instruct"

@@ -174,7 +174,7 @@ abbr py python
 
 # lsd abbreviations
 if type -q lsd
-    abbr -g l "lsd -A"
+    abbr -g l "lsd -AF"
     abbr -g lsc "lsd -A --color always --icon always"
     abbr -g ls "lsd -A"
     abbr -g lr "lsd -AR --depth 2"
@@ -187,13 +187,14 @@ else
 end
 # zoxide fzf stuff?
 alias zf=__fzf_search_current_dir
-abbr fzfp 'fzf --preview=\'v {}\''
+abbr fz 'fzf --preview=\'v {}\''
 #abbr zhome 'z ~ && z (__fzf_search_current_dir)'
 abbr z- 'z -'
 type -q zoxide
 and abbr -g cd z
 type -q _kn
 and abbr -g cd kn
+and abbr -g / kn
 
 # apt abbreviations
 if type -q nala

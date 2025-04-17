@@ -1,3 +1,4 @@
+#!/usr/bin/env just --justfile
 set shell := ["fish", "-c"]
 
 export justrun := just_executable() + " -d " + inst-script-dir + " -f " + justfile() 
@@ -383,6 +384,7 @@ nix:
 
 pacstall: axel
     sudo bash -c "$(curl -fsSL https://pacstall.dev/q/install || wget -q https://pacstall.dev/q/install -O -)"
+    {{justrun}} git "https://github.com/pacstall/pacstall-programs" "pacstall"
 
 packhub +name: 
     wget -qO- https://packhub.dev/sh/ubuntu/github/{{name}} | sh
@@ -416,6 +418,7 @@ gh-cli:
     && sudo apt update \
     && sudo apt install gh -y
     gh auth login
+    {{justrun}} gh-exts
 
 vcpkg: (gitclone "https://github.com/microsoft/vcpkg.git" "vcpkg")
     ~/git-builds/vcpkg/bootstrap-vcpkg.sh
@@ -442,12 +445,16 @@ yadm:
         yadm commit -m "Update yadm submodule"
     end
 
+confgen:
+    echo "LordMZTE/confgen"
+
 gh-exts:
     gh extension install gennaro-tedesco/gh-f
     gh extension install dlvhdr/gh-dash
     gh extension install yusukebe/gh-markdown-preview
     gh extension install redraw/gh-install
     gh extension install mislav/gh-cp
+    gh extension install mislav/gh-branch
 
 # arm embedded gcc - newer than apt
 gcc-arm-none-eabi: (insgh "arm-none-eabi-gcc" "xpack-dev-tools/arm-none-eabi-gcc-xpack" "*linux-x64.tar.gz")
@@ -931,69 +938,43 @@ ripgrep:
 ripgrep_all: ripgrep (gitclone "https://github.com/phiresky/ripgrep-all.git" "ripgrep_all")
     {{cargo-install}} --path {{blddir}}/ripgrep_all
 
-# gitui: cargo-install (gitclone "https://github.com/IndianBoy42/gitui.git" "gitui")
-# Easy to use TUI for git
-gitui: cargo-install (gitclone "https://github.com/extrawurst/gitui.git" "gitui")
-    cd {{blddir}}/gitui && git fetch --all && git merge upstream/master && git push
-    {{cargo-install}} --path {{blddir}}/gitui
-    cp {{blddir}}/gitui/vim_style_key_config.ron ~/.config/gitui/key_bindings.ron
-
 lazygit: (gitclone "https://github.com/jesseduffield/lazygit.git" "lazygit")
     cd {{blddir}}/lazygit && go install
 
-# Index and search all local files
-indexa: cargo-install (gitclone "https://github.com/mosmeh/indexa.git" "indexa")
-    {{cargo-install}} --path {{blddir}}/indexa
-
 # Fast implementation of the tldr standard
-tealdeer: cargo-install
+tealdeer:
     CARGO_BUILD_TARGET={{gnu-target}} {{cargo-install}} tealdeer
     command tldr --update
 
 # Manager for long running background shell commands/processes
-pueue: cargo-install
+pueue:
     {{cargo-install}} pueue
     systemctl --user enable --now pueued.service
     systemctl --user start pueued
     pueue parallel (nproc)
 
 # Network and port usage monitor
-bandwhich: cargo-install
+bandwhich:
     {{cargo-install}} bandwhich
     sudo setcap cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep (which bandwhich)
 
 clippy:
     rustup component add clippy-preview
 
-# High performance GPU accelerated Terminal
-alacritty: cargo-install
-    #!/usr/bin/env fish
-    {{cargo-install}} alacritty
-    if not type -q alacritty
-        {{justrun}} pipx-install alacritty-colorscheme
-        wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/logo/alacritty-term.svg -O /tmp/alacritty-term.svg
-        sudo cp /tmp/alacritty-term.svg /usr/share/pixmaps/Alacritty.svg
-        wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/alacritty.info -O /tmp/alacritty.info
-        sudo tic -xe alacritty,alacritty-direct /tmp/alacritty.info
-        wget https://raw.githubusercontent.com/alacritty/alacritty/master/extra/linux/Alacritty.desktop -O /tmp/Alacritty.desktop
-        sudo desktop-file-install /tmp/Alacritty.desktop
-        sudo update-desktop-database
-        if test "$(realpath /usr/bin/x-terminal-emulator)" != "$(realpath (which alacritty))"
-            sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which alacritty) 90
-        end
-    end
-
-broot: cargo-install
+broot:
     mkdir -p ~/.local/share/fonts
     test -f ~/.local/share/fonts/vscode.ttf; \
     or wget https://github.com/Canop/broot/raw/master/resources/icons/vscode/vscode.ttf -O ~/.local/share/fonts/vscode.ttf
     {{cargo-install}} broot
     ln -s ~/.local/share/broot/launcher/fish/br.fish ~/.config/fish/functions/br.fish
 
-xplr: cargo-install 
+xplr: 
     {{cargo-install}} xplr
     wget https://raw.githubusercontent.com/sayanarijit/xplr/main/src/init.lua -O ~/.config/xplr/init.lua.new
     xplr --version
+
+yazi: (gitclone "https://github.com/sxyazi/yazi.git" "yazi")
+    cargo install --path {{blddir}}/yazi 
 
 cargo-build-tools: clippy
     #!/usr/bin/env fish
@@ -1013,8 +994,11 @@ cargo-build-tools: clippy
     {{cargo-install}} cargo-samply  
     {{cargo-install}} bacon  
     {{cargo-install}} cargo-sweep  
+    {{cargo-install}} hyperfine  
 
-cargo-essentials: cargo-install ripgrep broot tealdeer pueue
+
+cargo-essentials: ripgrep broot tealdeer pueue
+    {{cargo-install}} gitui
     {{cargo-install}} bat
     {{cargo-install}} kn
     {{cargo-install}} zoxide
@@ -1023,12 +1007,12 @@ cargo-essentials: cargo-install ripgrep broot tealdeer pueue
     {{cargo-install}} fd-find
     {{cargo-install}} git-delta 
     {{cargo-install}} huniq
-    {{cargo-install}} hyperfine  
     {{cargo-install}} pipe-rename 
     {{cargo-install}} du-dust
     {{cargo-install}} fd-find
+    {{cargo-install}} ast-grep
 
-cargo-all-gnu: cargo-install
+cargo-all-gnu:
     #!/usr/bin/env fish
     set -x CARGO_BUILD_TARGET {{gnu-target}}
     {{cargo-install}} cargo-edit 
@@ -1039,7 +1023,7 @@ cargo-all-gnu: cargo-install
     {{cargo-install}} starship  
     {{cargo-install}} duma  
 
-cargo-all-musl: cargo-install bandwhich indexa
+cargo-all-musl: bandwhich 
     {{cargo-install}} macchina
     {{cargo-install}} onefetch
     {{cargo-install}} dua-cli
@@ -1067,9 +1051,10 @@ cargo-embedded:
     {{cargo-install}} probe-run
     
 spotify-tui: spotify
-    {{cargo-install}} spotify-tui 
+    {{apt-install}} libssl-dev libasound2-dev libdbus-1-dev
+    {{cargo-install}} spotify_player
 
-cargo +args: cargo-install
+cargo +args:
     {{cargo-install}} {{args}}
 
 # Install 'all' the cargo binaries (that i like)
@@ -1084,6 +1069,11 @@ rust-analyzer: (bingh "rust-analyzer" "rust-analyzer/rust-analyzer" "*-x86_64-un
     echo "Installed rust-analyzer"
 # rust-analyzer: (curlbin "https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux" "rust-analyzer")
 #   {{justrun}} link-pack "rust-analyzer"
+
+
+ra-multiplex:
+    {{cargo-install}} ra-multiplex
+    # TODO:
 
 # Install just prebuilt
 just: (mkpackdir "just")
@@ -1575,8 +1565,9 @@ forgit:
     fisher install wfxr/forgit
     fish_add_path {{blddir}}/forgit/bin
     
-nushell:
-    {{cargo-install}} nushell
+nushell: (targh "nushell" "nushell/nushell" "*-x86_64-unknown-linux-gnu.tar.gz")
+    mv /tmp/nushell/nu*/*
+    {{justrun}} ins-copy "nushell" "/tmp"
     git clone https://github.com/nushell/nu_scripts.git ~/.config/nushell/nu_scripts
 
 x2x: (gitclone "https://github.com/dottedmag/x2x.git" "x2x")
@@ -1620,7 +1611,7 @@ quickshare: (bingh "rquickshare" "martichou/rquickshare" "*glibc-2.31*.AppImage"
 axel:
     {{apt-install}} axel
 
-# TODO: need to pass rust arguments?cd /home/amedhi/.config/fishcd /home/amedhi/.config/fishcd /home/amedhi/.config/fishcd /home/amedhi/.config/fishcd /home/amedhi/.config/fishcd /home/amedhi/.config/fishcd /home/amedhi/.config/fishcd /home/amedhi/.config/fish
+# TODO: need to pass rust arguments?
 # Install fish from source
 fish-src: (gitclone "https://github.com/fish-shell/fish-shell.git" "fish")
     cmake -S {{blddir}}/fish -B {{blddir}}/fish/build \
@@ -1662,3 +1653,16 @@ tio: (gitclone "https://github.com/tio/tio" "tio") (mkpackdir "tio")
 nordvpn: 
     #!/usr/bin/env bash
     sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)
+
+aider:
+    pipx install aider-chat
+
+shellgpt:
+    pipx install shell-gpt[litellm]
+
+open-webui:
+   pipx install open-webui
+
+tailscale:
+   curl -fsSL https://tailscale.com/install.sh | sh
+   sudo tailscale up

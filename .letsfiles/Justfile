@@ -1,3 +1,4 @@
+#!/usr/bin/env just --justfile
 set shell := ["fish", "-c"]
 wd := invocation_directory()
 
@@ -12,7 +13,7 @@ wd := invocation_directory()
     nvim {{justfile_directory()}}/{{name}}.just
 
 @qmk *commands:
-    cd ~/qmk_firmware/ && just {{commands}}
+    cd ~/qmk_userspace/ && just {{commands}}
 
 @nvim *commands:
     cd ~/.config/nvim/ && just {{commands}}

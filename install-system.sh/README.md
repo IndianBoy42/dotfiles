@@ -68,8 +68,8 @@ just git
 just pacstall
 just stow
 just llvm
-just pipx
-sudo nala install cmake ninja-build g++-14
+just uv
+sudo nala install cmake ninja-build g++-15
 just mold
 
 read -n 1 -p 'Reboot now? (you should):'
@@ -84,7 +84,6 @@ just apt-libs
 just apt-apps
 just sublime-merge
 just cmake fzf zstd git-subrepo
-just mold
 just nvim
 just rustc
 just cargo-all

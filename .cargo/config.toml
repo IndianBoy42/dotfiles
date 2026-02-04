@@ -12,7 +12,7 @@ i = "install"
 
 [build]
 # rustflags = [ "-C", "link-arg=-fuse-ld=lld"]
-rustflags = ["-C", "link-arg=--fuse-ld=mold"]
+# rustflags = ["-C", "link-arg=--fuse-ld=mold"]
 # rustc-wrapper = "~/.cargo/bin/sccache"
 
 [profile.dev]
@@ -22,13 +22,13 @@ split-debuginfo = "unpacked"
 [profile.release]
 lto = "thin"
 panic = 'abort'
-# split-debuginfo = "unpacked"
+split-debuginfo = "unpacked"
 
 [profile.fastest]
 lto = "fat"
 codegen-units = 1
 panic = 'abort'
-# split-debuginfo = "unpacked"
+split-debuginfo = "unpacked"
 
 [profile.test]
 opt-level = 1
@@ -44,11 +44,19 @@ opt-level = 3
 linker = "clang"
 rustflags = [
     "-C",
-    "link-arg=-fuse-ld=mold",
-    # "-C", "link-arg=-fuse-ld=lld",
+    "link-arg=-fuse-ld=wild",
+    # "-C", "link-arg=-fuse-ld=mold",
     "-C",
     "target-cpu=native",
 ]
+
+[target.x86_64-pc-windows-gnu]
+# linker = "clang"
+# rustflags = [
+#     "-C",
+#     "link-arg=-fuse-ld=mold",
+#     # "-C", "link-arg=-fuse-ld=lld",
+# ]
 
 [target.x86_64-unknown-linux-musl]
 rustflags = [

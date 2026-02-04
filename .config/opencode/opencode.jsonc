@@ -1,0 +1,90 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // "model": "opencode/claude-sonnet-4-5",
+  // "model": "zai-coding-plan/glm-4.7",
+  "model": "opencode/kimi-k2.5",
+  // "small_model": "opencode/minimax-m2.1-free",
+  "small_model": "opencode/kimi-k2.5-free",
+  "theme": "opencode",
+  "experimental": {
+    "batch_tool": true,
+  },
+  "keybinds": {
+    "leader": "ctrl+k",
+    "session_fork": "<leader>f",
+    "session_child_cycle": "ctrl+right",
+    "session_child_cycle_reverse": "ctrl+left",
+    "session_parent": "ctrl+up",
+    "session_rename": "ctrl+r",
+    "messages_first": "<leader>k",
+    "messages_last": "<leader>j",
+    // Default is ctrl-a, ctrl-e
+    "input_line_home": "home",
+    "input_line_end": "end",
+    "input_select_line_home": "shift+home",
+    "input_select_line_end": "shift+end",
+    "input_visual_line_home": "alt+home",
+    "input_visual_line_end": "alt+end",
+    "input_select_visual_line_home": "alt+shift+home",
+    "input_select_visual_line_end": "alt+shift+end",
+    "input_buffer_home": "home",
+    "input_buffer_end": "end",
+    "input_select_buffer_home": "shift+home",
+    "input_select_buffer_end": "shift+end",
+  },
+  "plugin": ["@tarquinen/opencode-dcp@latest"],
+  "autoshare": false,
+  "autoupdate": true,
+  "lsp": {
+    "pyright": { "disabled": true },
+    "clangd": {
+      "command": [
+        "clangd",
+        "--background-index",
+        "--query-driver=**/arm-none-eabi-*,**/x86_64-linux-*",
+        "--cross-file-rename",
+      ],
+    },
+  },
+  "mcp": {
+    "jupyter": {
+      "enabled": false,
+      "type": "local",
+      "command": ["uvx", "jupyter-mcp-server@latest"],
+      "environment": {
+        "JUPYTER_URL": "http://localhost:8888",
+        "JUPYTER_TOKEN": "{env:JUPYTER_TOKEN}",
+        "ALLOW_IMG_OUTPUT": "true",
+      },
+    },
+    "perplexity-ask": {
+      "type": "local",
+      "enabled": true,
+      "command": ["npx", "-y", "@chatmcp/server-perplexity-ask"],
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": false,
+    },
+    "gh_grep": {
+      "type": "remote",
+      "url": "https://mcp.grep.app",
+      "enabled": false,
+    },
+  },
+  "command": {
+    "commit": {
+      "template": "Commit Message: $ARGUMENTS",
+      "subtask": true,
+      "model": "zai-coding-plan/glm-4.7", // Free
+    },
+    "describe": {
+      "template": "",
+      "model": "zai-coding-plan/glm-4.7", // Free
+    },
+    "run": {
+      "template": "Run the following command: `$ARGUMENTS` and evaluate the output in the context of the current session",
+    },
+  },
+}

@@ -11,9 +11,12 @@ model: gemini
 editor-model: gemini
 
 # weak-model: openrouter/google/gemma-3-4b-it
-weak-model: flash
+weak-model: flashlite
 
 vim: true
+
+attribute-author: false
+attribute-committer: false
 
 watch-files: true
 
@@ -28,16 +31,23 @@ notifications: true
 # install-tree-sitter-language-pack: true
 alias:
   - "deepseek:openrouter/deepseek/deepseek-chat-v3-0324"
-  - "flash:openrouter/google/gemini-2.0-flash-001"
-  - "gem:openrouter/google/gemini-2.5-pro-preview-03-25"
-  - "gemini:openrouter/google/gemini-2.5-pro-preview-03-25"
-  - "r1:openrouter/deepseek/deepseek-reasoner"
-  - "claude:openrouter/anthropic/claude-3.7-sonnet"
-  - "sonnet:openrouter/anthropic/claude-3.7-sonnet"
+  - "flash:openrouter/google/gemini-2.5-flash"
+  - "flash2:openrouter/google/gemini-2.0-flash-001"
+  - "gem:openrouter/google/gemini-2.5-pro"
+  - "gemini:openrouter/google/gemini-2.5-pro"
+  - "r1:openrouter/deepseek/deepseek-r1-0528"
+  - "claude3:openrouter/anthropic/claude-3.7-sonnet"
+  - "sonnet3:openrouter/anthropic/claude-3.7-sonnet"
+  - "opus3:openrouter/anthropic/claude-3.7-opus"
+  - "claude:openrouter/anthropic/claude-sonnet-4"
+  - "sonnet:openrouter/anthropic/claude-sonnet-4"
+  - "opus:openrouter/anthropic/claude-opus-4"
   - "freeseek:openrouter/deepseek/deepseek-chat-v3-0324:free"
-  - "flashlite:openrouter/google/gemini-2.0-flash-lite-001"
-  - "freegem:openrouter/google/gemini-2.5-pro-preview-03-25:free"
-  - "r1f:openrouter/deepseek/deepseek-r1:free,openrouter/deepseek/deepseek-r1"
+  - "flashlite:openrouter/google/gemini-2.5-flash-lite-preview-09-2025"
+  - "freegem:openrouter/google/gemini-2.5-pro-preview:free"
+  - "r1f:openrouter/deepseek/deepseek-r1-0528:free,openrouter/deepseek/deepseek-r1"
   - "optimus:openrouter/openrouter/optimus-alpha"
   - "deepcoder:lmstudio/agentica-org_deepcoder-14b-preview@q6_k_l"
-  - "qwen:lmstudio/qwen2.5-coder-32b-instruct"
+  - "lqwen:lmstudio/qwen2.5-coder-32b-instruct"
+  - "qwen:openrouter/qwen/qwen3-235b-a22b"
+  - "freeqwen:openrouter/qwen/qwen3-235b-a22b:free"

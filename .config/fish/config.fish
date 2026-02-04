@@ -1,3 +1,4 @@
+# TODO: more abbrs for subcommands
 ##################################
 # conf.d scripts run before this 
 ##################################
@@ -34,6 +35,8 @@ fish_add_path ~/bin
 fish_add_path ~/.cargo/bin
 fish_add_path ~/.local/bin
 fish_add_path ~/.local/share/coursier/bin
+fish_add_path ~/.opencode/bin
+fish_add_path ~/AppImages/
 fish_add_path $FISH_CONFIG_DIR/conf.d/bin/
 set -gx LUA_PATH "$HOME/.local/packages/luarocks/share/lua/5.4/?.lua;$HOME/.local/packages/luarocks/lib/lua/5.4/?.lua;;"
 # fish_add_path ~/anaconda3/bin
@@ -88,8 +91,14 @@ set -gx PIPENV_VENV_IN_PROJECT 1
 set -gx CUDACXX /usr/lib/cuda/bin/nvcc
 set -gx VIRTUAL_ENV_DIR .venv
 
+abbr open xdg-open
 abbr del 'rm -vi'
 abbr lc 'wc -l'
+
+function multicd
+    echo cd (string repeat -n (math (string length -- $argv[1]) - 1) ../)
+end
+abbr --add dotdot --regex '^\.\.+$' --function multicd
 
 abbr ps procs
 abbr pst procs --tree
@@ -99,11 +108,10 @@ abbr psmem10 'ps auxf | sort -nr -k 4 | head -10'
 abbr pscpu10 'ps auxf | sort -nr -k 3 | head -10'
 
 # ripgrep stuff, config and aliases
-set -gx RIPGREP_CONFIG_PATH $HOME/.config/ripgrep/config
-abbr rgrep 'rg --no-config'
-abbr rgl 'rg -C0'
-abbr rge 'rg -uu'
-abbr fde 'fd -uu'
+abbr rg 'rg -S'
+abbr rgc 'rg -SC3'
+abbr rge 'rg -S -uuu'
+abbr fde 'fd -uuu'
 
 # pueue is really cool
 abbr pu pueue
@@ -120,24 +128,24 @@ abbr yaddconfigs yadm add --update ~/.config/
 abbr yaddinstall yadm add ~/install-system.sh/
 abbr yaddupdate yadm add --update ~
 
-alias yalo 'yadm enter git forgit log'
-alias yadf 'yadm enter git forgit diff'
-alias yadd 'yadm enter git forgit add'
-alias yarh 'yadm enter git forgit reset_head'
-alias yai 'yadm enter git forgit ignore'
-alias yacf 'yadm enter git forgit checkout_file'
-alias yacb 'yadm enter git forgit checkout_branch'
-alias yabd 'yadm enter git forgit branch_delete'
-alias yact 'yadm enter git forgit checkout_tag'
-alias yaco 'yadm enter git forgit checkout_commit'
-alias yarc 'yadm enter git forgit revert_commit'
-alias yaclean 'yadm enter git forgit clean'
-alias yass 'yadm enter git forgit stash_show'
-alias yasp 'yadm enter git forgit stash_push'
-alias yacp 'yadm enter git forgit cherry_pick'
-alias yarb 'yadm enter git forgit rebase'
-alias yabl 'yadm enter git forgit blame'
-alias yafu 'yadm enter git forgit fixup'
+# alias yalo 'yadm enter git forgit log'
+# alias yadf 'yadm enter git forgit diff'
+# alias yadd 'yadm enter git forgit add'
+# alias yarh 'yadm enter git forgit reset_head'
+# alias yai 'yadm enter git forgit ignore'
+# alias yacf 'yadm enter git forgit checkout_file'
+# alias yacb 'yadm enter git forgit checkout_branch'
+# alias yabd 'yadm enter git forgit branch_delete'
+# alias yact 'yadm enter git forgit checkout_tag'
+# alias yaco 'yadm enter git forgit checkout_commit'
+# alias yarc 'yadm enter git forgit revert_commit'
+# alias yaclean 'yadm enter git forgit clean'
+# alias yass 'yadm enter git forgit stash_show'
+# alias yasp 'yadm enter git forgit stash_push'
+# alias yacp 'yadm enter git forgit cherry_pick'
+# alias yarb 'yadm enter git forgit rebase'
+# alias yabl 'yadm enter git forgit blame'
+# alias yafu 'yadm enter git forgit fixup'
 
 # ghcup-env
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME
@@ -146,42 +154,48 @@ and fish_add_path ~/.cabal/bin ~/.ghcup/bin
 
 # super short cargo abbreviations
 abbr cg cargo
-abbr cgcl "cargo clean"
-abbr cgr "cargo r"
-abbr cgrr "cargo r --release"
-abbr cgc "cargo check"
-abbr cgt "cargo test"
-abbr cgb "cargo build"
-abbr cgbr "cargo build --release"
-abbr cgbe "cargo bench"
-abbr cgwc "cargo watch -x check --clear"
+abbr -a --command cargo cl clean
+abbr -a --command cargo r run
+abbr -a --command cargo rr "run --release"
+abbr -a --command cargo c check
+abbr -a --command cargo t test
+abbr -a --command cargo b build
+abbr -a --command cargo br "build --release"
+abbr -a --command cargo be bench
+abbr -a --command cargo wc "watch -x check --clear"
 abbr BT "RUST_BACKTRACE=1"
-# set -gx CARGO_BUILD_TARGET x86_64-unknown-linux-musl
+abbr MUSL CARGO_BUILD_TARGET=x86_64-unknown-linux-musl
 
 abbr watchbuild "watchexec -cw . -i build --"
 
+abbr xa "xargs -I _"
+abbr xl "xargs -I _ lsd -aFl _"
+
 # super short zig abbreviations
-abbr zib "zig build"
-abbr zir "zig run"
-abbr zit "zig test"
-abbr zif "zig fmt"
-abbr zitc "zig translate-c"
+abbr -a --command zig b build
+abbr -a --command zig r run
+abbr -a --command zig t test
+abbr -a --command zig f fmt
+abbr -a --command zig tc translate-c
+abbr -a --command zig new init-exe
 abbr zcc "zig cc"
 abbr zc++ "zig c++"
-abbr ziinit "zig init-exe"
 
-abbr py python
+abbr py uv run python
+abbr python uv run python
+abbr pip uv pip
+abbr uvs uv run --script
 
 # lsd abbreviations
 if type -q lsd
     abbr -g l "lsd -AF"
+    abbr -g ls "lsd -AF"
+    abbr -g la "lsd -aFl"
+    abbr -g ll "lsd -aFl"
     abbr -g lsc "lsd -A --color always --icon always"
-    abbr -g ls "lsd -A"
     abbr -g lr "lsd -AR --depth 2"
-    abbr -g ll "lsd -al"
     abbr -g lt "lsd --tree -A"
     abbr -g ltd "lsd --tree -A --depth"
-    abbr -g la "lsd -al"
 else
     # TODO: Backup pretty ls abbrs
 end
@@ -190,11 +204,23 @@ alias zf=__fzf_search_current_dir
 abbr fz 'fzf --preview=\'v {}\''
 #abbr zhome 'z ~ && z (__fzf_search_current_dir)'
 abbr z- 'z -'
-type -q zoxide
-and abbr -g cd z
-type -q _kn
-and abbr -g cd kn
-and abbr -g / kn
+# type -q zoxide
+# and abbr -g cd z
+# type -q _kn
+# and abbr -g cd kn
+# and abbr -g / kn
+# and abbr -g . kn
+abbr -g / cd; and abbr -g . cd
+
+if type -q pacstall
+    abbr pac pacstall
+    abbr -a --command pacstall i -- -I
+    abbr -a --command pacstall r -- -R
+    abbr -a --command pacstall s -- -S
+    abbr -a --command pacstall a -- -A
+    abbr -a --command pacstall u -- -U
+    abbr -a --command pacstall ur -- -Up
+end
 
 # apt abbreviations
 if type -q nala
@@ -203,31 +229,24 @@ if type -q nala
 else
     set apt_prefix apt
 end
-abbr apti "sudo $apt_prefix install"
-abbr apty "sudo $apt_prefix install -y"
-abbr apts "$apt_prefix search"
-abbr aptr "sudo $apt_prefix remove"
-abbr aptu "sudo $apt_prefix update"
-abbr aptur "sudo $apt_prefix upgrade"
-abbr aptou "sudo $apt_prefix update && sudo $apt_prefix --only-upgrade install "
-abbr aptar "sudo $apt_prefix autoremove"
-abbr aptli "$apt_prefix list --installed"
-abbr aptsi "$apt_prefix list --installed | fzf"
-
-if type -q pacstall
-    abbr pac pacstall
-    abbr paci pacstall -I
-    abbr pacr pacstall -R
-    abbr pacs pacstall -S
-    abbr paca pacstall -A
-    abbr pacu pacstall -U
-    abbr pacur pacstall -Up
-end
+abbr -a --command nala --command apt i install
+abbr -a apti sudo $apt_prefix install
+abbr -a --command nala --command apt y "install -y"
+abbr -a --command nala --command apt s search
+abbr -a --command nala --command apt r remove
+abbr -a --command nala --command apt u update
+abbr -a --command nala --command apt ur upgrade
+abbr -a aptur sudo $apt_prefix upgrade
+abbr -a --command nala --command apt ou "update && sudo $apt_prefix --only-upgrade install "
+abbr -a --command nala --command apt ar autoremove
+abbr -a --command nala --command apt li "list --installed"
+abbr -a --command nala --command apt si "list --installed | fzf"
 
 # mkdir helpers
 # make all directories and create the file
-abbr mkd "mkdir -p"
+abbr mk "mkdir -p"
 
+abbr j just
 abbr justc "just --choose"
 abbr justl "just --list"
 
@@ -268,6 +287,9 @@ abbr coda code -a
 
 abbr echov 'set --show'
 
+abbr paste wl-paste
+abbr copy wl-copy
+
 # # for copying across long trees, you can mark a place to copy to (and then copy/go to it)
 # abbr cpmark 'set -gx CP_TO (pwd) && echo $CP_TO	'
 # abbr gomark 'cd $CP_TO'
@@ -280,7 +302,15 @@ abbr echov 'set --show'
 
 # set -gx EDITOR nvim #kak
 set -gx EDITOR nvim
+function echo_editor --wraps $EDITOR
+    echo $EDITOR
+end
+abbr ed --function echo_editor
+function echo_gui_editor --wraps $EDITOR
+    echo $GUI_EDITOR
+end
 set -gx GUI_EDITOR (which neovide)
+abbr ed --function echo_editor
 set -gx VISUAL $EDITOR
 #set -gx PAGER nvim
 # set -gx NVIM_APPNAME lazynvim
@@ -317,30 +347,30 @@ end
 
 # so many spotify-tui abbreviations
 set -gx SPT_FORMAT '%f %s %p : %t - %a (%b) - %v% - playing on %d'
-abbr sptnext " spt playback --next -f '$SPT_FORMAT'"
-abbr sptn " spt playback --next -f '$SPT_FORMAT'"
-abbr sptprev " spt playback --previous -f '$SPT_FORMAT'"
-abbr sptpb " spt playback -f '$SPT_FORMAT'"
-abbr sptplay " spt playback --toggle -f '$SPT_FORMAT'"
-abbr sptp " spt playback --toggle -f '$SPT_FORMAT'"
-abbr sptvol " spt playback -f '$SPT_FORMAT' --volume"
-abbr sptlike " spt playback --like -f '$SPT_FORMAT'"
-abbr sptf " spt search"
-abbr sptfl " spt search --playlists"
-abbr sptfa " spt search --artists"
-abbr sptfal " spt search --albums"
-abbr sptft " spt search --tracks"
-abbr sptpl " spt play -f '$SPT_FORMAT' --playlist --name"
-abbr sptpa " spt play -f '$SPT_FORMAT' --artist --name"
-abbr sptpal " spt play -f '$SPT_FORMAT' --album --name"
-abbr sptpt " spt play -f '$SPT_FORMAT' --track --name"
+abbr --command spt next "playback --next -f '$SPT_FORMAT'"
+abbr --command spt n "playback --next -f '$SPT_FORMAT'"
+abbr --command spt prev "playback --previous -f '$SPT_FORMAT'"
+abbr --command spt pb "playback -f '$SPT_FORMAT'"
+abbr --command spt play "playback --toggle -f '$SPT_FORMAT'"
+abbr --command spt p "playback --toggle -f '$SPT_FORMAT'"
+abbr --command spt vol "playback -f '$SPT_FORMAT' --volume"
+abbr --command spt like "playback --like -f '$SPT_FORMAT'"
+abbr --command spt f search
+abbr --command spt fl "search --playlists"
+abbr --command spt fa "search --artists"
+abbr --command spt fal "search --albums"
+abbr --command spt ft "search --tracks"
+abbr --command spt pl "play -f '$SPT_FORMAT' --playlist --name"
+abbr --command spt pa "play -f '$SPT_FORMAT' --artist --name"
+abbr --command spt pal "play -f '$SPT_FORMAT' --album --name"
+abbr --command spt pt "play -f '$SPT_FORMAT' --track --name"
 
 if type -q bass
     and type -q gvm
     gvm use latest &>/dev/null
 end
 if type -q nvm
-    nvm use lts &>/dev/null
+    nvm use latest &>/dev/null
 end
 
 # Reindex (indexa) if is-interactive
@@ -380,10 +410,47 @@ abbr newtag 'git tag -a'
 abbr gits 'git s'
 abbr gitf 'git f'
 
-abbr scr scriptisto
-abbr scrt scriptisto template
-abbr scrts scriptisto template ls
-# abbr scrnew scriptisto new
+abbr g git
+abbr -a --command git s status
+abbr -a --command git c commit
+abbr -a --command git cv "commit -v"
+abbr -a --command git f "fetch --all"
+abbr -a --command git a add
+abbr -a --command git u up
+abbr -a --command git d down
+abbr -a --command git sw switch
+abbr -a --command git addi "add --interactive"
+abbr -a --command git new "checkout -b"
+abbr -a --command git save "commit -av"
+abbr -a --command git save-all "add -A && git commit"
+abbr -a --command git wip "commit -am WIP"
+abbr -a --command git undo "reset HEAD~1 --mixed"
+abbr -a --command git amend "commit --amend"
+abbr -a --command git sync "fetch && git pull --ff-only && git push -u origin HEAD"
+# abbr -a --command git down "pull --rebase --prune $@ && git submodule update --init --recursive"
+abbr -a --command git up "push -u origin HEAD"
+abbr -a --command git ec "config --global -e"
+abbr -a --command git unstage "restore --staged"
+abbr -a --command git list-aliases "config -l | grep alias | cut -c 7-"
+abbr -a --command git ra "remote add"
+abbr -a --command git rao "remote add origin"
+abbr -a --command git clean-merged "branch --merged | grep -v \"\\*\" | xargs -n 1 git branch -d"
+abbr -a --command git sm submodule
+abbr -a --command git root "rev-parse --show-toplevel"
+abbr -a --command git pre-pull "diff @ @{upstream}"
+abbr -a --command git any-changes "diff --no-ext-diff --quiet --exit-code"
+abbr -a --command git untracked "ls-files . --exclude-standard --others"
+abbr -a --command git tracked "ls-tree -r HEAD --name-only "
+abbr -a --command git staged "diff --staged"
+abbr -a --command git partial-clone "clone --filter=blob:none"
+abbr -a --command git shallow-clone "clone --filter=tree:0"
+abbr -a --command git unshallow "fetch --unshallow"
+abbr -a --command git fork-point "merge-base --fork-point origin/master"
+abbr -a --command git autosquash "rebase -i --autosquash"
+abbr -a --command git diff1 "diff HEAD~1 HEAD"
+abbr -a --command git dft difftool
+abbr -a --command git dft1 "difftool HEAD~1 HEAD"
+abbr -a --command git dp "diff @{1} HEAD"
 
 abbr yta-aac "youtube-dl --extract-audio --audio-format aac "
 abbr yta-best "youtube-dl --extract-audio --audio-format best "
@@ -395,20 +462,22 @@ abbr yta-vorbis "youtube-dl --extract-audio --audio-format vorbis "
 abbr yta-wav "youtube-dl --extract-audio --audio-format wav "
 abbr ytv-best "youtube-dl -f bestvideo+bestaudio "
 
+abbr esperase "uvx esptool --port /dev/ttyACM0 erase-flash"
+abbr espflash "uvx esptool --port /dev/ttyACM0 write-flash 0 "
+
 if type -q direnv
     direnv hook fish | source
 end
 
-# nnn file manager settings
-set -gx NNN_PLUG 'z:autojump;f:finder;p:preview-tui-ext;P:preview-tabbed;o:nuke'
-set -gx NNN_OPENER "$HOME/.config/nnn/plugins/nuke"
-
-alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
-
 abbr tarz 'tar --zstd'
 
-abbr syctl 'systemctl --user'
-abbr ssyctl 'sudo systemctl'
+abbr sysc 'systemctl --user'
+abbr ssysc 'sudo systemctl'
+
+abbr ai opencode
+abbr oc opencode
+abbr ocask opencode --agent codebase
+abbr ask opencode --agent codebase --prompt
 
 if test "$TERM" = alacritty
     abbr itty alacritty &>/dev/null &
@@ -419,19 +488,16 @@ else if test "$TERM" = xterm-kitty
     abbr kls 'kitty @ ls | jless'
 end
 
-abbr . source
-abbr :q exit
-abbr :qa exit
-abbr :wq exit
-abbr ZZ exit
-
 abbr letsid lets install --dry-run
 abbr letsi lets install
 abbr flathub flatpak install --or-update flathub
 abbr remake 'make clean && make'
 
-set -x FORGIT_FZF_DEFAULT_OPTS "
+abbr ksh "kitten ssh"
+abbr kc "kitten choose-files --mode=files"
+abbr kd "cd (dirname (kitten choose-files))"
 
+set -x FORGIT_FZF_DEFAULT_OPTS "
 --ansi
 --height='80%'
 --bind='alt-k:preview-up,alt-p:preview-up'
@@ -461,3 +527,13 @@ ulimit -Sn (ulimit -Hn)
 for file in $FISH_CONFIG_PATH.d/*.fish
     source $file
 end
+
+# source .env
+envsource $HOME/.env
+
+test -e /tmp/.tio
+
+or mkdir /tmp/.tio
+
+# moonbit
+fish_add_path "$HOME/.moon/bin"

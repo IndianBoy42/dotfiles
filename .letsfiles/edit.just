@@ -6,6 +6,9 @@ justrun := "just -d " + wd + " -f " + justfile()
 lets:
     cd ~/.letsfiles/ && $EDITOR
 
+edit:
+    cd ~/.letsfiles/ && $EDITOR edit.just
+
 which-editor:
     echo $EDITOR
 
@@ -24,6 +27,9 @@ nvim:
 git: 
     $EDITOR ~/.gitconfig
 
+jj:
+    cd ~/.config/jj && $EDITOR ./config.toml
+
 install:
     cd ~/install-system.sh/ && $EDITOR Justfile
 
@@ -31,7 +37,7 @@ nix:
     cd ~/.letsfiles/ && $EDITOR nix.just
 	
 qmk:
-    cd ~/qmk_firmware/ && $EDITOR 
+    cd ~/qmk_userspace/ && $EDITOR 
 
 kitty:
     cd ~/.config/ && $EDITOR kitty/kitty.conf
@@ -55,5 +61,18 @@ cargo:
 aider:
     cd ~/.config && $EDITOR ~/.aider.conf.yml
 
+opencode:
+    cd ~/.config/opencode && $EDITOR ./opencode.jsonc
+oc: opencode
+
 tio:
     cd ~/.config && $EDITOR tio/config
+
+dotenv:
+    $EDITOR ~/.env && envsource ~/.env
+
+smerge:
+    cd ~/.config/ && $EDITOR ~/.config/sublime-merge/config.yml ~/.config/sublime-merge/.sublime-keymap
+
+flash:
+    cd ~/.letsfiles/ && $EDITOR flash.just

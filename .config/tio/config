@@ -1,6 +1,5 @@
 [default]
-log-directory=.tio
-map=INLCRNL,OCRNL
+log-directory=/tmp/.tio
 log=true
 local-echo=true
 input-mode=line
@@ -8,25 +7,44 @@ timestamp=true
 timestamp-format=24hour-start
 
 [fastN]
+map=INLCRNL,OCRNL
 pattern = ^fast([0-9]*)
 device = /dev/ttyACM%m1
 baudrate=460800
 
 [acmN]
+map=INLCRNL,OCRNL
 pattern = ^acm([0-9]*)
 device = /dev/ttyACM%m1
 
+[pyN]
+pattern = ^py([0-9]*)
+device = /dev/ttyACM%m1
+
+[ptN]
+map=INLCRNL,OCRNL
+pattern = ^pt([0-9]*)
+device = /dev/pts/%m1
+
 [usbN]
+map=INLCRNL,OCRNL
 pattern = ^usb([0-9]*)
 device = /dev/ttyUSB%m1
 
+[qctl]
+device = /dev/ttyUSB2
+
 [fast]
+map=INLCRNL,OCRNL
 baudrate=460800
 auto-connect=latest
 
 [latest]
+map=INLCRNL,OCRNL
 auto-connect=latest
 
-[gps]
+[gpsN]
+pattern = ^gps([0-9]*)
 auto-connect=latest
-map=
+map=ONLCRNL
+device = /dev/ttyUSB%m1

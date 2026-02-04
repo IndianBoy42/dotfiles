@@ -1,5 +1,5 @@
 # 2 Lines of context is usually necessary
---context=2
+# --context=2
 --smart-case
 
 # Don't let ripgrep vomit really long lines to my terminal, and show a preview.
@@ -8,5 +8,5 @@
 
 # --pretty -- Pretty output even when piping
 # --color=always
---heading
---line-number
+# --heading
+# --line-number

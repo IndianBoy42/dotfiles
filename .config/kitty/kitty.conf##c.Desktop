@@ -74,6 +74,8 @@ disable_ligatures never
 
 # cursor #cccccc
 
+cursor_trail 1
+
 #: Default cursor color
 
 # cursor_text_color #111111
@@ -837,15 +839,18 @@ kitty_mod ctrl+shift+alt
 #: Clipboard {{{
 
 # map kitty_mod+c copy_to_clipboard
+map super+c copy_to_clipboard
 
 #: There is also a copy_or_interrupt action that can be optionally
 #: mapped to Ctrl+c. It will copy only if there is a selection and
 #: send an interrupt otherwise.
+map ctrl+c copy_or_interrupt
 
 # map kitty_mod+v  paste_from_clipboard
+map super+v  paste_from_clipboard
 # map kitty_mod+s  paste_from_selection
 # map shift+insert paste_from_selection
-# map kitty_mod+o  pass_selection_to_program
+map kitty_mod+o>o  pass_selection_to_program
 
 #: You can also pass the contents of the current selection to any
 #: program using pass_selection_to_program. By default, the system's
@@ -921,11 +926,13 @@ map kitty_mod+q combine : close_other_os_windows : close_os_window
 #: kitty window. In particular you can use new_os_window_with_cwd to
 #: open a window with the current working directory.
 
-# map kitty_mod+w close_window
+map kitty_mod+w>w close_window
 map kitty_mod+j next_window
 map kitty_mod+k previous_window
 # map kitty_mod+f move_window_forward
 # map kitty_mod+b move_window_backward
+map kitty_mod+> move_window_forward
+map kitty_mod+< move_window_backward
 # map kitty_mod+` move_window_to_top
 # map kitty_mod+r start_resizing_window
 # map kitty_mod+1 first_window
@@ -989,6 +996,11 @@ map kitty_mod+space next_layout
 # map kitty_mod+minus     change_font_size all -2.0
 # map kitty_mod+backspace change_font_size all 0
 
+# default (small) font size
+map kitty_mod+w>f  change_font_size current 10.0
+map kitty_mod+w>b  change_font_size current 14.0
+map kitty_mod+w>g  change_font_size current 18.0
+
 #: To setup shortcuts for specific font sizes::
 
 #:     map kitty_mod+f6 change_font_size all 10.0
@@ -1014,18 +1026,23 @@ map kitty_mod+space next_layout
 map kitty_mod+u kitten hints --type path --program -
 map kitty_mod+g kitten hints --type=linenum --linenum-action=tab nvim +{line} {path}
 
+# pick
 map kitty_mod+p>u kitten hints --type url --program -
 map kitty_mod+p>f kitten hints --type path --program -
 map kitty_mod+p>g kitten hints  --type=linenum --linenum-action=self --program -
 
+# Yank
 map kitty_mod+y>u kitten hints --type url --program @
+map kitty_mod+y>h kitten hints --type hash --program @
 map kitty_mod+y>f kitten hints --type path --program @
 map kitty_mod+y>l kitten hints --type line --program @
 map kitty_mod+y>w kitten hints --type word --program @
 map kitty_mod+y>g kitten hints  --type=linenum --linenum-action=self --program @
 
+# 
 map kitty_mod+g>u kitten hints --type url 
 map kitty_mod+g>f kitten hints --type path 
+map kitty_mod+g>l kitten hints --type line 
 map kitty_mod+g>o kitten hints --type path --program "launch --type=self nvim"
 map kitty_mod+g>kitty_mod+o kitten hints --type path --program "launch --type=self nvim"
 map kitty_mod+g>g kitten hints --type=linenum --linenum-action=self nvim +{line} {path}
@@ -1034,6 +1051,10 @@ map kitty_mod+g>shift+f kitten hints --type path --program "launch --type=tab nv
 map kitty_mod+g>shift+g kitten hints --type=linenum --linenum-action=tab nvim +{line} {path}
 map kitty_mod+g>ctrl+f kitten hints --type path --program "launch --type=window nvim"
 map kitty_mod+g>ctrl+g kitten hints --type=linenum --linenum-action=window nvim +{line} {path}
+
+map kitty_mod+f kitten choose-files
+map ctrl+shift+f kitten choose-files --mode=files
+map ctrl+shift+f kitten choose-files --mode=directories
 
 #: Select a path/filename and insert it into the terminal. Useful, for
 #: instance to run git commands on a filename output from a previous

@@ -1,0 +1,37 @@
+[
+  { "keys": ["ctrl+f4"], "command": "close_tab" },
+  { "keys": ["ctrl+r"], "command": "refresh" },
+  {
+    "keys": ["ctrl+alt+b"],
+    "command": "show_command_palette",
+    "args": { "command": "navigate_to_branch" },
+  },
+  {
+    "keys": ["shift+f11"],
+    "command": "toggle_full_context",
+    "context": [{ "key": "control", "operand": "file_diff_hunk_container" }],
+  },
+  {
+    "keys": ["ctrl+shift+u"],
+    "command": "show_command_palette",
+    "args": { "command": "push", "args": { "prompt": true } },
+  },
+  {
+    "keys": ["ctrl+u"],
+    "command": "show_command_palette",
+    "args": { "command": "push" },
+  },
+  {
+    "keys": ["ctrl+shift+d"],
+    "command": "show_command_palette",
+    "args": { "command": "pull" },
+  },
+  { "keys": ["ctrl+d"], "command": "pull" },
+  {
+    "keys": ["ctrl+p"],
+    "command": "prev_conflict",
+    "context": [{ "key": "merge_mode" }],
+  },
+  // { "keys": ["ctrl+pageup"], "command": "prev_file_tab" },
+  // { "keys": ["ctrl+pagedown"], "command": "next_file_tab" },
+]

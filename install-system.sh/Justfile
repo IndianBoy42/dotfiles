@@ -110,6 +110,8 @@ flatpak-installer := flatpak-install-local
 apt := "nala" # apt
 apt-install := "sudo " + apt + " install"
 
+uvx := "uvx" # uvx
+
 stow := if to-root != "0" { "sudo stow" } else { "stow" }
 
 only-needed-blobs := "--filter=blob:none"
@@ -178,9 +180,9 @@ as-root +name:
 common: 
     echo "TODO: save list of packages installed by this"
 
-# Install-Upgrade using pipx
-pipx-install name: pipx
-    pipx install {{name}} || pipx upgrade {{name}}
+# Install-Upgrade using uvx
+uvx-install name: 
+    {{uvx}} install {{name}} || {{uvx}} upgrade {{name}}
 
 # Link from a directory inside {{prefix}}
 link-pack name:
@@ -248,7 +250,7 @@ copy-bin name from: (mkpackdir name)
 gh name repo pattern tag="": (_tmpdir name) 
     #!/usr/bin/env fish
     if not test -e "/tmp/{{name}}/{{pattern}}"
-        cd /tmp/{{name}} && gh release -R {{repo}} download -p '{{pattern}}' '{{tag}}'
+        gh release -R {{repo}} download -p '{{pattern}}' '{{tag}}' -D /tmp/{{name}}
     end
     test '/tmp/{{name}}/{{name}}' != '/tmp/{{name}}/{{pattern}}'
     and test -e /tmp/{{name}}/{{pattern}}
@@ -428,6 +430,9 @@ vcpkg: (gitclone "https://github.com/microsoft/vcpkg.git" "vcpkg")
 appimg-launcher:
     {{flatpak-installer}} it.mijorus.gearlever
 
+uvx:
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+
 ##############################################333
 # Programs
 ##############################################333
@@ -459,6 +464,10 @@ gh-exts:
 # arm embedded gcc - newer than apt
 gcc-arm-none-eabi: (insgh "arm-none-eabi-gcc" "xpack-dev-tools/arm-none-eabi-gcc-xpack" "*linux-x64.tar.gz")
     echo "Installed gcc-arm-none-eabi"
+
+wasi-sdk: (debgh "wasi-sdk" "webassembly/wasi-sdk" "wasi-sdk-*-x86_64-linux.deb")
+
+wasm-binaryen: (insgh "binaryen" "webassembly/binaryen" "binaryen-*-x86_64-linux.tar.gz")
 
 # openocd - newer than apt
 openocd: (insgh "openocd" "xpack-dev-tools/openocd-xpack" "*linux-x64.tar.gz")
@@ -505,7 +514,7 @@ kitty: (mkpackdir "kitty.app")
     if test "$(realpath /usr/bin/x-terminal-emulator)" != "$(realpath (which kitty))"
         sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator (which kitty) 90
     end
-    # {{justrun}} gitcloneto "https://github.com/yurikhan/kitty_grab.git" "$HOME/config/kitty/kitty_grab"
+    # {{justrun}} gitcloneto "https:/vgithub.comvyurikhan/kitty_grab.git" "$HOME/config/kitty/kitty_grab"
 
 kitty-nightly: (mkpackdir "kitty.app-nightly")
     #!/usr/bin/env fish
@@ -683,17 +692,17 @@ mpv:
 
 # mps-youtube -- cli youtube client
 mps-youtube: mpv
-    {{justrun}} pipx-install git+https://github.com/mps-youtube/mps-youtube.git
-    pipx inject mps-youtube youtube-dl 
-    pipx inject mps-youtube pyperclip
+    {{justrun}} uvx-install git+https://github.com/mps-youtube/mps-youtube.git
+    uvx inject mps-youtube youtube-dl 
+    uvx inject mps-youtube pyperclip
 
 # Run a program on a remote computer
 outrun:
-    {{justrun}} pipx-install outrun
+    {{justrun}} uvx-install outrun
 
 # SSH with your shell environment
 xxh:
-    {{justrun}} pipx-install xxh-xxh
+    {{justrun}} uvx-install xxh-xxh
 
 # Futhark
 futhark: (gitclone "https://github.com/diku-dk/futhark.git" "futhark")
@@ -756,7 +765,7 @@ git-libsecret: (mkblddir "libsecret")
 # Quantum Mechanical Keyboard firmware
 qmk: (gitcloneto "https://github.com/IndianBoy42/qmk_userspace.git" "$HOME/qmk_userspace")
     #!/usr/bin/env fish
-    pipx install qmk
+    {{justrun}} uvx install qmk
     qmk setup
     sudo cp ~/qmk_firmware/util/udev/50-qmk.rules /etc/udev/rules.d/
     qmk doctor
@@ -775,6 +784,8 @@ zstd: (gitclone "https://github.com/facebook/zstd.git" "zstd") (mkpackdir "zstd"
     cd {{blddir}}/zstd && make
     ln -s {{blddir}}/zstd/zstd {{prefix}}/zstd/bin
     {{justrun}} link-pack "zstd"
+
+# squashfs-tools, zipmount/fuse-zip, ratarmount
 
 # Computer-side QMK mapping for builtin keyboards
 kmonad: (bingh "kmonad" "kmonad/kmonad" "kmonad")
@@ -906,7 +917,7 @@ rustc: _rustup rustup_targets
 
 # Download prebuilt binaries for crates
 cargo-quickinstall:
-    {{cargo-install}} cargo-quickinstall
+    {{cargo-install}} cargo-binstall
 
 # Helper for updating things install via cargo
 cargo-update:
@@ -983,7 +994,6 @@ cargo-build-tools: clippy
     {{cargo-install}} cargo-generate 
     {{cargo-install}} cargo-cache
     {{cargo-install}} cargo-outdated 
-    {{cargo-install}} probe-run 
     {{cargo-install}} cargo-update
     {{cargo-install}} cargo-binutils 
     {{cargo-install}} cargo-do 
@@ -995,11 +1005,13 @@ cargo-build-tools: clippy
     {{cargo-install}} bacon  
     {{cargo-install}} cargo-sweep  
     {{cargo-install}} hyperfine  
+    {{cargo-install}} cross --git https://github.com/cross-rs/cross  
 
 
 cargo-essentials: ripgrep broot tealdeer pueue
     {{cargo-install}} gitui
     {{cargo-install}} bat
+    {{cargo-install}} mcat
     {{cargo-install}} kn
     {{cargo-install}} zoxide
     {{cargo-install}} lsd
@@ -1022,6 +1034,7 @@ cargo-all-gnu:
     {{cargo-install}} so 
     {{cargo-install}} starship  
     {{cargo-install}} duma  
+    {{cargo-install}} mergiraf
 
 cargo-all-musl: bandwhich 
     {{cargo-install}} macchina
@@ -1036,10 +1049,10 @@ cargo-all-musl: bandwhich
     {{cargo-install}} procs
     {{cargo-install}} ptail
     {{cargo-install}} sd
-    {{cargo-install}} shy
     {{cargo-install}} skim 
     {{cargo-install}} watchexec-cli
-    {{cargo-install}} xsv
+    {{cargo-install}} qsv
+    {{cargo-install}} jless
     {{cargo-install}} tokei
     {{cargo-install}} gpg-tui 
     {{cargo-install}} git-branchless
@@ -1047,8 +1060,7 @@ cargo-all-musl: bandwhich
     {{cargo-install}} impala
 
 cargo-embedded:
-    {{cargo-install}} flip-link
-    {{cargo-install}} probe-run
+    curl -LsSf https://github.com/probe-rs/probe-rs/releases/latest/download/probe-rs-tools-installer.sh | sh
     
 spotify-tui: spotify
     {{apt-install}} libssl-dev libasound2-dev libdbus-1-dev
@@ -1094,9 +1106,9 @@ conda:
     conda update -n base -c defaults --all
 
 # Python dev tools
-pydev: pipx pipenv poetry
-    {{justrun}} pipx-install black 
-    {{justrun}} pipx-install mypy 
+pydev: uvx pipenv poetry
+    {{justrun}} uvx-install black 
+    {{justrun}} uvx-install mypy 
 
 ipykernel name='python' python='python':
     {{python}} -m pip install ipykernel
@@ -1111,20 +1123,20 @@ jupyter_ascending python='python':
 # 'Essential' python packages
 py-essentials:
     pip3 install --user click argcomplete rich ptpython ipython bpython
-    pipx install jupyter --include-deps
+    {{justrun}} uvx install jupyter --include-deps
 
 # Isolated pip installs for applications
-pipx:
-    {{apt-install}} python3-full pipx
-    pipx ensurepath
+uvx:
+    {{apt-install}} python3-full uvx
+    uvx ensurepath
 
 # Pipenv venv manager
-pipenv: pipx
-    {{justrun}} pipx-install pipenv
+pipenv: uvx
+    {{justrun}} uvx-install pipenv
 
 # Poetry python dev environment manager
 poetry: 
-    {{justrun}} pipx-install poetry
+    {{justrun}} uvx-install poetry
 #!/usr/bin/env fish
 #if type -q poetry
 #    poetry self update
@@ -1134,8 +1146,8 @@ poetry:
 
 # Temporary venvs for quick scripts
 pip-run:
-    {{justrun}} pipx-install pip-run 
-    pipx inject pip-run click rich ptpython ipython numpy matplotlib ipython ptpython bpython
+    {{justrun}} uvx-install pip-run 
+    uvx inject pip-run click rich ptpython ipython numpy matplotlib ipython ptpython bpython
 
 # Create conda environment from file
 conda-env name:
@@ -1177,8 +1189,8 @@ kicad:
         org.kicad.KiCad.Library.Packages3D  \
         org.kicad.KiCad.Library.Footprints 
     {{justrun}} flatpak-shortcut org.kicad.KiCad "kicad"
-    flatpak run --command="python -m ensurepip --upgrade" org.kicad.KiCad
-    flatpak run --command="pip3 install requests" org.kicad.KiCad
+    flatpak run --command="python" org.kicad.KiCad -m ensurepip --upgrade
+    flatpak run --command="pip3" org.kicad.KiCad install requests kikit pymupdf
 
 spotify: (flatpak-install "com.spotify.Client")
     echo "done"
@@ -1305,7 +1317,7 @@ sublime-text:
     sudo {{apt}} update
     {{apt-install}} sublime-text
 
-# TODO: install in an isolated virutal environment? (use pipx)
+# TODO: install in an isolated virutal environment? (use uvx)
 # Install my neovim config
 nvim-config home='$HOME' nvim='nvim':
     {{justrun}} gitcloneto "https://github.com/IndianBoy42/dot.nvim.git" "{{home}}/.config/nvim" 
@@ -1388,6 +1400,7 @@ kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune") (mkpackdir 
 
 # JSON query CLI
 jq: (bingh "jq" "stedolan/jq" "jq-linux64")
+    {{cargo-install}} jless
     echo "Installed jq"
 
 # Interative JSON Query CLI
@@ -1417,7 +1430,7 @@ mtr: (gitclone "https://github.com/traviscross/mtr.git" "mtr")
     {{justrun}} autotool-install mtr
 
 platformio: 
-    {{justrun}} platformio
+    {{justrun}} uvx install platformio
 
 lua:
     {{apt-install}} liblua5.4-dev lua5.4 luajit
@@ -1514,12 +1527,12 @@ prettierd:
     npm install -g @fsouza/prettierd
 
 youtube-dl:
-    pipx install yt-dlp
+    {{justrun}} uvx install yt-dlp
     # sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o {{bindir}}/yt-dlp
     # sudo chmod a+rx {{bindir}}/yt-dlp
 
 conan: 
-    pipx install conan
+    {{justrun}} uvx install conan
     conan profile detect
 
 gccdiag: (gitclone "https://gitlab.com/andrejr/gccdiag.git" "gccdiag")
@@ -1543,23 +1556,26 @@ scala:
     /tmp/coursier-setup setup
 
 # TODO: get the newly installed version correctly
-llvm: 
+llvm ver: 
     #!/usr/bin/env fish
     wget -O /tmp/llvm.sh https://apt.llvm.org/llvm.sh
     {{apt-install}} lsb-release wget software-properties-common gnupg
     sed -i 's/apt-get/nala/g' /tmp/llvm.sh
     #sed -i 's/sudo add-apt-repository/sudo add-apt-repository -n/g' /tmp/llvm.sh
     sudo chmod +x /tmp/llvm.sh
-    sudo bash -c /tmp/llvm.sh all
-    set v 18
-    for i in (seq 18 20); type -q clang-$i && set v $i; end
-    set name clang; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v 100
-    set name clang++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v 100
-    set name lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v 100
-    set name ld.lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v 100
-    set name clangd; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v 100
+    sudo bash -c /tmp/llvm.sh -- {{ver}} all
 
-clang: llvm
+llvm-alts:
+    #!/usr/bin/env fish
+    set v 20
+    for i in (seq 20 23); type -q clang-$i && set v $i; end
+    set name clang; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v (math 100 + $v)
+    set name clang++; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v (math 100 + $v)
+    set name lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v (math 100 + $v)
+    set name ld.lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v (math 100 + $v)
+    set name clangd; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v (math 100 + $v)
+
+clang ver: (llvm ver) llvm-alts
 
 forgit: 
     fisher install wfxr/forgit
@@ -1584,7 +1600,7 @@ bun:
 latex-rubber: (gitclone "https://gitlab.com/latex-rubber/rubber.git" "rubber")
     #!/usr/bin/env fish
     cd {{blddir}}/rubber 
-    pipx install --spec {{blddir}}/rubber rubber 
+    {{justrun}} uvx install --spec {{blddir}}/rubber rubber 
 
 janet: (insgh "janet" "janet-lang/janet" "*-linux-x64.tar.gz") 
 
@@ -1602,8 +1618,8 @@ adbfs: (gitclone "https://github.com/spion/adbfs-rootless.git" "adbfs")
     cd {{blddir}}/adbfs && make
 
 euporie: 
-    pipx install git+https://github.com/joouha/euporie.git@dev --force  
-    pipx inject euporie timg cairosvg mtable flatlatex ipython  
+    {{justrun}} uvx install git+https://github.com/joouha/euporie.git@dev --force  
+    uvx inject euporie timg cairosvg mtable flatlatex ipython  
 
 quickshare: (bingh "rquickshare" "martichou/rquickshare" "*glibc-2.31*.AppImage") 
 
@@ -1635,7 +1651,7 @@ direnv:
 
 hints:
     {{apt-install}} git libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-4.0 girepository2.0
-    pipx install git+https://github.com/AlfredoSequeida/hints.git
+    {{justrun}} uvx install git+https://github.com/AlfredoSequeida/hints.git
     sudo usermod -a -G input $USER
     echo 'KERNEL=="uinput", GROUP="input", MODE:="0660"' | sudo tee -a /etc/udev/rules.d/80-hints.rules
 
@@ -1655,14 +1671,29 @@ nordvpn:
     sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)
 
 aider:
-    pipx install aider-chat
+    {{justrun}} uvx install aider-chat
 
 shellgpt:
-    pipx install shell-gpt[litellm]
+    {{justrun}} uvx install shell-gpt[litellm]
 
 open-webui:
-   pipx install open-webui
+   {{justrun}} uvx install open-webui
 
 tailscale:
    curl -fsSL https://tailscale.com/install.sh | sh
    sudo tailscale up
+
+gotty: (targh "gotty" "sorenisanerd/gotty" "*_linux_amd64.tar.gz")
+
+todo: (targh "todo" "todotxt/todo.txt-cli" "*.tar.gz") (mkpackdir "todotxt")
+    cd {{blddir}}/todotxt && make 
+    mkdir ~/.config/todo.txt/
+    cd {{blddir}}/todotxt && make install INSTALL_DIR={{prefix}}/todotxt CONFIG_DIR=~/.config/todo.txt/
+    wget https://gist.githubusercontent.com/NijeboerFrank/7067007a43658ff94e2c954b83c08e43/raw/1ccebbee0b9485ae6229b2f72432d5c0d1002b6b/todo.sh.fish -O ~/.config/fish/completions/todo.sh.fish
+
+jj:
+    cargo binstall --strategies crate-meta-data jj-cli
+    go install github.com/idursun/jjui/cmd/jjui@latest
+
+deno:
+    curl -fsSL https://deno.land/install.sh | sh

@@ -1,5 +1,6 @@
 function v
     test (count $argv) -lt 1 && lsd -A && return
+    # TODO: mcat
     for arg in $argv
         if set -q $arg
             echo "VARIABLES: "

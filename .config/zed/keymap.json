@@ -1,0 +1,190 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      // "shift shift": "file_finder::Toggle"
+    },
+  },
+  {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      // "j k": "vim::NormalBefore"
+    },
+  },
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      ";": "command_palette::Toggle",
+      "Y": "vim::YankToEndOfLine",
+    },
+  },
+  {
+    "context": "(!Editor && !Terminal)",
+    "bindings": {
+      ";": "command_palette::Toggle",
+    },
+  },
+  {
+    "context": "(ProjectPanel && not_editing)",
+    "bindings": {
+      ";": "command_palette::Toggle",
+    },
+  },
+  {
+    "context": "(VimControl && VimCount)",
+    "bindings": {
+      ";": "vim::CountCommand",
+    },
+  },
+  {
+    "context": "vim_mode == visual",
+    "bindings": {
+      ";": "vim::VisualCommand",
+    },
+  },
+  {
+    "context": "vim_mode == visual",
+    "bindings": {
+      "s": "vim::PushAddSurrounds",
+      "x": "vim::Exchange",
+    },
+  },
+  // Subword motions
+  {
+    "context": "VimControl && !menu && vim_mode != operator",
+    "bindings": {
+      "w": "vim::NextSubwordStart",
+      "b": "vim::PreviousSubwordStart",
+      "e": "vim::NextSubwordEnd",
+      "g e": "vim::PreviousSubwordEnd",
+    },
+  },
+  {
+    "context": "Dock",
+    "bindings": {
+      "ctrl-w h": "workspace::ActivatePaneLeft",
+      "ctrl-w l": "workspace::ActivatePaneRight",
+      "ctrl-w k": "workspace::ActivatePaneUp",
+      "ctrl-w j": "workspace::ActivatePaneDown",
+      // ... or other keybindings
+    },
+  },
+  // wrapping past lines
+  {
+    "context": "VimControl && !menu",
+    "bindings": {
+      "left": "vim::WrappingLeft",
+      "right": "vim::WrappingRight",
+      "h": "vim::WrappingLeft",
+      "l": "vim::WrappingRight",
+    },
+  },
+  // Sneak = poor mans leap
+  {
+    "context": "vim_mode == normal",
+    "bindings": {
+      "s": "vim::PushSneak",
+      "shift-s": "vim::PushSneakBackward",
+    },
+  },
+  {
+    "context": "vim_operator == a || vim_operator == i || vim_operator == cs",
+    "bindings": {
+      // mini.ai plugin behavior
+      "q": "vim::MiniQuotes",
+      "b": "vim::MiniBrackets",
+      "c": "vim::Comment",
+    },
+  },
+  {
+    // ycc doesnt work (cannot `y`)
+    "context": "vim_mode == normal",
+    "bindings": {
+      "space c": "vim::PushToggleComments",
+    },
+  },
+  {
+    "context": "vim_mode == visual",
+    "bindings": {
+      "shift-c": "vim::ToggleComments",
+    },
+  },
+  {
+    "context": "((vim_mode == normal || vim_mode == visual) && !menu)",
+    "bindings": {
+      "space space": "workspace::Save",
+      "space f": "file_finder::Toggle",
+    },
+  },
+  {
+    "context": "(VimControl && !menu)",
+    "bindings": {
+      "alt-n": "vim::SelectNext",
+      "alt-shift-n": "vim::SelectPrevious",
+      "alt-shift-o": "editor::SelectAllMatches",
+      "alt-o": "editor::SelectAllMatches", // in (op)
+      // Skip
+      "alt->": ["editor::SelectNext", { "replace_newest": true }],
+      "alt-<": ["editor::SelectPrevious", { "replace_newest": true }],
+    },
+  },
+  {
+    "context": "(VimControl && !menu)",
+    "bindings": {
+      "ctrl-c": ["pane::CloseActiveItem", { "save_intent": "save_all" }],
+      "ctrl-q": ["pane::CloseActiveItem", { "save_intent": "save_all" }],
+      "shift-h": "editor::Hover",
+    },
+  },
+  {
+    "context": "((vim_mode == normal || vim_mode == visual) && !menu)",
+    "bindings": {
+      "space /": "workspace::NewSearch",
+      "space s t": "workspace::NewSearch",
+      "alt-/": ["buffer_search::Deploy", { "selection_search_enabled": true }],
+      "space s d": "diagnostics::Deploy",
+    },
+  },
+  {
+    "context": "(VimControl && !menu)",
+    "bindings": {
+      // "alt-l": "pane::GoForward",
+      // "alt-h": "pane::GoBack",
+      "tab": "pane::AlternateFile",
+      "shift-tab": "editor::SwitchSourceHeader",
+    },
+  },
+  {
+    "context": "(Editor && !edit_prediction)",
+    "bindings": {
+      "alt-;": "editor::ShowEditPrediction",
+    },
+  },
+  {
+    "context": "(Editor && edit_prediction_conflict)",
+    "bindings": {
+      "alt-tab": null,
+      "alt-;": "editor::AcceptEditPrediction",
+    },
+  },
+  {
+    "context": "(Editor && edit_prediction)",
+    "bindings": {
+      "alt-tab": null,
+      "alt-;": "editor::AcceptEditPrediction",
+    },
+  },
+  {
+    "context": "(VimControl && !menu)",
+    "bindings": {
+      "space l f": "editor::Format",
+    },
+  },
+]

@@ -82,6 +82,7 @@ base_volume = "100%" # global volume multiplier
 # Uncomment and change the key-bindings you want to define
 # (some of those ones are the defaults and are just here for illustration)
 [keybindings]
+ctrl-r = "rerun"
 # esc = "back"
 # g = "scroll-to-top"
 # shift-g = "scroll-to-bottom"
@@ -115,7 +116,7 @@ base_volume = "100%" # global volume multiplier
 command = [
     "cargo",
     "clippy",
-    "--target-dir=target/analyzer",
+    "--target-dir=target/bacon",
     "--workspace",
     "--tests",
     "--all-targets",

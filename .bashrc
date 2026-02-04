@@ -126,5 +126,11 @@ if command -v pyenv 1>/dev/null 2>&1; then
 	eval "$(pyenv init --path)"
 fi
 
-export STM32_PRG_PATH=~/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin
 . "$HOME/.cargo/env"
+
+export STM32_PRG_PATH=/home/anshuman/STMicroelectronics/STM32Cube/STM32CubeProgrammer/bin
+
+alias python="uv run python"
+alias python3="uv run python"
+alias pip="uv pip"
+. "/home/anshuman/.deno/env"

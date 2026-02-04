@@ -71,7 +71,7 @@
 	sm = submodule
 	info = !"onefetch"
 	root = rev-parse --show-toplevel
-    ui = !gitui
+    ui = !gitu
     pre-pull = diff @ @{upstream}
     any-changes = diff --no-ext-diff --quiet --exit-code
 	untracked = ls-files . --exclude-standard --others
@@ -108,3 +108,8 @@
 [absorb]
     maxStack=10
     oneFixupPerCommit = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

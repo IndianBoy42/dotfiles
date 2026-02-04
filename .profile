@@ -30,7 +30,7 @@ source "$HOME/.cargo/env"
 
 if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
-[[ -s "~/.gvm/scripts/gvm" ]] && source "~/.gvm/scripts/gvm"
+# [[ -s "~/.gvm/scripts/gvm" ]] && source "~/.gvm/scripts/gvm"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
@@ -43,4 +43,6 @@ export PATH="$PATH:~/.local/share/coursier/bin"
 # repeating keys go brrrr
 xset r rate 220 25
 
-export STM32CubeMX_PATH=~/STM32CubeMX
+
+export STM32CubeMX_PATH=/home/anshuman/STM32CubeMX
+. "/home/anshuman/.deno/env"

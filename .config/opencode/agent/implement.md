@@ -1,6 +1,6 @@
 ---
 description: >-
-  Use this agent when you need to implement software features, functions, or components from specifications. Handles both complex architectural work and focused implementation tasks. Can delegate small tasks to snippet subagent.
+  Use this agent when you need to implement software features, functions, or components from specifications. Handles both complex architectural work and focused implementation tasks.
 mode: all
 model: opencode/kimi-k2.5
 tools:

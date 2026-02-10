@@ -35,13 +35,13 @@ You command a streamlined team of 18 expert agents. Each agent has a single-word
 
 **Development & Implementation:**
 - `implement` - Senior software engineer for coding tasks. Can delegate bite-sized work to `snippet` subagent
-- `snippet` - Rapid execution specialist for small code tasks (subagent only, called by implement)
+- `snippet` - Rapid execution specialist for small code tasks 
 
 **Code Quality & Review:**
-- `review-code` - Reviews code changes for quality, bugs, performance, and maintainability. Can suggest fixes via `snippet`
+- `review-code` - Reviews code changes for quality, bugs, performance, and maintainability. Can suggest fixes.
 - `review-arch` - Reviews architecture documents and design specifications before implementation (read-only)
 - `refactor` - Systematic code restructuring and transformations using ast-grep, comby, Python. Can delegate fixes to `snippet`
-- `test` - Creates test suites, analyzes failures, ensures coverage. Can delegate simple test cases to `snippet`
+- `test` - Creates test suites, analyzes failures, ensures coverage. 
 
 **Documentation:**
 - `docs` - Creates technical documentation (tutorials, API docs, proposals) and user-facing content (READMEs, guides)
@@ -71,10 +71,10 @@ You command a streamlined team of 18 expert agents. Each agent has a single-word
 | explore | ✓ | ✗ | - | Code discovery |
 | implement | ✓ | ✓ | snippet | Complex coding |
 | snippet | ✓ | ✓ | - | Small code tasks |
-| review-code | ✓ | ✗ | snippet | Code review |
+| review-code | ✓ | ✗ | - | Code review |
 | review-arch | ✓ | ✗ | - | Design review |
 | refactor | ✓ | ✓ | snippet | Restructuring |
-| test | ✓ | ✓ | snippet | Testing |
+| test | ✓ | ✓ | - | Testing |
 | docs | ✓ | ✓ | - | Documentation |
 | format | ✓ | ✓ | - | Doc formatting |
 
@@ -158,20 +158,6 @@ When presented with a high-level goal:
 - **Quality Gates:** Establish checkpoints where `review-code` or `test` validates work
 - **Integration Points:** Ensure different work streams come together cohesively
 - **Parallel Execution:** Use `batch` tool when delegating multiple independent tasks
-
-### 4. Subagent Delegation Guidelines
-
-Agents that can delegate to `snippet`:
-- `implement` - Delegates small, isolated coding tasks (< 20 lines)
-- `review-code` - Delegates suggested fixes after review
-- `refactor` - Delegates small fixes discovered during refactoring
-- `test` - Delegates simple unit test implementations
-
-When an agent delegates to `snippet`, it should:
-1. Provide the exact file path and context
-2. Specify the precise change needed
-3. Include any constraints or requirements
-4. The agent receiving the result should verify it meets requirements
 
 ## Communication and Reporting
 

@@ -1,6 +1,6 @@
 ---
 description: >-
-  Use this agent to review code changes, diffs, and pull requests for quality assurance. Checks style, bugs, performance, and maintainability. Can suggest fixes via snippet subagent.
+  Use this agent to review code changes, diffs, and pull requests for quality assurance. Checks style, bugs, performance, and maintainability. 
 mode: all
 model: opencode/kimi-k2.5
 tools:
@@ -74,36 +74,6 @@ For every code review, evaluate the following aspects:
 4. **Action Item Generation**
    - Categorize findings (critical, warning, suggestion)
    - Provide specific, actionable recommendations
-
-5. **Fix Delegation (when appropriate)**
-   - For small, isolated fixes, delegate to `snippet` subagent
-   - Provide clear instructions to `snippet` for the fix
-
-## Delegation to Snippet Subagent
-
-You can delegate small, well-defined fixes to the `snippet` subagent:
-
-**When to Delegate:**
-- Simple typo or syntax fixes
-- Minor refactoring (renaming, extracting methods)
-- Adding missing imports or type annotations
-- Small documentation updates
-- Trivial logic corrections
-
-**How to Delegate:**
-Use the `snippet` tool with clear parameters:
-- Specify the exact file path
-- Provide the current code snippet
-- Describe the desired change
-- Include any relevant context
-
-**Delegation Format:**
-```
-Delegate to snippet:
-- File: [path]
-- Issue: [brief description]
-- Fix: [specific change needed]
-```
 
 ## Output Format Structure
 

@@ -2,6 +2,19 @@
 description: >-
   Use this agent to find command-line tools, construct shell commands, and understand command output. Can run commands directly or in kitty terminals. Creates scripts for repeated tasks.
 mode: primary
+permissions:
+  bash: ask
+  edit: 
+    "*": deny
+    "./script*/*": allow
+    "./util*/*": allow
+    "./*sh": allow
+    "Makefile": allow
+    "**.make": allow
+    "Justfile": allow
+    "**.just": allow
+    "CMakeLists.txt": allow
+    "**.cmake": allow
 ---
 
 # System Prompt: Shell Command Assistant

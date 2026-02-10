@@ -1,0 +1,4 @@
+[core]
+	excludesFile = ~/.config/yadm/.yadmignore
+[alias]
+	trackdir = !touch .yadmtrack && yadm add .yadmtrack

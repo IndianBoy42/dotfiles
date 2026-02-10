@@ -15,7 +15,7 @@ description: >-
   requires focused implementation, perfect for the developer
   agent.</commentary></example>
 mode: all
-model: opencode/claude-sonnet-4-5
+model: opencode/kimi-k2.5
 # model: zai-coding-plan/glm-4.7
 # model: zai-coding-plan/glm-4.7
 ---

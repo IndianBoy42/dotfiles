@@ -1,0 +1,5 @@
+abbr --command jj -a bmc -- "bookmark create"
+abbr --command jj --set-cursor -a why -- "log -r 'why_immutable(%)'"
+abbr --command jj -a wus -- "workspace update-stale"
+abbr --command jj -a last -- "op show -p"
+abbr --set-cursor --command jj -a m -- "describe -m '%'"

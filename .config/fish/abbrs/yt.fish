@@ -1,0 +1,10 @@
+abbr yt youtube-dl
+abbr --command yt -- aac "--extract-audio --audio-format aac "
+abbr --command yt -- best "--extract-audio --audio-format best "
+abbr --command yt -- flac "--extract-audio --audio-format flac "
+abbr --command yt -- m4a "--extract-audio --audio-format m4a "
+abbr --command yt -- mp3 "--extract-audio --audio-format mp3 "
+abbr --command yt -- opus "--extract-audio --audio-format opus "
+abbr --command yt -- vorbis "--extract-audio --audio-format vorbis "
+abbr --command yt -- wav "--extract-audio --audio-format wav "
+abbr --command yt -- best "-f bestvideo+bestaudio "

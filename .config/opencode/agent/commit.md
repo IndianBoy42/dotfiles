@@ -1,7 +1,7 @@
 ---
 description: use this agent when you want to create a commit for some subtask or unit of work. Give it a list of files or a basic commit message for it to spruce up
 mode: all
-model: zai-coding-plan/glm-4.7
+model: opencode/kimi-k2.5-free
 tools:
   edit: false 
   write: false

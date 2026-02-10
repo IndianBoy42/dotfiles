@@ -1,0 +1,25 @@
+{
+  // Enable or disable the plugin
+  "enabled": true,
+  // Enable debug logging to ~/.config/opencode/logs/dcp/
+  "debug": false,
+  // Override model for analysis (format: "provider/model", e.g. "anthropic/claude-haiku-4-5")
+  // "model": "anthropic/claude-haiku-4-5",
+  // Show toast notifications when model selection fails
+  "showModelErrorToasts": true,
+  // Only run AI analysis with session model or configured model (disables fallback models)
+  "strictModelSelection": false,
+  // Pruning strategies: "deduplication", "ai-analysis" (empty array = disabled)
+  "strategies": {
+    // Strategies to run when session goes idle
+    "onIdle": ["deduplication", "ai-analysis"],
+    // Strategies to run when AI calls prune tool
+    "onTool": ["deduplication", "ai-analysis"]
+  },
+  // Summary display: "off", "minimal", or "detailed"
+  "pruning_summary": "detailed",
+  // How often to nudge the AI to prune (every N tool results, 0 = disabled)
+  "nudge_freq": 10
+  // Additional tools to protect from pruning (merged with built-in: task, todowrite, todoread, prune)
+  // "protectedTools": ["bash"]
+}

@@ -1054,7 +1054,7 @@ map kitty_mod+g>ctrl+g kitten hints --type=linenum --linenum-action=window nvim 
 
 map kitty_mod+f kitten choose-files
 map ctrl+shift+f kitten choose-files --mode=files
-map ctrl+shift+f kitten choose-files --mode=directories
+# map ctrl+shift+f kitten choose-files --mode=dirs
 
 #: Select a path/filename and insert it into the terminal. Useful, for
 #: instance to run git commands on a filename output from a previous

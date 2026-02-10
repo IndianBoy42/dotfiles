@@ -23,11 +23,11 @@ description: >-
 mode: all
 model: zai-coding-plan/glm-4.7
 tools:
-  bash: false
+  bash: true
   write: false
   edit: false
 permissions:
-  bash: "ask"
+  bash: "allow"
   external_directory: "allow"
 ---
 

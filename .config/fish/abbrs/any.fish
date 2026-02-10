@@ -1,0 +1,10 @@
+abbr -a --position anywhere -- ,h --help
+abbr -a --position anywhere -- ,v --version
+abbr -a --position anywhere -- ,i install
+abbr -a --position anywhere -- ,b build
+abbr -a --position anywhere -- ,c clean
+abbr -a --position anywhere -- ,u update
+abbr -a --position anywhere -- ,U upgrade
+abbr -a --position anywhere -- ,a add
+abbr -a --position anywhere -- ,s status
+abbr -a --position anywhere -- ,w watch

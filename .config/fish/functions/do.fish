@@ -3,7 +3,7 @@ function do --description 'Do what I want'
     function add_to_history
         set -l cmd (string join '\n' $argv)
         set -l time (date +%s)
-        echo "- cmd: $cmd"\n"  when: $time" >> ~/.local/share/fish/fish_history
+        echo "- cmd: $cmd"\n"  when: $time" >>~/.local/share/fish/fish_history
     end
 
     # Execute a command and add it to history as if a user would have executed it
@@ -27,7 +27,10 @@ function do --description 'Do what I want'
 
         # Get subject from clipboard
         if test -z "$subject"
-            if type -q xclip
+            if type -q wl-paste
+                # Wayland clipboard
+                set subject (wl-paste)
+            else if type -q xclip
                 # Xorg clipboard
                 set subject (xclip -o -selection clipboard)
                 if test -z "$subject"
@@ -56,12 +59,14 @@ function do --description 'Do what I want'
                 do_action "hub checkout $subject"
                 return
 
-            # Clone git repo
+                # Clone git repo
             case 'git@*.git' 'https://*.git' 'git://*' 'https://github.com/*/*'
                 set -l repo (string match -r '/([a-zA-Z_-]+)/?(?:\\.git)?$' $subject | sed -n 2p)
 
                 # Special case for GitHub
-                if begin; test -n "$repo"; and string match -e 'github.com' $subject > /dev/null; end
+                if begin
+                        test -n "$repo"; and string match -e 'github.com' $subject >/dev/null
+                    end
                     set -l owner (string match -r '(?:/|:)([a-zA-Z_-]+)/[a-zA-Z_-]+/?(?:\\.git)?$' $subject | sed -n 2p)
                     set -l api_url https://api.github.com/repos/$owner/$repo
                     set -l info (curl $api_url -s)
@@ -70,7 +75,7 @@ function do --description 'Do what I want'
                         set -l ssh_url (echo $info | jq .ssh_url -r)
 
                         # If the repo is a fork
-                        if test (echo $info | jq .fork -r) = "true"
+                        if test (echo $info | jq .fork -r) = true
                             set -l remote (git config --get remote.origin.url)
                             set -l parent_git_url (echo $info | jq .parent.git_url -r)
                             set -l parent_ssh_url (echo $info | jq .parent.ssh_url -r)
@@ -86,8 +91,8 @@ function do --description 'Do what I want'
                                 set add_remote yes
 
                             else if test "$remote" = "$parent_git_url" -o \
-                                "$remote" = "$parent_ssh_url" -o \
-                                "$remote" = "$parent_https_url"
+                                    "$remote" = "$parent_ssh_url" -o \
+                                    "$remote" = "$parent_https_url"
 
                                 set add_remote yes
                             end
@@ -127,7 +132,7 @@ function do --description 'Do what I want'
                 end
                 return
 
-            # Check out branch if it starts with feature
+                # Check out branch if it starts with feature
             case 'feature/*'
                 echo "Checkout feature: $subject"
                 do_action "git fetch"
@@ -135,26 +140,26 @@ function do --description 'Do what I want'
                 do_action "git pull"
                 return
 
-            # Download a  file
+                # Download a  file
             case 'http://*' 'https://*'
                 echo "Download: $subject"
                 do_action "curl -LO $subject"
                 return
 
-            # Unpack a file
+                # Unpack a file
             case '*.tgz' '*.tbz' '*.tar' '*.tar.*' '*.zip' '*.rar' '*gz' '*bz2'
                 echo "Unpack: $subject"
                 do_action "unpack $subject"
                 return
 
-            # Open a URL
+                # Open a URL
             case '*://*'
                 echo "Open: $subject"
                 do_action "open $subject"
                 return
         end
 
-        if git branch -r | grep $subject > /dev/null
+        if git branch -r | grep $subject >/dev/null
             echo "Checkout branch: $subject"
             do_action "git fetch"
             do_action "git checkout $subject"
@@ -185,7 +190,7 @@ function do --description 'Do what I want'
 
             set -l type (xdg-mime query filetype $subject)
 
-            if string match 'text/*' $type > /dev/null
+            if string match 'text/*' $type >/dev/null
                 set -l editor
                 if test -n "$EDITOR"
                     set editor $EDITOR
@@ -213,7 +218,7 @@ function do --description 'Do what I want'
 
         set -l first_word (string split ' ' $subject)[1]
 
-        if which $first_word > /dev/null ^/dev/null
+        if which $first_word >/dev/null ^/dev/null
             echo "Execute: $subject"
             do_action $subject
             return

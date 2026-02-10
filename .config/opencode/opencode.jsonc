@@ -77,11 +77,7 @@
     "commit": {
       "template": "Commit Message: $ARGUMENTS",
       "subtask": true,
-      "model": "zai-coding-plan/glm-4.7", // Free
-    },
-    "describe": {
-      "template": "",
-      "model": "zai-coding-plan/glm-4.7", // Free
+      "model": "opencode/kimi-k2.5-free", // Free
     },
     "run": {
       "template": "Run the following command: `$ARGUMENTS` and evaluate the output in the context of the current session",

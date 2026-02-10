@@ -1,1 +1,0 @@
-../plugins-manual/razzius/functions/git-add-commit.fish

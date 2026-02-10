@@ -1,0 +1,3 @@
+#!/bin/bash
+# Execute the tracking logic
+$HOME/.config/yadm/hooks/track_directories.py

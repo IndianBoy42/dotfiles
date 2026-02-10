@@ -3,19 +3,19 @@
 ##################################
 
 if type -q zoxide
-	zoxide init fish | source
+    zoxide init fish | source
 end
 
 if type -q _kn
-	_kn init --shell fish | source
+    _kn init --shell fish | source
 end
 
 if type -q direnv
-	direnv hook fish | source
+    direnv hook fish | source
 end
 
 if type -q cod
-	cod init %self fish | source
+    cod init %self fish | source
 end
 
 # Use starship (I prefer fish tide for now)
@@ -25,3 +25,7 @@ end
 #if type -q thefuck
 #	status is-interactive; and thefuck --alias fk | source
 #end
+
+if type -q direnv
+    direnv hook fish | source
+end

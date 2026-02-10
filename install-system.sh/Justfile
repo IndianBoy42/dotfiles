@@ -1105,11 +1105,6 @@ conda:
     end
     conda update -n base -c defaults --all
 
-# Python dev tools
-pydev: uvx pipenv poetry
-    {{justrun}} uvx-install black 
-    {{justrun}} uvx-install mypy 
-
 ipykernel name='python' python='python':
     {{python}} -m pip install ipykernel
     {{python}} -m ipykernel install --user --display-name '{{name}}' --name '{{name}}'
@@ -1121,38 +1116,9 @@ jupyter_ascending python='python':
     jupyter serverextension enable jupyter_ascending --sys-prefix --py
 
 # 'Essential' python packages
-py-essentials:
+py-essentials-update-to-uvx:
     pip3 install --user click argcomplete rich ptpython ipython bpython
     {{justrun}} uvx install jupyter --include-deps
-
-# Isolated pip installs for applications
-uvx:
-    {{apt-install}} python3-full uvx
-    uvx ensurepath
-
-# Pipenv venv manager
-pipenv: uvx
-    {{justrun}} uvx-install pipenv
-
-# Poetry python dev environment manager
-poetry: 
-    {{justrun}} uvx-install poetry
-#!/usr/bin/env fish
-#if type -q poetry
-#    poetry self update
-#else
-#    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python - --preview
-#end
-
-# Temporary venvs for quick scripts
-pip-run:
-    {{justrun}} uvx-install pip-run 
-    uvx inject pip-run click rich ptpython ipython numpy matplotlib ipython ptpython bpython
-
-# Create conda environment from file
-conda-env name:
-    conda env create -f {{name}} || conda env update --prune -n (cat {{name}} | rg 'name: ([\S]+)' -C0 -r '$1')
-    conda activate (cat {{name}} | rg 'name: ([\S]+)' -C0 -r '$1') && {{justrun}} py-essentials
 
 # vulkan api sdk
 vulcan-sdk:
@@ -1367,41 +1333,10 @@ neovide: (gitclone "https://github.com/neovide/neovide" "neovide")
     cd {{blddir}}/neovide
     CARGO_BUILD_TARGET={{gnu-target}} {{cargo-install}} --path .
 
-nvui: (gitclone "https://github.com/rohit-px2/nvui.git" "nvui")
-    #!/usr/bin/env fish
-    which nvui 
-    or {{apt-install}} gperf autoconf build-essential libtool libgl1-mesa-dev libxi-dev libx11-dev libxext-dev libxkbcommon-x11-dev libglu1-mesa-dev libx11-xcb-dev '^libxcb.*-dev' libxrender-dev ninja-build curl zip unzip tar autopoint python
-    cmake -S {{blddir}}/nvui \
-        -B {{blddir}}/nvui/build \
-        -DCMAKE_TOOLCHAIN_FILE={{blddir}}/nvui/vcpkg/scripts/buildsystems/vcpkg.cmake \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_INSTALL_PREFIX="{{prefix}}/nvui"
-    cmake --build {{blddir}}/nvui/build --target nvui --config Release
-    cmake --install {{blddir}}/nvui/build --config Release
-    rm -rf {{blddir}}/nvui/build {{blddir}}/nvui/vcpkg
-
-nvui-dl: 
-    rm -rf {{prefix}}/nvui
-    gh run -R rohit-px2/nvui download -n nvui-linux-x64 -D {{prefix}}/nvui
-    chmod +x {{prefix}}/nvui/bin/nvui
-    {{justrun}} link-pack nvui
-
-goneovim: (targh "goneovim" "akiyosi/goneovim" "*linux.tar.bz2") (mkpackdir "goneovim")
-    cp -r /tmp/goneovim/Goneovim-v*-linux/* {{prefix}}/goneovim/
-    {{justrun}} wrap-bin "goneovim" "goneovim" "goneovim"
-
-# Selection first modal editor
-kakoune: (gitclone "https://github.com/mawww/kakoune.git" "kakoune") (mkpackdir "kakoune")
-    {{apt-install}} libncursesw5-dev pkg-config
-    cd {{blddir}}/kakoune/src\
-    && make CXX={{CXX}} \
-    && PREFIX={{prefix}}/kakoune make install
-    {{justrun}} link-pack "kakoune"
-
 # JSON query CLI
 jq: (bingh "jq" "stedolan/jq" "jq-linux64")
     {{cargo-install}} jless
-    echo "Installed jq"
+    echo "Installed jq+jless"
 
 # Interative JSON Query CLI
 ijq: (gitclone "https://github.com/gpanders/ijq.git" "ijq") (mkpackdir "ijq")

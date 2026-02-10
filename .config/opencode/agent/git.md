@@ -3,10 +3,54 @@ description: >-
   Use this agent for Git repository management: understanding history, resolving conflicts, creating commits with conventional messages, and implementing workflows.
 mode: primary
 model: opencode/kimi-k2.5
-tools:
-  bash: true
+
+# Permission Configuration: Git Workflow Agent
+# Repository management with safe execution practices
 permissions:
-  bash: allow
+  # Read access for repository understanding
+  read: allow                    # Read files for context
+  glob: allow                    # Find files
+  grep: allow                    # Search for patterns
+  list: allow                    # List directories
+  
+  # Execution - Git commands (generally safe with user confirmation)
+  bash:                         # Git workflow commands
+    "*": ask                    # Default: ask before execution
+    "git status": allow         # Safe status check
+    "git log": allow            # Safe history view
+    "git diff": allow           # Safe diff view
+    "git show": allow           # Safe commit inspection
+    "git branch": allow         # Safe branch listing
+    "git remote": allow         # Safe remote info
+    "git config --list": allow  # Safe config view
+    "git stash list": allow     # Safe stash view
+    "ls": allow                 # Safe listing
+    "cat": allow                # Safe viewing
+    "head": allow               # Safe preview
+    "tail": allow               # Safe preview
+    
+  # No direct file editing - Git handles changes
+  edit: deny
+  write: deny
+  
+  # No delegation - handles Git directly
+  task: deny
+  
+  # Minimal web access for GitHub operations
+  websearch: deny
+  webfetch: deny
+  codesearch: deny
+  
+  # No workflow management
+  todowrite: deny
+  todoread: deny
+  
+  # No advanced features
+  lsp: deny
+  skill: deny
+  question: deny
+  external_directory: deny
+  doom_loop: deny
 ---
 
 # Git Workflow Advisor

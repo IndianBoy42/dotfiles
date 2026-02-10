@@ -2,6 +2,40 @@
 description: >-
   Use this agent for bite-sized coding tasks: quick snippets, small modifications, or concise coding questions. Fast, focused execution when context is already provided. Called by implement and other agents for subtasks.
 mode: primary
+
+# Permission Configuration: Snippet Agent (Restricted Subagent)
+# Minimal permissions for focused, bite-sized code tasks
+# Called by parent agents that provide full context
+permissions:
+  # File Operations - limited edit access only on provided paths
+  read: allow                    # Read files specified by parent
+  edit:                         # Only edit files explicitly provided in task
+    "*": ask                    # Ask for any file edit (parent should provide specific paths)
+  write:                        # Limited write access
+    "*": ask                    # Ask for any new file
+  glob: allow                    # Safe for finding files by pattern
+  grep: allow                    # Safe for searching content
+  list: allow                    # Safe for listing directories
+  
+  # No independent execution - parent handles orchestration
+  bash: deny
+  task: deny
+  
+  # No independent research - context provided by parent
+  websearch: deny
+  webfetch: deny
+  codesearch: deny
+  
+  # No workflow management - parent handles tracking
+  todowrite: deny
+  todoread: deny
+  
+  # No advanced features
+  lsp: allow                    # OK for syntax checking
+  skill: deny
+  question: deny
+  external_directory: deny
+  doom_loop: deny
 ---
 
 You are a Rapid Execution Specialist focused on small code tasks.

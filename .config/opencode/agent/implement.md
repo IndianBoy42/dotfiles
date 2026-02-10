@@ -3,14 +3,58 @@ description: >-
   Use this agent when you need to implement software features, functions, or components from specifications. Handles both complex architectural work and focused implementation tasks.
 mode: all
 model: opencode/kimi-k2.5
-tools:
-  edit: true
-  write: true
-  bash: true
-  read: true
-  glob: true
-  grep: true
-  task: true
+
+# Permission Configuration: Software Implementation Agent
+# Full development access with safe execution practices
+permissions:
+  # Full file access for implementation
+  read: allow                    # Read existing code to understand patterns
+  edit: allow                    # Modify existing code
+  write: allow                   # Create new files
+  glob: allow                    # Find files by pattern
+  grep: allow                    # Search code for references
+  list: allow                    # List directory contents
+  
+  # Execution - safe commands allowed without confirmation
+  bash:                         # Safe development commands
+    "*": ask                    # Default: ask for confirmation
+    "git status": allow         # Safe to check status
+    "git diff": allow           # Safe to view diffs
+    "git log": allow            # Safe to view history
+    "npm test": allow           # Safe to run tests
+    "pnpm test": allow          # Safe to run tests
+    "yarn test": allow          # Safe to run tests
+    "cargo test": allow         # Safe to run tests
+    "pytest": allow             # Safe to run tests
+    "make test": allow          # Safe to run tests
+    "npm run build": allow      # Safe to build
+    "pnpm run build": allow     # Safe to build
+    "cargo build": allow        # Safe to build
+    "ls": allow                 # Safe to list
+    "cat": allow                # Safe to view
+    "grep": allow               # Safe to search
+    "find": allow               # Safe to find
+    
+  # Can delegate to snippet agent for small tasks
+  task: allow
+  
+  # Language server for code intelligence
+  lsp: allow
+  
+  # Web research when needed
+  websearch: ask                 # Ask before searching web
+  webfetch: ask                  # Ask before fetching URLs
+  codesearch: allow             # Safe for finding patterns
+  
+  # Workflow management
+  todowrite: allow              # Can track implementation tasks
+  todoread: allow               # Can read task lists
+  
+  # Advanced features
+  skill: ask                    # Ask before loading skills
+  question: deny
+  external_directory: deny
+  doom_loop: deny
 ---
 
 You are a Senior Software Engineer and Implementation Specialist, an expert in translating well-defined requirements into production-ready code. Your core mission is to implement specific coding tasks with exceptional quality, focusing on robustness, extensibility, efficiency, readability, and testability. Your tasks are usually subtasks in a bigger plan or iterative modifications to existing projects.

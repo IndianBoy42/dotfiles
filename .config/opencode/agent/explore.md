@@ -2,16 +2,50 @@
 description: >-
   Use this agent to explore and understand unfamiliar codebases. Navigates structure, finds implementations, analyzes architecture, creates navigation guides.
 mode: all
-model: zai-coding-plan/glm-4.7
-tools:
-  read: true
-  glob: true
-  grep: true
-  bash: true
-  edit: false
-  write: true
+model: opencode/kimi-k2.5
+
+# Permission Configuration: Codebase Explorer (Read-Only)
+# This agent explores and analyzes codebases without modifying them
 permissions:
-  bash: allow
+  # File Operations - read and navigate only
+  read: allow                    # Read source files, configs, documentation
+  glob: allow                    # Discover file structures and patterns
+  grep: allow                    # Search for implementations and references
+  list: allow                    # List directories to understand structure
+  
+  # Light execution for directory operations only
+  bash:                         # Restricted bash for exploration only
+    ls: allow                   # List directories
+    find: allow                 # Find files by name/pattern
+    cat: allow                  # View file contents (redundant with read)
+    head: allow                 # Preview file beginnings
+    tail: allow                 # Preview file endings
+    wc: allow                   # Count lines/words in files
+    tree: allow                 # View directory tree
+    "*": deny                   # Deny all other bash commands
+  
+  # Documentation Creation - can write navigation guides
+  write:                        # Only write documentation files
+    "./docs/**": allow          # Allow writing to docs directory
+    "./guides/**": allow        # Allow writing to guides directory
+    "./**/*.md": allow          # Allow writing markdown files
+    "*": deny                   # Deny writing other file types
+  
+  # No editing of existing code
+  edit: deny
+  
+  # No advanced tools needed for exploration
+  lsp: deny
+  websearch: deny
+  webfetch: deny
+  codesearch: deny
+  task: deny
+  todowrite: deny
+  todoread: deny
+  question: deny
+  skill: deny
+  external_directory: deny
+  doom_loop: deny
 ---
 
 # System Prompt

@@ -3,12 +3,58 @@ description: >-
   Use this agent to create test suites, analyze test failures, and ensure coverage. Handles unit, integration, and regression testing. 
 mode: all
 model: opencode/kimi-k2.5
-tools:
-  read: true
-  glob: true
-  grep: true
-  edit: true
-  write: true
+
+# Permission Configuration: Test Suite Architect
+# Full development access with test-specific tooling
+permissions:
+  # Full file access for test creation
+  read: allow                    # Read code to test
+  edit: allow                    # Modify test files
+  write: allow                   # Create new test files
+  glob: allow                    # Find files to test
+  grep: allow                    # Search code patterns
+  list: allow                    # List directories
+  
+  # Execution - test commands are safe
+  bash:                         # Testing commands
+    "*": ask                    # Default: ask
+    "npm test": allow           # Safe test runner
+    "pnpm test": allow          # Safe test runner
+    "yarn test": allow          # Safe test runner
+    "pytest": allow             # Safe test runner
+    "cargo test": allow         # Safe test runner
+    "go test": allow            # Safe test runner
+    "jest": allow               # Safe test runner
+    "vitest": allow             # Safe test runner
+    "mocha": allow              # Safe test runner
+    "rspec": allow              # Safe test runner
+    "bundle exec rspec": allow  # Safe test runner
+    "coverage": allow           # Safe coverage report
+    "pytest-cov": allow         # Safe coverage
+    "make test": allow          # Safe test target
+    "ls": allow                 # Safe listing
+    "cat": allow                # Safe viewing
+    "find": allow               # Safe finding
+    "grep": allow               # Safe searching
+    
+  # No delegation - handles testing directly
+  task: deny
+  
+  # Minimal web access for test research
+  websearch: ask                 # Ask before searching
+  webfetch: ask                  # Ask before fetching
+  codesearch: allow             # Safe for patterns
+  
+  # Workflow management for test planning
+  todowrite: allow               # Track test tasks
+  todoread: allow               # Read test task lists
+  
+  # Advanced features
+  lsp: allow                    # OK for code analysis
+  skill: ask                    # Ask before loading skills
+  question: deny
+  external_directory: deny
+  doom_loop: deny
 ---
 
 # Test Suite Architect

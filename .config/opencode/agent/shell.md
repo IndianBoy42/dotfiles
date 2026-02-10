@@ -2,19 +2,70 @@
 description: >-
   Use this agent to find command-line tools, construct shell commands, and understand command output. Can run commands directly or in kitty terminals. Creates scripts for repeated tasks.
 mode: primary
+model: opencode/kimi-k2.5
+
+# Permission Configuration: Shell Command Assistant
+# Command construction and terminal management
 permissions:
-  bash: ask
-  edit: 
-    "*": deny
-    "./script*/*": allow
-    "./util*/*": allow
-    "./*sh": allow
+  # Execution - shell commands (requires confirmation)
+  bash: ask                      # All commands require confirmation
+  
+  # Script creation - limited to build/config files
+  write:                        # Only build/utility scripts
+    "./scripts/**": allow       # Script directory
+    "./util*/**": allow         # Utility directories
+    "./*.sh": allow             # Shell scripts in root
+    "Makefile": allow           # Makefiles
+    "*.make": allow             # Make includes
+    "Justfile": allow           # Just command runner
+    "*.just": allow             # Just includes
+    "CMakeLists.txt": allow     # CMake config
+    "*.cmake": allow            # CMake modules
+    "package.json": allow       # NPM scripts
+    "*.toml": allow             # Config files (Cargo.toml, etc.)
+    "*.yaml": allow             # Config files
+    "*.yml": allow              # Config files
+    "*": deny                   # No other file creation
+  edit:                         # Edit limited file types
+    "./scripts/**": allow
+    "./util*/**": allow
+    "./*.sh": allow
     "Makefile": allow
-    "**.make": allow
+    "*.make": allow
     "Justfile": allow
-    "**.just": allow
+    "*.just": allow
     "CMakeLists.txt": allow
-    "**.cmake": allow
+    "*.cmake": allow
+    "package.json": allow
+    "*.toml": allow
+    "*.yaml": allow
+    "*.yml": allow
+    "*": deny
+  
+  # Read access for context
+  read: allow                    # Read files for context
+  glob: allow                    # Find files
+  grep: allow                    # Search patterns
+  list: allow                    # List directories
+  
+  # No delegation
+  task: deny
+  
+  # No web research
+  websearch: deny
+  webfetch: deny
+  codesearch: deny
+  
+  # No workflow management
+  todowrite: deny
+  todoread: deny
+  
+  # No advanced features
+  lsp: deny
+  skill: deny
+  question: deny
+  external_directory: deny
+  doom_loop: deny
 ---
 
 # System Prompt: Shell Command Assistant

@@ -3,9 +3,49 @@ description: >-
   Use this agent when you need to create a new specialized agent. Designs agent architecture, personas, and comprehensive system prompts. Outputs valid agent definition JSON.
 mode: primary
 model: opencode/kimi-k2.5
-tools:
-  edit: true
-  write: true
+
+# Permission Configuration: Agent Creator
+# Write access for creating new agent definitions
+permissions:
+  # Agent Creation - write agent definition files
+  write:                        # Only agent definition files
+    "./agent/**": allow         # Can write to agent directory
+    "./agents/**": allow        # Can write to agents directory
+    "./**/*-agent.md": allow    # Can write agent markdown files
+    "./**/*agent*.json": allow  # Can write agent JSON files
+    "*": deny                   # No other file creation
+  edit:                         # Edit existing agents
+    "./agent/**": allow
+    "./agents/**": allow
+    "./**/*-agent.md": allow
+    "./**/*agent*.json": allow
+    "*": deny
+  
+  # Read access for reference
+  read: allow                    # Read existing agents for reference
+  glob: allow                    # Find agent files
+  grep: allow                    # Search patterns
+  list: allow                    # List directories
+  
+  # No execution - purely creative agent
+  bash: deny
+  task: deny
+  
+  # No web research needed
+  websearch: deny
+  webfetch: deny
+  codesearch: deny
+  
+  # No workflow management
+  todowrite: deny
+  todoread: deny
+  
+  # No advanced features
+  lsp: deny
+  skill: deny
+  question: deny
+  external_directory: deny
+  doom_loop: deny
 ---
 
 # AI Agent Architect

@@ -2,13 +2,50 @@
 description: >-
   Use this agent to format, clean, and fix documentation in Markdown, LaTeX, or Typst. Fixes math equations, diagrams, structure. Builds publication-ready outputs.
 mode: all
-model: zai-coding-plan/glm-4.7
-tools:
-  bash: true
-  edit: true
-  write: true
+model: opencode/kimi-k2.5
+
+# Permission Configuration: Document Formatting Agent
+# Full access for document processing and publication
 permissions:
-  bash: allow
+  # Document Processing - full read/write access
+  read: allow                    # Read source documents
+  edit: allow                    # Edit existing documents
+  write: allow                   # Create formatted output
+  glob: allow                    # Find document files
+  grep: allow                    # Search for patterns
+  list: allow                    # List directories
+  
+  # Execution - document processing commands
+  bash:                         # Publication tools
+    "*": ask                    # Default: ask before execution
+    "pandoc": allow             # Safe document conversion
+    "lualatex": allow           # Safe LaTeX compilation
+    "xelatex": allow            # Safe LaTeX compilation
+    "typst": allow              # Safe Typst compilation
+    "ls": allow                 # Safe listing
+    "cat": allow                # Safe viewing
+    "head": allow               # Safe preview
+    "tail": allow               # Safe preview
+    "mkdir": allow              # Safe output directory creation
+    
+  # No delegation - handles formatting directly
+  task: deny
+  
+  # Minimal web access
+  websearch: deny
+  webfetch: deny
+  codesearch: deny
+  
+  # No workflow management
+  todowrite: deny
+  todoread: deny
+  
+  # No advanced features
+  lsp: deny
+  skill: deny
+  question: deny
+  external_directory: deny
+  doom_loop: deny
 ---
 
 You are a **Document Formatting and Publishing Expert**, specializing in producing publication-ready documentation across multiple markup languages. Your expertise spans Markdown, LaTeX, and Typst, with particular focus on mathematical content, structural clarity, and professional output generation.

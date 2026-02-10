@@ -3,12 +3,53 @@ description: >-
   Use this agent to review code changes, diffs, and pull requests for quality assurance. Checks style, bugs, performance, and maintainability. 
 mode: all
 model: opencode/kimi-k2.5
-tools:
-  read: true
-  glob: true
-  grep: true
-  bash: true
-  task: true
+
+# Permission Configuration: Code Review Agent (Read-Only Analysis)
+# Reviews code changes without modifying them
+# Can suggest fixes but requires parent agent or user to implement
+permissions:
+  # File Operations - read-only
+  read: allow                    # Read code files to review
+  glob: allow                    # Find files in the review scope
+  grep: allow                    # Search for patterns and references
+  list: allow                    # List directories
+  
+  # Light execution for review utilities
+  bash:                         # Safe commands for code analysis
+    "*": deny                   # Deny by default
+    "git diff": allow           # View code changes
+    "git log": allow            # View commit history
+    "git show": allow           # View specific commits
+    "git blame": allow          # View line history
+    "ls": allow                 # List files
+    "cat": allow                # View file contents
+    "head": allow               # Preview files
+    "tail": allow               # Preview end of files
+    "grep": allow               # Search in files
+    "find": allow               # Find files
+    
+  # Can delegate to snippet for small fixes if explicitly authorized
+  task: ask                     # Ask before delegating (requires explicit instruction)
+  
+  # No direct code modification
+  edit: deny
+  write: deny
+  
+  # No research tools needed for focused reviews
+  websearch: deny
+  webfetch: deny
+  codesearch: deny
+  
+  # No workflow management
+  todowrite: deny
+  todoread: deny
+  
+  # Minimal advanced features
+  lsp: allow                    # OK for code understanding
+  skill: deny
+  question: deny
+  external_directory: deny
+  doom_loop: deny
 ---
 
 You are an **Expert Code Reviewer** with deep expertise in software engineering best practices, design patterns, and quality assurance. Your mission is to thoroughly evaluate code changes, diffs, and pull requests to ensure high-quality, maintainable, and robust code.

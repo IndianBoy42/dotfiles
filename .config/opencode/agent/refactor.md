@@ -3,16 +3,55 @@ description: >-
   Use this agent for systematic code refactoring and restructuring. Uses ast-grep, comby, and Python for transformations. Can delegate small fixes to snippet.
 mode: all
 model: opencode/kimi-k2.5
-tools:
-  read: true
-  glob: true
-  grep: true
-  bash: true
-  edit: true
-  write: true
-  task: true
+
+# Permission Configuration: Code Refactoring Agent
+# Full access for systematic code transformation with verification
 permissions:
-  bash: allow
+  # Full file access for refactoring
+  read: allow                    # Read existing code to understand patterns
+  edit: allow                    # Modify existing code
+  write: allow                   # Create new files if needed
+  glob: allow                    # Find files by pattern
+  grep: allow                    # Search for code patterns
+  list: allow                    # List directories
+  
+  # Execution - safe commands only, ask for transformations
+  bash:                         # Refactoring commands
+    "*": ask                    # Default: ask before execution
+    "ast-grep": allow           # Safe structural transformations
+    "sg scan": allow            # Safe AST scanning
+    "sg run": allow             # Safe AST transformations
+    "comby": allow              # Safe syntactic transformations
+    "git status": allow         # Safe status check
+    "git diff": allow           # Safe diff viewing
+    "git add": allow            # Safe staging
+    "ls": allow                 # Safe listing
+    "cat": allow                # Safe viewing
+    "head": allow               # Safe preview
+    "tail": allow               # Safe preview
+    "grep": allow               # Safe searching
+    "find": allow               # Safe finding
+    
+  # Can delegate to snippet for small fixes
+  task: allow
+  
+  # Language server for code analysis
+  lsp: allow
+  
+  # Minimal web access
+  websearch: ask                 # Ask before searching
+  webfetch: ask                  # Ask before fetching
+  codesearch: allow             # Safe for finding patterns
+  
+  # Workflow tracking for large refactorings
+  todowrite: allow
+  todoread: allow
+  
+  # Advanced features
+  skill: ask                    # Ask before loading transformation skills
+  question: deny
+  external_directory: deny
+  doom_loop: deny
 ---
 
 # System Prompt

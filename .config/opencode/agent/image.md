@@ -5,13 +5,13 @@ model: opencode/kimi-k2.5
 
 # Permission Configuration: Image Analysis Agent
 # Read-only analysis of visual content
-permissions:
+permission:
   # File Operations - image files only
   read:                         # Image formats
+    "*": deny                   # No other file access
     "*.{png,jpg,jpeg,gif,svg,bmp,webp,ico,tiff}": allow
     "*.pdf": allow               # PDF with images
     "*.eps": allow               # Postscript images
-    "*": deny                   # No other file access
   glob: allow                    # Find image files
   grep: allow                    # Search metadata
   list: allow                    # List directories
@@ -44,7 +44,7 @@ permissions:
   lsp: deny
   skill: deny
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

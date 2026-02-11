@@ -5,26 +5,30 @@ model: opencode/kimi-k2.5
 
 # Permission Configuration: Data Analysis Agent
 # Read data files with processing script capabilities
-permissions:
+permission:
   # File Operations - data files only
   read:                         # Data file formats
+    "*": deny                   # No access to other file types
     "*.{csv,json,parquet,xlsx,sql,db,sqlite,arrow,feather}": allow
     "*.csv.gz": allow            # Compressed CSV
     "*.jsonl": allow             # JSON lines
     "*.ndjson": allow            # Newline-delimited JSON
-    "*": deny                   # No access to other file types
+    "*.{md,txt,rst,pdf,tex}": allow
+    "*.{ipynb}": allow
+    "*.{py,js,ts,rs,java,c,cpp,go,rb,scala,swift}": allow
+    "*.{m,mathematica,sage}": allow  # Mathematical software files
   glob: allow                    # Find data files
   grep: allow                    # Search data patterns
   list: allow                    # List directories
   
   # Data processing scripts can be written
   write:                        # Analysis outputs only
+    "*": deny                   # No other writes
     "./analysis/**": allow        # Analysis output directory
     "./output/**": allow         # Output directory
     "./results/**": allow        # Results directory
     "./**/*.py": ask            # Ask before creating Python scripts
     "./**/*.ipynb": ask         # Ask before creating notebooks
-    "*": deny                   # No other writes
   edit: ask                      # Ask before editing any file
   
   # Execution - data processing commands
@@ -59,7 +63,7 @@ permissions:
   # Advanced features
   lsp: allow                    # OK for Python/R analysis
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

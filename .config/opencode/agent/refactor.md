@@ -6,7 +6,7 @@ model: opencode/kimi-k2.5
 
 # Permission Configuration: Code Refactoring Agent
 # Full access for systematic code transformation with verification
-permissions:
+permission:
   # Full file access for refactoring
   read: allow                    # Read existing code to understand patterns
   edit: allow                    # Modify existing code
@@ -33,7 +33,9 @@ permissions:
     "find": allow               # Safe finding
     
   # Can delegate to snippet for small fixes
-  task: allow
+  task: 
+    "*": ask
+    "snippet": allow
   
   # Language server for code analysis
   lsp: allow
@@ -50,7 +52,7 @@ permissions:
   # Advanced features
   skill: ask                    # Ask before loading transformation skills
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

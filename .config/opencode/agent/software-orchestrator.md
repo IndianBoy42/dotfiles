@@ -9,7 +9,7 @@ model: opencode/kimi-k2.5
 # Permission Configuration: Software Orchestrator (Coordinator)
 # Delegation-only agent with minimal direct file access
 # Orchestrates other agents but doesn't implement directly
-permissions:
+permission:
   # Read-only access for planning and coordination
   read: allow                    # Read files to understand context
   glob: allow                    # Find files for planning
@@ -45,7 +45,7 @@ permissions:
   batch: allow                  # Execute multiple tools in parallel
   skill: ask                    # Ask before loading skills
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
   lsp: deny
 ---

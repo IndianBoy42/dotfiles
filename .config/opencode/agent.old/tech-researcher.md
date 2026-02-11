@@ -65,7 +65,7 @@ tools:
   bash: false
   write: false
   edit: false
-permissions:
+permission:
   bash: "ask"
   external_directory: "allow"
 ---

@@ -6,7 +6,7 @@ model: opencode/kimi-k2.5
 
 # Permission Configuration: Test Suite Architect
 # Full development access with test-specific tooling
-permissions:
+permission:
   # Full file access for test creation
   read: allow                    # Read code to test
   edit: allow                    # Modify test files
@@ -53,7 +53,7 @@ permissions:
   lsp: allow                    # OK for code analysis
   skill: ask                    # Ask before loading skills
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

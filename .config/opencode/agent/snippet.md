@@ -6,13 +6,11 @@ mode: primary
 # Permission Configuration: Snippet Agent (Restricted Subagent)
 # Minimal permissions for focused, bite-sized code tasks
 # Called by parent agents that provide full context
-permissions:
+permission:
   # File Operations - limited edit access only on provided paths
   read: allow                    # Read files specified by parent
-  edit:                         # Only edit files explicitly provided in task
-    "*": ask                    # Ask for any file edit (parent should provide specific paths)
-  write:                        # Limited write access
-    "*": ask                    # Ask for any new file
+  edit: allow
+  write: allow
   glob: allow                    # Safe for finding files by pattern
   grep: allow                    # Safe for searching content
   list: allow                    # Safe for listing directories
@@ -34,7 +32,7 @@ permissions:
   lsp: allow                    # OK for syntax checking
   skill: deny
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

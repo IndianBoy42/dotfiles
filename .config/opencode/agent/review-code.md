@@ -7,7 +7,7 @@ model: opencode/kimi-k2.5
 # Permission Configuration: Code Review Agent (Read-Only Analysis)
 # Reviews code changes without modifying them
 # Can suggest fixes but requires parent agent or user to implement
-permissions:
+permission:
   # File Operations - read-only
   read: allow                    # Read code files to review
   glob: allow                    # Find files in the review scope
@@ -16,7 +16,7 @@ permissions:
   
   # Light execution for review utilities
   bash:                         # Safe commands for code analysis
-    "*": deny                   # Deny by default
+    "*": ask                   # Deny by default
     "git diff": allow           # View code changes
     "git log": allow            # View commit history
     "git show": allow           # View specific commits
@@ -48,7 +48,7 @@ permissions:
   lsp: allow                    # OK for code understanding
   skill: deny
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

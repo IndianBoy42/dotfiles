@@ -5,12 +5,14 @@ model: opencode/kimi-k2.5
 
 # Permission Configuration: Mathematical Verification Agent
 # Read-only analysis with web research and skill access
-permissions:
+permission:
   # File Operations - read code to verify mathematically
   read:                         # Only source code files
+    "*": deny                   # No other file access
+    "*.{md,txt,rst,pdf,tex}": allow
+    "*.{ipynb}": allow
     "*.{py,js,ts,rs,java,c,cpp,go,rb,scala,swift}": allow
     "*.{m,mathematica,sage}": allow  # Mathematical software files
-    "*": deny                   # No other file access
   glob: allow                    # Find code files
   grep: allow                    # Search for mathematical patterns
   list: allow                    # List directories
@@ -38,7 +40,7 @@ permissions:
   # No advanced features
   lsp: deny
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

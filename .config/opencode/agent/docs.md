@@ -6,7 +6,7 @@ model: opencode/kimi-k2.5
 
 # Permission Configuration: Documentation Agent
 # Write access for docs, read-only for code, web access for research
-permissions:
+permission:
   # Documentation - full write access
   write: allow                   # Can create all documentation files
   edit: allow                    # Can edit existing documentation
@@ -34,7 +34,7 @@ permissions:
   todoread: allow
   skill: deny
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

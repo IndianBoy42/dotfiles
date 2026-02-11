@@ -8,7 +8,7 @@ model: opencode/gemini-3-pro
 
 # Permission Configuration: Deep Research Agent
 # Full access for comprehensive research and documentation creation
-permissions:
+permission:
   # Full file access for research documentation
   read: allow                    # Read existing docs and code
   edit: allow                    # Update research documents
@@ -27,7 +27,9 @@ permissions:
     "mkdir": allow              # Safe dir creation for docs
     
   # Delegation to tech agent for specific questions
-  task: allow
+  task: 
+    "*": ask
+    "tech": allow
   
   # Full web research access
   websearch: allow               # Broad research capability
@@ -41,7 +43,7 @@ permissions:
   # Advanced features
   skill: ask                    # Ask before loading research skills
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
   lsp: deny
 ---

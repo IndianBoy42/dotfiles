@@ -107,7 +107,7 @@ permission:
   bash: ask # Require approval for shell commands
 ```
 
-**2. Granular per-tool permissions:**
+**2. Granular per-tool permission:**
 
 ```yaml
 permission:

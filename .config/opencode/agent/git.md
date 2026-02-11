@@ -6,7 +6,7 @@ model: opencode/kimi-k2.5
 
 # Permission Configuration: Git Workflow Agent
 # Repository management with safe execution practices
-permissions:
+permission:
   # Read access for repository understanding
   read: allow                    # Read files for context
   glob: allow                    # Find files
@@ -49,7 +49,7 @@ permissions:
   lsp: deny
   skill: deny
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

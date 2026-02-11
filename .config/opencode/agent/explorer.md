@@ -6,7 +6,7 @@ model: opencode/kimi-k2.5
 
 # Permission Configuration: Codebase Explorer (Read-Only)
 # This agent explores and analyzes codebases without modifying them
-permissions:
+permission:
   # File Operations - read and navigate only
   read: allow                    # Read source files, configs, documentation
   glob: allow                    # Discover file structures and patterns
@@ -15,21 +15,23 @@ permissions:
   
   # Light execution for directory operations only
   bash:                         # Restricted bash for exploration only
+    "*": deny                   # Deny all other bash commands
     ls: allow                   # List directories
+    ast-grep: allow                 # Find files by name/pattern
     find: allow                 # Find files by name/pattern
+    fd: allow                 # Find files by name/pattern
     cat: allow                  # View file contents (redundant with read)
     head: allow                 # Preview file beginnings
     tail: allow                 # Preview file endings
     wc: allow                   # Count lines/words in files
     tree: allow                 # View directory tree
-    "*": deny                   # Deny all other bash commands
   
   # Documentation Creation - can write navigation guides
   write:                        # Only write documentation files
+    "*": deny                   # Deny writing other file types
     "./docs/**": allow          # Allow writing to docs directory
     "./guides/**": allow        # Allow writing to guides directory
     "./**/*.md": allow          # Allow writing markdown files
-    "*": deny                   # Deny writing other file types
   
   # No editing of existing code
   edit: deny
@@ -44,7 +46,7 @@ permissions:
   todoread: deny
   question: deny
   skill: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

@@ -6,7 +6,7 @@ model: opencode/kimi-k2.5
 
 # Permission Configuration: Software Implementation Agent
 # Full development access with safe execution practices
-permissions:
+permission:
   # Full file access for implementation
   read: allow                    # Read existing code to understand patterns
   edit: allow                    # Modify existing code
@@ -17,7 +17,7 @@ permissions:
   
   # Execution - safe commands allowed without confirmation
   bash:                         # Safe development commands
-    "*": ask                    # Default: ask for confirmation
+    "*": allow                    # Default: ask for confirmation
     "git status": allow         # Safe to check status
     "git diff": allow           # Safe to view diffs
     "git log": allow            # Safe to view history
@@ -33,17 +33,22 @@ permissions:
     "ls": allow                 # Safe to list
     "cat": allow                # Safe to view
     "grep": allow               # Safe to search
+    "rg": allow               # Safe to search
     "find": allow               # Safe to find
+    "fd": allow               # Safe to find
+    "diff": allow               # Safe to view diffs
     
   # Can delegate to snippet agent for small tasks
-  task: allow
+  task: 
+    "*": ask
+    "snippet": allow
   
   # Language server for code intelligence
   lsp: allow
   
   # Web research when needed
-  websearch: ask                 # Ask before searching web
-  webfetch: ask                  # Ask before fetching URLs
+  websearch: allow                 # Ask before searching web
+  webfetch: allow                  # Ask before fetching URLs
   codesearch: allow             # Safe for finding patterns
   
   # Workflow management
@@ -51,9 +56,9 @@ permissions:
   todoread: allow               # Can read task lists
   
   # Advanced features
-  skill: ask                    # Ask before loading skills
+  skill: allow                    # Ask before loading skills
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

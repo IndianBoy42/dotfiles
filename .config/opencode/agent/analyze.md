@@ -5,16 +5,16 @@ model: opencode/kimi-k2.5
 
 # Permission Configuration: Large File Analysis Agent
 # Read and analyze large technical data files
-permissions:
+permission:
   # File Operations - large data files only
   read:                         # Large file formats
+    "*": deny                   # No other file access
     "*.{log,trace,csv,json,xml,txt,data,dump,prof}": allow
     "*.csv.gz": allow            # Compressed data
     "*.log.*": allow             # Rotated logs
     "**/logs/**": allow          # Log directories
     "*.bin": allow               # Binary data
     "*.hex": allow               # Hex dumps
-    "*": deny                   # No other file access
   glob: allow                    # Find large files
   grep: allow                    # Search in large files
   list: allow                    # List directories
@@ -58,7 +58,7 @@ permissions:
   # No advanced features
   lsp: deny
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

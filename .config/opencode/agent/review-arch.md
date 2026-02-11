@@ -6,7 +6,7 @@ model: opencode/kimi-k2.5
 
 # Permission Configuration: Architecture Review Agent (Read-Only)
 # Reviews design proposals and architecture documents without modification
-permissions:
+permission:
   # File Operations - read-only
   read: allow                    # Read all documents, specs, and code
   glob: allow                    # Find relevant files
@@ -36,7 +36,7 @@ permissions:
   lsp: deny
   skill: deny
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

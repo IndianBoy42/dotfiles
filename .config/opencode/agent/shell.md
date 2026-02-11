@@ -6,12 +6,13 @@ model: opencode/kimi-k2.5
 
 # Permission Configuration: Shell Command Assistant
 # Command construction and terminal management
-permissions:
+permission:
   # Execution - shell commands (requires confirmation)
   bash: ask                      # All commands require confirmation
   
   # Script creation - limited to build/config files
   write:                        # Only build/utility scripts
+    "*": deny                   # No other file creation
     "./scripts/**": allow       # Script directory
     "./util*/**": allow         # Utility directories
     "./*.sh": allow             # Shell scripts in root
@@ -25,8 +26,8 @@ permissions:
     "*.toml": allow             # Config files (Cargo.toml, etc.)
     "*.yaml": allow             # Config files
     "*.yml": allow              # Config files
-    "*": deny                   # No other file creation
   edit:                         # Edit limited file types
+    "*": deny
     "./scripts/**": allow
     "./util*/**": allow
     "./*.sh": allow
@@ -40,7 +41,6 @@ permissions:
     "*.toml": allow
     "*.yaml": allow
     "*.yml": allow
-    "*": deny
   
   # Read access for context
   read: allow                    # Read files for context
@@ -64,7 +64,7 @@ permissions:
   lsp: deny
   skill: deny
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

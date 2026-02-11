@@ -10,7 +10,7 @@ tools:
   - webfetch
   - skill
 
-permissions:
+permission:
   read: ["*.{rs,toml,md}"]
   write: []
   codesearch: true

@@ -37,6 +37,7 @@
   "autoupdate": true,
   "lsp": {
     "pyright": { "disabled": true },
+    "lua-ls": { "disabled": true },
     "clangd": {
       "command": [
         "clangd",

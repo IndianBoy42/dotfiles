@@ -6,7 +6,7 @@ model: opencode/kimi-k2.5
 
 # Permission Configuration: Document Formatting Agent
 # Full access for document processing and publication
-permissions:
+permission:
   # Document Processing - full read/write access
   read: allow                    # Read source documents
   edit: allow                    # Edit existing documents
@@ -44,7 +44,7 @@ permissions:
   lsp: deny
   skill: deny
   question: deny
-  external_directory: deny
+  external_directory: ask
   doom_loop: deny
 ---
 

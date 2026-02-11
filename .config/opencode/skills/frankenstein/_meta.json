@@ -1,0 +1,11 @@
+{
+  "owner": "rubenaquispe",
+  "slug": "frankenstein",
+  "displayName": "Frankenstein",
+  "latest": {
+    "version": "1.2.0",
+    "publishedAt": 1770475263412,
+    "commit": "https://github.com/openclaw/skills/commit/593b8223d9635bd33aa8fdd182667b0aaaa25aa9"
+  },
+  "history": []
+}

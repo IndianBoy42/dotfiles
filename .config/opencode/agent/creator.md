@@ -6,35 +6,37 @@ model: opencode/kimi-k2.5
 
 # Permission Configuration: Agent Creator
 # Write access for creating new agent definitions
-permissions:
+permission:
   # Agent Creation - write agent definition files
   write:                        # Only agent definition files
+    "*": deny                   # No other file creation
     "./agent/**": allow         # Can write to agent directory
     "./agents/**": allow        # Can write to agents directory
     "./**/*-agent.md": allow    # Can write agent markdown files
     "./**/*agent*.json": allow  # Can write agent JSON files
-    "*": deny                   # No other file creation
   edit:                         # Edit existing agents
+    "*": deny
     "./agent/**": allow
     "./agents/**": allow
     "./**/*-agent.md": allow
     "./**/*agent*.json": allow
-    "*": deny
   
   # Read access for reference
   read: allow                    # Read existing agents for reference
   glob: allow                    # Find agent files
   grep: allow                    # Search patterns
   list: allow                    # List directories
+
+  skill: allow
   
   # No execution - purely creative agent
   bash: deny
   task: deny
   
-  # No web research needed
-  websearch: deny
-  webfetch: deny
-  codesearch: deny
+  # Allow web research for best practices
+  websearch: allow
+  webfetch: allow
+  codesearch: allow
   
   # No workflow management
   todowrite: deny
@@ -42,9 +44,8 @@ permissions:
   
   # No advanced features
   lsp: deny
-  skill: deny
-  question: deny
-  external_directory: deny
+  question: allow
+  external_directory: ask
   doom_loop: deny
 ---
 

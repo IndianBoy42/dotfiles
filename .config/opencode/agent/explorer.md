@@ -28,8 +28,8 @@ permission:
   # Documentation Creation - can write navigation guides
   write:                        # Only write documentation files
     "*": deny                   # Deny writing other file types
-    "./docs/**": allow          # Allow writing to docs directory
-    "./guides/**": allow        # Allow writing to guides directory
+    "./docs/*": allow          # Allow writing to docs directory
+    "./guides/*": allow        # Allow writing to guides directory
     "./**/*.md": allow          # Allow writing markdown files
   
   # No editing of existing code

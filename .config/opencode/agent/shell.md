@@ -13,8 +13,8 @@ permission:
   # Script creation - limited to build/config files
   write:                        # Only build/utility scripts
     "*": deny                   # No other file creation
-    "./scripts/**": allow       # Script directory
-    "./util*/**": allow         # Utility directories
+    "./scripts/*": allow       # Script directory
+    "./util*/*": allow         # Utility directories
     "./*.sh": allow             # Shell scripts in root
     "Makefile": allow           # Makefiles
     "*.make": allow             # Make includes
@@ -28,8 +28,8 @@ permission:
     "*.yml": allow              # Config files
   edit:                         # Edit limited file types
     "*": deny
-    "./scripts/**": allow
-    "./util*/**": allow
+    "./scripts/*": allow
+    "./util*/*": allow
     "./*.sh": allow
     "Makefile": allow
     "*.make": allow

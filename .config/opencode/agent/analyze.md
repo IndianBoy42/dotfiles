@@ -12,7 +12,7 @@ permission:
     "*.{log,trace,csv,json,xml,txt,data,dump,prof}": allow
     "*.csv.gz": allow            # Compressed data
     "*.log.*": allow             # Rotated logs
-    "**/logs/**": allow          # Log directories
+    "**/logs/*": allow          # Log directories
     "*.bin": allow               # Binary data
     "*.hex": allow               # Hex dumps
   glob: allow                    # Find large files

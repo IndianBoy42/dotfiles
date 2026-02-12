@@ -24,9 +24,9 @@ permission:
   # Data processing scripts can be written
   write:                        # Analysis outputs only
     "*": deny                   # No other writes
-    "./analysis/**": allow        # Analysis output directory
-    "./output/**": allow         # Output directory
-    "./results/**": allow        # Results directory
+    "./analysis/*": allow        # Analysis output directory
+    "./output/*": allow         # Output directory
+    "./results/*": allow        # Results directory
     "./**/*.py": ask            # Ask before creating Python scripts
     "./**/*.ipynb": ask         # Ask before creating notebooks
   edit: ask                      # Ask before editing any file

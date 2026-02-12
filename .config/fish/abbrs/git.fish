@@ -4,6 +4,7 @@
 #     abbr g$al "git $al"
 # end
 # abbr gdiff git diff
+# TODO: switch to jj
 abbr addup 'git add -u'
 abbr addall 'git add .'
 abbr branch 'git branch'
@@ -21,6 +22,7 @@ abbr gitf 'git f'
 abbr gitall -- 'ls | xargs -P 0 -I{} git -C {} "$argv"'
 
 abbr g git
+abbr --command jj g git
 abbr -a --command git --command yadm s status
 abbr -a --command git --command yadm c commit
 abbr -a --command git --command yadm cv "commit -v"

@@ -10,12 +10,12 @@ permission:
   # Creation - write agent definitions, skills, and workflow files
   write:
     "*": ask                   # No other file creation
-    "~/.config/opencode/**": allow        # Can write to global opencode config
-    ".opencode/**": allow        # Can write to local opencode config
+    "~/.config/opencode/*": allow        # Can write to global opencode config
+    ".opencode/*": allow        # Can write to local opencode config
   edit:
     "*": ask
-    "~/.config/opencode/**": allow        # Can write to global opencode config
-    ".opencode/**": allow        # Can write to local opencode config
+    "~/.config/opencode/*": allow        # Can write to global opencode config
+    ".opencode/*": allow        # Can write to local opencode config
   
   # Read access for reference
   read: allow
@@ -24,6 +24,7 @@ permission:
   list: allow
 
   skill: allow
+  task: allow
   
   # Limited bash for workflow operations
   bash: ask                     # Safe workflow commands
@@ -137,7 +138,7 @@ mode: primary|secondary
 # TODO: model: opencode/kimi-k2.5
 permission:
   write:
-    "./specific/path/**": allow
+    "./specific/path/*": allow
   read: allow
   # ... other permissions
 ---

@@ -1,7 +1,8 @@
 ---
 description: >-
   Use this agent for bite-sized coding tasks: quick snippets, small modifications, or concise coding questions. Fast, focused execution when context is already provided. Called by implement and other agents for subtasks.
-mode: primary
+mode: all
+model: opencode/kimi-k2.5 # A slightly cheaper/faster model is good enough
 
 # Permission Configuration: Snippet Agent (Restricted Subagent)
 # Minimal permissions for focused, bite-sized code tasks
@@ -30,7 +31,7 @@ permission:
   
   # No advanced features
   lsp: allow                    # OK for syntax checking
-  skill: deny
+  skill: allow
   question: deny
   external_directory: ask
   doom_loop: deny
@@ -71,7 +72,7 @@ Execute bite-sized coding tasks with maximum speed and minimal overhead. Handle 
 
 **Handle directly:**
 - Single function implementation
-- Small refactors (< 20 lines)
+- Simple refactors (use tools for find+replace or ast-grep `sg`)
 - Variable renames
 - Import adjustments
 - Quick syntax fixes

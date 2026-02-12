@@ -8,6 +8,11 @@
   "theme": "opencode",
   "experimental": {
     "batch_tool": true,
+    "lsp": true,
+    "plan": true,
+  },
+  "permission": {
+    "external_directory": "ask",
   },
   "keybinds": {
     "leader": "ctrl+k",
@@ -32,7 +37,7 @@
     "input_select_buffer_home": "shift+home",
     "input_select_buffer_end": "shift+end",
   },
-  "plugin": ["@tarquinen/opencode-dcp@latest"],
+  "plugin": ["@tarquinen/opencode-dcp@latest", "@mohak34/opencode-notifier@latest"],
   "autoshare": false,
   "autoupdate": true,
   "lsp": {
@@ -58,10 +63,20 @@
         "ALLOW_IMG_OUTPUT": "true",
       },
     },
-    "perplexity-ask": {
+    "perplexity": {
       "type": "local",
       "enabled": true,
       "command": ["npx", "-y", "@chatmcp/server-perplexity-ask"],
+    },
+    "ast-grep": {
+      "type": "local",
+      "enabled": true,
+      "command": [
+        "uvx",
+        "--from",
+        "git+https://github.com/ast-grep/ast-grep-mcp",
+        "ast-grep-server",
+      ],
     },
     "context7": {
       "type": "remote",

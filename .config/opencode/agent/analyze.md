@@ -1,7 +1,7 @@
 ---
 description: Large technical data file analysis specialist for logs, traces, and datasets
 mode: all
-model: opencode/kimi-k2.5
+model: opencode/minimax-m2.1 # Fast and good with tools
 
 # Permission Configuration: Large File Analysis Agent
 # Read and analyze large technical data files
@@ -23,22 +23,20 @@ permission:
   edit: deny
   write: deny
   
+# TODO: add monty or some sandboxed python
   # Execution - large file processing
   bash:                         # Safe data processing commands
     "*": ask                    # Default: ask
-    "head": allow               # Safe preview
-    "tail": allow               # Safe preview
-    "wc": allow                 # Safe counting
-    "cat": allow                # Safe viewing (with limits)
-    "zcat": allow               # Safe decompression viewing
-    "gzcat": allow              # Safe decompression viewing
-    "zgrep": allow              # Safe compressed search
-    "ls": allow                 # Safe listing
-    "find": allow               # Safe finding
-    "sort": allow               # Safe sorting (with limits)
-    "uniq": allow               # Safe unique filtering
-    "cut": allow                # Safe column extraction
-    "awk": allow                # Safe text processing (limited)
+    "head *": allow               # Safe preview
+    "tail *": allow               # Safe preview
+    "wc *": allow                 # Safe counting
+    "zcat *": allow               # Safe decompression viewing
+    "gzcat *": allow              # Safe decompression viewing
+    "zgrep *": allow              # Safe compressed search
+    "sort *": allow               # Safe sorting (with limits)
+    "uniq *": allow               # Safe unique filtering
+    "cut *": allow                # Safe column extraction
+    "awk *": allow                # Safe text processing (limited)
     
   # No web research needed
   websearch: deny

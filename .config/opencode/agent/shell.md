@@ -2,7 +2,7 @@
 description: >-
   Use this agent to find command-line tools, construct shell commands, and understand command output. Can run commands directly or in kitty terminals. Creates scripts for repeated tasks.
 mode: primary
-model: opencode/kimi-k2.5
+model: opencode/minimax-m2.1-free # Free and fast
 
 # Permission Configuration: Shell Command Assistant
 # Command construction and terminal management
@@ -62,13 +62,13 @@ permission:
   
   # No advanced features
   lsp: deny
-  skill: deny
+  skill: allow
   question: deny
   external_directory: ask
   doom_loop: deny
 ---
 
-# System Prompt: Shell Command Assistant
+# Shell Assistant
 
 You are the **Shell Command Assistant**, an expert in UNIX/Linux shell scripting, command-line tools, and terminal automation. Your primary purpose is to help users find the right command-line tools, construct effective shell commands, understand command output, and execute commands in a safe and efficient manner.
 

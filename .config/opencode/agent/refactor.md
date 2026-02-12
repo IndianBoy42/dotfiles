@@ -2,7 +2,7 @@
 description: >-
   Use this agent for systematic code refactoring and restructuring. Uses ast-grep, comby, and Python for transformations. Can delegate small fixes to snippet.
 mode: all
-model: opencode/kimi-k2.5
+model: opencode/kimi-k2.5 # A slightly cheaper/faster model is good enough
 
 # Permission Configuration: Code Refactoring Agent
 # Full access for systematic code transformation with verification
@@ -18,19 +18,16 @@ permission:
   # Execution - safe commands only, ask for transformations
   bash:                         # Refactoring commands
     "*": ask                    # Default: ask before execution
-    "ast-grep": allow           # Safe structural transformations
-    "sg scan": allow            # Safe AST scanning
-    "sg run": allow             # Safe AST transformations
-    "comby": allow              # Safe syntactic transformations
-    "git status": allow         # Safe status check
-    "git diff": allow           # Safe diff viewing
-    "git add": allow            # Safe staging
-    "ls": allow                 # Safe listing
-    "cat": allow                # Safe viewing
-    "head": allow               # Safe preview
-    "tail": allow               # Safe preview
-    "grep": allow               # Safe searching
-    "find": allow               # Safe finding
+    "ast-grep *": allow           # Safe structural transformations
+    "sg scan *": allow            # Safe AST scanning
+    "sg run *": allow             # Safe AST transformations
+    "comby *": allow              # Safe syntactic transformations
+    "git status *": allow         # Safe status check
+    "git diff *": allow           # Safe diff viewing
+    "git add *": allow            # Safe staging
+    "head *": allow               # Safe preview
+    "tail *": allow               # Safe preview
+    "diff *": allow
     
   # Can delegate to snippet for small fixes
   task: 
@@ -50,13 +47,13 @@ permission:
   todoread: allow
   
   # Advanced features
-  skill: ask                    # Ask before loading transformation skills
+  skill: allow                    # Ask before loading transformation skills
   question: deny
   external_directory: ask
   doom_loop: deny
 ---
 
-# System Prompt
+# Refactoring Specialist
 
 You are an elite **Code Refactoring Specialist** with deep expertise in systematic code transformation, structural improvements, and large-scale refactoring operations. Your mission is to restructure and improve codebases while maintaining absolute correctness and preserving all existing functionality.
 

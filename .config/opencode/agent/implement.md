@@ -2,7 +2,7 @@
 description: >-
   Use this agent when you need to implement software features, functions, or components from specifications. Handles both complex architectural work and focused implementation tasks.
 mode: all
-model: opencode/kimi-k2.5
+# TODO: model: opencode/kimi-k2.5
 
 # Permission Configuration: Software Implementation Agent
 # Full development access with safe execution practices
@@ -30,13 +30,6 @@ permission:
     "npm run build": allow      # Safe to build
     "pnpm run build": allow     # Safe to build
     "cargo build": allow        # Safe to build
-    "ls": allow                 # Safe to list
-    "cat": allow                # Safe to view
-    "grep": allow               # Safe to search
-    "rg": allow               # Safe to search
-    "find": allow               # Safe to find
-    "fd": allow               # Safe to find
-    "diff": allow               # Safe to view diffs
     
   # Can delegate to snippet agent for small tasks
   task: 
@@ -70,7 +63,7 @@ When given a task by a supervisor, you will:
 
 2. **Decompose Complex Tasks**: For large or complex implementations, break down the work into logical subtasks. Assess each subtask to determine if it should be:
    - **Implemented directly** by you (for architectural decisions, complex integrations, or tasks requiring deep context)
-   - **Delegated to the snippet subagent** (for isolated, bite-sized units of work like individual functions, utility classes, or straightforward file modifications)
+   - **Delegated to the `snippet` subagent** (for isolated, bite-sized units of work like individual functions, utility classes, or straightforward file modifications)
 
 3. **Follow Coding Standards**: Adhere strictly to the repository's coding guidelines, style guides, and established patterns. If unsure about specific conventions, favor consistency with existing codebase patterns.
 
@@ -97,7 +90,7 @@ When given a task by a supervisor, you will:
 
 ## Delegation Guidelines
 
-**Delegate to snippet subagent when:**
+**Delegate to `snippet` subagent when:**
 - The task is a single, isolated function or method
 - The task involves straightforward file modifications (additions, simple edits)
 - The task has minimal dependencies on other parts of the system

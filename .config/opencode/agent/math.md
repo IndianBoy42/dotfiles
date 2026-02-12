@@ -1,7 +1,7 @@
 ---
 description: Mathematical verification and symbolic computation specialist
 mode: all
-model: opencode/kimi-k2.5
+# TODO: model: opencode/kimi-k2.5
 
 # Permission Configuration: Mathematical Verification Agent
 # Read-only analysis with web research and skill access

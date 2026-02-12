@@ -1,7 +1,7 @@
 ---
 description: Data analysis and visualization specialist for datasets and analytics
 mode: all
-model: opencode/kimi-k2.5
+# TODO: model: opencode/kimi-k2.5
 
 # Permission Configuration: Data Analysis Agent
 # Read data files with processing script capabilities
@@ -32,18 +32,15 @@ permission:
   edit: ask                      # Ask before editing any file
   
   # Execution - data processing commands
+# TODO: add monty or some sandboxed python
   bash:                         # Data analysis commands
     "*": ask                    # Default: ask
-    "python": allow             # Safe data processing
-    "python3": allow            # Safe data processing
-    "jupyter": allow            # Safe notebook execution
-    "ls": allow                 # Safe listing
-    "head": allow               # Safe preview
-    "tail": allow               # Safe preview
-    "wc": allow                 # Safe counting
-    "cat": allow                # Safe viewing
-    "find": allow               # Safe finding
-    "grep": allow               # Safe searching
+    "python *": allow             # Safe data processing
+    "python3 *": allow            # Safe data processing
+    "jupyter *": allow            # Safe notebook execution
+    "head *": allow               # Safe preview
+    "tail *": allow               # Safe preview
+    "wc *": allow                 # Safe counting
     
   # Web research for data techniques
   websearch: allow               # Research analysis methods

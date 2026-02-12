@@ -1,7 +1,7 @@
 ---
 description: Visual analysis specialist for images, diagrams, and visual content
 mode: all
-model: opencode/kimi-k2.5
+model: opencode/gemini-3-flash # image capable model
 
 # Permission Configuration: Image Analysis Agent
 # Read-only analysis of visual content
@@ -42,7 +42,7 @@ permission:
   
   # No advanced features
   lsp: deny
-  skill: deny
+  skill: allow
   question: deny
   external_directory: ask
   doom_loop: deny

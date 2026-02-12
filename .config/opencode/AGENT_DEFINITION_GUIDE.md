@@ -88,7 +88,7 @@ permission:
   question: allow # Ask the user questions
 
   # Advanced
-  skill: ask # Load and use skills
+  skill: allow # Load and use skills
   external_directory: ask # Access external project directories
   doom_loop: allow # Detect repetitive tool usage patterns
 ```

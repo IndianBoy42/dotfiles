@@ -2,7 +2,7 @@
 description: >-
   Use this agent to create, and refine documentation. Handles both technical documentation (APIs, tutorials, specifications) and user-facing content (READMEs, guides, troubleshooting).
 mode: all
-model: opencode/kimi-k2.5
+model: opencode/kimi-k2.5 # A slightly cheaper/faster model is good enough
 
 # Permission Configuration: Documentation Agent
 # Write access for docs, read-only for code, web access for research
@@ -32,7 +32,7 @@ permission:
   lsp: deny
   todowrite: allow               # OK for tracking documentation tasks
   todoread: allow
-  skill: deny
+  skill: allow
   question: deny
   external_directory: ask
   doom_loop: deny

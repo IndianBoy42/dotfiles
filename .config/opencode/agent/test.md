@@ -2,7 +2,7 @@
 description: >-
   Use this agent to create test suites, analyze test failures, and ensure coverage. Handles unit, integration, and regression testing. 
 mode: all
-model: opencode/kimi-k2.5
+# TODO: model: opencode/kimi-k2.5
 
 # Permission Configuration: Test Suite Architect
 # Full development access with test-specific tooling
@@ -18,24 +18,20 @@ permission:
   # Execution - test commands are safe
   bash:                         # Testing commands
     "*": ask                    # Default: ask
-    "npm test": allow           # Safe test runner
-    "pnpm test": allow          # Safe test runner
-    "yarn test": allow          # Safe test runner
-    "pytest": allow             # Safe test runner
-    "cargo test": allow         # Safe test runner
-    "go test": allow            # Safe test runner
-    "jest": allow               # Safe test runner
-    "vitest": allow             # Safe test runner
-    "mocha": allow              # Safe test runner
-    "rspec": allow              # Safe test runner
-    "bundle exec rspec": allow  # Safe test runner
-    "coverage": allow           # Safe coverage report
-    "pytest-cov": allow         # Safe coverage
-    "make test": allow          # Safe test target
-    "ls": allow                 # Safe listing
-    "cat": allow                # Safe viewing
-    "find": allow               # Safe finding
-    "grep": allow               # Safe searching
+    "npm test *": allow           # Safe test runner
+    "pnpm test *": allow          # Safe test runner
+    "yarn test *": allow          # Safe test runner
+    "pytest *": allow             # Safe test runner
+    "cargo test *": allow         # Safe test runner
+    "go test *": allow            # Safe test runner
+    "jest *": allow               # Safe test runner
+    "vitest *": allow             # Safe test runner
+    "mocha *": allow              # Safe test runner
+    "rspec *": allow              # Safe test runner
+    "bundle exec rspec *": allow  # Safe test runner
+    "coverage *": allow           # Safe coverage report
+    "pytest-cov *": allow         # Safe coverage
+    "make test *": allow          # Safe test target
     
   # No delegation - handles testing directly
   task: deny
@@ -51,7 +47,7 @@ permission:
   
   # Advanced features
   lsp: allow                    # OK for code analysis
-  skill: ask                    # Ask before loading skills
+  skill: allow                    # Ask before loading skills
   question: deny
   external_directory: ask
   doom_loop: deny

@@ -2,7 +2,7 @@
 description: >-
   Use this agent to format, clean, and fix documentation in Markdown, LaTeX, or Typst. Fixes math equations, diagrams, structure. Builds publication-ready outputs.
 mode: all
-model: opencode/kimi-k2.5
+model: opencode/minimax-m2.1-free # Free and fast
 
 # Permission Configuration: Document Formatting Agent
 # Full access for document processing and publication
@@ -18,15 +18,13 @@ permission:
   # Execution - document processing commands
   bash:                         # Publication tools
     "*": ask                    # Default: ask before execution
-    "pandoc": allow             # Safe document conversion
-    "lualatex": allow           # Safe LaTeX compilation
-    "xelatex": allow            # Safe LaTeX compilation
-    "typst": allow              # Safe Typst compilation
-    "ls": allow                 # Safe listing
-    "cat": allow                # Safe viewing
-    "head": allow               # Safe preview
-    "tail": allow               # Safe preview
-    "mkdir": allow              # Safe output directory creation
+    "pandoc *": allow             # Safe document conversion
+    "lualatex *": allow           # Safe LaTeX compilation
+    "xelatex *": allow            # Safe LaTeX compilation
+    "typst *": allow              # Safe Typst compilation
+    "head *": allow               # Safe preview
+    "tail *": allow               # Safe preview
+    "mkdir *": allow              # Safe output directory creation
     
   # No delegation - handles formatting directly
   task: deny
@@ -42,7 +40,7 @@ permission:
   
   # No advanced features
   lsp: deny
-  skill: deny
+  skill: allow
   question: deny
   external_directory: ask
   doom_loop: deny

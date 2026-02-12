@@ -2,7 +2,7 @@
 description: >-
   Use this agent to review code changes, diffs, and pull requests for quality assurance. Checks style, bugs, performance, and maintainability. 
 mode: all
-model: opencode/kimi-k2.5
+# TODO: model: opencode/kimi-k2.5
 
 # Permission Configuration: Code Review Agent (Read-Only Analysis)
 # Reviews code changes without modifying them
@@ -17,16 +17,10 @@ permission:
   # Light execution for review utilities
   bash:                         # Safe commands for code analysis
     "*": ask                   # Deny by default
-    "git diff": allow           # View code changes
-    "git log": allow            # View commit history
-    "git show": allow           # View specific commits
-    "git blame": allow          # View line history
-    "ls": allow                 # List files
-    "cat": allow                # View file contents
-    "head": allow               # Preview files
-    "tail": allow               # Preview end of files
-    "grep": allow               # Search in files
-    "find": allow               # Find files
+    "git diff *": allow           # View code changes
+    "git log *": allow            # View commit history
+    "git show *": allow           # View specific commits
+    "git blame *": allow          # View line history
     
   # Can delegate to snippet for small fixes if explicitly authorized
   task: ask                     # Ask before delegating (requires explicit instruction)
@@ -46,7 +40,7 @@ permission:
   
   # Minimal advanced features
   lsp: allow                    # OK for code understanding
-  skill: deny
+  skill: allow
   question: deny
   external_directory: ask
   doom_loop: deny

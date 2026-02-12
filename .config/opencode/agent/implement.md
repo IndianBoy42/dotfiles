@@ -31,10 +31,11 @@ permission:
     "pnpm run build": allow     # Safe to build
     "cargo build": allow        # Safe to build
     
-  # Can delegate to snippet agent for small tasks
+  # Can delegate to subagents for small tasks and debugging
   task: 
     "*": ask
     "snippet": allow
+    "debug-rabbit-hole": allow
   
   # Language server for code intelligence
   lsp: allow
@@ -96,6 +97,13 @@ When given a task by a supervisor, you will:
 - The task has minimal dependencies on other parts of the system
 - The task can be completed in a few lines of code with clear requirements
 - You need to parallelize work on independent components
+
+**Delegate to `debug-rabbit-hole` subagent when:**
+- Debugging a single failing test case requires extensive exploration and hypothesis testing
+- A specific function invocation behaves unexpectedly and needs deep investigation
+- The debugging process is expected to consume significant tokens/context through multiple iterations
+- The issue requires tracing through complex code paths, dependencies, or configurations
+- You need to preserve your context for broader orchestration while debugging continues
 
 **Implement directly when:**
 - The task requires architectural decisions or system design

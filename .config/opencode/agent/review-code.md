@@ -66,6 +66,7 @@ For every code review, evaluate the following aspects:
 - Race conditions or concurrency issues
 - Security vulnerabilities (injection, XSS, etc.)
 - Off-by-one errors and boundary conditions
+- Complex bugs requiring deep investigation (recommend delegating to `debug-rabbit-hole`)
 
 ### 3. **Performance**
 - Algorithmic complexity and efficiency

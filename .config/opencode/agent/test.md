@@ -33,8 +33,10 @@ permission:
     "pytest-cov *": allow         # Safe coverage
     "make test *": allow          # Safe test target
     
-  # No delegation - handles testing directly
-  task: deny
+  # Can delegate debugging to specialist agent
+  task: 
+    "*": deny
+    "debug-rabbit-hole": allow
   
   # Minimal web access for test research
   websearch: ask                 # Ask before searching
@@ -83,6 +85,13 @@ When investigating test failures, you will:
 - **Identify patterns** across multiple failures to detect systemic issues
 - **Propose fixes** for the underlying issues, not just test adjustments
 - **Update tests** when the failure indicates outdated test expectations due to legitimate code changes
+
+**Delegate to `debug-rabbit-hole` when:**
+- A single test case failure requires extensive debugging with multiple hypothesis iterations
+- The root cause involves complex interactions between code, dependencies, or configuration
+- Debugging is expected to consume significant context/tokens through deep exploration
+- The failure is elusive and only manifests under specific conditions that need isolation
+- You need to continue other testing work while debugging proceeds in parallel
 
 ### 3. Coverage Analysis
 

@@ -29,10 +29,11 @@ permission:
     "tail *": allow               # Safe preview
     "diff *": allow
     
-  # Can delegate to snippet for small fixes
+  # Can delegate to subagents for small fixes and debugging
   task: 
     "*": ask
     "snippet": allow
+    "debug-rabbit-hole": allow
   
   # Language server for code analysis
   lsp: allow
@@ -150,6 +151,13 @@ While you handle large-scale, systematic refactoring, delegate small, isolated f
 - Quick syntax fixes are needed (missing imports, typos)
 - The fix is less than 20 lines and doesn't require multi-file coordination
 - You need to maintain focus on the broader refactoring strategy
+
+**Delegate to `debug-rabbit-hole` when**:
+- Refactored code has unexpected test failures requiring deep investigation
+- A specific invocation of refactored code behaves differently than expected
+- Debugging requires exploring multiple hypotheses and extensive iteration
+- The issue is isolated to a specific test case but the cause is not immediately obvious
+- You need to preserve refactoring context while delegating the debugging effort
 
 **Example delegation**:
 - "Fix the import statement in `src/utils.py` - change `import foo` to `import foo as bar`"

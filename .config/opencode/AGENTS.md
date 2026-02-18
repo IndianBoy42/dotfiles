@@ -1,3 +1,5 @@
+NEVER create summary documents in the filesystem unless *explicitly* asked to. Talk directly to the user/parent agent.
+
 ALWAYS Check whether you are in a git repo `.git` or a jujutsu repo `.jj`, load the jujutsu skill if you need to work with it
 
 ALWAYS Prefer to use `uv` for python project management and execution always (it automatically manages virtual environments and dependencies). Only do anything else if using uv is impossible.

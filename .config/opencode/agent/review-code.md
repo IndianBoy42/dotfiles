@@ -2,7 +2,7 @@
 description: >-
   Use this agent to review code changes, diffs, and pull requests for quality assurance. Checks style, bugs, performance, and maintainability. 
 mode: all
-# TODO: model: opencode/kimi-k2.5
+model: github-copilot/claude-opus-4.6
 
 # Permission Configuration: Code Review Agent (Read-Only Analysis)
 # Reviews code changes without modifying them

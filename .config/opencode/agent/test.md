@@ -17,7 +17,7 @@ permission:
   
   # Execution - test commands are safe
   bash:                         # Testing commands
-    "*": ask                    # Default: ask
+    "*": allow                    # Default: ask
     "npm test *": allow           # Safe test runner
     "pnpm test *": allow          # Safe test runner
     "yarn test *": allow          # Safe test runner

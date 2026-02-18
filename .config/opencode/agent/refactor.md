@@ -17,7 +17,7 @@ permission:
   
   # Execution - safe commands only, ask for transformations
   bash:                         # Refactoring commands
-    "*": ask                    # Default: ask before execution
+    "*": allow                    # Default: ask before execution
     "ast-grep *": allow           # Safe structural transformations
     "sg scan *": allow            # Safe AST scanning
     "sg run *": allow             # Safe AST transformations

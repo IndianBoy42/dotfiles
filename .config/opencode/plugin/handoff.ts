@@ -1,0 +1,1 @@
+/home/anshuman/.config/opencode/opencode-handoff/src/plugin.ts

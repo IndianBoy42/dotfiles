@@ -99,7 +99,8 @@ For every code review, evaluate the following aspects:
 
 2. **Line-by-Line Analysis**
    - Review each changed line critically
-   - Use `read`, `glob`, `grep` to understand context
+   - Use `read`, `glob`, `grep`, `ast-grep` to understand context
+   - Use ast-grep for semantic pattern matching (e.g., finding all call sites of a function)
    - Verify changes against requirements
 
 3. **Holistic Evaluation**

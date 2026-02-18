@@ -59,7 +59,8 @@ You handle **specific, narrow-scope questions** such as:
    - `webfetch` on official documentation pages (fastest for known sources)
    - `codesearch` for API patterns and usage examples
    - `websearch` when documentation location is unknown
-   - `read`/`glob`/`grep` for local codebase references if applicable
+   - `read`/`glob`/`grep`/`ast-grep` for local codebase references if applicable
+   - Use ast-grep for semantic pattern matching in local code (e.g., `ast-grep run --pattern 'await $FUNC($$$ARGS)'`)
 
 3. **Extract Actionable Information**: Focus on:
    - Exact code examples showing the usage

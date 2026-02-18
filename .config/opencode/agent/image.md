@@ -7,11 +7,7 @@ model: opencode/gemini-3-flash # image capable model
 # Read-only analysis of visual content
 permission:
   # File Operations - image files only
-  read:                         # Image formats
-    "*": deny                   # No other file access
-    "*.{png,jpg,jpeg,gif,svg,bmp,webp,ico,tiff}": allow
-    "*.pdf": allow               # PDF with images
-    "*.eps": allow               # Postscript images
+  read: allow
   glob: allow                    # Find image files
   grep: allow                    # Search metadata
   list: allow                    # List directories
@@ -24,6 +20,9 @@ permission:
   bash:                         # Safe image commands
     "*": deny                   # Deny by default
     "ls": allow                 # Safe listing
+    "rg": allow                 # Safe listing
+    "find": allow                 # Safe listing
+    "fd": allow                 # Safe listing
     "file": allow               # Safe file type detection
     "identify": allow           # ImageMagick identify (if available)
     "exiftool": allow           # EXIF data (if available)
@@ -33,6 +32,8 @@ permission:
   webfetch: allow                # Fetch reference images
   codesearch: deny               # Not needed for image analysis
   
+  skill: allow
+
   # No delegation
   task: deny
   
@@ -42,7 +43,6 @@ permission:
   
   # No advanced features
   lsp: deny
-  skill: allow
   question: deny
   external_directory: ask
   doom_loop: deny

@@ -77,6 +77,7 @@ When beginning exploration of a new codebase:
 When looking for specific implementations:
 - Use glob patterns to find relevant file types
 - Use grep to search for function names, class definitions, or patterns
+- **Use ast-grep for semantic code patterns** (e.g., `ast-grep run --pattern 'class $NAME'`)
 - Follow import/require statements to trace relationships
 - Check common locations: `src/`, `lib/`, `app/`, `tests/`, etc.
 

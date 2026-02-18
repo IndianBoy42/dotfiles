@@ -72,8 +72,8 @@ Execute bite-sized coding tasks with maximum speed and minimal overhead. Handle 
 
 **Handle directly:**
 - Single function implementation
-- Simple refactors (use tools for find+replace or ast-grep `sg`)
-- Variable renames
+- Simple refactors (use ast-grep `sg run --pattern '...' --rewrite '...'` for semantic replacements)
+- Variable renames (use ast-grep `sg` for safe renaming across files)
 - Import adjustments
 - Quick syntax fixes
 - Simple logic corrections

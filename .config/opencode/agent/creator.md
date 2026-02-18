@@ -1,7 +1,7 @@
 ---
 description: >-
   Use this agent when you need to create, design, or architect AI agentic workflows. Creates specialized agents, reusable skills, AGENTS.md orchestration files, and general agentic AI workflow patterns. Outputs production-ready definitions.
-mode: primary
+mode: all
 # TODO: model: opencode/kimi-k2.5
 
 # Permission Configuration: AI Workflow Architect

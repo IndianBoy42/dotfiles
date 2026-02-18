@@ -37,9 +37,12 @@
     "input_select_buffer_home": "shift+home",
     "input_select_buffer_end": "shift+end",
   },
-  "plugin": ["@tarquinen/opencode-dcp@latest", "@mohak34/opencode-notifier@latest"],
+  "plugin": [
+    "@tarquinen/opencode-dcp@latest",
+    "@mohak34/opencode-notifier@latest",
+  ],
   "autoshare": false,
-  "autoupdate": true,
+  "autoupdate": false,
   "lsp": {
     "pyright": { "disabled": true },
     "lua-ls": { "disabled": true },
@@ -48,7 +51,6 @@
         "clangd",
         "--background-index",
         "--query-driver=**/arm-none-eabi-*,**/x86_64-linux-*",
-        "--cross-file-rename",
       ],
     },
   },
@@ -94,9 +96,6 @@
       "template": "Commit Message: $ARGUMENTS",
       "subtask": true,
       "model": "opencode/kimi-k2.5-free", // Free
-    },
-    "run": {
-      "template": "Run the following command: `$ARGUMENTS` and evaluate the output in the context of the current session",
     },
   },
 }

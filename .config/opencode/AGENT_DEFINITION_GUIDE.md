@@ -88,7 +88,7 @@ permission:
   question: allow # Ask the user questions
 
   # Advanced
-  skill: allow # Load and use skills
+  skill: ask # Load and use skills
   external_directory: ask # Access external project directories
   doom_loop: allow # Detect repetitive tool usage patterns
 ```
@@ -107,7 +107,7 @@ permission:
   bash: ask # Require approval for shell commands
 ```
 
-**2. Granular per-tool permission:**
+**2. Granular per-tool permissions:**
 
 ```yaml
 permission:

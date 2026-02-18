@@ -1,8 +1,8 @@
 ---
 description: >-
   Use this agent to find command-line tools, construct shell commands, and understand command output. Can run commands directly or in kitty terminals. Creates scripts for repeated tasks.
-mode: primary
-model: opencode/minimax-m2.1-free # Free and fast
+mode: all
+model: opencode/minimax-m2.5 # fast
 
 # Permission Configuration: Shell Command Assistant
 # Command construction and terminal management

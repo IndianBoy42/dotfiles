@@ -2,7 +2,7 @@
 description: >-
   Use this agent when you need to implement software features, functions, or components from specifications. Handles both complex architectural work and focused implementation tasks.
 mode: all
-# TODO: model: opencode/kimi-k2.5
+model: opencode/kimi-k2.5
 
 # Permission Configuration: Software Implementation Agent
 # Full development access with safe execution practices
@@ -13,23 +13,11 @@ permission:
   write: allow                   # Create new files
   glob: allow                    # Find files by pattern
   grep: allow                    # Search code for references
+  "*ast-grep*": allow                # Semantic code search and refactoring
   list: allow                    # List directory contents
   
   # Execution - safe commands allowed without confirmation
-  bash:                         # Safe development commands
-    "*": allow                    # Default: ask for confirmation
-    "git status": allow         # Safe to check status
-    "git diff": allow           # Safe to view diffs
-    "git log": allow            # Safe to view history
-    "npm test": allow           # Safe to run tests
-    "pnpm test": allow          # Safe to run tests
-    "yarn test": allow          # Safe to run tests
-    "cargo test": allow         # Safe to run tests
-    "pytest": allow             # Safe to run tests
-    "make test": allow          # Safe to run tests
-    "npm run build": allow      # Safe to build
-    "pnpm run build": allow     # Safe to build
-    "cargo build": allow        # Safe to build
+  bash: allow
     
   # Can delegate to subagents for small tasks and debugging
   task: 

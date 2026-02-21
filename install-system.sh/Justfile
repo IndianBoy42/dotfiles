@@ -1616,7 +1616,9 @@ open-webui:
 
 tailscale:
    curl -fsSL https://tailscale.com/install.sh | sh
+   sudo tailscale set --operator=$USER
    sudo tailscale up
+   flatpak install dev.deedles.Trayscale
 
 gotty: (targh "gotty" "sorenisanerd/gotty" "*_linux_amd64.tar.gz")
 

@@ -57,6 +57,10 @@ abbr lc 'wc -l'
 
 abbr export set -gx
 
+abbr ts sudo tailscale
+
+abbr skill npx agent-skills-cli -t opencode search
+
 abbr --command xdg-open gha 'https://github.com/$GITHUB_USERNAME/(basename $PWD)/commit/(git commit-id)/checks'
 abbr --command xdg-open localhostport --regex ':\d+' 'localhost:'
 
@@ -73,8 +77,8 @@ abbr psmem10 'ps auxf | sort -nr -k 4 | head -10'
 abbr pscpu10 'ps auxf | sort -nr -k 3 | head -10'
 
 # ripgrep stuff, config and aliases
-abbr rg 'rg -S'
-abbr rgc 'rg -SC3'
+abbr rg 'rg -SC5'
+abbr rgl 'rg -S'
 abbr rge 'rg -S -uuu'
 abbr fde 'fd -uuu'
 
@@ -252,8 +256,13 @@ abbr ssysc 'sudo systemctl'
 
 abbr ai opencode
 abbr oc opencode
-abbr --command opencode -- ask --agent codebase --prompt
-abbr ask opencode --agent codebase --prompt
+abbr --set-cursor --command opencode -- ask --agent codebase --prompt \"%\"
+abbr --set-cursor --command opencode -- q --agent snippet --prompt \"%\"
+abbr --set-cursor ask opencode --agent explorer --prompt \"%\"
+abbr --set-cursor osh opencode --agent shell --prompt \"%\"
+if not type -q skills then
+    abbr skills npx agent-skills-cli
+end
 
 if test "$TERM" = alacritty
     abbr itty alacritty &>/dev/null &
@@ -308,3 +317,6 @@ end
 for file in $FISH_CONFIG_DIR/abbrs/*.fish
     source $file
 end
+
+# shuvcode
+fish_add_path /home/anshuman/.shuvcode/bin

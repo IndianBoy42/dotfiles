@@ -23,7 +23,10 @@ permission:
   task: 
     "*": ask
     "snippet": allow
-    "debug-rabbit-hole": allow
+    "image": allow
+    "analyze": allow
+    "explore": allow
+    "debug*": allow
   
   # Language server for code intelligence
   lsp: allow
@@ -68,6 +71,7 @@ When given a task by a supervisor, you will:
    - Passes all linting checks and code quality tools
    - Includes appropriate unit tests that cover main functionality and edge cases
    - Meets all specific goals and requirements outlined by the supervisor
+   - if you can, run the code/program/command/function/script or some small example script using the code you just implemented and check the output (if it is an image or some large output then delegate to another agent)
 
 6. **Documentation**: Add necessary comments, docstrings, or documentation that explains the implementation, especially for complex logic or public interfaces.
 
@@ -92,6 +96,9 @@ When given a task by a supervisor, you will:
 - The debugging process is expected to consume significant tokens/context through multiple iterations
 - The issue requires tracing through complex code paths, dependencies, or configurations
 - You need to preserve your context for broader orchestration while debugging continues
+
+**Delegate to `image` or `analyze` subagent when:**
+- You need to check the output of some program/script that is images or large data outputs (csv, txt, anything)
 
 **Implement directly when:**
 - The task requires architectural decisions or system design

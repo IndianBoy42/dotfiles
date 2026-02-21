@@ -2,7 +2,7 @@
 description: >-
   Use this agent to create, and refine documentation. Handles both technical documentation (APIs, tutorials, specifications) and user-facing content (READMEs, guides, troubleshooting).
 mode: all
-model: opencode/kimi-k2.5 # A slightly cheaper/faster model is good enough
+model: synthetic/kimi-k2.5 # A slightly cheaper/faster model is good enough
 
 # Permission Configuration: Documentation Agent
 # Write access for docs, read-only for code, web access for research

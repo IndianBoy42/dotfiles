@@ -2,7 +2,7 @@
 description: >-
   Use this agent for deep, complicated 'rabbit hole' debugging of single test cases, specific invocations, or elusive bugs. This agent specializes in extensive exploration, hypothesis testing, and iterative investigation that would consume excessive context/tokens in broader agents.
 mode: all
-model: opencode/kimi-k2.5
+model: synthetic/kimi-k2.5
 
 # Permission Configuration: Deep Debugging Specialist
 # Full access for intensive investigation and debugging

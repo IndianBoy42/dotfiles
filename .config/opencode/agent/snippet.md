@@ -2,7 +2,7 @@
 description: >-
   Use this agent for bite-sized coding tasks: quick snippets, small modifications, or concise coding questions. Fast, focused execution when context is already provided. Called by implement and other agents for subtasks.
 mode: all
-model: opencode/kimi-k2.5 # A slightly cheaper/faster model is good enough
+model: opencode/minimax-m2.5-free # A slightly cheaper/faster model is good enough
 
 # Permission Configuration: Snippet Agent (Restricted Subagent)
 # Minimal permissions for focused, bite-sized code tasks

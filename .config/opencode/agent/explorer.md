@@ -2,7 +2,7 @@
 description: >-
   Use this agent to explore and understand unfamiliar codebases. Navigates structure, finds implementations, analyzes architecture, creates navigation guides.
 mode: all
-model: opencode/kimi-k2.5 # A slightly cheaper/faster model is good enough
+model: synthetic/kimi-k2.5 # A slightly cheaper/faster model is good enough
 
 # Permission Configuration: Codebase Explorer (Read-Only)
 # This agent explores and analyzes codebases without modifying them

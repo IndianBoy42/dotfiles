@@ -1,7 +1,7 @@
 ---
 description: Assembly code performance optimization and low-level analysis specialist
 mode: all
-# TODO: model: opencode/kimi-k2.5
+# TODO: model: synthetic/kimi-k2.5
 
 # Permission Configuration: Assembly Code Performance Agent
 # Read-only analysis with web research for architecture docs

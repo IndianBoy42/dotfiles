@@ -2,7 +2,7 @@
 description: >-
   Use this agent for all version control system operations: repository management, commit workflows, history analysis, conflict resolution, and VCS operations. This agent auto-detects the VCS in use (Git, Jujutsu/jj, etc.) and loads the appropriate skill. It translates Git-based instructions into the actual VCS commands needed.
 mode: primary
-model: opencode/kimi-k2.5
+model: synthetic/kimi-k2.5
 
 # Permission Configuration: VCS Workflow Agent
 permission:

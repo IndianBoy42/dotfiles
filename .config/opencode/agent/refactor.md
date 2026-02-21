@@ -2,7 +2,7 @@
 description: >-
   Use this agent for systematic code refactoring and restructuring. Uses ast-grep, comby, and Python for transformations. Can delegate small fixes to snippet.
 mode: all
-model: opencode/kimi-k2.5 # A slightly cheaper/faster model is good enough
+model: synthetic/kimi-k2.5 # A slightly cheaper/faster model is good enough
 
 # Permission Configuration: Code Refactoring Agent
 # Full access for systematic code transformation with verification

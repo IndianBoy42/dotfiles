@@ -2,7 +2,7 @@
 description: >-
   Use this agent to create test suites, analyze test failures, and ensure coverage. Handles unit, integration, and regression testing. 
 mode: all
-# TODO: model: opencode/kimi-k2.5
+# TODO: model: synthetic/kimi-k2.5
 
 # Permission Configuration: Test Suite Architect
 # Full development access with test-specific tooling

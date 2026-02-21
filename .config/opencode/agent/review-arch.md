@@ -2,7 +2,7 @@
 description: >-
   Use this agent to review technical proposals, architecture documents, and design specifications before implementation. Evaluates from multiple stakeholder perspectives.
 mode: all
-# TODO: model: opencode/kimi-k2.5
+# TODO: model: synthetic/kimi-k2.5
 
 # Permission Configuration: Architecture Review Agent (Read-Only)
 # Reviews design proposals and architecture documents without modification

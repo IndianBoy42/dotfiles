@@ -1,7 +1,7 @@
 ---
 description: Minimal orchestrator (coordinator) primary agent
 mode: primary
-# TODO: model: opencode/kimi-k2.5
+# TODO: model: synthetic/kimi-k2.5
 
 # Permission Configuration: Pure Coordinator
 # ZERO direct tool access - ONLY delegation capability

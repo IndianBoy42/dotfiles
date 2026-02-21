@@ -1,7 +1,7 @@
 ---
 description: Data analysis and visualization specialist for datasets and analytics
 mode: all
-# TODO: model: opencode/kimi-k2.5
+# TODO: model: synthetic/kimi-k2.5
 
 # Permission Configuration: Data Analysis Agent
 # Read data files with processing script capabilities

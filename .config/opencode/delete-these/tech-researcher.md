@@ -60,7 +60,7 @@ description: >-
 
   </example>
 mode: all
-model: opencode/kimi-k2.5
+model: synthetic/kimi-k2.5
 tools:
   bash: false
   write: false

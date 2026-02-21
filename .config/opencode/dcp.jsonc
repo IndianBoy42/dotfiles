@@ -10,7 +10,7 @@
       // Token limit at which the model compresses session context
       // to keep the model in the "smart zone" (not a hard limit)
       // Accepts: number or "X%" (percentage of model's context window)
-      "contextLimit": 100000,
+      "contextLimit": "75%",
       // Optional per-model overrides by exact providerID/modelID
       // Accepts: number or "X%"
       // Example:
@@ -31,7 +31,7 @@
     // Collapses a range of conversation content into a single summary
     "compress": {
       // Permission mode: "deny" (tool not registered), "ask" (prompt), "allow" (no prompt)
-      "permission": "deny",
+      "permission": "allow",
       // Show summary content as an ignored message notification
       "showCompression": true,
     },

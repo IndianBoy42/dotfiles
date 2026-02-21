@@ -64,7 +64,7 @@ permission:
   # File operations
   read: allow # Read file contents
   edit: allow # Write/edit files (includes write, patch, multiedit)
-  list: ask # List directory contents
+  list: allow # List directory contents
   glob: allow # Search files by glob patterns
   grep: allow # Search file contents by pattern
 

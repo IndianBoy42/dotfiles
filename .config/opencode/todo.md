@@ -1,0 +1,2 @@
+- add mcporter (replace mcp and all that)
+- overhaul the agents: https://github.com/alvinunreal/oh-my-opencode-slim

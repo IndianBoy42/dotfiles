@@ -12,7 +12,7 @@ permission:
   
   # Script creation - limited to build/config files
   write:                        # Only build/utility scripts
-    "*": deny                   # No other file creation
+    "*": ask                   # No other file creation
     "./scripts/*": allow       # Script directory
     "./util*/*": allow         # Utility directories
     "./*.sh": allow             # Shell scripts in root
@@ -27,7 +27,7 @@ permission:
     "*.yaml": allow             # Config files
     "*.yml": allow              # Config files
   edit:                         # Edit limited file types
-    "*": deny
+    "*": ask
     "./scripts/*": allow
     "./util*/*": allow
     "./*.sh": allow

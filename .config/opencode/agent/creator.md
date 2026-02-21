@@ -23,11 +23,14 @@ permission:
   grep: allow
   list: allow
 
+  question: allow
   skill: allow
   task: allow
   
   # Limited bash for workflow operations
-  bash: ask                     # Safe workflow commands
+  bash:                      # Safe workflow commands
+    "*": ask
+    "wc*": allow
   
   # No workflow management
   todowrite: deny
@@ -35,7 +38,6 @@ permission:
   
   # No advanced features
   lsp: deny
-  question: allow
   external_directory: ask
   doom_loop: deny
 ---

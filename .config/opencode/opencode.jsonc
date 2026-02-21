@@ -4,7 +4,7 @@
   // "model": "zai-coding-plan/glm-4.7",
   "model": "opencode/kimi-k2.5",
   // "small_model": "opencode/minimax-m2.1-free",
-  "small_model": "opencode/kimi-k2.5-free",
+  "small_model": "opencode/minimax-m2.5",
   "theme": "opencode",
   "experimental": {
     "batch_tool": true,
@@ -67,12 +67,12 @@
     },
     "perplexity": {
       "type": "local",
-      "enabled": true,
+      "enabled": false,
       "command": ["npx", "-y", "@chatmcp/server-perplexity-ask"],
     },
     "ast-grep": {
       "type": "local",
-      "enabled": true,
+      "enabled": false,
       "command": [
         "uvx",
         "--from",

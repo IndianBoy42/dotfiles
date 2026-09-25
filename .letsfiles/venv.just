@@ -1,4 +1,5 @@
 wd := invocation_directory()
+justrun := "just -d " + wd + " -f " + justfile()
 
 export VIRTUAL_ENV_DIR := `echo $VIRTUAL_ENV_DIR`
 

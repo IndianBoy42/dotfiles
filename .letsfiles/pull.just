@@ -8,11 +8,6 @@ git:
     git status
     confirm; and git pull --rebase
 
-nvim: 
-    #!/usr/bin/env fish
-    cd ~/.config/nvim
-    {{justrun}} pull
-
 dotfiles:
     yadm fetch
     yadm status

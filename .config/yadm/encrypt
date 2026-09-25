@@ -1,1 +1,3 @@
-.config/spotify-tui/client.yml
+# Files to feed to `yadm encrypt`. The previous entry (.config/spotify-tui/client.yml)
+# went away with spotify-tui; uncomment the next line once there is a secret to store.
+#.config/some-app/secret.yml

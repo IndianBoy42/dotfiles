@@ -7,7 +7,7 @@
 			"path": ".."
 		},
 		{
-			"path": "../../install-system.sh"
+			"path": "../../.letsfiles"
 		},
 		{
 			"path": "../../.cargo"

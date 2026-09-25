@@ -25,7 +25,3 @@ end
 #if type -q thefuck
 #	status is-interactive; and thefuck --alias fk | source
 #end
-
-if type -q direnv
-    direnv hook fish | source
-end

@@ -5,10 +5,6 @@
 
 set -gx TERMINAL $TERM
 
-if status is-login
-    system76-power profile performance
-end
-
 ##################################
 # PATH setup
 ##################################
@@ -20,7 +16,7 @@ end
 #   fish_add_path --append --move --path "~/../linuxbrew/.linuxbrew/bin"
 # end
 
-add_to_path /usr/lib/x86_64-linux-gnu/pkgconfig/ PKG_CONFIG_PATH
+add_to_path /usr/lib64/pkgconfig PKG_CONFIG_PATH
 add_to_path /usr/local/lib/pkgconfig PKG_CONFIG_PATH
 add_to_path /usr/lib/pkgconfig PKG_CONFIG_PATH
 add_to_path "$HOME/.local/lib" LD_LIBRARY_PATH
@@ -50,8 +46,6 @@ end
 set -gx FISH_CONFIG_PATH (status filename)
 set -gx FISH_CONFIG_DIR (status dirname)
 abbr reload_profile "source $FISH_CONFIG_PATH"
-
-set -gx CUDACXX /usr/lib/cuda/bin/nvcc
 
 abbr open xdg-open
 abbr del 'rm -vi'
@@ -241,13 +235,6 @@ set -g fish_key_bindings fish_vi_key_bindings
 abbr pu pueue
 abbr pusts pueue status
 
-if test -f /opt/ros/foxy/setup.bash
-    abbr ros2-foxy bass source /opt/ros/foxy/setup.bash
-end
-if test -f /opt/ros/noetic/setup.bash
-    abbr ros-noetic bass source /opt/ros/noetic/setup.bash
-end
-
 set ESP_TOOL "uvx esptool"
 abbr esp $ESP_TOOL
 abbr --command $ESP_TOOL -- erase "--port /dev/ttyACM0 erase-flash"
@@ -275,9 +262,7 @@ end
 
 abbr --command funced -- bind 'fish_user_key_bindings && fish_user_key_bindings'
 
-if test "$TERM" = alacritty
-    abbr itty alacritty &>/dev/null &
-else if test "$TERM" = xterm-kitty
+if test "$TERM" = xterm-kitty
     abbr itty kitty &>/dev/null &
     abbr klayout kitty @ goto-layout
     abbr knew kitty @ launch
@@ -287,8 +272,6 @@ else if test "$TERM" = xterm-kitty
 end
 
 abbr --set-cursor pyimport -- uv python -c "import % as x; print(x.__path__)"
-
-abbr dpkgi 'sudo dpkg -i '
 
 abbr letsid lets install --dry-run
 abbr letsi lets install
@@ -333,6 +316,3 @@ end
 for file in $FISH_CONFIG_DIR/abbrs/*.fish
     source $file
 end
-
-# Added by Antigravity CLI installer
-set -gx PATH "/home/anshuman/.local/bin" $PATH

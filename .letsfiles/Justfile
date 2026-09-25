@@ -15,18 +15,6 @@ wd := invocation_directory()
 @qmk *commands:
     cd ~/qmk_userspace/ && just {{commands}}
 
-@nvim *commands:
-    cd ~/.config/nvim/ && just {{commands}}
-
-@kbdis:
-    xinput float (xinput list | rg --no-config KMonad | cut -f2 | cut -d'=' -f 2)
-@kben:
-    xinput reattach (xinput list | rg --no-config KMonad | cut -f2 | cut -d'=' -f 2) (xinput list | rg --no-config 'Virtual core keyboard' | cut -f2 | cut -d'=' -f 2)
-
-@rock name *arguments:
-    set base (dirname (realpath (which luarocks)))"/{{name}}"; \
-    and $base {{arguments}}
-
 @scratch:
     cd ~/Documents/scratchpad/ && $EDITOR "scratch_"(date +"%d-%m-%y_%s").md -c "MarkdownPreview"
 

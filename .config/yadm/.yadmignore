@@ -1,0 +1,43 @@
+# Paths excluded from `yadm add` / `yadm status`.
+# The yadm work tree IS $HOME, so anything noisy or separately versioned has to be listed
+# here or it shows up as an untracked pile on every `yadm status`.
+
+# --- separately versioned repos that live in $HOME ---
+.omp/            # github.com/IndianBoy42/dot-omp
+qmk_userspace/   # kanata config + keyboard firmware
+.config/nvim/    # lazyvim fork
+
+# --- credentials; sourced by fish from ~/.env ---
+.env
+.config/gh/
+
+# --- caches and runtime state ---
+.cache/
+.local/state/
+.local/share/nvim/
+.local/share/Trash/
+.local/share/containers/
+.local/share/plasma/
+.local/share/kactivitymanagerd/
+.local/share/baloo/
+.cargo/registry/
+.cargo/git/
+.rustup/toolchains/
+.rustup/downloads/
+.bun/
+.mozilla/
+node_modules/
+.gradle/
+.npm/
+*.log
+
+# --- bulk user data ---
+Desktop/
+Documents/
+Downloads/
+Music/
+Pictures/
+Public/
+Templates/
+Videos/
+installs/

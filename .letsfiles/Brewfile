@@ -1,0 +1,24 @@
+# PATH additions the shell configs expect, minus what the image/brew already provides.
+# `just brew` in ~/.letsfiles/fedora.just consumes this file.
+
+# GNU stow drives the build-from-source machinery in ~/.letsfiles (dostow/link-pack).
+brew "stow"
+
+# Referenced from .config/fish/config.fish abbrs
+brew "git-delta"   # abbr diff delta
+brew "jless"       # abbr kls 'kitty @ ls | jless'
+brew "tealdeer"    # functions/tldr.fish
+
+# .cargo/config.toml pins `linker = "clang"` and `-C link-arg=-fuse-ld=wild`
+# (plus mold for the musl target), so Rust builds fail without these three.
+brew "llvm"
+brew "wild"
+brew "mold"
+
+# Embedded: ARM/RISC-V toolchains, flashing, serial console.
+# gcc-arm-embedded is a macOS-only cask; the formulae below are the Linux paths.
+brew "openocd"
+brew "tio"
+brew "esptool"
+brew "arm-none-eabi-gcc"
+brew "riscv64-elf-gcc"

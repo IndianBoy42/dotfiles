@@ -5,7 +5,7 @@ abbr -a --command $EDITOR -- ,cfg ~/.config/'(fzf --multi --walker-root ~/.confi
 abbr -a --command $EDITOR --command cd --command z -- ,conf '~/.config/'
 abbr --set-cursor -a --command $EDITOR --command cd -- ,fish '$FISH_CONFIG_DIR/% && source $FISH_CONFIG_PATH'
 abbr -a --command $EDITOR --command cd --command z -- ,nvim '~/.config/nvim/'
-abbr -a --command $EDITOR --command cd --command z -- ,oc '~/.config/opencode/'
+abbr -a --command $EDITOR --command cd --command z -- ,omp '~/.omp/'
 abbr -a --command $EDITOR --command cd --command z -- ,qmk '~/qmk_userspace/'
 abbr -a --command $EDITOR --command cd -- ,jj '~/.config/jj/'
 abbr -a --command $EDITOR -- ,git '~/.gitconfig'

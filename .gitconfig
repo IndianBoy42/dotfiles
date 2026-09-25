@@ -87,7 +87,7 @@
 [credential "https://dev.azure.com"]
 	useHttpPath = true
 [merge]
-	tool = smerge
+	tool = vimdiff
 [commit]
 	verbose = true
 

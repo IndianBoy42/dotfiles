@@ -1,3 +1,3 @@
 function fdinstall
-   fd -IH --type f '.' ~/install-system.sh/ | fzf 
+   fd -IH --type f '.' ~/.letsfiles/ | fzf
 end

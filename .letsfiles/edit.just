@@ -55,3 +55,6 @@ flash:
 
 fedora:
     cd ~/.letsfiles/ && $EDITOR fedora.just
+
+distrobox:
+    cd ~/.letsfiles/distrobox/ && $EDITOR arch.ini README.md

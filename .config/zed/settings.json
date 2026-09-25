@@ -7,6 +7,23 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "agent_servers": {
+    "opencode": {
+      "type": "registry"
+    }
+  },
+  "project_panel": {
+    "dock": "left"
+  },
+  "outline_panel": {
+    "dock": "left"
+  },
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "git_panel": {
+    "dock": "left"
+  },
   "show_signature_help_after_edits": true,
   "auto_signature_help": true,
   "inlay_hints": {
@@ -46,6 +63,7 @@
   },
   "diagnostics_max_severity": "all",
   "agent": {
+    "dock": "right",
     "always_allow_tool_actions": true,
     "inline_assistant_model": {
       "provider": "openrouter",

@@ -65,6 +65,10 @@ opencode:
     cd ~/.config/opencode && $EDITOR ./opencode.jsonc
 oc: opencode
 
+oh-my-pi:
+    cd ~/.omp/ && $EDITOR ./agent/config.yml
+omp: oh-my-pi
+
 tio:
     cd ~/.config && $EDITOR tio/config
 

@@ -127,6 +127,11 @@ command = [
 analyzer = "cargo_json"
 need_stdout = true
 
+[jobs.make]
+command = ["make"]
+need_stdout = true
+analyzer = "cpp"
+
 [exports.cargo-json-spans]
 auto = true
 exporter = "analyzer"

@@ -465,6 +465,9 @@ gh-exts:
 gcc-arm-none-eabi: (insgh "arm-none-eabi-gcc" "xpack-dev-tools/arm-none-eabi-gcc-xpack" "*linux-x64.tar.gz")
     echo "Installed gcc-arm-none-eabi"
 
+ffmpeg: (insgh "ffmpeg" "BtbN/FFmpeg-Builds" "*linux64-gpl.tar.xz")
+    echo "Installed ffmpeg"
+
 wasi-sdk: (debgh "wasi-sdk" "webassembly/wasi-sdk" "wasi-sdk-*-x86_64-linux.deb")
 
 wasm-binaryen: (insgh "binaryen" "webassembly/binaryen" "binaryen-*-x86_64-linux.tar.gz")
@@ -1509,6 +1512,8 @@ llvm-alts:
     set name lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v (math 100 + $v)
     set name ld.lld; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v (math 100 + $v)
     set name clangd; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v (math 100 + $v)
+    set name clang-format; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v (math 100 + $v)
+    set name clang-tidy; sudo update-alternatives --install /usr/bin/$name $name /usr/bin/$name-$v (math 100 + $v)
 
 clang ver: (llvm ver) llvm-alts
 

@@ -1,119 +1,160 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  // "model": "opencode/claude-sonnet-4-5",
-  // "model": "zai-coding-plan/glm-4.7",
-  // "model": "opencode-go/kimi-k2.5",
-  // "model": "opencode-go/kimi-k2.5",
-  "model": "synthetic/hf:moonshotai/Kimi-K2.5",
+  // "model": "synthetic/hf:moonshotai/Kimi-K2.5",
+  // "model": "neuralwatt/zai-org/GLM-5.1-FP8",
+  "model": "plexus/glm-5.2",
+  // "model": "plexus/kimi-k2.6",
+  // "model": "synthetic/hf:moonshotai/Kimi-K2.5",
   // "small_model": "opencode/minimax-m2.5-free",
-  "small_model": "opencode-go/minimax-m2.7",
+  "small_model": "plexus/deepseek-v4-flash",
   "compaction": {
     "auto": false,
+    "prune": false,
   },
-  "provider": {
-    // "inception": {
-    //   "models": {
-    //     "mercury-2": {
-    //       "id": "mercury-2",
-    //       "name": "Mercury 2",
-    //       "family": "mercury",
-    //       "release_date": "Feb 2026",
-    //       "attachment": false,
-    //       "reasoning": true,
-    //       "temperature": true,
-    //       "tool_call": true,
-    //       "limit": {
-    //         "context": 128000,
-    //         "output": 16384,
-    //       },
-    //       "modalities": {
-    //         "input": ["text"],
-    //         "output": ["text"],
-    //       },
-    //       "options": {},
-    //     },
-    //   },
-    // },
-  },
-  "experimental": {
-    "batch_tool": true,
+  "tools": {
     "lsp": true,
-    "plan": true,
+    "websearch": true,
+    "codesearch": true,
   },
-  "permission": {
-    "external_directory": {
-      "/tmp/*": "allow",
-      "*": "ask",
+  "default_agent": "build",
+  "agent": {
+    "plan": {
+      "model": "plexus/glm-5.2-max",
+      // "mode": "all",
+      "permission": {
+        "task": {
+          "*": "ask",
+          "search": "allow",
+          "image": "allow",
+          "explore": "deny",
+          "general": "deny",
+          "investigate": "allow",
+        },
+      },
     },
-    "read": {
-      "**/.env": "deny",
+    "build": {
+      // "model": "opencode-go/mimo-v2.5-pro",
+      "model": "plexus/glm-5.2",
+      "mode": "primary",
+    },
+    "explore": {
+      "mode": "primary",
+    },
+    "general": {
+      "mode": "primary",
+    },
+    "compaction": {
+      "model": "plexus/deepseek-v4-pro",
+      // "model": "plexus/deepseek-v4-flash",
     },
   },
   "plugin": [
-    "@tarquinen/opencode-dcp@latest",
-    // "@mohak34/opencode-notifier@latest",
+    // "@tarquinen/opencode-dcp@latest",
+    // "@tarquinen/opencode-dcp@3.2.8-beta0",
+    // "@tarquinen/opencode-dcp@3.1.12",
+    "@cortexkit/opencode-magic-context@0.33.1",
+    "@mohak34/opencode-notifier@latest",
+    "opencode-snippets",
+    "opencode-websearch-cited@1.2.0",
+    "@fredizzimo/opencode-synthetic-plexus",
+    // "opencode-session-recall",
+    "file:///home/anshuman/.config/opencode/opencode-interrupt-session/src/plugin.ts",
+    // "file:///home/anshuman/.config/opencode/opencode-hash/src/index.ts",
+    "@plannotator/opencode@latest",
+    "@slkiser/opencode-quota",
   ],
-  "autoshare": false,
-  "autoupdate": false,
-  "lsp": {
-    "pyright": { "disabled": true },
-    "lua-ls": { "disabled": true },
-    "clangd": {
-      "command": [
-        "clangd",
-        "--background-index",
-        "--query-driver=**/arm-none-eabi-*,**/x86_64-linux-*",
-      ],
-    },
-  },
-  "mcp": {
-    "jupyter": {
-      "enabled": false,
-      "type": "local",
-      "command": ["uvx", "jupyter-mcp-server@latest"],
-      "environment": {
-        "JUPYTER_URL": "http://localhost:8888",
-        "JUPYTER_TOKEN": "{env:JUPYTER_TOKEN}",
-        "ALLOW_IMG_OUTPUT": "true",
+  "provider": {
+    "openrouter": {
+      "options": {
+        "websearch_cited": {
+          "model": "deepseek/deepseek-v4-flash",
+          // "model": "xiaomi/mimo-v2-flash"
+        },
       },
     },
-    "perplexity": {
-      "type": "local",
-      "enabled": false,
-      "command": ["npx", "-y", "@chatmcp/server-perplexity-ask"],
-    },
-    "ast-grep": {
-      "type": "local",
-      "enabled": false,
-      "command": [
-        "uvx",
-        "--from",
-        "git+https://github.com/ast-grep/ast-grep-mcp",
-        "ast-grep-server",
-      ],
-    },
-    "context7": {
-      "type": "remote",
-      "url": "https://mcp.context7.com/mcp",
-      "enabled": false,
-    },
-    "gh_grep": {
-      "type": "remote",
-      "url": "https://mcp.grep.app",
-      "enabled": false,
+    "plexus": {
+      // "api": "https://plexus.zorse-platy.ts.net/v1",
+      "api": "http://localhost:4000/v1",
+      "name": "Plexus",
     },
   },
-  "command": {
-    "commit": {
-      "template": "Commit Message: $ARGUMENTS",
-      "subtask": true,
-      "model": "opencode/minimax-m2.5-free", // Free
-    },
+  "experimental": {
+    "batch_tool": true,
+    "disable_paste_summary": true,
   },
-  "default_agent": "coordinator",
-  "agent": {
-    "plan": {
-      "model": "github-copilot/claude-sonnet-4.6",
+  "permission": {
+    "external_directory": {
+      "*": "ask",
+      "/tmp": "allow",
+      "/tmp/*": "allow",
+      "~/.cache": "allow",
+      "~/.cache/*": "allow",
     },
+    "read": {
+      "**/.env": "deny",
+      ".env": "deny",
+    },
+    "task": {
+      "explore": "deny",
+      "general": "deny",
+    },
+    "question": "allow",
+  },
+  "autoshare": false,
+  "autoupdate": false,
+  "lsp": false,
+  // "lsp": {
+  //   "pyright": {
+  //     "disabled": true,
+  //   },
+  //   "lua-ls": {
+  //     "disabled": true,
+  //   },
+  //   "clangd": {
+  //     "command": [
+  //       "clangd",
+  //       "--background-index",
+  //       "--query-driver=**/arm-none-eabi-*,**/x86_64-linux-*",
+  //     ],
+  //   },
+  // },
+  // "mcp": {
+  //   "jupyter": {
+  //     "enabled": false,
+  //     "type": "local",
+  //     "command": ["uvx", "jupyter-mcp-server@latest"],
+  //     "environment": {
+  //       "JUPYTER_URL": "http://localhost:8888",
+  //       "JUPYTER_TOKEN": "{env:JUPYTER_TOKEN}",
+  //       "ALLOW_IMG_OUTPUT": "true",
+  //     },
+  //   },
+  //   "rust-docs": {
+  //     "enabled": false,
+  //     "type": "local",
+  //     "command": ["rust-docs-mcp"],
+  //   },
+  //   "perplexity": {
+  //     "type": "local",
+  //     "enabled": false,
+  //     "command": ["npx", "-y", "@chatmcp/server-perplexity-ask"],
+  //   },
+  //   "context7": {
+  //     "type": "remote",
+  //     "url": "https://mcp.context7.com/mcp",
+  //     "enabled": false,
+  //   },
+  //   "gh_grep": {
+  //     "type": "remote",
+  //     "url": "https://mcp.grep.app",
+  //     "enabled": false,
+  //   },
+  // },
+  "mcp": {
+    "cloudflare": { "type": "remote", "url": "https://mcp.cloudflare.com/mcp", "enabled": true, "oauth": {} },
+    "cloudflare-docs": { "type": "remote", "url": "https://docs.mcp.cloudflare.com/mcp", "enabled": true },
+    "cloudflare-bindings": { "type": "remote", "url": "https://bindings.mcp.cloudflare.com/mcp", "enabled": true, "oauth": {} },
+    "cloudflare-builds": { "type": "remote", "url": "https://builds.mcp.cloudflare.com/mcp", "enabled": true, "oauth": {} },
+    "cloudflare-observability": { "type": "remote", "url": "https://observability.mcp.cloudflare.com/mcp", "enabled": true, "oauth": {} },
   },
 }

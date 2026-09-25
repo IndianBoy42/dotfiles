@@ -12,12 +12,13 @@ jj = []
 ws = ["workspace"]
 e = ["edit"]
 n = ["new"]
-d = ["diff"]
+d = ["diff", "--tool", "difft"]
 s = ["show"]
 ll = ["log", "-T", "builtin_log_detailed"]
 nt = ["new", "trunk()"]
 credit = ["file", "annotate"]              # blame but nice
 init = ["git", "init", "--colocate"]
+fetch = ["git", "fetch", "--all-remotes"]
 clone = ["git", "clone", "--colocate"]
 cma = ["commit", "-m"]
 c = ["commit"]
@@ -25,6 +26,7 @@ conflicts = ["resolve", "-l"]
 re = ["resolve"]
 bm = ["bookmark"]
 dup = ["duplicate"]
+y = ["duplicate"]
 
 # [colors]
 # "diff removed token" = { fg = "bright red", bg = "#400000", underline = false }
@@ -62,6 +64,7 @@ dup = ["duplicate"]
 [ui]
 merge-editor = "smerge"
 diff-editor = ["nvim", "-c", "DiffEditor $left $right $output"]
+diff-formatter = ":git"
 
 [merge-tools.nvim2]
 program = "nvim"

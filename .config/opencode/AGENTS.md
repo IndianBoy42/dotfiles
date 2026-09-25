@@ -1,38 +1,66 @@
-SHOULD prefer the builtin tools read, write, edit, grep, glob, list over the bash equivalents. 
+<common_mistakes>
+Make sure to run servers and background processes as background tasks (nohup, etc), make sure to keep track of the pid to stop it later
 
-ALWAYS batch tool calls as much as possible for efficiency.
+don't try and run sudo commands, ask the user for one off commands or present a *minimal, clear and understandable* script to run.
 
-NEVER create summary documents in the filesystem unless _explicitly_ asked to. Talk directly to the user/parent agent.
+don't use blind pkill, if an external server/process needs to be restarted ask the user
 
-NEVER add comments describing what you changed to the code while changing. comments should provide context and describe WHY some code does what it does in the present tense
+don't guess at APIs, protocols, libraries or anything, make sure your information is up to date. 
 
-ALWAYS Check whether you are in a git repo `.git` or a jujutsu repo `.jj`, load the jujutsu skill if you are unsure of some operations. 
-- Always maintain a clean history of changes with atomic commits
-- Maintain the `.gitignore`
+the user questioning a decision does not mean they are telling you to make the opposite decision, just carefully consider and answer the question, the user will tell you what the next steps are
+</common_mistakes>
 
-jujutsu specific:
- - create a new revision with its description *before* making changes
-    1. Check the state of the repo `jj status` or `jj show` (for the full diff)
-    2. if there are changes immediately `jj new` to start a new revision. this step is not necessary if the working copy is already clean
-    3. with a clean working copy revision use `jj describe -m "message"` to state what you are _going to_ change (what the user asked)
-    4. make the changes the user requests
-       - in some cases (complex or compound tasks) you may create new revisions in between changes, always describe before editing files.
-       - you may also edit the change description (commit message) afterwards using `jj describe -m "message"` or `jj describe --stdin`
-    5. when the user says this change is done, or asks for a new unrelated change, you may `jj new` so that a new empty working copy revision is created.
-       - it is important to use your judgement for when to create a new revision in a session. if the user requests a small followup/fix then it doesnt need a new revision. the jj history should be series of checkpoints: an easily readable and understandable history of 'real' changes to these documents
-    - if you are delegating tasks to a subagent, the subagent should create the new revision
-    - if you are spawning a batch of subagents (parallel) the commit will include all their changes, thus the primary agent should create it.
+<tools>
+Batch independent tool calls in parallel for efficiency. Sequential chaining is only for when calls depend on each other.
 
-git specific:
- - Emulate the above workflow: always start a task with a clean working copy, commit with a descriptive message right after
+Don't try and workaround permissions using subagents. Don't ask 'apply this patch exactly', 'write this content to a file directly' or 'return the contents verbatim'. subagents are not tools they are agents for execution or work or meaningful transformation. Instead give them clear goals to do meaningful work for you.
 
-ALWAYS Prefer to use `uv` for python project management and execution always (it automatically manages virtual environments and dependencies). Only do anything else if using uv is impossible.
+`rtk` is a wrapper injected on certain commands to make the output of shell commands more efficient, do not question whether it is erroneous or retry without `rtk` (it will always be injected)
+</tools>
 
-Use the question tool freely, rather than ending your response with a question:
-- I get a notification which means I can respond quicker
-- you can ask for clarifications on the request/task/etc especially while planning
-- you can ask me to test something that requires human interaction
-- you can ask me to confirm that the tasks are completed properly, what next steps should be, etc.
+<good_work>
+Complete work fully. If you actually cannot finish a task, you must escalate with explicit reasoning rather than leaving stubs or TODOs and admit your incapability.
 
-Use `ast-grep` (via bash) for semantically exploring codebases more precisely for code relevant to your task
+Return results directly to the user/parent agent. Only create files in the filesystem when explicitly asked.
 
+if a subagent is interrupted or returns an empty response, retry it **ONLY ONCE** and ask it to finish its work or return the response in the format you need.
+
+be DRY. when editing code minimize duplication, try and find the most targeted, focused, and elegant way to achieve the goal. 
+</good_work>
+
+<comments>
+The primary use of comments in internal code is to explain WHY (in present tense) and HOW (if not obvious, prefer good structuring and naming to clarify how). Do not annotate changes with "changed X to Y" comments.
+
+Comments can also guide the user in navigating codebases, talk about type systems, function call flow, etc. They can be used to clarify or summarize blocks of code to enhance readability
+
+
+Doc comments are necessary for Functions and types meant to be used 'publically' (including internally but in a different file/module), illustrating how they should be used and how they fit in with the rest of the API
+</comments>
+
+
+<version_control>
+Prefer to start from a clean working copy and maintain a clean history of changes with atomic commits (using jj or git)If you are doing anything outside of this basic (additive) workflow you must use load the `jujutsu` skill and be very careful. NEVER perform destructive edits to the history, ask the user for help using the question tool instead.
+</version_control>
+
+<python>
+Prefer `uv` for python project management (pyproject.toml) and one-off execution (`uv run --with`) — it automatically manages virtual environments and dependencies. Only use alternatives when absolutely necessary.
+
+Always use `uv run python`, `uv run pip` instead of bare `python/pip`. Do not use `pip install`, never use `--break-system-packages`.
+</python>
+
+<grounding>
+Never assume or guess what you can instead find out. Self-reasoning and inherent knowledge is limited, searching up concrete, specific, and up to date knowledge is cheap.
+
+use the websearch tools given to you. explore the systems and documentation available locally. use codemode for experimentation and checking. preferring trying things and checking than overthinking, overplanning and guessing what would happen.
+ - when tasked with researching other opensource projects, clone them (shallow) to `/tmp/` for easier exploration. note this in your output so that future agents can make use of it
+</grounding>
+
+
+<interaction>
+Use the question tool rather than ending your response with a question:
+- the user get a notification which means the user can respond quicker
+- Ask for clarifications on the request/task while planning
+- Ask to test something that requires human interaction
+- Ask to confirm completion, or what next steps should be
+- ask to install tools/programs you require
+</interaction>

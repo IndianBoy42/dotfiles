@@ -45,6 +45,10 @@ auto-connect=latest
 
 [gpsN]
 pattern = ^gps([0-9]*)
-auto-connect=latest
 map=ONLCRNL
 device = /dev/ttyUSB%m1
+
+[crlfN]
+pattern = ^crlf([0-9]*)
+map=ONLCRNL
+device = /dev/ttyACM%m1

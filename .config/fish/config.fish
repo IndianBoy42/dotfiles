@@ -1,4 +1,4 @@
-# TODO: more abbrs for subcommands
+# tTODO: more abbrs for subcommands
 ##################################
 # conf.d scripts run before this 
 ##################################
@@ -28,7 +28,9 @@ add_to_path "$HOME/.local/libexec" LD_LIBRARY_PATH
 fish_add_path ~/bin
 fish_add_path ~/.cargo/bin
 fish_add_path ~/.local/bin
-fish_add_path ~/.local/share/coursier/bin
+set -gx GOBIN ~/.local/bin
+fish_add_path ~/.shuvcode/bin
+fish_add_path ~/.fly/bin/
 fish_add_path ~/.opencode/bin
 fish_add_path ~/AppImages/
 fish_add_path $FISH_CONFIG_DIR/conf.d/bin/
@@ -57,9 +59,9 @@ abbr lc 'wc -l'
 
 abbr export set -gx
 
-abbr ts sudo tailscale
+abbr ts tailscale
 
-abbr skill npx agent-skills-cli -t opencode search
+abbr diff delta
 
 abbr --command xdg-open gha 'https://github.com/$GITHUB_USERNAME/(basename $PWD)/commit/(git commit-id)/checks'
 abbr --command xdg-open localhostport --regex ':\d+' 'localhost:'
@@ -157,12 +159,14 @@ abbr coda code -a
 
 abbr echov 'set --show'
 
-abbr paste 'wl-paste |'
-abbr psel "wl-paste --primary |"
+abbr paste 'wl-paste | tee'
+abbr psel "wl-paste --primary | tee"
 abbr clip wl-copy
 abbr --position anywhere ,clp '(wl-paste | psub)'
 abbr --position anywhere ,sel '(wl-paste --primary | psub)'
 abbr --set-cursor --position anywhere ',p' '(% | psub)'
+
+abbr --set-cursor jjcd 'mkcd % && jj git init'
 
 # # for copying across long trees, you can mark a place to copy to (and then copy/go to it)
 # abbr cpmark 'set -gx CP_TO (pwd) && echo $CP_TO	'
@@ -251,18 +255,25 @@ abbr --command $ESP_TOOL -- flash "--port /dev/ttyACM0 write-flash 0 "
 
 abbr tarz 'tar --zstd'
 
-abbr sysc 'systemctl --user'
-abbr ssysc 'sudo systemctl'
+abbr sys 'systemctl --user'
+abbr ssy 'sudo systemctl'
+abbr --set-cursor daemonize 'systemd-run --user /bin/bash -l -c \'%\''
 
-abbr ai opencode
-abbr oc opencode
-abbr --set-cursor --command opencode -- ask --agent codebase --prompt \"%\"
-abbr --set-cursor --command opencode -- q --agent snippet --prompt \"%\"
-abbr --set-cursor ask opencode --agent explorer --prompt \"%\"
-abbr --set-cursor osh opencode --agent shell --prompt \"%\"
+set -gx OPENCODE_EXPERIMENTAL_BASH_DEFAULT_TIMEOUT_MS 300000
+# set -gx OPENCODE_EXPERIMENTAL_LSP_TOOL 1
+set -gx OPENCODE_ENABLE_EXA 1
+abbr skill npx agent-skills-cli -t opencode search
+abbr ai omp
+abbr oc omp
+abbr op omp
+abbr --set-cursor ask -- omp --tools=read,web_search,todo,grep,glob,task --print-thoughts --model @smol --no-session -p \"%\"
+abbr --set-cursor aido -- omp --model @smol --no-session --print-thoughts -p \"%\"
+abbr --set-cursor osh -- omp --model @smol --approval-mode=write --print-thoughts -p \"%\"
 if not type -q skills then
     abbr skills npx agent-skills-cli
 end
+
+abbr --command funced -- bind 'fish_user_key_bindings && fish_user_key_bindings'
 
 if test "$TERM" = alacritty
     abbr itty alacritty &>/dev/null &
@@ -294,6 +305,11 @@ abbr -a kd --function kitten_cd_helper
 # FIXME:
 abbr --set-cursor=! in "$(string join -n -- 'cd !;' 'and ;' 'and cd -')"
 
+function todo_abbr_helper
+    echo $EDITOR (find_in_parents TODO.md)
+end
+abbr todo --function todo_abbr_helper
+
 # bun
 set --export BUN_INSTALL "$HOME/.bun"
 set --export PATH $BUN_INSTALL/bin $PATH
@@ -318,5 +334,5 @@ for file in $FISH_CONFIG_DIR/abbrs/*.fish
     source $file
 end
 
-# shuvcode
-fish_add_path /home/anshuman/.shuvcode/bin
+# Added by Antigravity CLI installer
+set -gx PATH "/home/anshuman/.local/bin" $PATH

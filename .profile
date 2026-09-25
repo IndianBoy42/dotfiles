@@ -46,3 +46,7 @@ xset r rate 220 25
 
 export STM32CubeMX_PATH=/home/anshuman/STM32CubeMX
 . "/home/anshuman/.deno/env"
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/anshuman/.local/bin:$PATH"

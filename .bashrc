@@ -134,3 +134,7 @@ alias python="uv run python"
 alias python3="uv run python"
 alias pip="uv pip"
 . "/home/anshuman/.deno/env"
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/anshuman/.local/bin:$PATH"

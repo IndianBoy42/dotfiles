@@ -93,12 +93,12 @@
 
 [credential "https://github.com"]
 	helper = 
-	helper = !gh auth git-credential
+	helper = !/usr/bin/gh auth git-credential
 [github]
 	user = IndianBoy42
 [credential "https://gist.github.com"]
 	helper = 
-	helper = !/home/amedhi/.local/packages/gh/bin/gh auth git-credential
+	helper = !/usr/bin/gh auth git-credential
 [sendemail]
     smtpPass = yoolujiacxaumygt
     smtpserver = smtp.gmail.com
@@ -113,3 +113,6 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[safe]
+	directory = /home/anshuman/dev/onboard-sbc/armbian-build
+	directory = /home/anshuman/dev/onboard-sbc/armbian-build.raw

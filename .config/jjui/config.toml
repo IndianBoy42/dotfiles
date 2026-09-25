@@ -1,42 +1,99 @@
-[keys.details]
-"restore" = ["r", "a"]
+# Migrated from v0.9 to v0.10
+# See https://idursun.github.io/jjui/migrating/v0_10/
 
-[custom_commands]
-"delta" = { args = ["util", "exec", "--", "bash", "-c", """
-jj show -r $change_id --summary --git | delta
-"""], show = "diff", key_sequence = ["\\", "d"] }
-"resolve" = { key_sequence = [
-    "\\",
-    "r",
-], args = [
-    "resolve",
-    "-r",
-    "$change_id",
-    "$file",
-] }
-"resolve-Revset" = { key_sequence = [
-    "\\",
-    "R",
-], args = [
-    "resolve",
-    "-r",
-    "$change_id",
-] }
-"new-before" = { key_sequence = [
-    "\\",
-    "N",
-], args = [
-    "new",
-    "-B",
-    "$change_id",
-] }
-"new-after" = { key_sequence = ["\\", "n"], args = ["new", "-A", "$change_id"] }
+[[actions]]
+name = "delta"
+lua = '''
+local change_id = context.change_id()
+local file = context.file()
+local cmd
+if file then
+    cmd = "jj show -r " .. change_id .. " --git -- " .. file .. " | delta"
+else
+    cmd = "jj show -r " .. change_id .. " --git | delta"
+end
+exec_shell(cmd)
+revisions.refresh()
+'''
+
+[[bindings]]
+action = "delta"
+seq = ["\\", "d"]
+scope = "revisions"
+desc = "show diff with delta"
+
+[[actions]]
+name = "resolve-file"
+lua = '''
+local change_id = context.change_id()
+local checked = context.checked_files()
+
+if checked and #checked > 0 then
+    for _, f in ipairs(checked) do
+        jj_async("resolve", "-r", change_id, "--", f)
+    end
+else
+    jj_async("resolve", "-r", change_id)
+end
+revisions.refresh()
+'''
+
+[[bindings]]
+action = "resolve-file"
+seq = ["\\", "r"]
+scope = "revisions"
+desc = "resolve file(s)"
+
+[[actions]]
+name = "resolve-revset"
+lua = '''
+local change_id = context.change_id()
+jj_async("resolve", "-r", change_id)
+revisions.refresh()
+'''
+
+[[bindings]]
+action = "resolve-revset"
+seq = ["\\", "R"]
+scope = "revisions"
+desc = "resolve all"
+
+[[actions]]
+name = "new-before"
+lua = '''
+jj_async("new", "-B", context.change_id())
+revisions.refresh()
+'''
+
+[[bindings]]
+action = "new-before"
+seq = ["\\", "N"]
+scope = "revisions"
+desc = "new before"
+
+[[actions]]
+name = "new-after"
+lua = '''
+jj_async("new", "-A", context.change_id())
+revisions.refresh()
+'''
+
+[[bindings]]
+action = "new-after"
+seq = ["\\", "n"]
+scope = "revisions"
+desc = "new after"
+
+[[bindings]]
+action = "revisions.details.restore"
+key = "a"
+scope = "revisions.details"
 
 [suggest]
 [suggest.exec]
-mode = "fuzzy" # Accepted values: "off" (default), "regex", "fuzzy".
+mode = "fuzzy"
 
 [colors]
-"selected" = { bg = "#2c313a" } # The highlight bar
-"border" = "grey"               # The panel splitters
-"command_bar" = "white"         # The typing area
+"selected" = { bg = "#2c313a" }
+"border" = "grey"
+"command_bar" = "white"

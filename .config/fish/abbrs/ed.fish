@@ -14,3 +14,5 @@ abbr -a --command cd -- ,kty '~/.config/kitty/'
 abbr -a --command $EDITOR -- ,ig './.*ignore'
 abbr -a --command cd -- ,cg '~/.cargo/'
 abbr -a --command $EDITOR -- ,cg ~/.cargo/config.toml .cargo/config.toml
+
+abbr -a nv neovide

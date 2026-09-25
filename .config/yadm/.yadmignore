@@ -31,6 +31,122 @@ node_modules/
 .npm/
 *.log
 
+
+# --- fisher-managed fish plugin files ---
+# These belong to `fisher`, not to this repo. fisher refuses to install a plugin
+# when any of its files already exists while the plugin is missing from fisher's
+# registry, so a vendored copy of even ONE file wedges the whole plugin: tide's
+# prompt file had been committed here, fisher then refused to install tide's 50
+# supporting functions, and every prompt drew "Unknown command: _tide_pwd".
+# fish_plugins (tracked) is the manifest; `fisher update` materialises these.
+# The .yadmtrack hook under .config/fish/functions and .config/fish/conf.d
+# respects this file, which is what stops them being committed again.
+# Regenerate after adding or removing plugins:
+#   fish -c 'for v in (set --names --universal | string match "_fisher_*_files"); for p in $$v; string replace "~/" "" $p; end; end' | sort -u
+.config/fish/completions/fisher.fish
+.config/fish/completions/fzf_configure_bindings.fish
+.config/fish/completions/nvm.fish
+.config/fish/completions/tide.fish
+.config/fish/conf.d/_tide_init.fish
+.config/fish/conf.d/autopair.fish
+.config/fish/conf.d/bak.fish
+.config/fish/conf.d/fish_auto_source.fish
+.config/fish/conf.d/fzf.fish
+.config/fish/conf.d/magic-enter.fish
+.config/fish/conf.d/nvm.fish
+.config/fish/conf.d/park.fish
+.config/fish/conf.d/plugin-bang-bang.fish
+.config/fish/functions/__bak.fish
+.config/fish/functions/__bak_help.fish
+.config/fish/functions/__bak_is_bak.fish
+.config/fish/functions/__bak_name.fish
+.config/fish/functions/__bak_normalized.fish
+.config/fish/functions/__bak_parse_help.fish
+.config/fish/functions/__bak_unbak.fish
+.config/fish/functions/__bass.py
+.config/fish/functions/__history_previous_command.fish
+.config/fish/functions/__history_previous_command_arguments.fish
+.config/fish/functions/_autopair_backspace.fish
+.config/fish/functions/_autopair_insert_left.fish
+.config/fish/functions/_autopair_insert_right.fish
+.config/fish/functions/_autopair_insert_same.fish
+.config/fish/functions/_autopair_tab.fish
+.config/fish/functions/_fzf_configure_bindings_help.fish
+.config/fish/functions/_fzf_extract_var_info.fish
+.config/fish/functions/_fzf_preview_changed_file.fish
+.config/fish/functions/_fzf_preview_file.fish
+.config/fish/functions/_fzf_report_diff_type.fish
+.config/fish/functions/_fzf_report_file_type.fish
+.config/fish/functions/_fzf_search_directory.fish
+.config/fish/functions/_fzf_search_git_log.fish
+.config/fish/functions/_fzf_search_git_status.fish
+.config/fish/functions/_fzf_search_history.fish
+.config/fish/functions/_fzf_search_processes.fish
+.config/fish/functions/_fzf_search_variables.fish
+.config/fish/functions/_fzf_wrapper.fish
+.config/fish/functions/_nvm_index_update.fish
+.config/fish/functions/_nvm_list.fish
+.config/fish/functions/_nvm_version_activate.fish
+.config/fish/functions/_nvm_version_deactivate.fish
+.config/fish/functions/_tide_1_line_prompt.fish
+.config/fish/functions/_tide_2_line_prompt.fish
+.config/fish/functions/_tide_cache_variables.fish
+.config/fish/functions/_tide_detect_os.fish
+.config/fish/functions/_tide_find_and_remove.fish
+.config/fish/functions/_tide_fish_colorize.fish
+.config/fish/functions/_tide_item_aws.fish
+.config/fish/functions/_tide_item_bun.fish
+.config/fish/functions/_tide_item_character.fish
+.config/fish/functions/_tide_item_cmd_duration.fish
+.config/fish/functions/_tide_item_context.fish
+.config/fish/functions/_tide_item_crystal.fish
+.config/fish/functions/_tide_item_direnv.fish
+.config/fish/functions/_tide_item_distrobox.fish
+.config/fish/functions/_tide_item_docker.fish
+.config/fish/functions/_tide_item_elixir.fish
+.config/fish/functions/_tide_item_gcloud.fish
+.config/fish/functions/_tide_item_git.fish
+.config/fish/functions/_tide_item_go.fish
+.config/fish/functions/_tide_item_java.fish
+.config/fish/functions/_tide_item_jobs.fish
+.config/fish/functions/_tide_item_kubectl.fish
+.config/fish/functions/_tide_item_nix_shell.fish
+.config/fish/functions/_tide_item_node.fish
+.config/fish/functions/_tide_item_os.fish
+.config/fish/functions/_tide_item_php.fish
+.config/fish/functions/_tide_item_private_mode.fish
+.config/fish/functions/_tide_item_pulumi.fish
+.config/fish/functions/_tide_item_python.fish
+.config/fish/functions/_tide_item_ruby.fish
+.config/fish/functions/_tide_item_rustc.fish
+.config/fish/functions/_tide_item_shlvl.fish
+.config/fish/functions/_tide_item_status.fish
+.config/fish/functions/_tide_item_terraform.fish
+.config/fish/functions/_tide_item_time.fish
+.config/fish/functions/_tide_item_toolbox.fish
+.config/fish/functions/_tide_item_vi_mode.fish
+.config/fish/functions/_tide_item_zig.fish
+.config/fish/functions/_tide_parent_dirs.fish
+.config/fish/functions/_tide_print_item.fish
+.config/fish/functions/_tide_pwd.fish
+.config/fish/functions/_tide_remove_unusable_items.fish
+.config/fish/functions/_tide_sub_bug-report.fish
+.config/fish/functions/_tide_sub_configure.fish
+.config/fish/functions/_tide_sub_reload.fish
+.config/fish/functions/await.fish
+.config/fish/functions/bass.fish
+.config/fish/functions/cpbak.fish
+.config/fish/functions/fish_mode_prompt.fish
+.config/fish/functions/fish_prompt.fish
+.config/fish/functions/fisher.fish
+.config/fish/functions/fzf_configure_bindings.fish
+.config/fish/functions/mvbak.fish
+.config/fish/functions/nvm.fish
+.config/fish/functions/tide
+.config/fish/functions/tide.fish
+.config/fish/functions/uncpbak.fish
+.config/fish/functions/unmvbak.fish
+
 # --- bulk user data ---
 Desktop/
 Documents/

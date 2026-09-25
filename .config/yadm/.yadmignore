@@ -3,9 +3,12 @@
 # here or it shows up as an untracked pile on every `yadm status`.
 
 # --- separately versioned repos that live in $HOME ---
-.omp/            # github.com/IndianBoy42/dot-omp
-qmk_userspace/   # kanata config + keyboard firmware
-.config/nvim/    # lazyvim fork
+# github.com/IndianBoy42/dot-omp
+.omp/
+# kanata config + keyboard firmware
+qmk_userspace/
+# lazyvim fork
+.config/nvim/
 
 # --- credentials; sourced by fish from ~/.env ---
 .env

@@ -1,3 +1,7 @@
+# NOTE: git never reads this file -- only `yadm config` does. Repo-level git
+# settings (core.excludesFile, aliases) must be applied with `yadm gitconfig`,
+# which writes to the repo config git does read. See
+# .config/yadm/bootstrap.d/gitconfigs.bash, which applies the two keys below.
 [core]
 	excludesFile = ~/.config/yadm/.yadmignore
 [alias]

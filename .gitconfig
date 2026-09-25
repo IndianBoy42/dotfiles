@@ -93,12 +93,12 @@
 
 [credential "https://github.com"]
 	helper = 
-	helper = !/usr/bin/gh auth git-credential
+	helper = !gh auth git-credential
 [github]
 	user = IndianBoy42
 [credential "https://gist.github.com"]
 	helper = 
-	helper = !/usr/bin/gh auth git-credential
+	helper = !gh auth git-credential
 [sendemail]
     smtpPass = yoolujiacxaumygt
     smtpserver = smtp.gmail.com

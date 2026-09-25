@@ -44,6 +44,7 @@ flatpak-apps:
 kitty:
     #!/usr/bin/env fish
     curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
+    mkdir -p $HOME/.local/share/applications
     # kitty must not be copied out of its app dir, only symlinked, and the symlink has to
     # live somewhere on the system-wide PATH or .desktop launches will not find it
     ln -sf $HOME/.local/kitty.app/bin/kitty $HOME/.local/kitty.app/bin/kitten $HOME/.local/bin/

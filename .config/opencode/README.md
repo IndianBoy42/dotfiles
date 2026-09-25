@@ -1,3 +1,0 @@
-```
-npx agent-skills-cli
-```

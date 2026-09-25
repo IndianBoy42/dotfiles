@@ -1,4 +1,5 @@
-[keys]
+[keys.details]
+"restore" = ["r", "a"]
 
 [custom_commands]
 "delta" = { args = ["util", "exec", "--", "bash", "-c", """

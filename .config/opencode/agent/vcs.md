@@ -2,7 +2,7 @@
 description: >-
   Use this agent for all version control system operations: repository management, commit workflows, history analysis, conflict resolution, and VCS operations. This agent auto-detects the VCS in use (Git, Jujutsu/jj, etc.) and loads the appropriate skill. It translates Git-based instructions into the actual VCS commands needed.
 mode: primary
-model: synthetic/kimi-k2.5
+model: synthetic/hf:moonshotai/Kimi-K2.5
 
 # Permission Configuration: VCS Workflow Agent
 # Repository management with safe execution practices
@@ -31,11 +31,11 @@ permission:
   # No delegation - handles VCS directly
   task: deny
   
-  # Minimal web access for VCS hosting operations
-  websearch: deny
-  webfetch: deny
-  codesearch: deny
-  
+  # web research
+  websearch: allow
+  webfetch: allow
+  codesearch: allow
+
   # No workflow management
   todowrite: deny
   todoread: deny

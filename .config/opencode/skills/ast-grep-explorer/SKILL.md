@@ -1,5 +1,5 @@
 ---
-name: ast-grep-explorer
+name: ast-grep-explore
 description: "Use when you need to explore, search, or understand codebases using structural AST patterns. Ideal for finding specific code patterns, understanding code architecture, discovering API usage, or locating code smells across multiple files."
 ---
 

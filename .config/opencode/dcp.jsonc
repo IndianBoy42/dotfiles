@@ -1,44 +1,14 @@
 {
   "$schema": "https://raw.githubusercontent.com/Opencode-DCP/opencode-dynamic-context-pruning/master/dcp.schema.json",
-  "pruneNotification": "minimal",
-  "tools": {
-    // Shared settings for all prune tools
-    "settings": {
-      // Nudge the LLM to use prune tools (every <nudgeFrequency> tool results)
-      "nudgeEnabled": false,
-      "nudgeFrequency": 50,
-      // Token limit at which the model compresses session context
-      // to keep the model in the "smart zone" (not a hard limit)
-      // Accepts: number or "X%" (percentage of model's context window)
-      "contextLimit": "75%",
-      // Optional per-model overrides by exact providerID/modelID
-      // Accepts: number or "X%"
-      // Example:
-      // "modelLimits": {
-      //     "openai/gpt-5": 120000,
-      //     "anthropic/claude-3-7-sonnet": "80%"
-      // },
-      // Additional tools to protect from pruning
-      "protectedTools": [],
-    },
-    // Distills key findings into preserved knowledge before removing raw content
-    "distill": {
-      // Permission mode: "allow" (no prompt), "ask" (prompt), "deny" (tool not registered)
-      "permission": "allow",
-      // Show distillation content as an ignored message notification
-      "showDistillation": true,
-    },
-    // Collapses a range of conversation content into a single summary
-    "compress": {
-      // Permission mode: "deny" (tool not registered), "ask" (prompt), "allow" (no prompt)
-      "permission": "deny",
-      // Show summary content as an ignored message notification
-      "showCompression": true,
-    },
-    // Removes tool content from context without preservation (for completed tasks or noise)
-    "prune": {
-      // Permission mode: "allow" (no prompt), "ask" (prompt), "deny" (tool not registered)
-      "permission": "allow",
-    },
+  "experimental": {
+    "allowSubAgents": true,
+  },
+  "compress": {
+    "maxContextLimit": "60%",
+    "minContextLimit": "20%",
+    "nudgeForce": "strong",
+    // "nudgeFrequency": 10,
+    "flatSchema": true,
+    "protectUserMessages": true,
   },
 }

@@ -4,7 +4,7 @@ description: >-
   
   Examples: <example>Context: User needs to integrate a specific library. user: 'How do I use the Stripe Python library to create a subscription?' assistant: 'I'll use the tech agent to research the Stripe Python library subscription API and provide you with specific code examples and integration steps.' <commentary>Narrow, specific technical question requiring immediate actionable code, perfect for tech agent.</commentary></example> <example>Context: User needs API details. user: 'What are the rate limits for the GitHub API GraphQL endpoint?' assistant: 'Let me use the tech agent to find the specific GitHub API rate limiting documentation.' <commentary>Specific technical fact-finding that can be answered concisely, ideal for tech agent.</commentary></example>
 mode: all
-model: synthetic/kimi-k2.5 # A slightly cheaper/faster model is good enough
+model: opencode-go/kimi-k2.5
 
 # Permission Configuration: Read-Only Research Agent
 # This agent only reads code and documentation to answer specific technical questions

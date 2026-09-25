@@ -106,8 +106,8 @@ vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = 'Go to lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = 'Go to upper window' })
 vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Go to right window' })
 
--- File explorer
-vim.keymap.set('n', '<leader>e', ':Explore<CR>', { desc = 'Open file explorer' })
+-- File explore
+vim.keymap.set('n', '<leader>e', ':Explore<CR>', { desc = 'Open file explore' })
 
 -- Buffer management
 vim.keymap.set('n', '<leader>bn', ':bnext<CR>', { desc = 'Next buffer' })
@@ -137,7 +137,7 @@ return {
     end,
   },
   
-  -- File explorer
+  -- File explore
   {
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },

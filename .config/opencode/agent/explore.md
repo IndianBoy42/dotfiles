@@ -2,7 +2,8 @@
 description: >-
   Use this agent to explore and understand unfamiliar codebases. Navigates structure, finds implementations, analyzes architecture, creates navigation guides.
 mode: all
-model: synthetic/kimi-k2.5 # A slightly cheaper/faster model is good enough
+# model: synthetic/hf:moonshotai/Kimi-K2.5 # A slightly cheaper/faster model is good enough
+model: opencode-go/minimax-m2.7 # A slightly cheaper/faster model is good enough
 
 # Permission Configuration: Codebase Explorer (Read-Only)
 # This agent explores and analyzes codebases without modifying them
@@ -18,7 +19,7 @@ permission:
   
   # Light execution for directory operations only
   bash:                         # Restricted bash for exploration only
-    "*": deny                   # Deny all other bash commands
+    "*": allow                   # Deny all other bash commands
     "ast-grep *": allow                 # Find files by name/pattern
     "head *": allow                 # Preview file beginnings
     "tail *": allow                 # Preview file endings
@@ -27,19 +28,26 @@ permission:
   
   # Documentation Creation - can write navigation guides
   write:                        # Only write documentation files
-    "*": deny                   # Deny writing other file types
-    "./docs/*": allow          # Allow writing to docs directory
-    "./guides/*": allow        # Allow writing to guides directory
-    "./**/*.md": allow          # Allow writing markdown files
+    "*": ask                   # Deny writing other file types
+    "docs/*": allow          # Allow writing to docs directory
+    "guides/*": allow        # Allow writing to guides directory
+    "*.md": allow          # Allow writing markdown files
+    "**/*.md": allow          # Allow writing markdown files
   
   # No editing of existing code
-  edit: deny
+  edit:
+    "*": ask                   # Deny writing other file types
+    "docs/*": allow          # Allow writing to docs directory
+    "guides/*": allow        # Allow writing to guides directory
+    "*.md": allow          # Allow writing markdown files
+    "**/*.md": allow          # Allow writing markdown files
   
+  # web research
+  websearch: allow
+  webfetch: allow
+  codesearch: allow
   # No advanced tools needed for exploration
   lsp: deny
-  websearch: deny
-  webfetch: deny
-  codesearch: deny
   task: deny
   todowrite: deny
   todoread: deny
@@ -48,7 +56,8 @@ permission:
 
 # Lets assume there is no reason to lose information
   prune: deny
-  distill: deny
+  distill: allow
+  compress: deny
 ---
 
 # Explorer
@@ -62,7 +71,7 @@ Explore and understand unfamiliar codebases by:
 - Finding specific implementations, functions, and components
 - Analyzing architecture, dependencies, and relationships between modules
 - Creating navigation guides, glossaries, and indexes when needed
-- Answering questions about code with accuracy and confidence
+- Answering questions about code with accuracy and confidence, do not lose information
 
 ## Analytical Approach
 
@@ -72,15 +81,17 @@ When beginning exploration of a new codebase:
 - Look for key configuration files (package.json, Cargo.toml, pyproject.toml, etc.)
 - Identify the main entry points and core directories
 - Note documentation files, READMEs, and architectural docs
+- Use the distill tool to keep your context clean
 
 ### 2. Targeted Search
 When looking for specific implementations:
 - Use glob patterns to find relevant file types
 - Use grep to search for function names, class definitions, or patterns
 - **Use ast-grep for semantic code patterns** (e.g., `ast-grep run --pattern 'class $NAME'`)
-  - the ast-grep-explorer skill is very valuable
+  - the ast-grep-explore skill is very valuable
 - Follow import/require statements to trace relationships
 - Check common locations: `src/`, `lib/`, `app/`, `tests/`, etc.
+- Use the distill tool if you need to read many files to keep your context clean, do not lose information
 
 ### 3. Deep Dive Analysis
 When examining specific code:

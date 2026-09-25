@@ -80,7 +80,7 @@ sg -p 'console.log($$$ARGS)' -r 'logger.debug($$$ARGS)' -l ts ./src
 
 When a library changes its API, migrate all usages systematically:
 
-1. **Analyze current usage** (use ast-grep-explorer first)
+1. **Analyze current usage** (use ast-grep-explore first)
    ```bash
    # Find all old API calls
    sg -p 'oldLibrary.$METHOD($$$ARGS)' -l ts ./src
@@ -450,7 +450,7 @@ sg -p 'export { $$$ITEMS }' -r 'export { $$$ITEMS }' -l ts -i ./src
 ## Integration with Other Skills
 
 This skill works synergistically with:
-- **ast-grep-explorer**: Explore patterns first, then refactor
+- **ast-grep-explore**: Explore patterns first, then refactor
 - **test agent**: Generate tests to verify transformations
 - **linter**: Run linters after refactoring to catch issues
 

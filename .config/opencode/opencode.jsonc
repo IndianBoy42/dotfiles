@@ -2,44 +2,56 @@
   "$schema": "https://opencode.ai/config.json",
   // "model": "opencode/claude-sonnet-4-5",
   // "model": "zai-coding-plan/glm-4.7",
-  "model": "synthetic/kimi-k2.5",
-  // "small_model": "opencode/minimax-m2.1-free",
-  "small_model": "opencode/minimax-m2.5",
-  "theme": "opencode",
+  // "model": "opencode-go/kimi-k2.5",
+  // "model": "opencode-go/kimi-k2.5",
+  "model": "synthetic/hf:moonshotai/Kimi-K2.5",
+  // "small_model": "opencode/minimax-m2.5-free",
+  "small_model": "opencode-go/minimax-m2.7",
+  "compaction": {
+    "auto": false,
+  },
+  "provider": {
+    // "inception": {
+    //   "models": {
+    //     "mercury-2": {
+    //       "id": "mercury-2",
+    //       "name": "Mercury 2",
+    //       "family": "mercury",
+    //       "release_date": "Feb 2026",
+    //       "attachment": false,
+    //       "reasoning": true,
+    //       "temperature": true,
+    //       "tool_call": true,
+    //       "limit": {
+    //         "context": 128000,
+    //         "output": 16384,
+    //       },
+    //       "modalities": {
+    //         "input": ["text"],
+    //         "output": ["text"],
+    //       },
+    //       "options": {},
+    //     },
+    //   },
+    // },
+  },
   "experimental": {
     "batch_tool": true,
     "lsp": true,
     "plan": true,
   },
   "permission": {
-    "external_directory": "ask",
-  },
-  "keybinds": {
-    "leader": "ctrl+k",
-    "session_fork": "<leader>f",
-    "session_child_cycle": "ctrl+right",
-    "session_child_cycle_reverse": "ctrl+left",
-    "session_parent": "ctrl+up",
-    "session_rename": "ctrl+r",
-    "messages_first": "<leader>k",
-    "messages_last": "<leader>j",
-    // Default is ctrl-a, ctrl-e
-    "input_line_home": "home",
-    "input_line_end": "end",
-    "input_select_line_home": "shift+home",
-    "input_select_line_end": "shift+end",
-    "input_visual_line_home": "alt+home",
-    "input_visual_line_end": "alt+end",
-    "input_select_visual_line_home": "alt+shift+home",
-    "input_select_visual_line_end": "alt+shift+end",
-    "input_buffer_home": "home",
-    "input_buffer_end": "end",
-    "input_select_buffer_home": "shift+home",
-    "input_select_buffer_end": "shift+end",
+    "external_directory": {
+      "/tmp/*": "allow",
+      "*": "ask",
+    },
+    "read": {
+      "**/.env": "deny",
+    },
   },
   "plugin": [
     "@tarquinen/opencode-dcp@latest",
-    "@mohak34/opencode-notifier@latest",
+    // "@mohak34/opencode-notifier@latest",
   ],
   "autoshare": false,
   "autoupdate": false,
@@ -96,6 +108,12 @@
       "template": "Commit Message: $ARGUMENTS",
       "subtask": true,
       "model": "opencode/minimax-m2.5-free", // Free
+    },
+  },
+  "default_agent": "coordinator",
+  "agent": {
+    "plan": {
+      "model": "github-copilot/claude-sonnet-4.6",
     },
   },
 }

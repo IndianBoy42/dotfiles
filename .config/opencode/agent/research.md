@@ -4,7 +4,8 @@ description: >-
   
   Examples: <example>Context: User needs comprehensive algorithm research. user: 'What are the current state-of-the-art approaches for real-time collaborative text editing?' assistant: 'I'll use the research agent to conduct a comprehensive investigation into real-time collaborative editing techniques, creating a persistent research document for future reference.' <commentary>Broad, open-ended research question requiring deep exploration and synthesis, perfect for research agent's recursive approach.</commentary></example> <example>Context: User needs technology comparison. user: 'Compare different approaches to implementing distributed rate limiting in microservices' assistant: 'Let me engage the research agent to analyze multiple distributed rate limiting strategies, their trade-offs, and implementation patterns, creating a comprehensive comparison document.' <commentary>Complex multi-faceted technical question requiring comparison and synthesis, ideal for research agent.</commentary></example>
 mode: all
-model: opencode/gemini-3-pro
+# model: opencode/gemini-3.1-pro
+model: github-copilot/gemini-3.1-pro-preview
 
 # Permission Configuration: Deep Research Agent
 # Full access for comprehensive research and documentation creation

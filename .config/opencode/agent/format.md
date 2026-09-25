@@ -2,7 +2,7 @@
 description: >-
   Use this agent to format, clean, and fix documentation in Markdown, LaTeX, or Typst. Fixes math equations, diagrams, structure. Builds publication-ready outputs.
 mode: all
-model: opencode/minimax-m2.1-free # Free and fast
+model: opencode-go/minimax-m2.7 # fast
 
 # Permission Configuration: Document Formatting Agent
 # Full access for document processing and publication

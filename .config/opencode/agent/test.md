@@ -2,7 +2,8 @@
 description: >-
   Use this agent to create test suites, analyze test failures, and ensure coverage. Handles unit, integration, and regression testing. 
 mode: all
-# TODO: model: synthetic/kimi-k2.5
+# TODO: model: synthetic/hf:moonshotai/Kimi-K2.5
+model: synthetic/hf:moonshotai/Kimi-K2.5
 
 # Permission Configuration: Test Suite Architect
 # Full development access with test-specific tooling
@@ -39,8 +40,8 @@ permission:
     "debug-rabbit-hole": allow
   
   # Minimal web access for test research
-  websearch: ask                 # Ask before searching
-  webfetch: ask                  # Ask before fetching
+  websearch: allow                 # Ask before searching
+  webfetch: allow                  # Ask before fetching
   codesearch: allow             # Safe for patterns
   
   # Workflow management for test planning
@@ -91,7 +92,6 @@ When investigating test failures, you will:
 - The root cause involves complex interactions between code, dependencies, or configuration
 - Debugging is expected to consume significant context/tokens through deep exploration
 - The failure is elusive and only manifests under specific conditions that need isolation
-- You need to continue other testing work while debugging proceeds in parallel
 
 ### 3. Coverage Analysis
 

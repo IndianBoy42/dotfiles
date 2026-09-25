@@ -38,11 +38,11 @@ permission:
     "cut *": allow                # Safe column extraction
     "awk *": allow                # Safe text processing (limited)
     
-  # No web research needed
-  websearch: deny
-  webfetch: deny
-  codesearch: deny
-  
+  # web research
+  websearch: allow
+  webfetch: allow
+  codesearch: allow
+
   # Can load analysis skills
   skill: allow
   

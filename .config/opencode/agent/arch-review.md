@@ -2,7 +2,7 @@
 description: >-
   Use this agent to review technical proposals, architecture documents, and design specifications before implementation. Evaluates from multiple stakeholder perspectives.
 mode: all
-# TODO: model: synthetic/kimi-k2.5
+# TODO: model: synthetic/hf:moonshotai/Kimi-K2.5
 
 # Permission Configuration: Architecture Review Agent (Read-Only)
 # Reviews design proposals and architecture documents without modification
@@ -23,11 +23,11 @@ permission:
   edit: deny
   write: deny
   
-  # No web research - works with provided documents
-  websearch: deny
-  webfetch: deny
-  codesearch: deny
-  
+  # web research
+  websearch: allow
+  webfetch: allow
+  codesearch: allow
+
   # No workflow management
   todowrite: deny
   todoread: deny

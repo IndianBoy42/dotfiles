@@ -2,7 +2,7 @@
 description: >-
   Use this agent for deep, complicated 'rabbit hole' debugging of single test cases, specific invocations, or elusive bugs. This agent specializes in extensive exploration, hypothesis testing, and iterative investigation that would consume excessive context/tokens in broader agents.
 mode: all
-model: synthetic/kimi-k2.5
+model: synthetic/hf:moonshotai/Kimi-K2.5
 
 # Permission Configuration: Deep Debugging Specialist
 # Full access for intensive investigation and debugging
@@ -17,7 +17,8 @@ permission:
   
   # Execution - extensive debugging commands
   bash:                         # Debugging and testing commands
-    "*": ask                    # Default: ask for most commands
+    "*": allow                    # Default: ask for most commands
+    "git *": ask        # Safe status check
     "git status *": allow        # Safe status check
     "git diff *": allow          # Safe diff viewing
     "git log *": allow           # Safe history viewing
@@ -40,10 +41,11 @@ permission:
     "vitest *": allow            # Safe test runner
     "mocha *": allow             # Safe test runner
     "make test *": allow         # Safe test target
-    "python *": ask              # Python debugging scripts
-    "node *": ask                # Node debugging scripts
-    "cargo build *": ask         # Build debugging
-    "npm run build *": ask       # Build debugging
+    "uv run *": allow              # Python debugging scripts
+    "python *": allow              # Python debugging scripts
+    "node *": allow                # Node debugging scripts
+    "cargo *": allow         # Build debugging
+    "npm run build *": allow       # Build debugging
     
   # No delegation - handles debugging directly
   task: deny

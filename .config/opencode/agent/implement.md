@@ -2,7 +2,9 @@
 description: >-
   Use this agent when you need to implement software features, functions, or components from specifications. Handles both complex architectural work and focused implementation tasks.
 mode: all
-model: synthetic/kimi-k2.5
+model: synthetic/hf:moonshotai/Kimi-K2.5
+# model: opencode-go/minimax-m2.7
+# model: opencode-go/kimi-k2.5
 
 # Permission Configuration: Software Implementation Agent
 # Full development access with safe execution practices

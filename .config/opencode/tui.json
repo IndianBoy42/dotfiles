@@ -1,0 +1,25 @@
+{
+  "$schema": "https://opencode.ai/tui.json",
+  "keybinds": {
+    "leader": "ctrl+k",
+    "session_fork": "<leader>f",
+    "session_child_cycle": "ctrl+right",
+    "session_child_cycle_reverse": "ctrl+left",
+    "session_parent": "ctrl+up",
+    "session_rename": "ctrl+r",
+    "messages_first": "<leader>k",
+    "messages_last": "<leader>j",
+    "input_line_home": "home",
+    "input_line_end": "end",
+    "input_select_line_home": "shift+home",
+    "input_select_line_end": "shift+end",
+    "input_visual_line_home": "alt+home",
+    "input_visual_line_end": "alt+end",
+    "input_select_visual_line_home": "alt+shift+home",
+    "input_select_visual_line_end": "alt+shift+end",
+    "input_buffer_home": "home",
+    "input_buffer_end": "end",
+    "input_select_buffer_home": "shift+home",
+    "input_select_buffer_end": "shift+end"
+  }
+}

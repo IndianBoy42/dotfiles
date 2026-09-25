@@ -2,7 +2,7 @@
 description: >-
   Use this agent to find command-line tools, construct shell commands, and understand command output. Can run commands directly or in kitty terminals. Creates scripts for repeated tasks.
 mode: all
-model: opencode/minimax-m2.5 # fast
+model: opencode-go/minimax-m2.7 # fast
 
 # Permission Configuration: Shell Command Assistant
 # Command construction and terminal management
@@ -51,10 +51,10 @@ permission:
   # No delegation
   task: deny
   
-  # No web research
-  websearch: deny
-  webfetch: deny
-  codesearch: deny
+  # web research
+  websearch: allow
+  webfetch: allow
+  codesearch: allow
   
   # No workflow management
   todowrite: deny

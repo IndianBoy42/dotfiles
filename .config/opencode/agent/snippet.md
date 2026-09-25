@@ -1,8 +1,9 @@
 ---
 description: >-
-  Use this agent for bite-sized coding tasks: quick snippets, small modifications, or concise coding questions. Fast, focused execution when context is already provided. Called by implement and other agents for subtasks.
+  Use this agent for conceptually bite-sized coding tasks to avoid bloating context: repetitive snippets, modifications, or quick coding questions. Fast, focused execution with the given context. 
 mode: all
-model: opencode/minimax-m2.5-free # A slightly cheaper/faster model is good enough
+# model: inception/mercury-2 # A slightly cheaper/faster model is good enough
+model: opencode-go/minimax-m2.7 # A slightly cheaper/faster model is good enough
 
 # Permission Configuration: Snippet Agent (Restricted Subagent)
 # Minimal permissions for focused, bite-sized code tasks

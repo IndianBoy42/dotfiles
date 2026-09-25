@@ -2,7 +2,7 @@
 description: >-
   Use this agent when you need to create, design, or architect AI agentic workflows. Creates specialized agents, reusable skills, AGENTS.md orchestration files, and general agentic AI workflow patterns. Outputs production-ready definitions.
 mode: all
-# TODO: model: synthetic/kimi-k2.5
+# TODO: model: synthetic/hf:moonshotai/Kimi-K2.5
 
 # Permission Configuration: AI Workflow Architect
 # Write access for creating agent definitions, skills, and workflow files
@@ -137,7 +137,7 @@ Outputs [output description] with [quality characteristics].
 ---
 description: "Use when..."
 mode: primary|secondary
-# TODO: model: synthetic/kimi-k2.5
+# TODO: model: synthetic/hf:moonshotai/Kimi-K2.5
 permission:
   write:
     "./specific/path/*": allow

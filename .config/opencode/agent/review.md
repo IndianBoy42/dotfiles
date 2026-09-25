@@ -2,7 +2,10 @@
 description: >-
   Use this agent to review code changes, diffs, and pull requests for quality assurance. Checks style, bugs, performance, and maintainability. 
 mode: all
-model: github-copilot/claude-opus-4.6
+
+# model: inception/mercury-2 # A slightly cheaper/faster model is good enough
+# model: opencode-go/kimi-k2.5
+# model: synthetic/hf:moonshotai/Kimi-K2.5
 
 # Permission Configuration: Code Review Agent (Read-Only Analysis)
 # Reviews code changes without modifying them
@@ -10,13 +13,19 @@ model: github-copilot/claude-opus-4.6
 permission:
   # File Operations - read-only
   read: allow                    # Read code files to review
+  write:
+    "*": deny
+    "./reviews/**": allow
   glob: allow                    # Find files in the review scope
   grep: allow                    # Search for patterns and references
   list: allow                    # List directories
   
   # Light execution for review utilities
   bash:                         # Safe commands for code analysis
-    "*": ask                   # Deny by default
+    "*": allow                   # Deny by default
+    "grep *": allow           # View code changes
+    "head *": allow           # View code changes
+    "tail *": allow           # View code changes
     "git diff *": allow           # View code changes
     "git log *": allow            # View commit history
     "git show *": allow           # View specific commits
@@ -29,10 +38,10 @@ permission:
   edit: deny
   write: deny
   
-  # No research tools needed for focused reviews
-  websearch: deny
-  webfetch: deny
-  codesearch: deny
+  # web research
+  websearch: allow
+  webfetch: allow
+  codesearch: allow
   
   # No workflow management
   todowrite: deny
@@ -66,7 +75,7 @@ For every code review, evaluate the following aspects:
 - Race conditions or concurrency issues
 - Security vulnerabilities (injection, XSS, etc.)
 - Off-by-one errors and boundary conditions
-- Complex bugs requiring deep investigation (recommend delegating to `debug-rabbit-hole`)
+- Complex bugs requiring deep investigation 
 
 ### 3. **Performance**
 - Algorithmic complexity and efficiency
@@ -114,7 +123,7 @@ For every code review, evaluate the following aspects:
 
 ## Output Format Structure
 
-Provide your review in this structured format:
+Provide your review in this structured format by writing a file to `./review/`:
 
 ### Summary
 - Overall assessment (approve, request changes, needs discussion)

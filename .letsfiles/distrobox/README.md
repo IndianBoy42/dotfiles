@@ -95,6 +95,10 @@ and `PS1` carries the OSC 133 prompt marks. It also exports `TERM`/`TERMINFO` it
 `~/.config/kitty/kitty.d/containers/containers.conf` — pulled in by a `globinclude` in
 `kitty.conf`, since kitty does not read extra config files on its own — bound to `kitty_mod+o>a`.
 
+The interactive entry point is the `arch` fish function: inside a kitty window it wraps that kitten
+invocation, and anywhere else it falls back to a plain `distrobox enter arch`. `arch <cmd>` is
+still the plain passthrough it always was, since a one-shot command has no shell to integrate.
+
 ## Adding things
 
 - **A normal package**: add it to an `additional_packages` line in `arch.ini`, then

@@ -62,6 +62,39 @@ rules (`~/.letsfiles/udev/99-platformio-udev.rules`, installed by `lets fedora u
 the container — which is fortunate, because the container's `video`/`render`/`dialout` GIDs
 do not match the host's.
 
+## Terminal integration
+
+Two things make a container shell behave like a kitty shell, and only one of them is automatic.
+
+**Terminal identity comes for free.** kitty keeps its terminfo under `~/.local/kitty.app` and
+exports `TERMINFO` pointing at it to every child. `$HOME` is shared, so that path resolves inside
+the container and `distrobox enter arch` started from a kitty window gets a working
+`xterm-kitty` — measured there as `tput -T xterm-kitty colors` → `256` and `setrgbf` emitting the
+truecolor escape. No container-side setup is involved.
+
+**`kitty-terminfo` exists because that variable does not always survive.** `sudo` resets the
+environment: it keeps `TERM` but drops `TERMINFO`. Anything that loses it falls back to
+`/usr/share/terminfo` — which Arch's ncurses does not populate with `xterm-kitty` — and then
+every TUI misrenders (`sudo nvim` being the common case). Arch's `kitty-terminfo` (0.49.1-1,
+tracking the host's kitty release exactly) puts the entry in `/usr/share/terminfo/x/xterm-kitty`.
+Measured as root, both ways: `256` with it, `unknown terminal "xterm-kitty"` without.
+
+**Shell integration does not come for free.** `distrobox enter` runs a plain login shell, so
+inside the container there are no prompt marks, no cwd/window-title reporting, no
+`clone-in-kitty`, no click-to-move-cursor, and prompt redraw on resize is glitchy. Upstream's
+answer for containers is the run-shell kitten, which works here because `~/.local/bin/kitten` is
+reachable through the shared `$HOME`:
+
+```
+distrobox enter arch -- kitten run-shell
+```
+
+Verified inside the container: `clone-in-kitty` is a function, five kitty helpers are defined,
+and `PS1` carries the OSC 133 prompt marks. It also exports `TERM`/`TERMINFO` itself and aliases
+`sudo` to preserve `TERMINFO`. The kitty side of this lives in
+`~/.config/kitty/kitty.d/containers/containers.conf` — pulled in by a `globinclude` in
+`kitty.conf`, since kitty does not read extra config files on its own — bound to `kitty_mod+o>a`.
+
 ## Adding things
 
 - **A normal package**: add it to an `additional_packages` line in `arch.ini`, then

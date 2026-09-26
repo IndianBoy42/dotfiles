@@ -60,3 +60,14 @@ if vulkaninfo --summary >/tmp/vk.txt 2>&1; then
 else
     printf '  vulkaninfo failed — /dev/dri may not be passed through\n'
 fi
+
+section "terminal"
+printf '  TERM=%s\n' "$TERM"
+# Asserted with -T so it does not depend on the caller's TERM, and *not* via $TERMINFO: the
+# point is that the container can resolve xterm-kitty on its own, for the commands that lose
+# TERMINFO (sudo, su, a nested login).
+if tput -T xterm-kitty colors >/dev/null 2>&1; then
+    ok "xterm-kitty terminfo (tput colors = $(tput -T xterm-kitty colors))"
+else
+    printf '  xterm-kitty terminfo: MISSING — install kitty-terminfo (see arch.ini)\n'
+fi
